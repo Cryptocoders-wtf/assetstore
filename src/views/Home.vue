@@ -38,7 +38,7 @@ export default defineComponent({
     const expectedNetwork = ChainIds.RinkebyTestNet;
     const store = useStore();
     const tokenBalance = ref(0);
-    const contract = computed(() => {
+    const holder = computed(() => {
       if (store.state.account && store.state.chainId == expectedNetwork) {
         const provider = new ethers.providers.Web3Provider(store.state.ethereum);
         const signer = provider.getSigner();
@@ -47,19 +47,19 @@ export default defineComponent({
           console.log("**** event NounsBought", tokenId, to);
           fetchBalance();
         });
-        return contract;
+        return { contract, provider, signer };
       }
       return null;
     });
     const fetchBalance = async () => {
-      if (!contract.value) return;
-      const count = await contract.value.functions.balanceOf(store.state.account);
+      if (!holder.value) return;
+      const count = await holder.value.contract.functions.balanceOf(store.state.account);
       console.log("**** count", count[0].toNumber());
       tokenBalance.value = count[0].toNumber();
     };
     const mint = async () => {
-      if (!contract.value) return;
-      const result = await contract.value.functions.mint();
+      if (!holder.value) return;
+      const result = await holder.value.contract.functions.mint();
       console.log("**** minted", result);
     };
     const tokenGate = computed(()=>{
