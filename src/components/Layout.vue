@@ -1,8 +1,11 @@
 <template>
   <div class="layout">
-    <template v-if="user.user"> {{ user.user.displayName }}!! </template>
+    <div id="nav">
+      <router-link :to="localizedUrl('/')">Home</router-link> |
+      <router-link :to="localizedUrl('/about')">About</router-link>
+      <Languages class="mt-4" />
+    </div>
     <router-view />
-    <Languages class="mt-4" />
   </div>
 </template>
 
