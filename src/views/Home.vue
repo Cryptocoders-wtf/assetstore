@@ -13,7 +13,7 @@
       </div>
       <div v-else>
         <p>You need to have a Nounsville token to play with this app</p>
-        <button @click="mint" class="underline">Mint</button>
+        Please <button @click="mint" class="underline">mint</button> (free, but you need to pay a gas).
       </div>
     </div>
   </div>
