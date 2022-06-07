@@ -13,6 +13,7 @@
       </div>
       <div v-else>
         <p>You need to have a Nounsville token to play with this app</p>
+        <button @click="mint" class="underline">Mint</button>
       </div>
     </div>
   </div>
@@ -48,6 +49,13 @@ export default defineComponent({
       console.log("**** count", count[0].toNumber());
       tokenBalance.value = count[0].toNumber();
     };
+    const mint = async () => {
+      const provider = new ethers.providers.Web3Provider(store.state.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(NounsVille.address, NounsVille.wabi.abi, signer);
+      const result = await contract.functions.mint();
+      console.log("**** minted", result);
+    };
     const tokenGate = computed(()=>{
       if (!account.value) {
         return "noAccount"
@@ -64,6 +72,7 @@ export default defineComponent({
     }
 
     return {
+      mint,
       tokenGate,
       tokenBalance,
       switchToValidNetwork
