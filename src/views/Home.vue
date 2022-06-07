@@ -42,7 +42,12 @@ export default defineComponent({
       if (store.state.account && store.state.chainId == expectedNetwork) {
         const provider = new ethers.providers.Web3Provider(store.state.ethereum);
         const signer = provider.getSigner();
-        return new ethers.Contract(NounsVille.address, NounsVille.wabi.abi, signer);
+        const contract = new ethers.Contract(NounsVille.address, NounsVille.wabi.abi, signer);
+        provider.on("NounsBought", (tokenId, to) => {
+          console.log("**** event NounsBought", tokenId, to);
+          fetchBalance();
+        });
+        return contract;
       }
       return null;
     });
