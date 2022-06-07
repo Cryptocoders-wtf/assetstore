@@ -6,9 +6,11 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { initializeEthereum } from "./utils/MetaMask";
 
 export default defineComponent({
   setup() {
+    initializeEthereum();
     return {
     };
   },
