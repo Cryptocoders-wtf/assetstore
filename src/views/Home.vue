@@ -22,12 +22,22 @@
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
 import { useStore } from "vuex";
-import { ethers } from "ethers";
+import { ethers, utils } from "ethers";
 import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const NounsVille = {
   wabi: require("../abis/NounsvilleToken.json"), // wrapped abi
   address: "0x163B3906884df904EFF51bf21E7Ee3D3f87098D3"
+};
+
+// no topics means any events
+const filter = {
+  address: NounsVille.address,
+  /*
+  topics: [
+    utils.id("NounBought(uint256,address)")
+  ]
+  */
 };
 
 export default defineComponent({
@@ -43,8 +53,8 @@ export default defineComponent({
         const provider = new ethers.providers.Web3Provider(store.state.ethereum);
         const signer = provider.getSigner();
         const contract = new ethers.Contract(NounsVille.address, NounsVille.wabi.abi, signer);
-        provider.on("NounsBought", (tokenId, to) => {
-          console.log("**** event NounsBought", tokenId, to);
+        provider.on(filter, (log, event) => {
+          console.log("**** got event", log, event);
           fetchBalance();
         });
         return { contract, provider, signer };
