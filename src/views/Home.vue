@@ -38,11 +38,8 @@ export default defineComponent({
     const expectedNetwork = ChainIds.RinkebyTestNet;
     const store = useStore();
     const tokenBalance = ref(0);
-    const account = computed(() => {
-      return store.state.account;
-    });
     const contract = computed(() => {
-      if (account.value && store.state.chainId == expectedNetwork) {
+      if (store.state.account && store.state.chainId == expectedNetwork) {
         const provider = new ethers.providers.Web3Provider(store.state.ethereum);
         const signer = provider.getSigner();
         return new ethers.Contract(NounsVille.address, NounsVille.wabi.abi, signer);
@@ -51,7 +48,7 @@ export default defineComponent({
     });
     const fetchBalance = async () => {
       if (!contract.value) return;
-      const count = await contract.value.functions.balanceOf(account.value);
+      const count = await contract.value.functions.balanceOf(store.state.account);
       console.log("**** count", count[0].toNumber());
       tokenBalance.value = count[0].toNumber();
     };
@@ -61,7 +58,7 @@ export default defineComponent({
       console.log("**** minted", result);
     };
     const tokenGate = computed(()=>{
-      if (!account.value) {
+      if (!store.state.account) {
         return "noAccount"
       }
       if (store.state.chainId != expectedNetwork) {
