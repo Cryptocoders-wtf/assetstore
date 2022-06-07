@@ -9,11 +9,16 @@
     </div>
     <div v-else>
       <div v-if="tokenBalance > 0">
-        <p>Hello a member</p>
+        <p>Thank you for becoming a member.</p>
       </div>
       <div v-else>
-        <p>You need to have a Nounsville token to play with this app</p>
-        Please <button @click="mint" class="underline">mint</button> (free, but you need to pay a gas).
+        <div v-if="justMinted">
+          <p>Thank you for minting. Please wait a little bit...</p>
+        </div>
+        <div v-else>
+          <p>You need to have a Nounsville token to play with this app</p>
+          <p>Please <button @click="mint" class="underline">mint</button> (free, but you need to pay a gas).</p>
+        </div>
       </div>
     </div>
   </div>
@@ -48,6 +53,7 @@ export default defineComponent({
     const expectedNetwork = ChainIds.RinkebyTestNet;
     const store = useStore();
     const tokenBalance = ref(0);
+    const justMinted = ref(false);
     const holder = computed(() => {
       if (store.state.account && store.state.chainId == expectedNetwork) {
         const provider = new ethers.providers.Web3Provider(store.state.ethereum);
@@ -55,6 +61,7 @@ export default defineComponent({
         const contract = new ethers.Contract(NounsVille.address, NounsVille.wabi.abi, signer);
         provider.on(filter, (log, event) => {
           console.log("**** got event", log, event);
+          justMinted.value = false;
           fetchBalance();
         });
         return { contract, provider, signer };
@@ -70,7 +77,7 @@ export default defineComponent({
     const mint = async () => {
       if (!holder.value) return;
       const result = await holder.value.contract.functions.mint();
-      console.log("**** minted", result);
+      justMinted.value = true;
     };
     const tokenGate = computed(()=>{
       if (!store.state.account) {
@@ -89,6 +96,7 @@ export default defineComponent({
 
     return {
       mint,
+      justMinted,
       tokenGate,
       tokenBalance,
       switchToValidNetwork
