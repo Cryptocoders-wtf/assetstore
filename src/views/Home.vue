@@ -41,19 +41,23 @@ export default defineComponent({
     const account = computed(() => {
       return store.state.account;
     });
+    const contract = computed(() => {
+      if (account.value && store.state.chainId == expectedNetwork) {
+        const provider = new ethers.providers.Web3Provider(store.state.ethereum);
+        const signer = provider.getSigner();
+        return new ethers.Contract(NounsVille.address, NounsVille.wabi.abi, signer);
+      }
+      return null;
+    });
     const fetchBalance = async () => {
-      const provider = new ethers.providers.Web3Provider(store.state.ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(NounsVille.address, NounsVille.wabi.abi, signer);
-      const count = await contract.functions.balanceOf(account.value);
+      if (!contract.value) return;
+      const count = await contract.value.functions.balanceOf(account.value);
       console.log("**** count", count[0].toNumber());
       tokenBalance.value = count[0].toNumber();
     };
     const mint = async () => {
-      const provider = new ethers.providers.Web3Provider(store.state.ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(NounsVille.address, NounsVille.wabi.abi, signer);
-      const result = await contract.functions.mint();
+      if (!contract.value) return;
+      const result = await contract.value.functions.mint();
       console.log("**** minted", result);
     };
     const tokenGate = computed(()=>{
