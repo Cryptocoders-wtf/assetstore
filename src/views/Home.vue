@@ -27,7 +27,7 @@
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
 import { useStore } from "vuex";
-import { ethers, utils } from "ethers";
+import { ethers } from "ethers";
 import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const NounsVille = {
@@ -54,6 +54,7 @@ export default defineComponent({
     const store = useStore();
     const tokenBalance = ref(0);
     const justMinted = ref(false);
+    const users = ref([]);
     const holder = computed(() => {
       if (store.state.account && store.state.chainId == expectedNetwork) {
         const provider = new ethers.providers.Web3Provider(store.state.ethereum);
@@ -74,9 +75,14 @@ export default defineComponent({
       console.log("**** count", count[0].toNumber());
       tokenBalance.value = count[0].toNumber();
     };
+    const fetchUsers = async () => {
+      if (!holder.value) return;
+      const result = await holder.value.contract.functions.totalSupply();
+      console.log("***** totalSupply", result);
+    };
     const mint = async () => {
       if (!holder.value) return;
-      const result = await holder.value.contract.functions.mint();
+      await holder.value.contract.functions.mint();
       justMinted.value = true;
     };
     const tokenGate = computed(()=>{
@@ -87,6 +93,7 @@ export default defineComponent({
         return "invalidNetwork"
       }
       fetchBalance();
+      fetchUsers();
       return "valid";      
     });
     const switchToValidNetwork = async () => {
