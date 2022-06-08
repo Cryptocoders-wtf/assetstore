@@ -8,16 +8,24 @@
       <button @click="switchToValidNetwork" class="underline">Switch Network</button>
     </div>
     <div v-else>
-      <div v-if="tokenBalance > 0">
-        <p>Thank you for becoming a member.</p>
-      </div>
-      <div v-else>
+      <div v-if="tokenBalance == 0">
         <div v-if="justMinted">
           <p>Thank you for minting. Please wait a little bit...</p>
         </div>
         <div v-else>
           <p>You need to have a Nounsville token to play with this app</p>
           <p>Please <button @click="mint" class="underline">mint</button> (free, but you need to pay a gas).</p>
+        </div>
+      </div>
+      <div v-else>
+        <div>
+          <h4>Inbox:</h4>
+        </div>
+        <div>
+          <h4>Members:</h4>
+          <p v-for="user in users" v-bind:key="user.address">
+            {{ user.name }}
+          </p>
         </div>
       </div>
     </div>
@@ -45,6 +53,10 @@ const filter = {
   */
 };
 
+const shorten = (address: string) => {
+  return address.substring(0,6) + "..." + address.substring(38);
+};
+
 export default defineComponent({
   name: "HomePage",
   components: {
@@ -54,7 +66,7 @@ export default defineComponent({
     const store = useStore();
     const tokenBalance = ref(0);
     const justMinted = ref(false);
-    const users = ref([] as Array<string>);
+    const users = ref([] as Array<object>);
     const holder = computed(() => {
       if (store.state.account && store.state.chainId == expectedNetwork) {
         const provider = new ethers.providers.Web3Provider(store.state.ethereum);
@@ -72,22 +84,23 @@ export default defineComponent({
     const fetchBalance = async () => {
       if (!holder.value) return;
       const count = await holder.value.contract.functions.balanceOf(store.state.account);
-      console.log("**** count", count[0].toNumber());
+      //console.log("**** count", count[0].toNumber());
       tokenBalance.value = count[0].toNumber();
     };
     const fetchUsers = async () => {
       if (!holder.value) return;
       const contract = holder.value.contract;      
       const result = await contract.functions.totalSupply();
-      console.log("***** totalSupply", result);
+      //console.log("***** totalSupply", result);
       const itemCount = result[0].toNumber();
       const promises = [...Array(itemCount).keys()].map((index) => {
         return contract.functions.ownerOf(index);
       });
       const owners = (await Promise.all(promises)).map((result) => {
-        return result[0];
-      }).filter((value) => {return value !== '0x000000000000000000000000000000000000dEaD'});
-      console.log("***** users", owners);
+        const address = result[0];
+        return { address, name:shorten(address) };
+      }).filter((user) => {return user.address !== '0x000000000000000000000000000000000000dEaD'});
+      //console.log("***** users", owners);
       users.value = owners;
     };
     const mint = async () => {
@@ -112,6 +125,7 @@ export default defineComponent({
     }
 
     return {
+      users,
       mint,
       justMinted,
       tokenGate,
