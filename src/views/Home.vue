@@ -42,6 +42,10 @@ const NounsVille = {
   wabi: require("../abis/NounsvilleToken.json"), // wrapped abi
   address: "0x163B3906884df904EFF51bf21E7Ee3D3f87098D3"
 };
+const MessageBox = {
+  wabi: require("../abis/MessageBox.json"), // wrapped abi
+  address: "0x933B9cb9fe85a620eA2f02997D77a960281628dF"
+};
 
 // no topics means any events
 const filter = {
@@ -71,30 +75,30 @@ export default defineComponent({
       if (store.state.account && store.state.chainId == expectedNetwork) {
         const provider = new ethers.providers.Web3Provider(store.state.ethereum);
         const signer = provider.getSigner();
-        const contract = new ethers.Contract(NounsVille.address, NounsVille.wabi.abi, signer);
+        const nounsville = new ethers.Contract(NounsVille.address, NounsVille.wabi.abi, signer);
         provider.on(filter, (log, event) => {
           console.log("**** got event", log, event);
           justMinted.value = false;
           fetchBalance();
         });
-        return { contract, provider, signer };
+        return { nounsville, provider, signer };
       }
       return null;
     });
     const fetchBalance = async () => {
       if (!holder.value) return;
-      const count = await holder.value.contract.functions.balanceOf(store.state.account);
+      const count = await holder.value.nounsville.functions.balanceOf(store.state.account);
       //console.log("**** count", count[0].toNumber());
       tokenBalance.value = count[0].toNumber();
     };
     const fetchUsers = async () => {
       if (!holder.value) return;
-      const contract = holder.value.contract;      
-      const result = await contract.functions.totalSupply();
+      const nounsville = holder.value.nounsville;      
+      const result = await nounsville.functions.totalSupply();
       //console.log("***** totalSupply", result);
       const itemCount = result[0].toNumber();
       const promises = [...Array(itemCount).keys()].map((index) => {
-        return contract.functions.ownerOf(index);
+        return nounsville.functions.ownerOf(index);
       });
       const owners = (await Promise.all(promises)).map((result) => {
         const address = result[0];
@@ -105,7 +109,7 @@ export default defineComponent({
     };
     const mint = async () => {
       if (!holder.value) return;
-      await holder.value.contract.functions.mint();
+      await holder.value.nounsville.functions.mint();
       justMinted.value = true;
     };
     const tokenGate = computed(()=>{
