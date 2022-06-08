@@ -25,6 +25,7 @@
           <h4>Members:</h4>
           <p v-for="user in users" v-bind:key="user.address">
             {{ user.name }}
+            <span v-if="user.address == account">(you)</span>
           </p>
         </div>
       </div>
@@ -76,12 +77,13 @@ export default defineComponent({
         const provider = new ethers.providers.Web3Provider(store.state.ethereum);
         const signer = provider.getSigner();
         const nounsville = new ethers.Contract(NounsVille.address, NounsVille.wabi.abi, signer);
+        const messagebox = new ethers.Contract(MessageBox.address, MessageBox.wabi.abi, signer);
         provider.on(filter, (log, event) => {
           console.log("**** got event", log, event);
           justMinted.value = false;
           fetchBalance();
         });
-        return { nounsville, provider, signer };
+        return { nounsville, provider, signer, messagebox };
       }
       return null;
     });
@@ -90,6 +92,24 @@ export default defineComponent({
       const count = await holder.value.nounsville.functions.balanceOf(store.state.account);
       //console.log("**** count", count[0].toNumber());
       tokenBalance.value = count[0].toNumber();
+    };
+    const fetchMessages = async () => {
+      if (!holder.value) return;
+      const messagebox = holder.value.messagebox;      
+      const result = await messagebox.functions.count();
+      console.log("***** totalSupply", result);
+      /*
+      const itemCount = result[0].toNumber();
+      const promises = [...Array(itemCount).keys()].map((index) => {
+        return nounsville.functions.ownerOf(index);
+      });
+      const owners = (await Promise.all(promises)).map((result) => {
+        const address = result[0];
+        return { address, name:shorten(address) };
+      }).filter((user) => {return user.address !== '0x000000000000000000000000000000000000dEaD'});
+      //console.log("***** users", owners);
+      users.value = owners;
+      */
     };
     const fetchUsers = async () => {
       if (!holder.value) return;
@@ -101,9 +121,9 @@ export default defineComponent({
         return nounsville.functions.ownerOf(index);
       });
       const owners = (await Promise.all(promises)).map((result) => {
-        const address = result[0];
+        const address = result[0].toLowerCase();
         return { address, name:shorten(address) };
-      }).filter((user) => {return user.address !== '0x000000000000000000000000000000000000dEaD'});
+      }).filter((user) => {return user.address !== '0x000000000000000000000000000000000000dead'});
       //console.log("***** users", owners);
       users.value = owners;
     };
@@ -121,6 +141,7 @@ export default defineComponent({
       }
       fetchBalance();
       fetchUsers();
+      fetchMessages();
       return "valid";      
     });
     const switchToValidNetwork = async () => {
@@ -129,6 +150,7 @@ export default defineComponent({
     }
 
     return {
+      account: store.state.account,
       users,
       mint,
       justMinted,
