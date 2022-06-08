@@ -159,7 +159,10 @@ export default defineComponent({
     const selectUser = (address:string) => {
       selected.value = address;
     };
-    const sendMessage = () => {
+    const sendMessage = async () => {
+      if (!holder.value) return;
+      const messagebox = holder.value.messagebox;    
+      await messagebox.functions.send(selected, message);  
       selected.value = "";
       message.value = "";
     };
