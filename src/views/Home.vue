@@ -57,7 +57,7 @@ const NounsVille = {
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
-  address: "0xEDE1a69DB77c4CBa8d15F9170568959a56Ce9c05"
+  address: "0x9F2dC3f778c07987Fcf5a225c3EFD29400930D50"
 };
 
 // no topics means any events
@@ -132,7 +132,7 @@ export default defineComponent({
       console.log("***** room count", result[0].toNumber());
       const itemCount = result[0].toNumber();
       const promises = [...Array(itemCount).keys()].map((index) => {
-        return messagebox.functions.messageCount(index);
+        return messagebox.functions.getMembers(index);
       });
       const items = (await Promise.all(promises)).map((result) => {
         return result[0];
