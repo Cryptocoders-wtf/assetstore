@@ -20,6 +20,12 @@
       <div v-else>
         <div>
           <h4>Inbox:</h4>
+          <div v-for="message in messages" v-bind:key="message.sender">
+            <p>
+              {{ message.senderName }}
+              : {{ message.text }}
+            </p>
+          </div>
         </div>
         <div>
           <h4>Members: (Select one to send a message)</h4>
@@ -80,6 +86,7 @@ export default defineComponent({
     const message = ref("");
     const justMinted = ref(false);
     const users = ref([] as Array<object>);
+    const messages = ref([] as Array<object>);
     const holder = computed(() => {
       if (store.state.account && store.state.chainId == expectedNetwork) {
         const provider = new ethers.providers.Web3Provider(store.state.ethereum);
@@ -106,18 +113,16 @@ export default defineComponent({
       const messagebox = holder.value.messagebox;      
       const result = await messagebox.functions.count();
       console.log("***** message count", result[0].toNumber());
-      /*
       const itemCount = result[0].toNumber();
       const promises = [...Array(itemCount).keys()].map((index) => {
-        return nounsville.functions.ownerOf(index);
+        return messagebox.functions.get(index);
       });
-      const owners = (await Promise.all(promises)).map((result) => {
-        const address = result[0];
-        return { address, name:shorten(address) };
-      }).filter((user) => {return user.address !== '0x000000000000000000000000000000000000dEaD'});
-      //console.log("***** users", owners);
-      users.value = owners;
-      */
+      const items = (await Promise.all(promises)).map((result) => {
+        const value = result[0];
+        return { sender: value[0], senderName: shorten(value[0]), text: value[2] }
+      });
+      console.log("***** messages", items);
+      messages.value = items;
     };
     const fetchUsers = async () => {
       if (!holder.value) return;
@@ -163,9 +168,9 @@ export default defineComponent({
       if (!holder.value) return;
       const messagebox = holder.value.messagebox;    
       console.log("calling send", selected.value, message.value);
-      const result = await messagebox.functions.send(selected.value, message.value, {
+      const result = await messagebox.functions.send(selected.value, message.value); /*, {
         gasLimit: 100000
-      });  
+      });  */
       console.log("just send", result);
       selected.value = "";
       message.value = "";
@@ -180,7 +185,7 @@ export default defineComponent({
       account,
       users,
       selected, selectUser,
-      message, sendMessage,
+      message, sendMessage, messages,
       mint, justMinted,
       tokenGate,
       tokenBalance,
