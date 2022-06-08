@@ -57,7 +57,7 @@ const NounsVille = {
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
-  address: "0x2468b1c59D907852c4645547e45537075C2fa933"
+  address: "0xEB2D0d8e287d66303b9CBc7De7C9e9E743448c8f"
 };
 
 // no topics means any events
@@ -86,6 +86,7 @@ export default defineComponent({
     const message = ref("");
     const justMinted = ref(false);
     const users = ref([] as Array<object>);
+    const rooms = ref([] as Array<object>);
     const messages = ref([] as Array<object>);
     const holder = computed(() => {
       if (store.state.account && store.state.chainId == expectedNetwork) {
@@ -124,6 +125,21 @@ export default defineComponent({
       console.log("***** messages", items);
       messages.value = items;
     };
+    const fetchRooms = async () => {
+      if (!holder.value) return;
+      const messagebox = holder.value.messagebox;      
+      const result = await messagebox.functions.roomCount();
+      console.log("***** room count", result[0].toNumber());
+      const itemCount = result[0].toNumber();
+      const promises = [...Array(itemCount).keys()].map((index) => {
+        return messagebox.functions.messageCount(index);
+      });
+      const items = (await Promise.all(promises)).map((result) => {
+        return result[0];
+      });
+      console.log("***** rooms", items);
+      // messages.value = items;
+    };
     const fetchUsers = async () => {
       if (!holder.value) return;
       const nounsville = holder.value.nounsville;      
@@ -154,7 +170,7 @@ export default defineComponent({
       }
       fetchBalance();
       fetchUsers();
-      fetchMessages();
+      fetchRooms();
       return "valid";      
     });
     const switchToValidNetwork = async () => {
@@ -168,7 +184,7 @@ export default defineComponent({
       if (!holder.value) return;
       const messagebox = holder.value.messagebox;    
       console.log("calling send", selected.value, message.value);
-      const result = await messagebox.functions.send(selected.value, message.value); /*, {
+      const result = await messagebox.functions.sendMessage(selected.value, message.value); /*, {
         gasLimit: 100000
       });  */
       console.log("just send", result);
