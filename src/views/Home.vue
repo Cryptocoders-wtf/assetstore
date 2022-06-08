@@ -51,7 +51,7 @@ const NounsVille = {
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
-  address: "0x933B9cb9fe85a620eA2f02997D77a960281628dF"
+  address: "0x2468b1c59D907852c4645547e45537075C2fa933"
 };
 
 // no topics means any events
@@ -163,9 +163,10 @@ export default defineComponent({
       if (!holder.value) return;
       const messagebox = holder.value.messagebox;    
       console.log("calling send", selected.value, message.value);
-      await messagebox.functions.send(selected.value, message.value, {
+      const result = await messagebox.functions.send(selected.value, message.value, {
         gasLimit: 100000
       });  
+      console.log("just send", result);
       selected.value = "";
       message.value = "";
     };
