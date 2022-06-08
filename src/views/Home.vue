@@ -105,7 +105,7 @@ export default defineComponent({
       if (!holder.value) return;
       const messagebox = holder.value.messagebox;      
       const result = await messagebox.functions.count();
-      console.log("***** totalSupply", result);
+      console.log("***** message count", result[0].toNumber());
       /*
       const itemCount = result[0].toNumber();
       const promises = [...Array(itemCount).keys()].map((index) => {
@@ -162,13 +162,21 @@ export default defineComponent({
     const sendMessage = async () => {
       if (!holder.value) return;
       const messagebox = holder.value.messagebox;    
-      await messagebox.functions.send(selected, message);  
+      console.log("calling send", selected.value, message.value);
+      await messagebox.functions.send(selected.value, message.value, {
+        gasLimit: 100000
+      });  
       selected.value = "";
       message.value = "";
     };
-
+    const account = computed(()=>{
+      if (store.state.account) {
+        return store.state.account.toLowerCase();
+      }
+      return null;
+    });    
     return {
-      account: store.state.account,
+      account,
       users,
       selected, selectUser,
       message, sendMessage,
