@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center space-x-8">
+  <div class="max-w-lg mx-auto text-left p-2">
     <div v-if="tokenGate == 'noAccount'">
       <p>{{ tokenGate }}</p>
     </div>
@@ -19,7 +19,7 @@
       </div>
       <div v-else>
         <div>
-          <h4>Inbox:</h4>
+          <h4 class="font-bold">Inbox:</h4>
           <div v-for="message in messages" v-bind:key="message.sender">
             <p>
               {{ message.senderName }}
@@ -28,14 +28,14 @@
           </div>
         </div>
         <div>
-          <h4>Members: (Select one to send a message)</h4>
+          <h4 class="font-bold">Members: (Select one to send a message)</h4>
           <div v-for="user in users" v-bind:key="user.address" @click="()=>{selectUser(user.address);}">
             <p>
               {{ user.name }}
               <span v-if="user.address == account">(you)</span>
             </p>
             <p v-if="selected == user.address">
-              <input v-model="message" />
+              <input v-model="message" class="border border-solid border-gray-300" />
               <button @click="sendMessage">Send</button>
             </p>
           </div>
