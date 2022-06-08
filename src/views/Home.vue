@@ -54,7 +54,7 @@ export default defineComponent({
     const store = useStore();
     const tokenBalance = ref(0);
     const justMinted = ref(false);
-    const users = ref([]);
+    const users = ref([] as Array<string>);
     const holder = computed(() => {
       if (store.state.account && store.state.chainId == expectedNetwork) {
         const provider = new ethers.providers.Web3Provider(store.state.ethereum);
@@ -77,8 +77,18 @@ export default defineComponent({
     };
     const fetchUsers = async () => {
       if (!holder.value) return;
-      const result = await holder.value.contract.functions.totalSupply();
+      const contract = holder.value.contract;      
+      const result = await contract.functions.totalSupply();
       console.log("***** totalSupply", result);
+      const itemCount = result[0].toNumber();
+      const promises = [...Array(itemCount).keys()].map((index) => {
+        return contract.functions.ownerOf(index);
+      });
+      const owners = (await Promise.all(promises)).map((result) => {
+        return result[0];
+      }).filter((value) => {return value !== '0x000000000000000000000000000000000000dEaD'});
+      console.log("***** users", owners);
+      users.value = owners;
     };
     const mint = async () => {
       if (!holder.value) return;
