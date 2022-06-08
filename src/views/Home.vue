@@ -22,14 +22,15 @@
           <h4>Inbox:</h4>
         </div>
         <div>
-          <h4>Members:</h4>
+          <h4>Members: (Select one to send a message)</h4>
           <div v-for="user in users" v-bind:key="user.address" @click="()=>{selectUser(user.address);}">
             <p>
               {{ user.name }}
               <span v-if="user.address == account">(you)</span>
             </p>
             <p v-if="selected == user.address">
-              selected
+              <input v-model="message" />
+              <button @click="sendMessage">Send</button>
             </p>
           </div>
         </div>
@@ -76,6 +77,7 @@ export default defineComponent({
     const store = useStore();
     const tokenBalance = ref(0);
     const selected = ref("");
+    const message = ref("");
     const justMinted = ref(false);
     const users = ref([] as Array<object>);
     const holder = computed(() => {
@@ -157,14 +159,17 @@ export default defineComponent({
     const selectUser = (address:string) => {
       selected.value = address;
     };
+    const sendMessage = () => {
+      selected.value = "";
+      message.value = "";
+    };
 
     return {
       account: store.state.account,
       users,
-      selected,
-      selectUser,
-      mint,
-      justMinted,
+      selected, selectUser,
+      message, sendMessage,
+      mint, justMinted,
       tokenGate,
       tokenBalance,
       switchToValidNetwork
