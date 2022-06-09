@@ -21,8 +21,9 @@
         <div>
           <h4 class="font-bold">Rooms:</h4>
           <div v-for="room in rooms" v-bind:key="room.another">
-            <p>
+            <p @click="()=>{selectRoom(room.index)}">
               {{ room.name }}
+              <span v-if="selectedRoom == room.index">*</span>
             </p>
           </div>
         </div>
@@ -91,6 +92,7 @@ export default defineComponent({
     const store = useStore();
     const tokenBalance = ref(0);
     const selectedUser = ref("");
+    const selectedRoom = ref(-1);
     const message = ref("");
     const justMinted = ref(false);
     const users = ref([] as Array<object>);
@@ -142,11 +144,11 @@ export default defineComponent({
       const promises = [...Array(itemCount).keys()].map((index) => {
         return messagebox.functions.getMembers(index);
       });
-      const items = (await Promise.all(promises)).map((result) => {
+      const items = (await Promise.all(promises)).map((result, index) => {
         const members = result[0];
         const another = (members[0].toLowerCase() == account.value.toLowerCase()) ? members[1] : members[0];
         const name = shorten(another);
-        return { another, name, members };
+        return { index, another, name, members };
       });
       console.log("***** rooms", items);
       rooms.value = items;
@@ -191,6 +193,9 @@ export default defineComponent({
     const selectUser = (address:string) => {
       selectedUser.value = address;
     };
+    const selectRoom = (index:number) => {
+      selectedRoom.value = index;
+    }
     const sendMessage = async () => {
       if (!holder.value) return;
       const messagebox = holder.value.messagebox;    
@@ -212,6 +217,7 @@ export default defineComponent({
       account,
       users,
       rooms,
+      selectedRoom, selectRoom,
       selectedUser, selectUser,
       message, sendMessage, messages,
       mint, justMinted,
