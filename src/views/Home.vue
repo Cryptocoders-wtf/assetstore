@@ -122,9 +122,10 @@ export default defineComponent({
     const fetchMessages = async () => {
       if (!holder.value) return;
       const messagebox = holder.value.messagebox;      
-      const result = await messagebox.functions.count();
-      console.log("***** message count", result[0].toNumber());
+      const result = await messagebox.functions.messageCount(selectedRoom.value);
+      console.log("***** messageCount", result[0].toNumber());
       const itemCount = result[0].toNumber();
+      /*
       const promises = [...Array(itemCount).keys()].map((index) => {
         return messagebox.functions.get(index);
       });
@@ -134,6 +135,7 @@ export default defineComponent({
       });
       console.log("***** messages", items);
       messages.value = items;
+      */
     };
     const fetchRooms = async () => {
       if (!holder.value) return;
@@ -195,6 +197,8 @@ export default defineComponent({
     };
     const selectRoom = (index:number) => {
       selectedRoom.value = index;
+      messages.value = [];
+      fetchMessages();
     }
     const sendMessage = async () => {
       if (!holder.value) return;
