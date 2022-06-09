@@ -23,18 +23,18 @@
           <div v-for="room in rooms" v-bind:key="room.another">
             <p @click="()=>{selectRoom(room.index)}">
               {{ room.name }}
-              <span v-if="selectedRoom == room.index">*</span>
             </p>
+            <div v-if="selectedRoom == room.index">
+              <div v-for="message in messages" v-bind:key="message.sender">
+                <p>
+                  {{ message.senderName }}
+                  : {{ message.text }}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
         <div>
-          <h4 class="font-bold">Inbox:</h4>
-          <div v-for="message in messages" v-bind:key="message.sender">
-            <p>
-              {{ message.senderName }}
-              : {{ message.text }}
-            </p>
-          </div>
         </div>
         <div>
           <h4 class="font-bold">Members: (Select one to send a message)</h4>
