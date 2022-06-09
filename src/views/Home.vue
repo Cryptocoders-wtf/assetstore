@@ -125,9 +125,8 @@ export default defineComponent({
       const result = await messagebox.functions.messageCount(selectedRoom.value);
       console.log("***** messageCount", result[0].toNumber());
       const itemCount = result[0].toNumber();
-      /*
       const promises = [...Array(itemCount).keys()].map((index) => {
-        return messagebox.functions.get(index);
+        return messagebox.functions.getMessage(selectedRoom.value, index);
       });
       const items = (await Promise.all(promises)).map((result) => {
         const value = result[0];
@@ -135,7 +134,6 @@ export default defineComponent({
       });
       console.log("***** messages", items);
       messages.value = items;
-      */
     };
     const fetchRooms = async () => {
       if (!holder.value) return;
