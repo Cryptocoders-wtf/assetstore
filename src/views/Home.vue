@@ -19,6 +19,14 @@
       </div>
       <div v-else>
         <div>
+          <h4 class="font-bold">Rooms:</h4>
+          <div v-for="room in rooms" v-bind:key="room.another">
+            <p>
+              {{ room.name }}
+            </p>
+          </div>
+        </div>
+        <div>
           <h4 class="font-bold">Inbox:</h4>
           <div v-for="message in messages" v-bind:key="message.sender">
             <p>
@@ -135,10 +143,13 @@ export default defineComponent({
         return messagebox.functions.getMembers(index);
       });
       const items = (await Promise.all(promises)).map((result) => {
-        return result[0];
+        const members = result[0];
+        const another = (members[0].toLowerCase() == account.value.toLowerCase()) ? members[1] : members[0];
+        const name = shorten(another);
+        return { another, name, members };
       });
       console.log("***** rooms", items);
-      // messages.value = items;
+      rooms.value = items;
     };
     const fetchUsers = async () => {
       if (!holder.value) return;
@@ -200,6 +211,7 @@ export default defineComponent({
     return {
       account,
       users,
+      rooms,
       selected, selectUser,
       message, sendMessage, messages,
       mint, justMinted,
