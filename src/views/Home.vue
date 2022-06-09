@@ -42,7 +42,7 @@
               {{ user.name }}
               <span v-if="user.address == account">(you)</span>
             </p>
-            <p v-if="selected == user.address">
+            <p v-if="selectedUser == user.address">
               <input v-model="message" class="border border-solid border-gray-300" />
               <button @click="sendMessage">Send</button>
             </p>
@@ -90,7 +90,7 @@ export default defineComponent({
     const expectedNetwork = ChainIds.RinkebyTestNet;
     const store = useStore();
     const tokenBalance = ref(0);
-    const selected = ref("");
+    const selectedUser = ref("");
     const message = ref("");
     const justMinted = ref(false);
     const users = ref([] as Array<object>);
@@ -189,17 +189,17 @@ export default defineComponent({
       await switchNetwork(expectedNetwork);
     }
     const selectUser = (address:string) => {
-      selected.value = address;
+      selectedUser.value = address;
     };
     const sendMessage = async () => {
       if (!holder.value) return;
       const messagebox = holder.value.messagebox;    
-      console.log("calling send", selected.value, message.value);
-      const result = await messagebox.functions.sendMessage(selected.value, message.value); /*, {
+      console.log("calling send", selectedUser.value, message.value);
+      const result = await messagebox.functions.sendMessage(selectedUser.value, message.value); /*, {
         gasLimit: 100000
       });  */
       console.log("just send", result);
-      selected.value = "";
+      selectedUser.value = "";
       message.value = "";
     };
     const account = computed(()=>{
@@ -212,7 +212,7 @@ export default defineComponent({
       account,
       users,
       rooms,
-      selected, selectUser,
+      selectedUser, selectUser,
       message, sendMessage, messages,
       mint, justMinted,
       tokenGate,
