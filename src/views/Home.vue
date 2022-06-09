@@ -19,13 +19,22 @@
       </div>
       <div v-else>
         <div>
-          <h4 class="font-bold">Inbox:</h4>
-          <div v-for="message in messages" v-bind:key="message.sender">
-            <p>
-              {{ message.senderName }}
-              : {{ message.text }}
+          <h4 class="font-bold">Rooms:</h4>
+          <div v-for="room in rooms" v-bind:key="room.another">
+            <p @click="()=>{selectRoom(room.index)}">
+              {{ room.name }}
             </p>
+            <div v-if="selectedRoom == room.index">
+              <div v-for="message in messages" v-bind:key="message.sender">
+                <p>
+                  {{ message.senderName }}
+                  : {{ message.text }}
+                </p>
+              </div>
+            </div>
           </div>
+        </div>
+        <div>
         </div>
         <div>
           <h4 class="font-bold">Members: (Select one to send a message)</h4>
@@ -34,7 +43,7 @@
               {{ user.name }}
               <span v-if="user.address == account">(you)</span>
             </p>
-            <p v-if="selected == user.address">
+            <p v-if="selectedUser == user.address">
               <input v-model="message" class="border border-solid border-gray-300" />
               <button @click="sendMessage">Send</button>
             </p>
@@ -57,7 +66,7 @@ const NounsVille = {
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
-  address: "0x2468b1c59D907852c4645547e45537075C2fa933"
+  address: "0x9F2dC3f778c07987Fcf5a225c3EFD29400930D50"
 };
 
 // no topics means any events
@@ -82,10 +91,12 @@ export default defineComponent({
     const expectedNetwork = ChainIds.RinkebyTestNet;
     const store = useStore();
     const tokenBalance = ref(0);
-    const selected = ref("");
+    const selectedUser = ref("");
+    const selectedRoom = ref(-1);
     const message = ref("");
     const justMinted = ref(false);
     const users = ref([] as Array<object>);
+    const rooms = ref([] as Array<object>);
     const messages = ref([] as Array<object>);
     const holder = computed(() => {
       if (store.state.account && store.state.chainId == expectedNetwork) {
@@ -111,11 +122,11 @@ export default defineComponent({
     const fetchMessages = async () => {
       if (!holder.value) return;
       const messagebox = holder.value.messagebox;      
-      const result = await messagebox.functions.count();
-      console.log("***** message count", result[0].toNumber());
+      const result = await messagebox.functions.messageCount(selectedRoom.value);
+      console.log("***** messageCount", result[0].toNumber());
       const itemCount = result[0].toNumber();
       const promises = [...Array(itemCount).keys()].map((index) => {
-        return messagebox.functions.get(index);
+        return messagebox.functions.getMessage(selectedRoom.value, index);
       });
       const items = (await Promise.all(promises)).map((result) => {
         const value = result[0];
@@ -123,6 +134,24 @@ export default defineComponent({
       });
       console.log("***** messages", items);
       messages.value = items;
+    };
+    const fetchRooms = async () => {
+      if (!holder.value) return;
+      const messagebox = holder.value.messagebox;      
+      const result = await messagebox.functions.roomCount();
+      console.log("***** room count", result[0].toNumber());
+      const itemCount = result[0].toNumber();
+      const promises = [...Array(itemCount).keys()].map((index) => {
+        return messagebox.functions.getMembers(index);
+      });
+      const items = (await Promise.all(promises)).map((result, index) => {
+        const members = result[0];
+        const another = (members[0].toLowerCase() == account.value.toLowerCase()) ? members[1] : members[0];
+        const name = shorten(another);
+        return { index, another, name, members };
+      });
+      console.log("***** rooms", items);
+      rooms.value = items;
     };
     const fetchUsers = async () => {
       if (!holder.value) return;
@@ -154,7 +183,7 @@ export default defineComponent({
       }
       fetchBalance();
       fetchUsers();
-      fetchMessages();
+      fetchRooms();
       return "valid";      
     });
     const switchToValidNetwork = async () => {
@@ -162,17 +191,22 @@ export default defineComponent({
       await switchNetwork(expectedNetwork);
     }
     const selectUser = (address:string) => {
-      selected.value = address;
+      selectedUser.value = address;
     };
+    const selectRoom = (index:number) => {
+      selectedRoom.value = index;
+      messages.value = [];
+      fetchMessages();
+    }
     const sendMessage = async () => {
       if (!holder.value) return;
       const messagebox = holder.value.messagebox;    
-      console.log("calling send", selected.value, message.value);
-      const result = await messagebox.functions.send(selected.value, message.value); /*, {
+      console.log("calling send", selectedUser.value, message.value);
+      const result = await messagebox.functions.sendMessage(selectedUser.value, message.value); /*, {
         gasLimit: 100000
       });  */
       console.log("just send", result);
-      selected.value = "";
+      selectedUser.value = "";
       message.value = "";
     };
     const account = computed(()=>{
@@ -184,7 +218,9 @@ export default defineComponent({
     return {
       account,
       users,
-      selected, selectUser,
+      rooms,
+      selectedRoom, selectRoom,
+      selectedUser, selectUser,
       message, sendMessage, messages,
       mint, justMinted,
       tokenGate,
