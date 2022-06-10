@@ -72,7 +72,7 @@ const NounsVille = {
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
-  address: "0x7aca88Dc990fF22592D24310c04538b725e94Ffc"
+  address: "0xdfbf32A5d04aa5CD148415477591109B63b2bfB5"
 };
 
 // no topics means any events
@@ -149,7 +149,7 @@ export default defineComponent({
       const items = (await Promise.all(promises)).map((result) => {
         const value = result[0];
         const sender = value[0].toLowerCase();
-        return { sender, isMe:(sender == account.value), senderName: shorten(sender), text: value[2] }
+        return { sender, isMe:(sender == account.value), senderName: shorten(sender), text: value[1] }
       });
       console.log("***** messages", items);
       messages.value = items;
@@ -238,11 +238,10 @@ export default defineComponent({
     };
     const sendMessageToRoom = async () => {
       if (!holder.value) return;
-      // TBD: Change it to room
-      const { others } = selectedRoom.value;
-      console.log("****to", others[0]);
+      const { roomId } = selectedRoom.value;
+      console.log("****to", roomId);
       const messagebox = holder.value.messagebox;    
-      const result = await messagebox.functions.sendMessage(others[0], message.value); 
+      const result = await messagebox.functions.sendMessageToRoom(roomId, message.value); 
       console.log("just send", result);
       selectedUser.value = "";
       message.value = "";
