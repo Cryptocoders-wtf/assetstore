@@ -22,7 +22,7 @@
           <h4 class="font-bold">Rooms:</h4>
           <div v-for="room in rooms" v-bind:key="room.another">
             <p @click="()=>{selectRoom(room.index)}">
-              {{ room.name }}
+              [{{ room.name }}]
             </p>
             <div v-if="selectedRoom == room.index">
               <div v-for="message in messages" v-bind:key="message.sender">
@@ -32,6 +32,10 @@
                 <p v-else>
                   {{ message.text }}
                 </p>
+              </div>
+              <div class="text-right">
+                <input v-model="message" class="border border-solid border-gray-300" />
+                <button @click="sendMessageToRoom">Send</button>
               </div>
             </div>
           </div>
@@ -212,6 +216,17 @@ export default defineComponent({
       selectedUser.value = "";
       message.value = "";
     };
+    const sendMessageToRoom = async () => {
+      if (!holder.value) return;
+      // TBD: Change it to room
+      const { others } = rooms.value[selectedRoom.value] as any;
+      console.log("****to", others[0]);
+      const messagebox = holder.value.messagebox;    
+      const result = await messagebox.functions.sendMessage(others[0], message.value); 
+      console.log("just send", result);
+      selectedUser.value = "";
+      message.value = "";
+    }
     const account = computed(()=>{
       if (store.state.account) {
         return store.state.account.toLowerCase();
@@ -222,7 +237,7 @@ export default defineComponent({
       account,
       users,
       rooms,
-      selectedRoom, selectRoom,
+      selectedRoom, selectRoom, sendMessageToRoom,
       selectedUser, selectUser,
       message, sendMessage, messages,
       mint, justMinted,
