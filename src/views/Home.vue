@@ -33,9 +33,9 @@
                   {{ message.text }}
                 </p>
               </div>
-              <div class="text-right">
-                <input v-model="message" class="border border-solid border-gray-300" />
-                <button @click="sendMessageToRoom">Send</button>
+              <div class="text-right mt-2 mb-2">
+                <input v-model="message" class="border border-solid border-gray-300 px-2 py-1" />
+                <button @click="sendMessageToRoom" class="inline-block px-6 py-2 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded ml-2">Send</button>
               </div>
             </div>
           </div>
@@ -50,8 +50,8 @@
               <span v-if="member.address == account">(you)</span>
             </p>
             <div v-if="selectedUser == member.address" class="text-right">
-              <input v-model="message" class="border border-solid border-gray-300" />
-              <button @click="sendMessage">Send</button>
+              <input v-model="message" class="border border-solid border-gray-300 px-2 py-1" />
+              <button @click="sendMessage" class="inline-block px-6 py-2 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded ml-2">Send</button>
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@ const NounsVille = {
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
-  address: "0xc5D3ED2730A97fDc1Ab705C2a07B4533FE484814"
+  address: "0x5C8d7748bF07709D3adC3f74fa0255F9f358C8b1"
 };
 
 const shorten = (address: string) => {
@@ -163,16 +163,21 @@ export default defineComponent({
       const messagebox = networkContext.value.messagebox;      
       const result = await messagebox.functions.roomCount();
       //console.log("***** room count", result[0].toNumber());
-      const itemCount = result[0].toNumber();
-      const promises = [...Array(itemCount).keys()].map(async (index) => {
-        const result = await messagebox.functions.getRoomId(index);
-        const roomId = result[0].toNumber();
-        const resultRoomInfo = await messagebox.functions.getRoomInfo(roomId);
-        const roomInfo = resultRoomInfo[0];
-        const timestamp = roomInfo[1].toNumber();
-        const members = roomInfo[2];
-        console.log("**** members", members, timestamp);
-        return { roomId, timestamp, members };
+      const roomCount = result[0].toNumber();
+      const promises = [...Array(roomCount).keys()].map(async (index) => {
+        try {
+          const result = await messagebox.functions.getRoomId(index);
+          const roomId = result[0].toNumber();
+          const resultRoomInfo = await messagebox.functions.getRoomInfo(roomId);
+          const roomInfo = resultRoomInfo[0];
+          const timestamp = roomInfo[1].toNumber();
+          const members = roomInfo[2];
+          // console.log("**** members", members, timestamp);
+          return { roomId, timestamp, members };
+        } catch (e) {
+          console.error("Failed to get roomID and getRoomInfo", index, roomCount, e);
+          return {};
+        }
       });
       let exclude : any = {};
       const items = (await Promise.all(promises)).map((result, index) => {
