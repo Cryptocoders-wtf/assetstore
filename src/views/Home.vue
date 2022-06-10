@@ -72,7 +72,7 @@ const NounsVille = {
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
-  address: "0xeeaD0C5285312dfa1100668c85DDfb7a0a9A3061"
+  address: "0xc5D3ED2730A97fDc1Ab705C2a07B4533FE484814"
 };
 
 const shorten = (address: string) => {
@@ -143,10 +143,10 @@ export default defineComponent({
     const fetchMessages = async () => {
       if (!networkContext.value) return;
       const messagebox = networkContext.value.messagebox;      
-      const result = await messagebox.functions.messageCount(selectedRoom.value.roomId);
+      const result = await messagebox.functions.getRoomInfo(selectedRoom.value.roomId);
       //console.log("***** messageCount", result[0].toNumber());
-      const itemCount = result[0].toNumber();
-      const promises = [...Array(itemCount).keys()].map((index) => {
+      const messageCount = result[0][0].toNumber();
+      const promises = [...Array(messageCount).keys()].map((index) => {
         return messagebox.functions.getMessage(selectedRoom.value.roomId, index);
       });
       const items = (await Promise.all(promises)).map((result) => {
