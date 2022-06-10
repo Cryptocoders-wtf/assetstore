@@ -94,7 +94,15 @@ export default defineComponent({
     const members = ref([] as Array<object>);
     const rooms = ref([] as Array<object>);
     const messages = ref([] as Array<object>);
+
+    let prevProvider:ethers.providers.Web3Provider | null = null;
     const networkContext = computed(() => {
+      if (prevProvider) {
+        console.log("Calling removeAllListners()");
+        prevProvider.removeAllListeners();
+        prevProvider = null;
+      }
+
       if (store.state.account && store.state.chainId == expectedNetwork) {
         const provider = new ethers.providers.Web3Provider(store.state.ethereum);
         const signer = provider.getSigner();
@@ -118,6 +126,8 @@ export default defineComponent({
             fetchMessages();
           }
         });
+        prevProvider = provider;
+
         return { provider, signer, nounsville, messagebox };
       }
       return null;

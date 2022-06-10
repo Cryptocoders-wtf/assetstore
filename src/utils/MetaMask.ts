@@ -57,18 +57,18 @@ export const initializeEthereum = () => {
 
 export const startMonitoringMetamask = () => {
   getAccount().then((value) => {
-    store.commit("setAccount", value);
     console.log("Eth gotAccount", store.getters.displayAccount);
+    store.commit("setAccount", value);
   });
   if (store.getters.hasMetaMask) {
     const ethereum = store.state.ethereum;
     ethereum.on("accountsChanged", (accounts: string[]) => {
-      console.log("accountsChanged", accounts.length);
+      //console.log("accountsChanged", accounts.length);
       if (accounts.length == 0) {
         store.commit("setAccount", null);
       } else {
-        store.commit("setAccount", accounts[0]);
         console.log("Eth acountsChanged", store.getters.displayAccount);
+        store.commit("setAccount", accounts[0]);
       }
     });
     ethereum.on("connect", ( info: ProviderConnectInfo): void => {
