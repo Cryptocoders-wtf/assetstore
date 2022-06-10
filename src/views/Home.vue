@@ -20,11 +20,11 @@
       <div v-else>
         <div>
           <h4 class="font-bold">Rooms:</h4>
-          <div v-for="room in rooms" v-bind:key="room.another">
-            <p @click="()=>{selectRoom(room.index)}">
+          <div v-for="room in rooms" v-bind:key="room.roomId">
+            <p @click="()=>{selectRoom(room.roomId)}">
               [{{ room.name }}]
             </p>
-            <div v-if="selectedRoom == room.index">
+            <div v-if="selectedRoom == room.roomId">
               <div v-for="message in messages" v-bind:key="message.sender">
                 <p v-if="message.isMe" class="text-right">
                   {{ message.text }}
@@ -72,7 +72,7 @@ const NounsVille = {
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
-  address: "0x8bbef7796D11867Ef31953e7a1a620447A9560Dd"
+  address: "0x7aca88Dc990fF22592D24310c04538b725e94Ffc"
 };
 
 // no topics means any events
@@ -160,14 +160,22 @@ export default defineComponent({
       const result = await messagebox.functions.roomCount();
       console.log("***** room count", result[0].toNumber());
       const itemCount = result[0].toNumber();
-      const promises = [...Array(itemCount).keys()].map((index) => {
-        return messagebox.functions.getMembers(index);
+      const promises = [...Array(itemCount).keys()].map(async (index) => {
+        console.log("**** calling getRoomId", index);
+        const result = await messagebox.functions.getRoomId(index);
+        const roomId = result[0].toNumber();
+        console.log("**** roomId", roomId);
+        const resultMembers = await messagebox.functions.getMembers(roomId);
+        const members = resultMembers[0];
+        console.log("**** members", members);
+        return { roomId, members };
       });
       const items = (await Promise.all(promises)).map((result, index) => {
-        const members = result[0].map((m:string) => { return m.toLowerCase(); });
+        const members = result.members.map((m:string) => { return m.toLowerCase(); });
+        const roomId = result.roomId;
         const others = members.filter((m:string) => { return m != account.value; });
         const name = others.map((m:string) => { return shorten(m); }).join(",");
-        return { index, others, name, members };
+        return { index, roomId, others, name, members };
       });
       console.log("***** rooms", items);
       rooms.value = items;
