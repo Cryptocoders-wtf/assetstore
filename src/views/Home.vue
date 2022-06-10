@@ -171,12 +171,23 @@ export default defineComponent({
         //console.log("**** members", members);
         return { roomId, members };
       });
-      rooms.value = (await Promise.all(promises)).map((result, index) => {
+      let exclude : any = {};
+      const items = (await Promise.all(promises)).map((result, index) => {
         const members = result.members.map((m:string) => { return m.toLowerCase(); });
         const roomId = result.roomId;
         const others = members.filter((m:string) => { return m != account.value; });
         const name = others.length > 0 ? others.map((m:string) => { return shorten(m); }).join(",") : "you";
+        if (others.length == 0) {
+          exclude[account.value] = true;
+        } else if (others.length == 1) {
+          exclude[others[0] as string] = true;
+        }
         return { index, roomId, others, name, members };
+      });
+      rooms.value = items;
+
+      members.value = members.value.filter((member: any) => {
+        return !exclude[member.address]; 
       });
     };
 
@@ -193,6 +204,7 @@ export default defineComponent({
         const address = result[0].toLowerCase();
         return { address, name:shorten(address) };
       }).filter((user) => {return user.address !== '0x000000000000000000000000000000000000dead'});
+      fetchRooms();
     };
 
     const mint = async () => {
@@ -209,7 +221,6 @@ export default defineComponent({
       }
       fetchBalance();
       fetchMembers();
-      fetchRooms();
       return "valid";      
     });
     const switchToValidNetwork = async () => {
