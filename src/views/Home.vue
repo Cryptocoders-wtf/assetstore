@@ -26,9 +26,11 @@
             </p>
             <div v-if="selectedRoom == room.index">
               <div v-for="message in messages" v-bind:key="message.sender">
-                <p>
-                  {{ message.senderName }}
-                  : {{ message.text }}
+                <p v-if="message.isMe" class="text-right">
+                  {{ message.text }}
+                </p>
+                <p v-else>
+                  {{ message.text }}
                 </p>
               </div>
             </div>
@@ -130,7 +132,8 @@ export default defineComponent({
       });
       const items = (await Promise.all(promises)).map((result) => {
         const value = result[0];
-        return { sender: value[0], senderName: shorten(value[0]), text: value[2] }
+        const sender = value[0].toLowerCase();
+        return { sender, isMe:(sender == account.value), senderName: shorten(sender), text: value[2] }
       });
       console.log("***** messages", items);
       messages.value = items;
