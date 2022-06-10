@@ -75,16 +75,6 @@ const MessageBox = {
   address: "0x5743cF32FfD4C1F2093AE2C94E1d036B6472E7B9"
 };
 
-// no topics means any events
-const mintFilter = {
-  address: NounsVille.address,
-  /*
-  topics: [
-    utils.id("NounBought(uint256,address)")
-  ]
-  */
-};
-
 const shorten = (address: string) => {
   return address.substring(0,6) + "..." + address.substring(38);
 };
@@ -104,12 +94,13 @@ export default defineComponent({
     const members = ref([] as Array<object>);
     const rooms = ref([] as Array<object>);
     const messages = ref([] as Array<object>);
-    const holder = computed(() => {
+    const networkContext = computed(() => {
       if (store.state.account && store.state.chainId == expectedNetwork) {
         const provider = new ethers.providers.Web3Provider(store.state.ethereum);
         const signer = provider.getSigner();
         const nounsville = new ethers.Contract(NounsVille.address, NounsVille.wabi.abi, signer);
         const messagebox = new ethers.Contract(MessageBox.address, MessageBox.wabi.abi, signer);
+        const mintFilter = nounsville.filters.NounBought();
         provider.on(mintFilter, (log, event) => {
           console.log("**** got mint event", log, event);
           justMinted.value = false;
@@ -127,21 +118,21 @@ export default defineComponent({
             fetchMessages();
           }
         });
-        return { nounsville, provider, signer, messagebox };
+        return { provider, signer, nounsville, messagebox };
       }
       return null;
     });
 
     const fetchBalance = async () => {
-      if (!holder.value) return;
-      const count = await holder.value.nounsville.functions.balanceOf(store.state.account);
+      if (!networkContext.value) return;
+      const count = await networkContext.value.nounsville.functions.balanceOf(store.state.account);
       //console.log("**** count", count[0].toNumber());
       tokenBalance.value = count[0].toNumber();
     };
 
     const fetchMessages = async () => {
-      if (!holder.value) return;
-      const messagebox = holder.value.messagebox;      
+      if (!networkContext.value) return;
+      const messagebox = networkContext.value.messagebox;      
       const result = await messagebox.functions.messageCount(selectedRoom.value.roomId);
       //console.log("***** messageCount", result[0].toNumber());
       const itemCount = result[0].toNumber();
@@ -158,8 +149,8 @@ export default defineComponent({
     };
 
     const fetchRooms = async () => {
-      if (!holder.value) return;
-      const messagebox = holder.value.messagebox;      
+      if (!networkContext.value) return;
+      const messagebox = networkContext.value.messagebox;      
       const result = await messagebox.functions.roomCount();
       //console.log("***** room count", result[0].toNumber());
       const itemCount = result[0].toNumber();
@@ -192,8 +183,8 @@ export default defineComponent({
     };
 
     const fetchMembers = async () => {
-      if (!holder.value) return;
-      const nounsville = holder.value.nounsville;      
+      if (!networkContext.value) return;
+      const nounsville = networkContext.value.nounsville;      
       const result = await nounsville.functions.totalSupply();
       //console.log("***** totalSupply", result);
       const itemCount = result[0].toNumber();
@@ -208,8 +199,8 @@ export default defineComponent({
     };
 
     const mint = async () => {
-      if (!holder.value) return;
-      await holder.value.nounsville.functions.mint();
+      if (!networkContext.value) return;
+      await networkContext.value.nounsville.functions.mint();
       justMinted.value = true;
     };
     const tokenGate = computed(()=>{
@@ -236,8 +227,8 @@ export default defineComponent({
       fetchMessages();
     }
     const sendMessage = async () => {
-      if (!holder.value) return;
-      const messagebox = holder.value.messagebox;    
+      if (!networkContext.value) return;
+      const messagebox = networkContext.value.messagebox;    
       console.log("calling send", selectedUser.value, message.value);
       const result = await messagebox.functions.sendMessage(selectedUser.value, message.value); /*, {
         gasLimit: 100000
@@ -247,10 +238,10 @@ export default defineComponent({
       message.value = "";
     };
     const sendMessageToRoom = async () => {
-      if (!holder.value) return;
+      if (!networkContext.value) return;
       const { roomId } = selectedRoom.value;
       console.log("****to", roomId);
-      const messagebox = holder.value.messagebox;    
+      const messagebox = networkContext.value.messagebox;    
       const result = await messagebox.functions.sendMessageToRoom(roomId, message.value); 
       console.log("just send", result);
       selectedUser.value = "";
