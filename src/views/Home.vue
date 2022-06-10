@@ -115,6 +115,11 @@ export default defineComponent({
           justMinted.value = false;
           fetchBalance();
         });
+        const roomFilter = messagebox.filters.RoomCreated();
+        provider.on(roomFilter, (log, event) => {
+          console.log("**** got room event", log, event);
+          fetchRooms();
+        });
         const messageFilter = messagebox.filters.MessageReceived();
         provider.on(messageFilter, (log, event) => {
           console.log("**** got message event", log, event);
