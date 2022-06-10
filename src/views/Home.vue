@@ -84,14 +84,6 @@ const mintFilter = {
   ]
   */
 };
-const messageFilter = {
-  address: MessageBox.address,
-  /*
-  topics: [
-    utils.id("NounBought(uint256,address)")
-  ]
-  */
-};
 
 const shorten = (address: string) => {
   return address.substring(0,6) + "..." + address.substring(38);
@@ -123,6 +115,7 @@ export default defineComponent({
           justMinted.value = false;
           fetchBalance();
         });
+        const messageFilter = messagebox.filters.MessageReceived();
         provider.on(messageFilter, (log, event) => {
           console.log("**** got message event", log, event);
           if (selectedRoom.value >= 0) {
