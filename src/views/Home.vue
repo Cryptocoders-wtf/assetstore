@@ -44,15 +44,15 @@
         </div>
         <div>
           <h4 class="font-bold">Members: (Select one to send a message)</h4>
-          <div v-for="user in users" v-bind:key="user.address" @click="()=>{selectUser(user.address);}">
+          <div v-for="member in members" v-bind:key="member.address" @click="()=>{selectUser(member.address);}">
             <p>
-              {{ user.name }}
-              <span v-if="user.address == account">(you)</span>
+              {{ member.name }}
+              <span v-if="member.address == account">(you)</span>
             </p>
-            <p v-if="selectedUser == user.address">
+            <div v-if="selectedUser == member.address" class="text-right">
               <input v-model="message" class="border border-solid border-gray-300" />
               <button @click="sendMessage">Send</button>
-            </p>
+            </div>
           </div>
         </div>
       </div>
@@ -101,7 +101,7 @@ export default defineComponent({
     const selectedRoom = ref(null as any);
     const message = ref("");
     const justMinted = ref(false);
-    const users = ref([] as Array<object>);
+    const members = ref([] as Array<object>);
     const rooms = ref([] as Array<object>);
     const messages = ref([] as Array<object>);
     const holder = computed(() => {
@@ -131,17 +131,19 @@ export default defineComponent({
       }
       return null;
     });
+
     const fetchBalance = async () => {
       if (!holder.value) return;
       const count = await holder.value.nounsville.functions.balanceOf(store.state.account);
       //console.log("**** count", count[0].toNumber());
       tokenBalance.value = count[0].toNumber();
     };
+
     const fetchMessages = async () => {
       if (!holder.value) return;
       const messagebox = holder.value.messagebox;      
       const result = await messagebox.functions.messageCount(selectedRoom.value.roomId);
-      console.log("***** messageCount", result[0].toNumber());
+      //console.log("***** messageCount", result[0].toNumber());
       const itemCount = result[0].toNumber();
       const promises = [...Array(itemCount).keys()].map((index) => {
         return messagebox.functions.getMessage(selectedRoom.value.roomId, index);
@@ -151,36 +153,34 @@ export default defineComponent({
         const sender = value[0].toLowerCase();
         return { sender, isMe:(sender == account.value), senderName: shorten(sender), text: value[1] }
       });
-      console.log("***** messages", items);
+      //console.log("***** messages", items);
       messages.value = items;
     };
+
     const fetchRooms = async () => {
       if (!holder.value) return;
       const messagebox = holder.value.messagebox;      
       const result = await messagebox.functions.roomCount();
-      console.log("***** room count", result[0].toNumber());
+      //console.log("***** room count", result[0].toNumber());
       const itemCount = result[0].toNumber();
       const promises = [...Array(itemCount).keys()].map(async (index) => {
-        console.log("**** calling getRoomId", index);
         const result = await messagebox.functions.getRoomId(index);
         const roomId = result[0].toNumber();
-        console.log("**** roomId", roomId);
         const resultMembers = await messagebox.functions.getMembers(roomId);
         const members = resultMembers[0];
-        console.log("**** members", members);
+        //console.log("**** members", members);
         return { roomId, members };
       });
-      const items = (await Promise.all(promises)).map((result, index) => {
+      rooms.value = (await Promise.all(promises)).map((result, index) => {
         const members = result.members.map((m:string) => { return m.toLowerCase(); });
         const roomId = result.roomId;
         const others = members.filter((m:string) => { return m != account.value; });
         const name = others.map((m:string) => { return shorten(m); }).join(",");
         return { index, roomId, others, name, members };
       });
-      console.log("***** rooms", items);
-      rooms.value = items;
     };
-    const fetchUsers = async () => {
+
+    const fetchMembers = async () => {
       if (!holder.value) return;
       const nounsville = holder.value.nounsville;      
       const result = await nounsville.functions.totalSupply();
@@ -189,13 +189,12 @@ export default defineComponent({
       const promises = [...Array(itemCount).keys()].map((index) => {
         return nounsville.functions.ownerOf(index);
       });
-      const owners = (await Promise.all(promises)).map((result) => {
+      members.value = (await Promise.all(promises)).map((result) => {
         const address = result[0].toLowerCase();
         return { address, name:shorten(address) };
       }).filter((user) => {return user.address !== '0x000000000000000000000000000000000000dead'});
-      //console.log("***** users", owners);
-      users.value = owners;
     };
+
     const mint = async () => {
       if (!holder.value) return;
       await holder.value.nounsville.functions.mint();
@@ -209,7 +208,7 @@ export default defineComponent({
         return "invalidNetwork"
       }
       fetchBalance();
-      fetchUsers();
+      fetchMembers();
       fetchRooms();
       return "valid";      
     });
@@ -254,7 +253,7 @@ export default defineComponent({
     });    
     return {
       account,
-      users,
+      members,
       rooms,
       selectedRoom, selectRoom, sendMessageToRoom,
       selectedUser, selectUser,
