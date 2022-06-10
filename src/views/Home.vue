@@ -145,8 +145,8 @@ export default defineComponent({
         return messagebox.functions.getMembers(index);
       });
       const items = (await Promise.all(promises)).map((result, index) => {
-        const members = result[0];
-        const another = (members[0].toLowerCase() == account.value.toLowerCase()) ? members[1] : members[0];
+        const members = result[0].map((member:string) => { return member.toLowerCase(); });
+        const another = (members[0] == account.value) ? members[1] : members[0];
         const name = shorten(another);
         return { index, another, name, members };
       });

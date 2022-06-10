@@ -34,8 +34,8 @@ export default createStore<State>({
     setUser(state: State, user: User | null) {
       state.user = user;
     },
-    setAccount(state: State, account) {
-      state.account = account;
+    setAccount(state: State, account: string | null) {
+      state.account = account && account.toLowerCase();
       if (state.user) {
         auth.signOut();
       }
