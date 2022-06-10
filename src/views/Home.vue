@@ -44,8 +44,8 @@
         </div>
         <div>
           <h4 class="font-bold">Members: (Select one to send a message)</h4>
-          <div v-for="member in members" v-bind:key="member.address" @click="()=>{selectUser(member.address);}">
-            <p>
+          <div v-for="member in members" v-bind:key="member.address">
+            <p @click="()=>{selectUser(member.address);}">
               {{ member.name }}
               <span v-if="member.address == account">(you)</span>
             </p>
@@ -72,7 +72,7 @@ const NounsVille = {
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
-  address: "0x5743cF32FfD4C1F2093AE2C94E1d036B6472E7B9"
+  address: "0xeeaD0C5285312dfa1100668c85DDfb7a0a9A3061"
 };
 
 const shorten = (address: string) => {
@@ -167,10 +167,12 @@ export default defineComponent({
       const promises = [...Array(itemCount).keys()].map(async (index) => {
         const result = await messagebox.functions.getRoomId(index);
         const roomId = result[0].toNumber();
-        const resultMembers = await messagebox.functions.getMembers(roomId);
-        const members = resultMembers[0];
-        //console.log("**** members", members);
-        return { roomId, members };
+        const resultRoomInfo = await messagebox.functions.getRoomInfo(roomId);
+        const roomInfo = resultRoomInfo[0];
+        const timestamp = roomInfo[1].toNumber();
+        const members = roomInfo[2];
+        console.log("**** members", members, timestamp);
+        return { roomId, timestamp, members };
       });
       let exclude : any = {};
       const items = (await Promise.all(promises)).map((result, index) => {
