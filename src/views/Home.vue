@@ -232,9 +232,13 @@ export default defineComponent({
       selectedUser.value = address;
     };
     const selectRoom = (room:any) => {
-      selectedRoom.value = room;
-      messages.value = [];
-      fetchMessages();
+      if (selectedRoom.value && selectedRoom.value.roomId == room.roomId) {
+        selectedRoom.value = null;
+      } else {
+        selectedRoom.value = room;
+        messages.value = [];
+        fetchMessages();
+      }
     }
     const sendMessage = async () => {
       if (!networkContext.value) return;
