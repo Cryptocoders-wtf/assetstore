@@ -76,8 +76,16 @@ const MessageBox = {
 };
 
 // no topics means any events
-const filter = {
+const mintFilter = {
   address: NounsVille.address,
+  /*
+  topics: [
+    utils.id("NounBought(uint256,address)")
+  ]
+  */
+};
+const messageFilter = {
+  address: MessageBox.address,
   /*
   topics: [
     utils.id("NounBought(uint256,address)")
@@ -110,10 +118,16 @@ export default defineComponent({
         const signer = provider.getSigner();
         const nounsville = new ethers.Contract(NounsVille.address, NounsVille.wabi.abi, signer);
         const messagebox = new ethers.Contract(MessageBox.address, MessageBox.wabi.abi, signer);
-        provider.on(filter, (log, event) => {
-          console.log("**** got event", log, event);
+        provider.on(mintFilter, (log, event) => {
+          console.log("**** got mint event", log, event);
           justMinted.value = false;
           fetchBalance();
+        });
+        provider.on(messageFilter, (log, event) => {
+          console.log("**** got message event", log, event);
+          if (selectedRoom.value >= 0) {
+            fetchMessages();
+          }
         });
         return { nounsville, provider, signer, messagebox };
       }
