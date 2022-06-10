@@ -21,10 +21,10 @@
         <div>
           <h4 class="font-bold">Rooms:</h4>
           <div v-for="room in rooms" v-bind:key="room.roomId">
-            <p @click="()=>{selectRoom(room.roomId)}">
+            <p @click="()=>{selectRoom(room)}">
               [{{ room.name }}]
             </p>
-            <div v-if="selectedRoom == room.roomId">
+            <div v-if="selectedRoom && selectedRoom.roomId == room.roomId">
               <div v-for="message in messages" v-bind:key="message.sender">
                 <p v-if="message.isMe" class="text-right">
                   {{ message.text }}
@@ -98,7 +98,7 @@ export default defineComponent({
     const store = useStore();
     const tokenBalance = ref(0);
     const selectedUser = ref("");
-    const selectedRoom = ref(-1);
+    const selectedRoom = ref(null as any);
     const message = ref("");
     const justMinted = ref(false);
     const users = ref([] as Array<object>);
@@ -123,7 +123,7 @@ export default defineComponent({
         const messageFilter = messagebox.filters.MessageReceived();
         provider.on(messageFilter, (log, event) => {
           console.log("**** got message event", log, event);
-          if (selectedRoom.value >= 0) {
+          if (selectedRoom.value) {
             fetchMessages();
           }
         });
@@ -140,11 +140,11 @@ export default defineComponent({
     const fetchMessages = async () => {
       if (!holder.value) return;
       const messagebox = holder.value.messagebox;      
-      const result = await messagebox.functions.messageCount(selectedRoom.value);
+      const result = await messagebox.functions.messageCount(selectedRoom.value.roomId);
       console.log("***** messageCount", result[0].toNumber());
       const itemCount = result[0].toNumber();
       const promises = [...Array(itemCount).keys()].map((index) => {
-        return messagebox.functions.getMessage(selectedRoom.value, index);
+        return messagebox.functions.getMessage(selectedRoom.value.roomId, index);
       });
       const items = (await Promise.all(promises)).map((result) => {
         const value = result[0];
@@ -220,8 +220,8 @@ export default defineComponent({
     const selectUser = (address:string) => {
       selectedUser.value = address;
     };
-    const selectRoom = (index:number) => {
-      selectedRoom.value = index;
+    const selectRoom = (room:any) => {
+      selectedRoom.value = room;
       messages.value = [];
       fetchMessages();
     }
@@ -239,7 +239,7 @@ export default defineComponent({
     const sendMessageToRoom = async () => {
       if (!holder.value) return;
       // TBD: Change it to room
-      const { others } = rooms.value[selectedRoom.value] as any;
+      const { others } = selectedRoom.value;
       console.log("****to", others[0]);
       const messagebox = holder.value.messagebox;    
       const result = await messagebox.functions.sendMessage(others[0], message.value); 
