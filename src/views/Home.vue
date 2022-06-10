@@ -72,7 +72,7 @@ const NounsVille = {
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
-  address: "0x9F2dC3f778c07987Fcf5a225c3EFD29400930D50"
+  address: "0x8bbef7796D11867Ef31953e7a1a620447A9560Dd"
 };
 
 // no topics means any events
