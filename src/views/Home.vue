@@ -72,7 +72,7 @@ const NounsVille = {
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
-  address: "0xdfbf32A5d04aa5CD148415477591109B63b2bfB5"
+  address: "0x5743cF32FfD4C1F2093AE2C94E1d036B6472E7B9"
 };
 
 // no topics means any events
@@ -175,7 +175,7 @@ export default defineComponent({
         const members = result.members.map((m:string) => { return m.toLowerCase(); });
         const roomId = result.roomId;
         const others = members.filter((m:string) => { return m != account.value; });
-        const name = others.map((m:string) => { return shorten(m); }).join(",");
+        const name = others.length > 0 ? others.map((m:string) => { return shorten(m); }).join(",") : "you";
         return { index, roomId, others, name, members };
       });
     };
