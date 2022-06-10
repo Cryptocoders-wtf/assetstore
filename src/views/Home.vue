@@ -145,10 +145,10 @@ export default defineComponent({
         return messagebox.functions.getMembers(index);
       });
       const items = (await Promise.all(promises)).map((result, index) => {
-        const members = result[0].map((member:string) => { return member.toLowerCase(); });
-        const another = (members[0] == account.value) ? members[1] : members[0];
-        const name = shorten(another);
-        return { index, another, name, members };
+        const members = result[0].map((m:string) => { return m.toLowerCase(); });
+        const others = members.filter((m:string) => { return m != account.value; });
+        const name = others.map((m:string) => { return shorten(m); }).join(",");
+        return { index, others, name, members };
       });
       console.log("***** rooms", items);
       rooms.value = items;
