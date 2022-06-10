@@ -229,7 +229,12 @@ export default defineComponent({
       await switchNetwork(expectedNetwork);
     }
     const selectUser = (address:string) => {
-      selectedUser.value = address;
+      if (selectedUser.value && selectedUser.value == address) {
+        selectedUser.value = "";
+      } else {
+        selectedUser.value = address;
+      }
+      selectedRoom.value = null;
     };
     const selectRoom = (room:any) => {
       if (selectedRoom.value && selectedRoom.value.roomId == room.roomId) {
@@ -239,6 +244,7 @@ export default defineComponent({
         messages.value = [];
         fetchMessages();
       }
+      selectedUser.value = "";
     }
     const sendMessage = async () => {
       if (!networkContext.value) return;
