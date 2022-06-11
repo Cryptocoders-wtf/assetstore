@@ -72,7 +72,7 @@ const NounsVille = {
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
-  address: "0x4B71cC6c98182b803a15f2bdCf4c3cBF4C3035A3"
+  address: "0x09FF4ccDF50650aDF1Be2fff7B0f344ED65d0394"
 };
 
 const shorten = (address: string) => {
@@ -271,7 +271,6 @@ export default defineComponent({
       const messagebox = networkContext.value.messagebox;    
       const result = await messagebox.functions.sendMessageToRoom(roomId, message.value); 
       console.log("just send", result);
-      selectedUser.value = "";
       message.value = "";
     }
     const account = computed(()=>{
