@@ -72,7 +72,7 @@ const NounsVille = {
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
-  address: "0x09FF4ccDF50650aDF1Be2fff7B0f344ED65d0394"
+  address: "0x7EFF203C4824057645f4Bba2f49bFe0A19f33134"
 };
 
 const shorten = (address: string) => {
@@ -144,7 +144,7 @@ export default defineComponent({
       if (!networkContext.value) return;
       const messagebox = networkContext.value.messagebox;      
       const result = await messagebox.functions.getRoomInfo(selectedRoom.value.roomId);
-      //console.log("***** messageCount", result[0].toNumber());
+      console.log("***** messageCount", result[0]);
       const messageCount = result[0][0].toNumber();
       const promises = [...Array(messageCount).keys()].map((index) => {
         return messagebox.functions.getMessage(selectedRoom.value.roomId, index);
@@ -257,7 +257,8 @@ export default defineComponent({
       if (!networkContext.value) return;
       const messagebox = networkContext.value.messagebox;    
       console.log("calling send", selectedUser.value, message.value);
-      const result = await messagebox.functions.sendMessage(selectedUser.value, message.value); /*, {
+      const members = [store.state.account, selectedUser.value].sort();
+      const result = await messagebox.functions.sendMessage(members, message.value); /*, {
         gasLimit: 100000
       });  */
       console.log("just send", result);
