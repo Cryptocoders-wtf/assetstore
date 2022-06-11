@@ -179,24 +179,14 @@ export default defineComponent({
           return {};
         }
       });
-      let exclude : any = {};
       const items = (await Promise.all(promises)).map((result, index) => {
         const members = result.members.map((m:string) => { return m.toLowerCase(); });
         const roomId = result.roomId;
         const others = members.filter((m:string) => { return m != account.value; });
         const name = others.length > 0 ? others.map((m:string) => { return shorten(m); }).join(",") : "you";
-        if (others.length == 0) {
-          exclude[account.value] = true;
-        } else if (others.length == 1) {
-          exclude[others[0] as string] = true;
-        }
         return { index, roomId, others, name, members };
       });
       rooms.value = items;
-
-      members.value = members.value.filter((member: any) => {
-        return !exclude[member.address]; 
-      });
     };
 
     const fetchMembers = async () => {
@@ -257,8 +247,8 @@ export default defineComponent({
       if (!networkContext.value) return;
       const messagebox = networkContext.value.messagebox;    
       console.log("calling send", selectedUser.value, message.value);
-      const members = [store.state.account, selectedUser.value].sort();
-      const result = await messagebox.functions.sendMessage(members, message.value); /*, {
+      const addressed = [store.state.account, selectedUser.value].sort();
+      const result = await messagebox.functions.sendMessage(addressed, message.value); /*, {
         gasLimit: 100000
       });  */
       console.log("just send", result);
