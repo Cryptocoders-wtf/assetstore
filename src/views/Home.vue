@@ -72,7 +72,7 @@ const NounsVille = {
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
-  address: "0x673c5bA6f6C612a2Ed2e810eD91f168F7910bE9a"
+  address: "0x1E93414cf36659084963E66c7cD24bDd00a55917"
 };
 
 const shorten = (address: string) => {
