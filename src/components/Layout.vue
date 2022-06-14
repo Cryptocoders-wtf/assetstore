@@ -2,9 +2,7 @@
   <div class="layout">
     <div id="nav">
       <img class="mb-4" src="@/assets/banner.jpeg" />
-      <router-link :to="localizedUrl('/')" class="text-2xl font-londrina">Top</router-link> |
-      <router-link :to="localizedUrl('/about')" class="text-2xl font-londrina">About</router-link>
-      <Languages class="mt-4" />
+      <router-link :to="localizedUrl('/')" class="text-2xl">Pride Squiggle</router-link> 
       <Connect />
     </div>
     <router-view />
@@ -30,7 +28,6 @@ interface UserData {
 export default defineComponent({
   name: "AppLayout",
   components: {
-    Languages,
     Connect
   },
   async setup() {
