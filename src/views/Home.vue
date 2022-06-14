@@ -1,10 +1,10 @@
 <template>
   <div class="max-w-lg mx-auto text-left p-2">
     <div v-if="tokenGate == 'noAccount'">
-      <p>{{ tokenGate }}</p>
+      <p>{{ $t("message."+tokenGate) }}</p>
     </div>
     <div v-else-if="tokenGate == 'invalidNetwork'">
-      <p>{{ tokenGate }}</p>
+      <p>{{ $t("message."+tokenGate) }}</p>
       <button @click="switchToValidNetwork" class="underline">Switch Network</button>
     </div>
     <div v-else>
