@@ -67,8 +67,8 @@ import { ethers } from "ethers";
 import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const NounsVille = {
-  wabi: require("../abis/NounsvilleToken.json"), // wrapped abi
-  address: "0x11994690b1682706Be6f9cfA55279Ff04aE3154F"
+  wabi: require("../abis/VectorToken.json"), // wrapped abi
+  address: "0x3f454b4618A6581b55fFefbC4B4638818872638a"
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
@@ -138,6 +138,9 @@ export default defineComponent({
       const count = await networkContext.value.nounsville.functions.balanceOf(store.state.account);
       //console.log("**** count", count[0].toNumber());
       tokenBalance.value = count[0].toNumber();
+      // debug only
+      const svg = await networkContext.value.nounsville.functions.generateSVG(0);
+      console.log(svg[0]);
     };
 
     const fetchMessages = async () => {
