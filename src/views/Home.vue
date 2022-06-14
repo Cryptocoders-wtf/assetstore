@@ -23,7 +23,6 @@
         </div>
         <div v-else>
           <div v-if="currentToken < limit">
-            <p>You need to have a contract token to play with this app</p>
             <p>Please <button @click="mint" class="underline">mint</button> (free, but you need to pay a gas fee).</p>
           </div>
           <div v-else>
@@ -48,7 +47,7 @@ import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const PrideSquiggle = {
   wabi: require("../abis/PrideSquiggle.json"), // wrapped abi
-  address: "0x78B7c24602E22D94bc338497e30f45D60794BDDA"
+  address: "0xdb9Ae4A1CAE7D45f2601e8efeCDb07EF33635CC7"
 };
 
 const shorten = (address: string) => {
