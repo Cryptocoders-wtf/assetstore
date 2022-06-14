@@ -68,7 +68,7 @@ import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const NounsVille = {
   wabi: require("../abis/VectorToken.json"), // wrapped abi
-  address: "0x3f454b4618A6581b55fFefbC4B4638818872638a"
+  address: "0x2ae025c7Fb9d21838A4Ab23860C97BCb2Adb356a"
 };
 const MessageBox = {
   wabi: require("../abis/MessageBox.json"), // wrapped abi
