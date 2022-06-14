@@ -34,7 +34,7 @@ import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const PrideSquiggle = {
   wabi: require("../abis/PrideSquiggle.json"), // wrapped abi
-  address: "0x182FE3EF25F8f559C22620Fa6c64fFB6Aa2BaDf8"
+  address: "0x507d5ee72568b68Aed487fd0eF25a37D73f4453F"
 };
 
 const shorten = (address: string) => {
