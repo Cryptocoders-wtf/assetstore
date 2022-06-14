@@ -19,41 +19,7 @@
       </div>
       <div v-else>
         <div>
-          <h4 class="font-bold">Rooms:</h4>
-          <div v-for="room in rooms" v-bind:key="room.roomId">
-            <p @click="()=>{selectRoom(room)}">
-              [{{ room.name }}]
-            </p>
-            <div v-if="selectedRoom && selectedRoom.roomId == room.roomId">
-              <div v-for="message in messages" v-bind:key="message.sender">
-                <p v-if="message.isMe" class="text-right">
-                  {{ message.text }}
-                </p>
-                <p v-else>
-                  {{ message.text }}
-                </p>
-              </div>
-              <div class="text-right mt-2 mb-2">
-                <input v-model="message" class="border border-solid border-gray-300 px-2 py-1" />
-                <button @click="sendMessageToRoom" class="inline-block px-6 py-2 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded ml-2">Send</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-        </div>
-        <div>
-          <h4 class="font-bold">Members: (Select one to send a message)</h4>
-          <div v-for="member in members" v-bind:key="member.address">
-            <p @click="()=>{selectUser(member.address);}">
-              {{ member.name }}
-              <span v-if="member.address == account">(you)</span>
-            </p>
-            <div v-if="selectedUser == member.address" class="text-right">
-              <input v-model="message" class="border border-solid border-gray-300 px-2 py-1" />
-              <button @click="sendMessage" class="inline-block px-6 py-2 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded ml-2">Send</button>
-            </div>
-          </div>
+          <p>Thank you for being a member of Pride Squiggle community.</p>
         </div>
       </div>
     </div>
@@ -67,7 +33,7 @@ import { ethers } from "ethers";
 import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const PrideSquiggle = {
-  wabi: require("../abis/VectorToken.json"), // wrapped abi
+  wabi: require("../abis/PrideSquiggle.json"), // wrapped abi
   address: "0x2ae025c7Fb9d21838A4Ab23860C97BCb2Adb356a"
 };
 
@@ -115,9 +81,6 @@ export default defineComponent({
       const count = await networkContext.value.contract.functions.balanceOf(store.state.account);
       //console.log("**** count", count[0].toNumber());
       tokenBalance.value = count[0].toNumber();
-      // debug only
-      const svg = await networkContext.value.contract.functions.generateSVG(0);
-      console.log(svg[0]);
     };
 
     const mint = async () => {
@@ -132,6 +95,7 @@ export default defineComponent({
       if (store.state.chainId != expectedNetwork) {
         return "invalidNetwork"
       }
+      fetchBalance();
       return "valid";      
     });
     const switchToValidNetwork = async () => {
