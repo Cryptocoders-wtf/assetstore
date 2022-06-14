@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <div id="nav">
-      <img class="mb-4" src="@/assets/banner.jpeg" />
+      <img class="mb-4" src="@/assets/banner.png" />
       <router-link :to="localizedUrl('/')" class="text-2xl">Pride Squiggle</router-link> 
       <Connect />
     </div>
