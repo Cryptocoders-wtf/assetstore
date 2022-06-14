@@ -8,13 +8,27 @@
       <button @click="switchToValidNetwork" class="underline">Switch Network</button>
     </div>
     <div v-else>
+      <div>
+        Total Count: {{ limit }}
+      </div>
+      <div v-if="currentToken < limit">
+        Next Token: {{ currentToken }}
+      </div>
+      <div v-else>
+        Sold Out!
+      </div>
       <div v-if="tokenBalance == 0">
         <div v-if="justMinted">
           <p>Thank you for minting. Please wait a little bit...</p>
         </div>
         <div v-else>
-          <p>You need to have a contract token to play with this app</p>
-          <p>Please <button @click="mint" class="underline">mint</button> (free, but you need to pay a gas).</p>
+          <div v-if="currentToken < limit">
+            <p>You need to have a contract token to play with this app</p>
+            <p>Please <button @click="mint" class="underline">mint</button> (free, but you need to pay a gas fee).</p>
+          </div>
+          <div v-else>
+            Thank you for the interest, but it is sold out unfortunately.
+          </div>
         </div>
       </div>
       <div v-else>
@@ -34,7 +48,7 @@ import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const PrideSquiggle = {
   wabi: require("../abis/PrideSquiggle.json"), // wrapped abi
-  address: "0x507d5ee72568b68Aed487fd0eF25a37D73f4453F"
+  address: "0xaC644987601456554272B296936D3C262A7A1Fcf"
 };
 
 const shorten = (address: string) => {
@@ -50,6 +64,8 @@ export default defineComponent({
     const store = useStore();
     const tokenBalance = ref(0);
     const justMinted = ref(false);
+    const limit = ref(0);
+    const currentToken = ref(0);
 
     let prevProvider:ethers.providers.Web3Provider | null = null;
     const networkContext = computed(() => {
@@ -78,9 +94,16 @@ export default defineComponent({
 
     const fetchBalance = async () => {
       if (!networkContext.value) return;
-      const count = await networkContext.value.contract.functions.balanceOf(store.state.account);
+      let contract = networkContext.value.contract;
+      let result = await contract.functions.balanceOf(store.state.account);
       //console.log("**** count", count[0].toNumber());
-      tokenBalance.value = count[0].toNumber();
+      tokenBalance.value = result[0].toNumber();
+
+      result = await contract.functions.limit();
+      limit.value = result[0].toNumber();
+      result = await contract.functions.getCurrentToken();
+      currentToken.value = result[0].toNumber();
+      console.log("**fetchBakabce", tokenBalance.value, limit.value, currentToken.value);
     };
 
     const mint = async () => {
@@ -111,6 +134,7 @@ export default defineComponent({
     return {
       account,
       mint, justMinted,
+      limit, currentToken,
       tokenGate,
       tokenBalance,
       switchToValidNetwork
