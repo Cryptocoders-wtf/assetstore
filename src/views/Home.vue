@@ -116,8 +116,7 @@ export default defineComponent({
         result = await contract.functions.tokenOfOwnerByIndex(account.value, 0);
         const tokenId = result[0].toNumber();
         result = await contract.functions.generateSVG(tokenId);
-        imageURL.value = 'data:image/svg+xml;base64,' + btoa(result[0]); // BUGBUG: "Buffer.from(result[0], 'base64'));" causes an error
-        console.log("** svg", imageURL.value); // 
+        imageURL.value = 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64'); 
       }
 
       result = await contract.functions.limit();
