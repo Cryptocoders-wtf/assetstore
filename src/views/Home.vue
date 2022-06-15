@@ -4,6 +4,12 @@
       <p class="mb-4">We, <a href="https://www.singularitysociety.org/" class="underline">Singularity Society</a>, 
         have decided to create Pride Squiggle, a fully on-chain, 
         auto-generated NFT collection to celebrate Pride Month 2022.</p>
+      <div class="mb-4">
+        <img class="w-24 inline-block mr-2" src="@/assets/squiggle0.svg" />
+        <img class="w-24 inline-block mr-2" src="@/assets/squiggle1.svg" />
+        <img class="w-24 inline-block mr-2" src="@/assets/squiggle2.svg" />
+        <img class="w-24 inline-block mr-2" src="@/assets/squiggle3.svg" />
+      </div>
       <p class="mb-4">We are releasing {{ $n(limit) }} NFTs to the LGBT commumity and supporters for free (you need to pay a gas fee).</p>
       <p class="mb-4">All the royality from the secondary sales on OpenSee will be directly donated to a chosen charity organization, 
         who supports LGBT and human rights.</p>
