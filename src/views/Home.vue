@@ -1,5 +1,17 @@
 <template>
   <div class="max-w-lg mx-auto text-left p-2">
+    <div class="mt-4 mb-8">
+      <p class="mb-4">We, <a href="https://www.singularitysociety.org/" class="underline">Singularity Society</a>, 
+        has decided to create Pride Squiggle, fully on-chain, 
+        auto generated NFT collection to celebrate Pride month 2022.</p>
+      <p class="mb-4">We are releasing 10,000 NFTs to the LGBT commumity and its supporters for free (you need to pay a gas fee).</p>
+      <p class="mb-4">All the royality from the secondary sales on OpenSee will be directly donated to a chosen charity organization, 
+        who supports LGBT and human rights.</p>
+      <p class="mb-4">This work was inspired by <a href="https://opensea.io/collection/nouns" class="underline">Nouns</a>
+       and <a href="https://opensea.io/collection/chromie-squiggle-by-snowfro" class="underline">Chroie Squiggle</a>
+       and all artworks are available as cc0. Just like Nouns, one in twenty NFTs will be distributed to the developer, 
+       <a href="https://twitter.com/nounsfes" class="underline">Nounsfes ⌐◨-◨</a>.</p>
+    </div>
     <div v-if="tokenGate == 'noAccount'">
       <p>{{ $t("message."+tokenGate) }}</p>
     </div>
@@ -9,10 +21,10 @@
     </div>
     <div v-else>
       <div>
-        Total Count: {{ limit }}
+        <b>Total Count:</b> {{ limit }}
       </div>
       <div v-if="currentToken < limit">
-        Next Token: {{ currentToken }}
+        <b>Next Token:</b> #{{ currentToken }}
       </div>
       <div v-else>
         Sold Out!
@@ -31,7 +43,7 @@
         </div>
       </div>
       <div v-else>
-        <div>
+        <div class="mt-4">
           <p>Thank you for being a member of Pride Squiggle community.</p>
         </div>
       </div>
@@ -47,7 +59,7 @@ import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const PrideSquiggle = {
   wabi: require("../abis/PrideSquiggle.json"), // wrapped abi
-  address: "0xdb9Ae4A1CAE7D45f2601e8efeCDb07EF33635CC7"
+  address: "0xa0DD69F6A7623763Dc8F259687301e391C6aa386"
 };
 
 const shorten = (address: string) => {
