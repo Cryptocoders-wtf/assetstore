@@ -1,9 +1,9 @@
 <template>
-  <div class="max-w-lg mx-auto text-left p-2">
+  <div class="max-w-xl mx-auto text-left p-2">
     <div class="mt-4 mb-8">
       <p class="mb-4">We, <a href="https://www.singularitysociety.org/" class="underline">Singularity Society</a>, 
-        has decided to create Pride Squiggle, fully on-chain, 
-        auto generated NFT collection to celebrate Pride month 2022.</p>
+        has decided to create Pride Squiggle, a fully on-chain, 
+        auto-generated NFT collection to celebrate Pride Month 2022.</p>
       <p class="mb-4">We are releasing 10,000 NFTs to the LGBT commumity and its supporters for free (you need to pay a gas fee).</p>
       <p class="mb-4">All the royality from the secondary sales on OpenSee will be directly donated to a chosen charity organization, 
         who supports LGBT and human rights.</p>
@@ -45,6 +45,7 @@
       <div v-else class="mt-4">
         <div>
           <p>Thank you for being a member of Pride Squiggle community.</p>
+          <img :src="imageURL" class="mt-4 w-48"/>
         </div>
       </div>
     </div>
@@ -77,6 +78,7 @@ export default defineComponent({
     const justMinted = ref(false);
     const limit = ref(0);
     const currentToken = ref(0);
+    const imageURL = ref("");
 
     let prevProvider:ethers.providers.Web3Provider | null = null;
     const networkContext = computed(() => {
@@ -109,6 +111,14 @@ export default defineComponent({
       let result = await contract.functions.balanceOf(store.state.account);
       //console.log("**** count", count[0].toNumber());
       tokenBalance.value = result[0].toNumber();
+
+      if (tokenBalance.value > 0) {
+        result = await contract.functions.tokenOfOwnerByIndex(account.value, 0);
+        const tokenId = result[0].toNumber();
+        result = await contract.functions.generateSVG(tokenId);
+        imageURL.value = 'data:image/svg+xml;base64,' + btoa(result[0]); // BUGBUG: "Buffer.from(result[0], 'base64'));" causes an error
+        console.log("** svg", imageURL.value); // 
+      }
 
       result = await contract.functions.limit();
       limit.value = result[0].toNumber();
@@ -147,7 +157,7 @@ export default defineComponent({
       mint, justMinted,
       limit, currentToken,
       tokenGate,
-      tokenBalance,
+      tokenBalance, imageURL,
       switchToValidNetwork
     }
   }
