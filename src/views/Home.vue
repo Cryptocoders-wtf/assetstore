@@ -4,7 +4,7 @@
       <p class="mb-4">We, <a href="https://www.singularitysociety.org/" class="underline">Singularity Society</a>, 
         has decided to create Pride Squiggle, a fully on-chain, 
         auto-generated NFT collection to celebrate Pride Month 2022.</p>
-      <p class="mb-4">We are releasing 10,000 NFTs to the LGBT commumity and its supporters for free (you need to pay a gas fee).</p>
+      <p class="mb-4">We are releasing {{ $n(limit) }} NFTs to the LGBT commumity and its supporters for free (you need to pay a gas fee).</p>
       <p class="mb-4">All the royality from the secondary sales on OpenSee will be directly donated to a chosen charity organization, 
         who supports LGBT and human rights.</p>
       <p class="mb-4">This work was inspired by <a href="https://opensea.io/collection/nouns" class="underline">Nouns</a>
@@ -21,7 +21,7 @@
     </div>
     <div v-else>
       <div>
-        <b>Total Count:</b> {{ limit }}
+        <b>Total Count:</b> {{ $n(limit) }}
       </div>
       <div v-if="currentToken < limit">
         <b>Next Token:</b> #{{ currentToken }}
