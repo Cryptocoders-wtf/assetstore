@@ -29,21 +29,21 @@
       <div v-else>
         Sold Out!
       </div>
-      <div v-if="tokenBalance == 0">
+      <div v-if="tokenBalance == 0" class="mt-4">
         <div v-if="justMinted">
           <p>Thank you for minting. Please wait a little bit...</p>
         </div>
         <div v-else>
           <div v-if="currentToken < limit">
-            <p>Please <button @click="mint" class="underline">mint</button> (free, but you need to pay a gas fee).</p>
+            <p><button @click="mint" class="inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">MINT</button> (free, but you need to pay a gas fee).</p>
           </div>
           <div v-else>
             Thank you for the interest, but it is sold out unfortunately.
           </div>
         </div>
       </div>
-      <div v-else>
-        <div class="mt-4">
+      <div v-else class="mt-4">
+        <div>
           <p>Thank you for being a member of Pride Squiggle community.</p>
         </div>
       </div>
