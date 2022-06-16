@@ -16,7 +16,7 @@
         a chosen charity organization, who supports LGBT and human rights
         (via <a href="https://thegivingblock.com/campaigns/pride/" class="underline">The Giving Back</a>).</p>
       <p class="mb-4">This work was inspired by <a href="https://opensea.io/collection/nouns" class="underline">Nouns</a>
-       and <a href="https://opensea.io/collection/chromie-squiggle-by-snowfro" class="underline">Chroie Squiggle</a>
+       and <a href="https://opensea.io/collection/chromie-squiggle-by-snowfro" class="underline">Chromie Squiggle</a>
        and all artworks are available as cc0. Just like Nouns, one in twenty NFTs will be distributed to the developer, 
        <a href="https://twitter.com/nounsfes" class="underline">Nounsfes ⌐◨-◨</a>.</p>
     </div>
