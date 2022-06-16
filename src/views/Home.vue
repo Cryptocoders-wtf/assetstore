@@ -2,17 +2,19 @@
   <div class="max-w-xl mx-auto text-left p-2">
     <div class="mt-4 mb-8">
       <p class="mb-4">We, <a href="https://www.singularitysociety.org/" class="underline">Singularity Society</a>, 
-        have decided to create Pride Squiggle, a fully on-chain, 
-        auto-generated NFT collection to celebrate Pride Month 2022.</p>
+        have decided to create Pride Squiggle NFTs, a fully on-chain, 
+        generated NFT collection to celebrate Pride Month 2022.</p>
       <div class="mb-4">
         <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle0.svg" />
         <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle1.svg" />
         <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle2.svg" />
         <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle3.svg" />
+        <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle4.svg" />
       </div>
-      <p class="mb-4">We are releasing {{ $n(limit) }} NFTs to the LGBT commumity and supporters for free (you need to pay a gas fee).</p>
-      <p class="mb-4">All the royality from the secondary sales on OpenSee will be directly donated to a chosen charity organization, 
-        who supports LGBT and human rights.</p>
+      <p class="mb-4">We are releasing {{ $n(limit) }} NFTs to the LGBT commumity and supporters for free.</p>
+      <p class="mb-4">All the royality from the secondary sales on OpenSee will be directly donated to 
+        a chosen charity organization, who supports LGBT and human rights
+        (via <a href="https://thegivingblock.com/campaigns/pride/" class="underline">The Giving Back</a>).</p>
       <p class="mb-4">This work was inspired by <a href="https://opensea.io/collection/nouns" class="underline">Nouns</a>
        and <a href="https://opensea.io/collection/chromie-squiggle-by-snowfro" class="underline">Chroie Squiggle</a>
        and all artworks are available as cc0. Just like Nouns, one in twenty NFTs will be distributed to the developer, 

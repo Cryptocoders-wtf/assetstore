@@ -1,8 +1,8 @@
 <template>
   <div class="layout">
-    <div id="nav">
-      <img class="mb-4" src="@/assets/banner.png" />
-      <router-link :to="localizedUrl('/')" class="text-2xl">Pride Squiggle</router-link> 
+    <div id="nav" class="mt-8">
+      <!--img class="mb-4" src="@/assets/banner.png" /-->
+      <router-link :to="localizedUrl('/')" class="text-2xl">Pride Squiggle NFTs</router-link> 
       <Connect />
     </div>
     <router-view />
