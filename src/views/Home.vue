@@ -53,6 +53,9 @@
           <p>Thank you for being a member of Pride Squiggle community.</p>
           <img :src="imageURL" class="mt-4 w-48"/>
         </div>
+        <div>
+          <img v-for="image in images" :src="image" class="w-24 inline-block mr-1 mt-1" v-bind:key="image"/>
+        </div>
       </div>
     </div>
   </div>
@@ -85,6 +88,7 @@ export default defineComponent({
     const limit = ref(0);
     const currentToken = ref(0);
     const imageURL = ref("");
+    const images = ref([] as Array<string>);
 
     let prevProvider:ethers.providers.Web3Provider | null = null;
     const networkContext = computed(() => {
@@ -105,11 +109,23 @@ export default defineComponent({
           fetchBalance();
         });
         prevProvider = provider;
+        if (window.location.href == "http://localhost:8080/") {
+          fetchImages(contract);
+        }
 
         return { provider, signer, contract };
       }
       return null;
     });
+
+    const fetchImages = async(contract: any) => {
+        // debug only
+        let i = 0;
+        for (i = 0; i < 100; i++) {
+          const result = await contract.functions.generateSVG(i);
+          images.value[i] = 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64'); 
+        }
+    };
 
     const fetchBalance = async () => {
       if (!networkContext.value) return;
@@ -162,7 +178,7 @@ export default defineComponent({
       mint, justMinted,
       limit, currentToken,
       tokenGate,
-      tokenBalance, imageURL,
+      tokenBalance, imageURL, images,
       switchToValidNetwork
     }
   }
