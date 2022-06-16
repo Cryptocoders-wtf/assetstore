@@ -53,9 +53,9 @@
           <p>Thank you for being a member of Pride Squiggle community.</p>
           <img :src="imageURL" class="mt-4 w-48"/>
         </div>
-        <div>
-          <img v-for="image in images" :src="image" class="w-24 inline-block mr-1 mt-1" v-bind:key="image"/>
-        </div>
+      </div>
+      <div class="mt-4">
+        <img v-for="image in images" :src="image" class="w-24 inline-block mr-1 mt-1" v-bind:key="image"/>
       </div>
     </div>
   </div>
@@ -69,7 +69,7 @@ import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const PrideSquiggle = {
   wabi: require("../abis/PrideSquiggle.json"), // wrapped abi
-  address: "0xa0DD69F6A7623763Dc8F259687301e391C6aa386"
+  address: "0xEa669d1Bf30D0fF7b346F9702723Da6BdEc3DF08"
 };
 
 const shorten = (address: string) => {
