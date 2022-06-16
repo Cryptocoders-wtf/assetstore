@@ -5,10 +5,10 @@
         have decided to create Pride Squiggle, a fully on-chain, 
         auto-generated NFT collection to celebrate Pride Month 2022.</p>
       <div class="mb-4">
-        <img class="w-24 inline-block mr-2" src="@/assets/squiggle0.svg" />
-        <img class="w-24 inline-block mr-2" src="@/assets/squiggle1.svg" />
-        <img class="w-24 inline-block mr-2" src="@/assets/squiggle2.svg" />
-        <img class="w-24 inline-block mr-2" src="@/assets/squiggle3.svg" />
+        <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle0.svg" />
+        <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle1.svg" />
+        <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle2.svg" />
+        <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle3.svg" />
       </div>
       <p class="mb-4">We are releasing {{ $n(limit) }} NFTs to the LGBT commumity and supporters for free (you need to pay a gas fee).</p>
       <p class="mb-4">All the royality from the secondary sales on OpenSee will be directly donated to a chosen charity organization, 
@@ -55,7 +55,7 @@
         </div>
       </div>
       <div class="mt-4">
-        <img v-for="image in images" :src="image" class="w-24 inline-block mr-1 mt-1" v-bind:key="image"/>
+        <img v-for="image in images" :src="image" class="w-24 inline-block mr-1 mt-1 rounded" v-bind:key="image"/>
       </div>
     </div>
   </div>
@@ -69,7 +69,7 @@ import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const PrideSquiggle = {
   wabi: require("../abis/PrideSquiggle.json"), // wrapped abi
-  address: "0xEa669d1Bf30D0fF7b346F9702723Da6BdEc3DF08"
+  address: "0xC89DDFb8765699d6A660ad972FCF33904D491E9f"
 };
 
 const shorten = (address: string) => {
