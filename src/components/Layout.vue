@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
-    <div id="nav" class="mt-8">
-      <!--img class="mb-4" src="@/assets/banner.png" /-->
+    <div id="nav" class="mb-2">
+      <img class="mb-4" src="@/assets/banner.svg" />
       <router-link :to="localizedUrl('/')" class="text-2xl">Pride Squiggle NFTs</router-link> 
       <Connect />
     </div>
