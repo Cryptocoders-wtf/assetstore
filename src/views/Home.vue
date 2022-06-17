@@ -2,14 +2,16 @@
   <div class="max-w-xl mx-auto text-left p-2">
     <div class="mt-4 mb-8">
       <p class="mb-4">We, <a href="https://www.singularitysociety.org/" class="underline">Singularity Society</a>, 
-        have decided to create Pride Squiggle NFTs, a fully on-chain, 
+        have decided to create <a href="https://opensea.io/collection/pride-squiggle-2022" class="underline">Pride Squiggle NFTs</a>, a fully on-chain, 
         generated NFT collection to celebrate Pride Month 2022.</p>
       <div class="mb-4">
-        <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle0.svg" />
-        <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle1.svg" />
-        <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle2.svg" />
-        <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle3.svg" />
-        <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle4.svg" />
+        <a href="https://opensea.io/collection/pride-squiggle-2022">        
+          <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle0.svg" />
+          <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle1.svg" />
+          <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle2.svg" />
+          <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle3.svg" />
+          <img class="w-24 inline-block mr-2 rounded-xl" src="@/assets/squiggle4.svg" />
+        </a>
       </div>
       <p class="mb-4">We are releasing {{ $n(limit) }} NFTs to the LGBT commumity and supporters for free.</p>
       <p class="mb-4">All the royality from the secondary sales on OpenSee will be directly donated to 
