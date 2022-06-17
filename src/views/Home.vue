@@ -53,7 +53,9 @@
       <div v-else class="mt-4">
         <div>
           <p>Thank you for being a member of Pride Squiggle community.</p>
-          <img :src="imageURL" class="mt-4 w-48"/>
+          <a :href="'https://opensea.io/assets/ethereum/0x433697232e3b55ec39050cb7a5678a3b1347eec4/' + tokenId">
+            <img :src="imageURL" class="mt-4 w-48 rounded-xl"/>
+          </a>
         </div>
       </div>
       <div class="mt-4">
@@ -90,6 +92,7 @@ export default defineComponent({
     const limit = ref(0);
     const currentToken = ref(0);
     const imageURL = ref("");
+    const tokenId = ref(0);
     const images = ref([] as Array<string>);
 
     let prevProvider:ethers.providers.Web3Provider | null = null;
@@ -138,8 +141,8 @@ export default defineComponent({
 
       if (tokenBalance.value > 0) {
         result = await contract.functions.tokenOfOwnerByIndex(account.value, 0);
-        const tokenId = result[0].toNumber();
-        result = await contract.functions.generateSVG(tokenId);
+        tokenId.value = result[0].toNumber();
+        result = await contract.functions.generateSVG(tokenId.value);
         imageURL.value = 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64'); 
       }
 
@@ -180,7 +183,7 @@ export default defineComponent({
       mint, justMinted,
       limit, currentToken,
       tokenGate,
-      tokenBalance, imageURL, images,
+      tokenBalance, imageURL, images, tokenId,
       switchToValidNetwork
     }
   }
