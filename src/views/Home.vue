@@ -27,7 +27,7 @@
       <p>{{ $t("message."+tokenGate) }}</p>
     </div>
     <div v-else-if="tokenGate == 'invalidNetwork'">
-      <p>{{ $t("message."+tokenGate) }}</p>
+      <p>{{ $t("message."+tokenGate, {networkName}) }}</p>
       <button @click="switchToValidNetwork" class="underline">Switch Network</button>
     </div>
     <div v-else>
@@ -76,7 +76,7 @@ import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const PrideSquiggle = {
   wabi: require("../abis/PrideSquiggle.json"), // wrapped abi
-  address: "0x433697232e3b55EC39050cB7a5678a3b1347EeC4"
+  address: "0xBD875B4379E638CeDb69c171A43040E5295236ab"
 };
 
 const shorten = (address: string) => {
@@ -88,7 +88,8 @@ export default defineComponent({
   components: {
   },
   setup() {
-    const expectedNetwork = ChainIds.Mainnet;
+    const expectedNetwork = ChainIds.RinkebyTestNet;
+    const networkName = "Rinkeby Testnet";
     const store = useStore();
     const tokenBalance = ref(0);
     const justMinted = ref(false);
@@ -182,7 +183,7 @@ export default defineComponent({
       return null;
     });    
     return {
-      account,
+      account, networkName,
       mint, justMinted,
       limit, currentToken,
       tokenGate,

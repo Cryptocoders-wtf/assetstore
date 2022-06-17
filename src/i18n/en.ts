@@ -9,7 +9,7 @@ const lang = {
   message: {
     hello: "hello world",
     noAccount: "Please connect Metamask.",
-    invalidNetwork: "Please switch network to Ethereum Mainnet",
+    invalidNetwork: "Please switch network to { networkName }.",
   },
   languages,
 };
