@@ -15,8 +15,9 @@
       </div>
       <p class="mb-4">We are releasing {{ $n(limit) }} NFTs to the LGBT commumity and supporters for free.</p>
       <p class="mb-4">All the royality from the secondary sales on OpenSee will be directly donated to 
-        a chosen charity organization, who supports LGBT and human rights
-        (via <a href="https://thegivingblock.com/campaigns/pride/" class="underline">The Giving Back</a>).</p>
+        <a href="https://outrightinternational.org" class="underline">OutRight Action International</a>.
+      </p>
+      <img src="@/assets/outright.png" class="w-48 bg-slate-800 mb-4" />
       <p class="mb-4">This work was inspired by <a href="https://opensea.io/collection/nouns" class="underline">Nouns</a>
        and <a href="https://opensea.io/collection/chromie-squiggle-by-snowfro" class="underline">Chromie Squiggle</a>
        and, all artworks are available as cc0. Just like Nouns, one in twenty NFTs will be distributed to the developer, 
