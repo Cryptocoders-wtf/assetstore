@@ -90,7 +90,6 @@ export default defineComponent({
   setup() {
     const expectedNetwork = ChainIds.RinkebyTestNet;
     const networkName = "Rinkeby Testnet";
-    const providerViewOnly = new ethers.providers.AlchemyProvider("rinkeby");
     const store = useStore();
     const tokenBalance = ref(0);
     const justMinted = ref(false);
@@ -99,6 +98,9 @@ export default defineComponent({
     const imageURL = ref("");
     const tokenId = ref(0);
     const images = ref([] as Array<string>);
+
+    const providerViewOnly = new ethers.providers.AlchemyProvider("rinkeby");
+    const contractViewOnly = new ethers.Contract(PrideSquiggle.address, PrideSquiggle.wabi.abi, providerViewOnly);
 
     let prevProvider:ethers.providers.Web3Provider | null = null;
     const networkContext = computed(() => {
@@ -144,6 +146,7 @@ export default defineComponent({
       currentToken.value = result[0].toNumber();
       console.log("**fetchLimit", limit.value, currentToken.value);
     };
+    fetchLimit(contractViewOnly);
 
     const fetchBalance = async () => {
       if (!networkContext.value) return;
