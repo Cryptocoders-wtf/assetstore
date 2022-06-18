@@ -88,8 +88,12 @@ export default defineComponent({
   components: {
   },
   setup() {
+    // Following three lines must be changed for other networks
     const expectedNetwork = ChainIds.RinkebyTestNet;
     const networkName = "Rinkeby Testnet";
+    const providerViewOnly = new ethers.providers.AlchemyProvider("rinkeby");
+
+    const contractViewOnly = new ethers.Contract(PrideSquiggle.address, PrideSquiggle.wabi.abi, providerViewOnly);
     const store = useStore();
     const tokenBalance = ref(0);
     const justMinted = ref(false);
@@ -98,9 +102,6 @@ export default defineComponent({
     const imageURL = ref("");
     const tokenId = ref(0);
     const images = ref([] as Array<string>);
-
-    const providerViewOnly = new ethers.providers.AlchemyProvider("rinkeby");
-    const contractViewOnly = new ethers.Contract(PrideSquiggle.address, PrideSquiggle.wabi.abi, providerViewOnly);
 
     let prevProvider:ethers.providers.Web3Provider | null = null;
     const networkContext = computed(() => {
