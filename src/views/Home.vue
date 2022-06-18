@@ -90,6 +90,7 @@ export default defineComponent({
   setup() {
     const expectedNetwork = ChainIds.RinkebyTestNet;
     const networkName = "Rinkeby Testnet";
+    const providerViewOnly = new ethers.providers.AlchemyProvider("rinkeby");
     const store = useStore();
     const tokenBalance = ref(0);
     const justMinted = ref(false);
@@ -136,6 +137,14 @@ export default defineComponent({
         }
     };
 
+    const fetchLimit = async(contract:any) => {
+      let result = await contract.functions.limit();
+      limit.value = result[0].toNumber();
+      result = await contract.functions.getCurrentToken();
+      currentToken.value = result[0].toNumber();
+      console.log("**fetchLimit", limit.value, currentToken.value);
+    };
+
     const fetchBalance = async () => {
       if (!networkContext.value) return;
       let contract = networkContext.value.contract;
@@ -150,11 +159,7 @@ export default defineComponent({
         imageURL.value = 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64'); 
       }
 
-      result = await contract.functions.limit();
-      limit.value = result[0].toNumber();
-      result = await contract.functions.getCurrentToken();
-      currentToken.value = result[0].toNumber();
-      console.log("**fetchBakabce", tokenBalance.value, limit.value, currentToken.value);
+      await fetchLimit(contract);
     };
 
     const mint = async () => {
