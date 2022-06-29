@@ -1,9 +1,9 @@
 export const firebaseConfig = {
-  apiKey: "AIzaSyAvfCZ87UIa00pUEQ4WpZHvmjiP3Zjvj_4",
-  authDomain: "pridesquiggle.firebaseapp.com",
-  projectId: "pridesquiggle",
-  storageBucket: "pridesquiggle.appspot.com",
-  messagingSenderId: "738177262734",
-  appId: "1:738177262734:web:5d9b5f0012757d7970d5df",
-  measurementId: "G-4KB27YY38B"
+  apiKey: "AIzaSyCJP07F3ZmWLeiYiMLKrSeRcXQa__bkEAw",
+  authDomain: "assetstore-wtf.firebaseapp.com",
+  projectId: "assetstore-wtf",
+  storageBucket: "assetstore-wtf.appspot.com",
+  messagingSenderId: "991565220882",
+  appId: "1:991565220882:web:14ec3ebeaf58948c15dccb",
+  measurementId: "G-QP3Z4HZM1E"
 };
