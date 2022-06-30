@@ -8,14 +8,16 @@
           <div>
           {{ category }} 
           </div>
-          <span v-for="assetId in allAssets[group][category]" v-bind:key="assetId">
-            <span v-if="assets[assetId]">
-              <img :src="assets[assetId].svg" class="w-24 inline-block rounded-xl" />
+          <div v-if="allAssets[group] && allAssets[group][category]">
+            <span v-for="assetId in allAssets[group][category]" v-bind:key="assetId">
+              <span v-if="assets[assetId]">
+                <img :src="assets[assetId].svg" class="w-24 inline-block rounded-xl" />
+              </span>
+              <span v-else>
+              {{ assetId }},
+              </span>
             </span>
-            <span v-else>
-             {{ assetId }},
-            </span>
-          </span>
+          </div>
         </div>
       </div>
     </div>
@@ -103,10 +105,13 @@ export default defineComponent({
       value[group][category] = assets;
       allAssets.value = value;   
     };
+
     const fetchCategories = async(group:string, category: string | null) => {
       console.log("fetchCategories called", group);
-      const value2 = Object.assign({}, allAssets.value) as any;
-      allAssets.value = value2;
+      /* Just in case...
+        const value2 = Object.assign({}, allAssets.value) as any;
+        allAssets.value = value2;
+      */
 
       const result = await contractRO.functions.getCategoryCount(group);
       const categoryCount = result[0];
@@ -118,11 +123,13 @@ export default defineComponent({
         return result[0];
       });
       const categories:Array<string> = await Promise.all(promises);
-      console.log("categories", categories);
+
+      console.log("updating categories", group, categories);
       const value = Object.assign({}, allCategories.value) as any;
       value[group] = categories;
       allCategories.value = value;
     };
+
     const fetchGroups = async (group: string | null) => {
       const result = await contractRO.functions.getGroupCount();
       const groupCount = result[0];
