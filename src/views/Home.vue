@@ -3,7 +3,7 @@
     <div class="mt-4 mb-8">
       <p class="mb-4">Hello.</p>
       <div v-for="group in groups" v-bind:key="group">
-        {{ group }}
+        <b>{{ group }}</b> 
         <div v-for="category in allCategories[group]" v-bind:key="category">
           {{ category }}
         </div>
@@ -20,7 +20,7 @@ import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
-  address: "0xc9952Fc93Fa9bE383ccB39008c786b9f94eAc95d"
+  address: "0x06786bCbc114bbfa670E30A1AC35dFd1310Be82f"
 };
 
 export default defineComponent({
