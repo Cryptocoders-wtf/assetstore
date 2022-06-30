@@ -45,8 +45,8 @@ export default defineComponent({
 
     const contractRO = new ethers.Contract(AssetStore.address, AssetStore.wabi.abi, provider);
     const groups = ref([] as string[]);
-    const allCategories = ref({} as {[group:string]:[string]});
-    const allAssets = ref({} as {[group:string]:{[category:string]:[string]}});
+    const allCategories = ref({} as {[group:string]:string[]});
+    const allAssets = ref({} as {[group:string]:{[category:string]:string[]}});
     const assets = ref({} as {[assetId: string]: {[propId:string]:string}});
 
     provider.once("block", () => {
@@ -89,7 +89,7 @@ export default defineComponent({
         return assetId;
       });
       const assets:string[] = await Promise.all(promises);
-      const value = Object.assign({}, allAssets.value) as any;
+      const value = Object.assign({}, allAssets.value) as  {[group:string]:{[category:string]:string[]}};
       if (!value[group]) {
         value[group] = {};
       }
@@ -116,7 +116,7 @@ export default defineComponent({
       const categories:string[] = await Promise.all(promises);
 
       console.log("updating categories", group, categories);
-      const value = Object.assign({}, allCategories.value) as any;
+      const value = Object.assign({}, allCategories.value) as {[group:string]:string[]};
       value[group] = categories;
       allCategories.value = value;
     };
