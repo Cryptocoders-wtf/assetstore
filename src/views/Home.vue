@@ -25,7 +25,7 @@ import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
-  address: "0xc9952Fc93Fa9bE383ccB39008c786b9f94eAc95d"
+  address: "0x8B190573374637f144AC8D37375d97fd84cBD3a0"
 };
 
 export default defineComponent({
@@ -42,20 +42,24 @@ export default defineComponent({
     const groups = ref([] as Array<string>);
     const allCategories = ref(new Map<string, Array<string>>());
     const allAssets = ref(new Map<string, Map<string, Array<any>>>());
-    provider.on(contractRO.filters.GroupAdded(), (log, event) => {
-      console.log("**** got GroupAdded event", log, event);
-    });
-    provider.on(contractRO.filters.CategoryAdded(), (log, event) => {
-      console.log("**** got CategoryAdded event", log, event);
-    });
-    provider.on(contractRO.filters.AssetRegistered(), (log, event) => {
-      console.log("**** got AssetRegistered event", log, event);
+    provider.once("block", () => {
+      contractRO.on(contractRO.filters.GroupAdded(), (group) => {
+        console.log("**** got GroupAdded event", group);
+        fetchGroups(group);
+      });
+      contractRO.on(contractRO.filters.CategoryAdded(), (group, category) => {
+        console.log("**** got CategoryAdded event", group, category);
+        fetchCategories(group, category);
+      });
+      contractRO.on(contractRO.filters.AssetRegistered(), (from, assetId) => {
+        console.log("**** got AssetRegistered event", from, assetId.toNumber());
+      });
     });
 
 
     const store = useStore();
 
-    const fetchAssets = async(group:string, category:string) => {
+    const fetchAssets = async(group:string, category:string, assetIdToUpdate:string | null) => {
       const result = await contractRO.functions.getAssetCountInCategory(group, category);
       console.log("fetchAssets called", group, category, result[0]);
       const assetCount = result[0];
@@ -73,7 +77,7 @@ export default defineComponent({
       //console.log("***", value);
       allAssets.value = value;   
     };
-    const fetchCategories = async(group:string) => {
+    const fetchCategories = async(group:string, category: string | null) => {
       console.log("fetchCategories called", group);
       const value2 = Object.assign({}, allAssets.value) as any;
       value2[group] = {};
@@ -83,7 +87,9 @@ export default defineComponent({
       const categoryCount = result[0];
       const promises = Array(categoryCount).fill("").map(async (_,index) => {
         const result = await contractRO.functions.getCategoryNameAtIndex(group, index);
-        fetchAssets(group, result[0]);
+        if (!category || category == result[0]) {
+          fetchAssets(group, result[0], null);
+        }
         return result[0];
       });
       const categories:Array<string> = await Promise.all(promises);
@@ -92,17 +98,19 @@ export default defineComponent({
       value[group] = categories;
       allCategories.value = value;
     };
-    const fetchGroups = async () => {
+    const fetchGroups = async (group: string | null) => {
       const result = await contractRO.functions.getGroupCount();
       const groupCount = result[0];
       const promises = Array(groupCount).fill("").map(async (_,index) => {
         const result = await contractRO.functions.getGroupNameAtIndex(index);
-        fetchCategories(result[0]);
+        if (!group || group == result[0]) {
+          fetchCategories(result[0], null);
+        }
         return result[0];
       });
       groups.value = await Promise.all(promises);
     };
-    fetchGroups();
+    fetchGroups(null);
 
     return {
       groups, allCategories, allAssets
