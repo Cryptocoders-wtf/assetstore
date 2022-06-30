@@ -9,7 +9,7 @@
           {{ category }} 
           </div>
           <span v-for="asset in allAssets[group][category]" v-bind:key="asset.assetId">
-            {{ asset.assetId }}, 
+            <img :src="asset.svg" class="mt-4 w-24" />
           </span>
         </div>
       </div>
@@ -53,21 +53,15 @@ export default defineComponent({
         let result = await contractRO.functions.getAssetIdInCategory(group, category, index);
         const assetId = result[0].toNumber();
         result = await contractRO.functions.generateSVG(assetId);
-        const svg = result[0];
+        const svg = 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64');
         return { assetId, svg };
       });
       const assets:Array<any> = await Promise.all(promises);
       console.log("assetIds", assets);
       const value = Object.assign({}, allAssets.value) as any;
       value[group][category] = assets;
-      console.log("***", value);
-      allAssets.value = value;
-      /*
-      const value = Object.assign({}, allAssets.value) as any;
-      value[group][category] = assets;
-      console.log("***", value);
-      allAssets.value = value;
-      */
+      //console.log("***", value);
+      allAssets.value = value;   
     };
     const fetchCategories = async(group:string) => {
       console.log("fetchCategories called", group);
