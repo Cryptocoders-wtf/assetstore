@@ -4,6 +4,9 @@
       <p class="mb-4">Hello.</p>
       <div v-for="group in groups" v-bind:key="group">
         {{ group }}
+        <div v-for="category in allCategories[group]" v-bind:key="category">
+          {{ category }}
+        </div>
       </div>
     </div>
   </div>
@@ -31,21 +34,37 @@ export default defineComponent({
 
     const contractRO = new ethers.Contract(AssetStore.address, AssetStore.wabi.abi, provider);
     const groups = ref([] as Array<string>);
+    const allCategories = ref(new Map<string, Array<string>>());
 
     const store = useStore();
+    const fetchCategory = async(group:string) => {
+      console.log("fetchCategory called", group);
+      const result = await contractRO.functions.getCategoryCount(group);
+      const categoryCount = result[0];
+      const promises = Array(categoryCount).fill("").map(async (_,index) => {
+        const result = await contractRO.functions.getCategoryNameAtIndex(group, index);
+        return result[0];
+      });
+      const categories:Array<string> = await Promise.all(promises);
+      console.log("categories", categories);
+      const value = allCategories.value as any;
+      value[group] = categories;
+      allCategories.value = value;
+    };
     const fetchGroups = async () => {
-      let result = await contractRO.functions.getGroupCount();
+      const result = await contractRO.functions.getGroupCount();
       const groupCount = result[0];
       const promises = Array(groupCount).fill("").map(async (_,index) => {
         const result = await contractRO.functions.getGroupNameAtIndex(index);
+        fetchCategory(result[0]);
         return result[0];
       });
       groups.value = await Promise.all(promises);
-    }
+    };
     fetchGroups();
 
     return {
-      groups
+      groups, allCategories
     }
   }
 });
