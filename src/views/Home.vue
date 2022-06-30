@@ -34,7 +34,7 @@ const AssetStore = {
 };
 
 interface AssetInfo {
-  [assetId: string]: any;
+  [assetId: string]: {[propId:string]:string};
 }
 
 export default defineComponent({
@@ -49,7 +49,7 @@ export default defineComponent({
 
     const contractRO = new ethers.Contract(AssetStore.address, AssetStore.wabi.abi, provider);
     const groups = ref([] as Array<string>);
-    const allCategories = ref(new Map<string, Array<string>>());
+    const allCategories = ref({} as {[group:string]:[string]});
     const allAssets = ref(new Map<string, Map<string, Array<string>>>());
     const assets = ref({} as AssetInfo);
     provider.once("block", () => {
