@@ -8,8 +8,13 @@
           <div>
           {{ category }} 
           </div>
-          <span v-for="asset in allAssets[group][category]" v-bind:key="asset.assetId">
-            <img :src="asset.svg" class="mt-4 w-24" />
+          <span v-for="assetId in allAssets[group][category]" v-bind:key="assetId">
+            <span v-if="assets[assetId]">
+              <img :src="assets[assetId].svg" class="mt-4 w-24" />
+            </span>
+            <span v-else>
+             {{ assetId }},
+            </span>
           </span>
         </div>
       </div>
@@ -25,7 +30,7 @@ import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
-  address: "0x8B190573374637f144AC8D37375d97fd84cBD3a0"
+  address: "0xe38b6847E611e942E6c80eD89aE867F522402e80"
 };
 
 export default defineComponent({
@@ -41,7 +46,8 @@ export default defineComponent({
     const contractRO = new ethers.Contract(AssetStore.address, AssetStore.wabi.abi, provider);
     const groups = ref([] as Array<string>);
     const allCategories = ref(new Map<string, Array<string>>());
-    const allAssets = ref(new Map<string, Map<string, Array<any>>>());
+    const allAssets = ref(new Map<string, Map<string, Array<string>>>());
+    const assets = ref({} as any);
     provider.once("block", () => {
       contractRO.on(contractRO.filters.GroupAdded(), (group) => {
         console.log("**** got GroupAdded event", group);
@@ -51,13 +57,33 @@ export default defineComponent({
         console.log("**** got CategoryAdded event", group, category);
         fetchCategories(group, category);
       });
-      contractRO.on(contractRO.filters.AssetRegistered(), (from, assetId) => {
+      contractRO.on(contractRO.filters.AssetRegistered(), async (from, assetId) => {
         console.log("**** got AssetRegistered event", from, assetId.toNumber());
+        const attr = (await contractRO.functions.getAttributes(assetId))[0];
+        console.log(attr);
+        const group = attr[0];
+        const category = attr[1];
+        fetchAssets(group, category, null);
       });
     });
 
 
     const store = useStore();
+
+    /*
+        result = await contractRO.functions.generateSVG(assetId);
+        const svg = 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64');
+
+    */
+    const fetchAsset = async (assetId:string) => {
+      if (!assets.value[assetId]) {
+        const result = await contractRO.functions.generateSVG(assetId);
+        const svg = 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64');
+        const value = Object.assign({}, assets.value);
+        value[assetId] = { svg };
+        assets.value = value;
+      }
+    };
 
     const fetchAssets = async(group:string, category:string, assetIdToUpdate:string | null) => {
       const result = await contractRO.functions.getAssetCountInCategory(group, category);
@@ -66,21 +92,20 @@ export default defineComponent({
       const promises = Array(assetCount).fill("").map(async (_,index) => {
         let result = await contractRO.functions.getAssetIdInCategory(group, category, index);
         const assetId = result[0].toNumber();
-        result = await contractRO.functions.generateSVG(assetId);
-        const svg = 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64');
-        return { assetId, svg };
+        fetchAsset(assetId);
+        return assetId;
       });
-      const assets:Array<any> = await Promise.all(promises);
-      console.log("assetIds", assets);
+      const assets:Array<string> = await Promise.all(promises);
       const value = Object.assign({}, allAssets.value) as any;
+      if (!value[group]) {
+        value[group] = {};
+      }
       value[group][category] = assets;
-      //console.log("***", value);
       allAssets.value = value;   
     };
     const fetchCategories = async(group:string, category: string | null) => {
       console.log("fetchCategories called", group);
       const value2 = Object.assign({}, allAssets.value) as any;
-      value2[group] = {};
       allAssets.value = value2;
 
       const result = await contractRO.functions.getCategoryCount(group);
@@ -113,7 +138,7 @@ export default defineComponent({
     fetchGroups(null);
 
     return {
-      groups, allCategories, allAssets
+      groups, allCategories, allAssets, assets
     }
   }
 });
