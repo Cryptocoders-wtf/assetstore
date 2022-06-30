@@ -33,10 +33,6 @@ const AssetStore = {
   address: "0xe38b6847E611e942E6c80eD89aE867F522402e80"
 };
 
-interface AssetInfo {
-  [assetId: string]: {[propId:string]:string};
-}
-
 export default defineComponent({
   name: "HomePage",
   components: {
@@ -50,8 +46,8 @@ export default defineComponent({
     const contractRO = new ethers.Contract(AssetStore.address, AssetStore.wabi.abi, provider);
     const groups = ref([] as Array<string>);
     const allCategories = ref({} as {[group:string]:[string]});
-    const allAssets = ref(new Map<string, Map<string, Array<string>>>());
-    const assets = ref({} as AssetInfo);
+    const allAssets = ref({} as {[group:string]:{[category:string]:[string]}});
+    const assets = ref({} as {[assetId: string]: {[propId:string]:string}});
     provider.once("block", () => {
       contractRO.on(contractRO.filters.GroupAdded(), (group) => {
         console.log("**** got GroupAdded event", group);
