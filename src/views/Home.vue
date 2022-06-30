@@ -25,7 +25,7 @@ import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
-  address: "0x06786bCbc114bbfa670E30A1AC35dFd1310Be82f"
+  address: "0xc9952Fc93Fa9bE383ccB39008c786b9f94eAc95d"
 };
 
 export default defineComponent({
@@ -42,6 +42,16 @@ export default defineComponent({
     const groups = ref([] as Array<string>);
     const allCategories = ref(new Map<string, Array<string>>());
     const allAssets = ref(new Map<string, Map<string, Array<any>>>());
+    provider.on(contractRO.filters.GroupAdded(), (log, event) => {
+      console.log("**** got GroupAdded event", log, event);
+    });
+    provider.on(contractRO.filters.CategoryAdded(), (log, event) => {
+      console.log("**** got CategoryAdded event", log, event);
+    });
+    provider.on(contractRO.filters.AssetRegistered(), (log, event) => {
+      console.log("**** got AssetRegistered event", log, event);
+    });
+
 
     const store = useStore();
 
