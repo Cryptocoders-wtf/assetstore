@@ -5,7 +5,12 @@
       <div v-for="group in groups" v-bind:key="group">
         <b>{{ group }}</b> 
         <div v-for="category in allCategories[group]" v-bind:key="category">
-          {{ category }}
+          <div>
+          {{ category }} 
+          </div>
+          <span v-for="asset in allAssets[group][category]" v-bind:key="asset.assetId">
+            {{ asset.assetId }}, 
+          </span>
         </div>
       </div>
     </div>
@@ -36,6 +41,7 @@ export default defineComponent({
     const contractRO = new ethers.Contract(AssetStore.address, AssetStore.wabi.abi, provider);
     const groups = ref([] as Array<string>);
     const allCategories = ref(new Map<string, Array<string>>());
+    const allAssets = ref(new Map<string, Map<string, Array<any>>>());
 
     const store = useStore();
 
@@ -50,11 +56,25 @@ export default defineComponent({
         const svg = result[0];
         return { assetId, svg };
       });
-      const assetIds:Array<any> = await Promise.all(promises);
-      console.log("assetIds", assetIds);
+      const assets:Array<any> = await Promise.all(promises);
+      console.log("assetIds", assets);
+      const value = Object.assign({}, allAssets.value) as any;
+      value[group][category] = assets;
+      console.log("***", value);
+      allAssets.value = value;
+      /*
+      const value = Object.assign({}, allAssets.value) as any;
+      value[group][category] = assets;
+      console.log("***", value);
+      allAssets.value = value;
+      */
     };
     const fetchCategories = async(group:string) => {
       console.log("fetchCategories called", group);
+      const value2 = Object.assign({}, allAssets.value) as any;
+      value2[group] = {};
+      allAssets.value = value2;
+
       const result = await contractRO.functions.getCategoryCount(group);
       const categoryCount = result[0];
       const promises = Array(categoryCount).fill("").map(async (_,index) => {
@@ -81,7 +101,7 @@ export default defineComponent({
     fetchGroups();
 
     return {
-      groups, allCategories
+      groups, allCategories, allAssets
     }
   }
 });
