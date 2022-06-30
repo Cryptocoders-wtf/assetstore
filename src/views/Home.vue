@@ -44,10 +44,11 @@ export default defineComponent({
     const provider = new ethers.providers.JsonRpcProvider();
 
     const contractRO = new ethers.Contract(AssetStore.address, AssetStore.wabi.abi, provider);
-    const groups = ref([] as Array<string>);
+    const groups = ref([] as string[]);
     const allCategories = ref({} as {[group:string]:[string]});
     const allAssets = ref({} as {[group:string]:{[category:string]:[string]}});
     const assets = ref({} as {[assetId: string]: {[propId:string]:string}});
+
     provider.once("block", () => {
       contractRO.on(contractRO.filters.GroupAdded(), (group) => {
         console.log("**** got GroupAdded event", group);
@@ -87,7 +88,7 @@ export default defineComponent({
         fetchAsset(assetId);
         return assetId;
       });
-      const assets:Array<string> = await Promise.all(promises);
+      const assets:string[] = await Promise.all(promises);
       const value = Object.assign({}, allAssets.value) as any;
       if (!value[group]) {
         value[group] = {};
@@ -112,7 +113,7 @@ export default defineComponent({
         }
         return result[0];
       });
-      const categories:Array<string> = await Promise.all(promises);
+      const categories:string[] = await Promise.all(promises);
 
       console.log("updating categories", group, categories);
       const value = Object.assign({}, allCategories.value) as any;
