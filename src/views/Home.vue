@@ -11,7 +11,7 @@
           <div v-if="allAssets[group] && allAssets[group][category]">
             <span v-for="assetId in allAssets[group][category]" v-bind:key="assetId">
               <span v-if="assets[assetId]">
-                <img :src="assets[assetId].svg" class="w-24 inline-block rounded-xl" />
+                <img :src="assets[assetId].svg" class="w-16 inline-block rounded-xl" />
               </span>
               <span v-else>
               ...
@@ -30,7 +30,7 @@ import { ethers } from "ethers";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
-  address: "0xe38b6847E611e942E6c80eD89aE867F522402e80"
+  address: "0x1D8D70AD07C8E7E442AD78E4AC0A16f958Eba7F0"
 };
 
 export default defineComponent({
