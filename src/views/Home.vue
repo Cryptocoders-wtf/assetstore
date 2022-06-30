@@ -40,7 +40,18 @@ export default defineComponent({
     const store = useStore();
 
     const fetchAssets = async(group:string, category:string) => {
-      console.log("fetchAssets called", group, category);
+      const result = await contractRO.functions.getAssetCountInCategory(group, category);
+      console.log("fetchAssets called", group, category, result[0]);
+      const assetCount = result[0];
+      const promises = Array(assetCount).fill("").map(async (_,index) => {
+        let result = await contractRO.functions.getAssetIdInCategory(group, category, index);
+        const assetId = result[0].toNumber();
+        result = await contractRO.functions.generateSVG(assetId);
+        const svg = result[0];
+        return { assetId, svg };
+      });
+      const assetIds:Array<any> = await Promise.all(promises);
+      console.log("assetIds", assetIds);
     };
     const fetchCategories = async(group:string) => {
       console.log("fetchCategories called", group);
@@ -48,6 +59,7 @@ export default defineComponent({
       const categoryCount = result[0];
       const promises = Array(categoryCount).fill("").map(async (_,index) => {
         const result = await contractRO.functions.getCategoryNameAtIndex(group, index);
+        fetchAssets(group, result[0]);
         return result[0];
       });
       const categories:Array<string> = await Promise.all(promises);
