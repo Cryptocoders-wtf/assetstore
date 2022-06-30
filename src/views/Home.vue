@@ -10,7 +10,7 @@
           </div>
           <span v-for="assetId in allAssets[group][category]" v-bind:key="assetId">
             <span v-if="assets[assetId]">
-              <img :src="assets[assetId].svg" class="mt-4 w-24" />
+              <img :src="assets[assetId].svg" class="w-24 inline-block rounded-xl" />
             </span>
             <span v-else>
              {{ assetId }},
