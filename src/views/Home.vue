@@ -14,7 +14,7 @@
                 <img :src="assets[assetId].svg" class="w-24 inline-block rounded-xl" />
               </span>
               <span v-else>
-              {{ assetId }},
+              ...
               </span>
             </span>
           </div>
@@ -25,10 +25,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from "vue";
-import { useStore } from "vuex";
+import { defineComponent, ref } from "vue";
 import { ethers } from "ethers";
-import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -65,18 +63,10 @@ export default defineComponent({
         console.log(attr);
         const group = attr[0];
         const category = attr[1];
-        fetchAssets(group, category, null);
+        fetchAssets(group, category);
       });
     });
 
-
-    const store = useStore();
-
-    /*
-        result = await contractRO.functions.generateSVG(assetId);
-        const svg = 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64');
-
-    */
     const fetchAsset = async (assetId:string) => {
       if (!assets.value[assetId]) {
         const result = await contractRO.functions.generateSVG(assetId);
@@ -87,7 +77,7 @@ export default defineComponent({
       }
     };
 
-    const fetchAssets = async(group:string, category:string, assetIdToUpdate:string | null) => {
+    const fetchAssets = async(group:string, category:string) => {
       const result = await contractRO.functions.getAssetCountInCategory(group, category);
       console.log("fetchAssets called", group, category, result[0]);
       const assetCount = result[0];
@@ -118,7 +108,7 @@ export default defineComponent({
       const promises = Array(categoryCount).fill("").map(async (_,index) => {
         const result = await contractRO.functions.getCategoryNameAtIndex(group, index);
         if (!category || category == result[0]) {
-          fetchAssets(group, result[0], null);
+          fetchAssets(group, result[0]);
         }
         return result[0];
       });
