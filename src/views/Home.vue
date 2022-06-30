@@ -38,8 +38,12 @@ export default defineComponent({
     const allCategories = ref(new Map<string, Array<string>>());
 
     const store = useStore();
-    const fetchCategory = async(group:string) => {
-      console.log("fetchCategory called", group);
+
+    const fetchAssets = async(group:string, category:string) => {
+      console.log("fetchAssets called", group, category);
+    };
+    const fetchCategories = async(group:string) => {
+      console.log("fetchCategories called", group);
       const result = await contractRO.functions.getCategoryCount(group);
       const categoryCount = result[0];
       const promises = Array(categoryCount).fill("").map(async (_,index) => {
@@ -48,7 +52,7 @@ export default defineComponent({
       });
       const categories:Array<string> = await Promise.all(promises);
       console.log("categories", categories);
-      const value = allCategories.value as any;
+      const value = Object.assign({}, allCategories.value) as any;
       value[group] = categories;
       allCategories.value = value;
     };
@@ -57,7 +61,7 @@ export default defineComponent({
       const groupCount = result[0];
       const promises = Array(groupCount).fill("").map(async (_,index) => {
         const result = await contractRO.functions.getGroupNameAtIndex(index);
-        fetchCategory(result[0]);
+        fetchCategories(result[0]);
         return result[0];
       });
       groups.value = await Promise.all(promises);
