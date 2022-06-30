@@ -20,7 +20,7 @@ import { ChainIds, switchNetwork } from "../utils/MetaMask";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
-  address: "0x7072e8bfF38EB37c9b197F7921Fecb84c2ac1121"
+  address: "0xc9952Fc93Fa9bE383ccB39008c786b9f94eAc95d"
 };
 
 export default defineComponent({
@@ -29,8 +29,9 @@ export default defineComponent({
   },
   setup() {
     // Following two lines must be changed for other networks
-    const expectedNetwork = ChainIds.RinkebyTestNet;
-    const provider = new ethers.providers.AlchemyProvider("rinkeby");
+    //const expectedNetwork = ChainIds.RinkebyTestNet;
+    //const provider = new ethers.providers.AlchemyProvider("rinkeby");
+    const provider = new ethers.providers.JsonRpcProvider();
 
     const contractRO = new ethers.Contract(AssetStore.address, AssetStore.wabi.abi, provider);
     const groups = ref([] as Array<string>);
