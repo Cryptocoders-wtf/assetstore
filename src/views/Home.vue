@@ -33,6 +33,10 @@ const AssetStore = {
   address: "0xe38b6847E611e942E6c80eD89aE867F522402e80"
 };
 
+interface AssetInfo {
+  [assetId: string]: any;
+}
+
 export default defineComponent({
   name: "HomePage",
   components: {
@@ -47,7 +51,7 @@ export default defineComponent({
     const groups = ref([] as Array<string>);
     const allCategories = ref(new Map<string, Array<string>>());
     const allAssets = ref(new Map<string, Map<string, Array<string>>>());
-    const assets = ref({} as any);
+    const assets = ref({} as AssetInfo);
     provider.once("block", () => {
       contractRO.on(contractRO.filters.GroupAdded(), (group) => {
         console.log("**** got GroupAdded event", group);
