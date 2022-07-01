@@ -1,6 +1,5 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
-    {{ foo }}
     <div class="mt-4 mb-8">
       <div v-for="group in groups" v-bind:key="group">
         <b>{{ group }}</b> 
@@ -35,16 +34,17 @@ const AssetStore = {
 export default defineComponent({
   name: "HomePage",
   props: [
-    "foo",
-    "storeAddress"
+    "network",
+    "storeAddress",
   ],
   components: {
   },
   setup(props) {
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
-    //const provider = new ethers.providers.AlchemyProvider("rinkeby");
-    const provider = new ethers.providers.JsonRpcProvider();
+    //const provider = ;
+    const provider = (props.network == "localhost") ?
+      new ethers.providers.JsonRpcProvider() : new ethers.providers.AlchemyProvider("rinkeby");
 
     const contractRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
     const groups = ref([] as string[]);
