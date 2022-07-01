@@ -1,8 +1,8 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
     <store-view
-      network="localhost" 
-      storeAddress="0x1D8D70AD07C8E7E442AD78E4AC0A16f958Eba7F0"
+      network="rinkeby" 
+      storeAddress="0x3Aea980E9F0b6D7e4067A0F3854a0cEfC5F5A957"
       />
   </div>
 </template>
