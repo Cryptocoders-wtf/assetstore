@@ -30,7 +30,6 @@ import { ethers } from "ethers";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
-  address: "0x1D8D70AD07C8E7E442AD78E4AC0A16f958Eba7F0"
 };
 
 export default defineComponent({
@@ -42,13 +41,12 @@ export default defineComponent({
   components: {
   },
   setup(props) {
-    console.log(props.foo);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = new ethers.providers.AlchemyProvider("rinkeby");
     const provider = new ethers.providers.JsonRpcProvider();
 
-    const contractRO = new ethers.Contract(AssetStore.address, AssetStore.wabi.abi, provider);
+    const contractRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
     const groups = ref([] as string[]);
     const allCategories = ref({} as {[group:string]:string[]});
     const allAssets = ref({} as {[group:string]:{[category:string]:string[]}});
