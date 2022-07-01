@@ -2,7 +2,7 @@
   <div class="max-w-xl mx-auto text-left p-2">
     <store-view
       network="localhost" 
-      storeAddress="0x153c299219D31111f1237C86180e9962e49a33D2"
+      storeAddress="0x774372fB7c8D6e484dbc7AE9c0f7771F070C30Db"
       />
   </div>
 </template>

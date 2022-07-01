@@ -2,7 +2,7 @@
   <div class="max-w-xl mx-auto text-left p-2">
     <store-view
       network="rinkeby" 
-      storeAddress="0x3Aea980E9F0b6D7e4067A0F3854a0cEfC5F5A957"
+      storeAddress="0x06bD9a73Ed54F11b1Ed3259763e15D705F2816a3"
       />
   </div>
 </template>
