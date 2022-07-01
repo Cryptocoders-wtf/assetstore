@@ -1,5 +1,6 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
+    {{ foo }}
     <div class="mt-4 mb-8">
       <div v-for="group in groups" v-bind:key="group">
         <b>{{ group }}</b> 
@@ -34,9 +35,14 @@ const AssetStore = {
 
 export default defineComponent({
   name: "HomePage",
+  props: [
+    "foo",
+    "storeAddress"
+  ],
   components: {
   },
-  setup() {
+  setup(props) {
+    console.log(props.foo);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = new ethers.providers.AlchemyProvider("rinkeby");

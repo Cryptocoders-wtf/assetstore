@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
-    <store-view />
+    <store-view foo="Hello World" />
   </div>
 </template>
 
