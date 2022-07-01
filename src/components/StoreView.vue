@@ -1,22 +1,20 @@
 <template>
-  <div class="max-w-xl mx-auto text-left p-2">
-    <div class="mt-4 mb-8">
-      <div v-for="group in groups" v-bind:key="group">
-        <b>{{ group }}</b> 
-        <div v-for="category in allCategories[group]" v-bind:key="category">
-          <div>
-          {{ category }} 
-          </div>
-          <div v-if="allAssets[group] && allAssets[group][category]">
-            <span v-for="assetId in allAssets[group][category]" v-bind:key="assetId">
-              <span v-if="assets[assetId]">
-                <img :src="assets[assetId].svg" class="w-16 inline-block rounded-xl" />
-              </span>
-              <span v-else>
-              ...
-              </span>
+  <div>
+    <div v-for="group in groups" v-bind:key="group">
+      <b>{{ group }}</b> 
+      <div v-for="category in allCategories[group]" v-bind:key="category">
+        <div>
+        {{ category }} 
+        </div>
+        <div v-if="allAssets[group] && allAssets[group][category]">
+          <span v-for="assetId in allAssets[group][category]" v-bind:key="assetId">
+            <span v-if="assets[assetId]">
+              <img :src="assets[assetId].svg" class="w-16 inline-block rounded-xl" />
             </span>
-          </div>
+            <span v-else>
+            ...
+            </span>
+          </span>
         </div>
       </div>
     </div>
@@ -32,13 +30,11 @@ const AssetStore = {
 };
 
 export default defineComponent({
-  name: "HomePage",
+  name: "StoreView",
   props: [
     "network",
     "storeAddress",
   ],
-  components: {
-  },
   setup(props) {
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
@@ -102,10 +98,6 @@ export default defineComponent({
 
     const fetchCategories = async(group:string, category: string | null) => {
       console.log("fetchCategories called", group);
-      /* Just in case...
-        const value2 = Object.assign({}, allAssets.value) as any;
-        allAssets.value = value2;
-      */
 
       const result = await contractRO.functions.getCategoryCount(group);
       const categoryCount = result[0];
