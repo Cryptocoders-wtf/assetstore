@@ -127,20 +127,23 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
   asset.category = category;
   asset.name = _asset.name;
   const width = _asset.width || _width;
+  let svgPath = "";
   if (_asset.parts) {
     asset.parts = _asset.parts.map((part:any) => {
       part.color = part.color || "";
+      svgPath = normalizePath(part.body, width);
       part.body = compressPath(part.body, width);
       return part;
     });
   } else {
+    svgPath = normalizePath(_asset.body, width);
     asset.parts = [{
       color: "",
       body: compressPath(_asset.body, width)
     }];
   }
   asset.svg = '<svg viewBox="0 0 1024 1024"  xmlns="http://www.w3.org/2000/svg">'
-    + '<path d="' + asset.parts[0].body.path + '" />'
+    + '<path d="' + svgPath + '" />'
     + '</svg>';
   asset.image = 'data:image/svg+xml;base64,' + Buffer.from(asset.svg).toString('base64');
   asset.bytes = asset.parts[0].body.bytes;
