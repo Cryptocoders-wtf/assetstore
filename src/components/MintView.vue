@@ -1,7 +1,14 @@
 <template>
   <div>
-    <div v-for="asset in actionAssets" v-bind:key="asset.name">
-      <img :src="asset.image" class="w-16 inline-block rounded-xl" />
+    <div>
+      <span v-for="asset in actionAssets" v-bind:key="asset.name">
+        <img :src="asset.image" class="w-16 inline-block rounded-xl" />
+      </span>
+    </div>
+    <div>
+      <span v-for="asset in socialAssets" v-bind:key="asset.name">
+        <img :src="asset.image" class="w-16 inline-block rounded-xl" />
+      </span>
     </div>
     <div v-for="group in groups" v-bind:key="group">
       <b>{{ group }}</b> 
@@ -27,7 +34,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { ethers } from "ethers";
-import { actionAssets } from "../resources/materials";
+import { actionAssets, socialAssets } from "../resources/materials";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -136,7 +143,7 @@ export default defineComponent({
     fetchGroups(null);
 
     return {
-      groups, allCategories, allAssets, assets, actionAssets
+      groups, allCategories, allAssets, assets, actionAssets, socialAssets
     }
   }
 });
