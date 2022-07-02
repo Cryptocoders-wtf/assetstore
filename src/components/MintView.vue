@@ -1,13 +1,17 @@
 <template>
   <div>
     <div>
-      <span v-for="asset in actionAssets" v-bind:key="asset.name">
+      <span v-for="asset in actionAssetsRef" v-bind:key="asset.name">
+        <span v-if="!asset.registered">
         <img @click="() => {onSelect(asset)}" :src="asset.image" class="w-16 inline-block rounded-xl" />
+        </span>
       </span>
     </div>
     <div>
-      <span v-for="asset in socialAssets" v-bind:key="asset.name">
+      <span v-for="asset in socialAssetsRef" v-bind:key="asset.name">
+        <span v-if="!asset.registered">
         <img @click="() => {onSelect(asset)}" :src="asset.image" class="w-16 inline-block rounded-xl" />
+        </span>
       </span>
     </div>
     <div v-if="selection">
@@ -55,6 +59,7 @@ import { useStore } from "vuex";
 import { ethers } from "ethers";
 import { actionAssets, socialAssets } from "../resources/materials";
 import { switchNetwork } from "../utils/MetaMask";
+import { getSystemErrorName } from "util";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -73,6 +78,8 @@ export default defineComponent({
   ],
   setup(props) {
     const store = useStore();
+    const actionAssetsRef = ref(actionAssets);
+    const socialAssetsRef = ref(socialAssets);
     console.log("****", props.expectedNetwork);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
@@ -146,6 +153,16 @@ export default defineComponent({
         fetchAssets(group, category);
       });
     });
+    
+    const markAsset = (assets: any, name:string) => {
+      assets.forEach(element => {
+        if (element.asset.name == name) {
+          console.log("match");
+          element.registered = true;
+        }
+      });
+      return assets.map(item=>{return item});
+    };
 
     const fetchAsset = async (assetId:string) => {
       if (!assets.value[assetId]) {
@@ -154,6 +171,15 @@ export default defineComponent({
         const value = Object.assign({}, assets.value);
         value[assetId] = { svg };
         assets.value = value;
+
+        const assetInfo = await contractRO.functions.getAttributes(assetId);
+        const category = assetInfo[0][1];
+        const name = assetInfo[0][2];
+        if (category == "UI Actions") {
+          actionAssetsRef.value = markAsset(actionAssetsRef.value, name);
+        } else if (category == "Social") {
+          socialAssetsRef.value = markAsset(socialAssetsRef.value, name);
+        }
       }
     };
 
@@ -211,7 +237,7 @@ export default defineComponent({
     fetchGroups(null);
 
     return {
-      groups, allCategories, allAssets, assets, actionAssets, socialAssets,
+      groups, allCategories, allAssets, assets, actionAssetsRef, socialAssetsRef,
       onSelect, selection, tokenGate, switchToValidNetwork, mint
     }
   }
