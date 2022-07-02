@@ -117,6 +117,7 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
       body: compressPath(_asset.body, width)
     }];
   }
+  asset.asset = Object.assign({}, asset)
   asset.svg = '<svg viewBox="0 0 1024 1024"  xmlns="http://www.w3.org/2000/svg">'
     + '<path d="' + svgPath + '" />'
     + '</svg>';
