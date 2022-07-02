@@ -50,17 +50,16 @@ export default defineComponent({
 
     provider.once("block", () => {
       contractRO.on(contractRO.filters.GroupAdded(), (group) => {
-        console.log("**** got GroupAdded event", group);
+        console.log("[event/GroupAdded]", group);
         fetchGroups(group);
       });
       contractRO.on(contractRO.filters.CategoryAdded(), (group, category) => {
-        console.log("**** got CategoryAdded event", group, category);
+        console.log("[event/CategoryAdded]", group, category);
         fetchCategories(group, category);
       });
       contractRO.on(contractRO.filters.AssetRegistered(), async (from, assetId) => {
-        console.log("**** got AssetRegistered event", from, assetId.toNumber());
+        console.log("[event/AssetRegistered]", from, assetId.toNumber());
         const attr = (await contractRO.functions.getAttributes(assetId))[0];
-        console.log(attr);
         const group = attr[0];
         const category = attr[1];
         fetchAssets(group, category);
@@ -110,7 +109,6 @@ export default defineComponent({
       });
       const categories:string[] = await Promise.all(promises);
 
-      console.log("updating categories", group, categories);
       const value = Object.assign({}, allCategories.value) as {[group:string]:string[]};
       value[group] = categories;
       allCategories.value = value;
