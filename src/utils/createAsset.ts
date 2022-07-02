@@ -8,6 +8,42 @@ const regexNumG = /[+-]?(\d*\.\d*|\d+)/g;
 const regexDivG = /[,\s]+/g;
 const encoder = new TextEncoder();
 
+const normalizePath = (body:string, width:number) => {
+  const ret = body.replace(regexNumG, (str:string)=>{
+    return ` ${parseFloat(str)} `;
+  });
+  const items = ret.split(regexDivG);
+
+  let isArc = false;
+  let offset = 0;
+  const numArray2:Array<string> = items.reduce((prev:Array<string>, item:string) => {
+    if (regexNum.test(item)) {
+      let value = Math.round(parseFloat(item) * 1024 / width);
+      if (isArc) {
+        const off7 = offset % 7;
+        if (off7 >=2 && off7 <=4) {
+          // we don't want to normalize 'angle', and two flags for 'a' or 'A'
+          value = Math.round(parseFloat(item));        
+        }
+        offset++;
+      }
+      prev.push(value.toString());
+    } else {
+      prev.push(item);
+      const ch = item.substring(-1);
+      if (ch == 'a' || ch == 'A') {
+        isArc = true;
+        offset = 0;
+      } else {
+        isArc = false;
+      }
+    }
+    return prev;
+  }, []);
+
+  return numArray2.join(' ');
+} 
+
 const compressPath = (body:string, width:number) => {
   const ret = body.replace(regexNumG, (str:string)=>{
     return ` ${parseFloat(str)} `;
