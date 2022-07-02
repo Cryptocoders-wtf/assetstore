@@ -2,7 +2,7 @@
   <div>
     <div>
       <span v-for="asset in actionAssets" v-bind:key="asset.name">
-        <img :src="asset.image" class="w-16 inline-block rounded-xl" />
+        <img @click="() => {onSelect(asset)}" :src="asset.image" class="w-16 inline-block rounded-xl" />
       </span>
     </div>
     <div>
@@ -59,6 +59,10 @@ export default defineComponent({
     const allCategories = ref({} as {[group:string]:string[]});
     const allAssets = ref({} as {[group:string]:{[category:string]:string[]}});
     const assets = ref({} as {[assetId: string]: {[propId:string]:string}});
+
+    const onSelect = async (asset: any) => {
+      console.log(asset);
+    }
 
     provider.once("block", () => {
       contractRO.on(contractRO.filters.GroupAdded(), (group) => {
@@ -143,7 +147,8 @@ export default defineComponent({
     fetchGroups(null);
 
     return {
-      groups, allCategories, allAssets, assets, actionAssets, socialAssets
+      groups, allCategories, allAssets, assets, actionAssets, socialAssets,
+      onSelect
     }
   }
 });
