@@ -20,8 +20,8 @@
       <div v-else-if="tokenGate=='noAccount'">
         Please connect Metamask.
       </div>
-      <div v-else>
-        Hello
+      <div v-else @click="mint">
+        Mint
       </div>
     </div>
   
@@ -118,6 +118,15 @@ export default defineComponent({
         asset
       }
     }
+    const mint = async() => {
+      console.log("*** mint", selection.value.asset.asset);
+      const asset = selection.value.asset.asset;
+      asset.soulbound = await networkContext.value.signer.getAddress();
+      console.log(asset.soulbound);
+      const tx = await networkContext.value.contract.mintWithAsset(asset, 0);
+      const result = await tx.wait();
+      console.log(result.gasUsed);
+    }
 
     provider.once("block", () => {
       contractRO.on(contractRO.filters.GroupAdded(), (group) => {
@@ -203,7 +212,7 @@ export default defineComponent({
 
     return {
       groups, allCategories, allAssets, assets, actionAssets, socialAssets,
-      onSelect, selection, tokenGate, switchToValidNetwork
+      onSelect, selection, tokenGate, switchToValidNetwork, mint
     }
   }
 });
