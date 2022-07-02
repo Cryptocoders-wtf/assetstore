@@ -11,7 +11,7 @@
       </span>
     </div>
     <div v-if="selection">
-      Selected {{ selection.asset.name }}
+      <img :src="selection.asset.image" class="w-24 inline-block rounded-xl" />
     </div>
     <div v-for="group in groups" v-bind:key="group">
       <b>{{ group }}</b> 
