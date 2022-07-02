@@ -127,6 +127,10 @@ export default defineComponent({
     }
     const mint = async() => {
       console.log("*** mint", selection.value.asset.asset);
+      if (!networkContext.value) {
+        console.error("Mint: we are not supposed to come here");
+        return;
+      }
       const asset = selection.value.asset.asset;
       asset.soulbound = await networkContext.value.signer.getAddress();
       console.log(asset.soulbound);
@@ -155,13 +159,13 @@ export default defineComponent({
     });
     
     const markAsset = (assets: any, name:string) => {
-      assets.forEach(element => {
+      assets.forEach((element:any) => {
         if (element.asset.name == name) {
           console.log("match");
           element.registered = true;
         }
       });
-      return assets.map(item=>{return item});
+      return assets.map((item:any)=>{return item});
     };
 
     const fetchAsset = async (assetId:string) => {
