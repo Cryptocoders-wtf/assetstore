@@ -52,31 +52,6 @@ const compressPath = (body:string, width:number) => {
 
   let isArc = false;
   let offset = 0;
-  const numArray2:Array<string> = items.reduce((prev:Array<string>, item:string) => {
-    if (regexNum.test(item)) {
-      let value = Math.round(parseFloat(item) * 1024 / width);
-      if (isArc) {
-        const off7 = offset % 7;
-        if (off7 >=2 && off7 <=4) {
-          // we don't want to normalize 'angle', and two flags for 'a' or 'A'
-          value = Math.round(parseFloat(item));        
-        }
-        offset++;
-      }
-      prev.push(value.toString());
-    } else {
-      prev.push(item);
-      const ch = item.substring(-1);
-      if (ch == 'a' || ch == 'A') {
-        isArc = true;
-        offset = 0;
-      } else {
-        isArc = false;
-      }
-    }
-    return prev;
-  }, []);
-
   const numArray:Array<number> = items.reduce((prev:Array<number>, item:string) => {
     if (regexNum.test(item)) {
       let value = Math.round(parseFloat(item) * 1024 / width);
@@ -118,7 +93,7 @@ const compressPath = (body:string, width:number) => {
     }
   });
 
-  return { path: numArray2.join(' '), bytes };
+  return bytes;
 } 
 
 export const createAsset = (_asset:any, group:string, category:string, _width:number) => {
