@@ -24,7 +24,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { ethers } from "ethers";
-import { actions } from "../resources/materials";
+import { actionAssets } from "../resources/materials";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -37,7 +37,7 @@ export default defineComponent({
     "storeAddress",
   ],
   setup(props) {
-    console.log("**** actions", actions);
+    console.log("**** actions", actionAssets);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
