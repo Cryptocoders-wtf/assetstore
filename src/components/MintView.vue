@@ -7,8 +7,11 @@
     </div>
     <div>
       <span v-for="asset in socialAssets" v-bind:key="asset.name">
-        <img :src="asset.image" class="w-16 inline-block rounded-xl" />
+        <img @click="() => {onSelect(asset)}" :src="asset.image" class="w-16 inline-block rounded-xl" />
       </span>
+    </div>
+    <div v-if="selection">
+      Selected {{ selection.asset.name }}
     </div>
     <div v-for="group in groups" v-bind:key="group">
       <b>{{ group }}</b> 
@@ -60,8 +63,12 @@ export default defineComponent({
     const allAssets = ref({} as {[group:string]:{[category:string]:string[]}});
     const assets = ref({} as {[assetId: string]: {[propId:string]:string}});
 
+    const selection = ref(null as any);
     const onSelect = async (asset: any) => {
       console.log(asset);
+      selection.value = {
+        asset
+      }
     }
 
     provider.once("block", () => {
@@ -148,7 +155,7 @@ export default defineComponent({
 
     return {
       groups, allCategories, allAssets, assets, actionAssets, socialAssets,
-      onSelect
+      onSelect, selection
     }
   }
 });
