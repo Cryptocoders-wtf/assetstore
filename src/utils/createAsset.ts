@@ -30,7 +30,13 @@ const compressPath = (body:string, width:number) => {
       prev.push(value.toString());
     } else {
       prev.push(item);
-      isArc = (item=="c" || item=="C");
+      const ch = item.substring(-1);
+      if (ch == 'a' || ch == 'A') {
+        isArc = true;
+        offset = 0;
+      } else {
+        isArc = false;
+      }
     }
     return prev;
   }, []);
@@ -59,6 +65,7 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
   asset.svg = '<svg viewBox="0 0 1024 1024"  xmlns="http://www.w3.org/2000/svg">'
     + '<path d="' + asset.parts[0].body + '" />'
     + '</svg>';
+  asset.image = 'data:image/svg+xml;base64,' + Buffer.from(asset.svg).toString('base64');
   return asset;  
 }
 

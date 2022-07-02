@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-for="asset in actionAssets" v-bind:key="asset.name">
+      <img :src="asset.image" class="w-16 inline-block rounded-xl" />
+    </div>
     <div v-for="group in groups" v-bind:key="group">
       <b>{{ group }}</b> 
       <div v-for="category in allCategories[group]" v-bind:key="category">
@@ -37,7 +40,7 @@ export default defineComponent({
     "storeAddress",
   ],
   setup(props) {
-    console.log("**** actions", actionAssets[0].svg);
+    console.log("**** actions", actionAssets[0].image);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
@@ -133,7 +136,7 @@ export default defineComponent({
     fetchGroups(null);
 
     return {
-      groups, allCategories, allAssets, assets
+      groups, allCategories, allAssets, assets, actionAssets
     }
   }
 });
