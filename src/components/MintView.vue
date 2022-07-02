@@ -1,7 +1,14 @@
 <template>
   <div>
-    <div v-for="asset in actionAssets" v-bind:key="asset.name">
-      <img :src="asset.image" class="w-16 inline-block rounded-xl" />
+    <div>
+      <span v-for="asset in actionAssets" v-bind:key="asset.name">
+        <img @click="() => {onSelect(asset)}" :src="asset.image" class="w-16 inline-block rounded-xl" />
+      </span>
+    </div>
+    <div>
+      <span v-for="asset in socialAssets" v-bind:key="asset.name">
+        <img :src="asset.image" class="w-16 inline-block rounded-xl" />
+      </span>
     </div>
     <div v-for="group in groups" v-bind:key="group">
       <b>{{ group }}</b> 
@@ -27,7 +34,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { ethers } from "ethers";
-import { actionAssets } from "../resources/materials";
+import { actionAssets, socialAssets } from "../resources/materials";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -40,7 +47,7 @@ export default defineComponent({
     "storeAddress",
   ],
   setup(props) {
-    console.log("**** actions", actionAssets[0].image);
+    console.log("**** actions", actionAssets[0].bytes);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
@@ -52,6 +59,10 @@ export default defineComponent({
     const allCategories = ref({} as {[group:string]:string[]});
     const allAssets = ref({} as {[group:string]:{[category:string]:string[]}});
     const assets = ref({} as {[assetId: string]: {[propId:string]:string}});
+
+    const onSelect = async (asset: any) => {
+      console.log(asset);
+    }
 
     provider.once("block", () => {
       contractRO.on(contractRO.filters.GroupAdded(), (group) => {
@@ -136,7 +147,8 @@ export default defineComponent({
     fetchGroups(null);
 
     return {
-      groups, allCategories, allAssets, assets, actionAssets
+      groups, allCategories, allAssets, assets, actionAssets, socialAssets,
+      onSelect
     }
   }
 });
