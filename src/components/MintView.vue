@@ -47,7 +47,7 @@ export default defineComponent({
     "storeAddress",
   ],
   setup(props) {
-    console.log("**** actions", actionAssets[0].image);
+    console.log("**** actions", actionAssets[0].bytes);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
