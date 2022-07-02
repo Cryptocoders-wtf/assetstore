@@ -11,8 +11,22 @@
       </span>
     </div>
     <div v-if="selection">
-      {{ tokenGate }}
-      <img :src="selection.asset.image" class="w-24 inline-block rounded-xl" />
+      <div>
+        <img :src="selection.asset.image" class="w-24 inline-block rounded-xl" />
+      </div>
+      <div v-if="tokenGate=='invalidNetwork'">
+        <button @click="switchToValidNetwork">Switch Network</button>
+      </div>
+      <div v-else-if="tokenGate=='noAccount'">
+        Please connect Metamask.
+      </div>
+      <div v-else>
+        Hello
+      </div>
+    </div>
+  
+    <div class="mt-20 mb-20">
+      *** Please ignore information below ***
     </div>
     <div v-for="group in groups" v-bind:key="group">
       <b>{{ group }}</b> 
@@ -40,6 +54,7 @@ import { defineComponent, computed, ref } from "vue";
 import { useStore } from "vuex";
 import { ethers } from "ethers";
 import { actionAssets, socialAssets } from "../resources/materials";
+import { switchNetwork } from "../utils/MetaMask";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -86,6 +101,10 @@ export default defineComponent({
       }
       return "valid";      
     });
+
+    const switchToValidNetwork = async () => {
+      await switchNetwork(props.expectedNetwork);
+    }
 
     const contractRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
     const groups = ref([] as string[]);
@@ -185,7 +204,7 @@ export default defineComponent({
 
     return {
       groups, allCategories, allAssets, assets, actionAssets, socialAssets,
-      onSelect, selection, tokenGate
+      onSelect, selection, tokenGate, switchToValidNetwork
     }
   }
 });
