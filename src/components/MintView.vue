@@ -11,6 +11,7 @@
       </span>
     </div>
     <div v-if="selection">
+      {{ tokenGate }}
       <img :src="selection.asset.image" class="w-24 inline-block rounded-xl" />
     </div>
     <div v-for="group in groups" v-bind:key="group">
@@ -35,12 +36,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, computed, ref } from "vue";
+import { useStore } from "vuex";
 import { ethers } from "ethers";
 import { actionAssets, socialAssets } from "../resources/materials";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
+};
+const MaterialToken = {
+  wabi: require("../abis/MaterialToken.json"), // wrapped abi
 };
 
 export default defineComponent({
@@ -48,14 +53,39 @@ export default defineComponent({
   props: [
     "network",
     "storeAddress",
+    "tokenAddress",
+    "expectedNetwork"
   ],
   setup(props) {
+    const store = useStore();
+    console.log("****", props.expectedNetwork);
     console.log("**** actions", actionAssets[0].bytes);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
     const provider = (props.network == "localhost") ?
       new ethers.providers.JsonRpcProvider() : new ethers.providers.AlchemyProvider("rinkeby");
+
+    let prevProvider:ethers.providers.Web3Provider | null = null;
+    const networkContext = computed(() => {
+      if (store.state.account && store.state.chainId == props.expectedNetwork) {
+        const provider = new ethers.providers.Web3Provider(store.state.ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(props.tokenAddress, MaterialToken.wabi.abi, signer);
+
+        return { provider, signer, contract };
+      }
+      return null;
+    });
+   const tokenGate = computed(()=>{
+      if (!store.state.account) {
+        return "noAccount"
+      }
+      if (store.state.chainId != props.expectedNetwork) {
+        return "invalidNetwork"
+      }
+      return "valid";      
+    });
 
     const contractRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
     const groups = ref([] as string[]);
@@ -155,7 +185,7 @@ export default defineComponent({
 
     return {
       groups, allCategories, allAssets, assets, actionAssets, socialAssets,
-      onSelect, selection
+      onSelect, selection, tokenGate
     }
   }
 });
