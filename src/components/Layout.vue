@@ -3,6 +3,7 @@
     <div id="nav" class="mb-2">
       <!--img class="mb-4" src="@/assets/banner.svg" /-->
       <router-link :to="localizedUrl('/')" class="text-2xl">Home</router-link> |
+      <router-link :to="localizedUrl('/mint')" class="text-2xl">Mint</router-link> |
       <router-link :to="localizedUrl('/local')" class="text-2xl">Local</router-link> 
       <Connect />
     </div>
