@@ -146,7 +146,6 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
     + '<path d="' + svgPath + '" />'
     + '</svg>';
   asset.image = 'data:image/svg+xml;base64,' + Buffer.from(asset.svg).toString('base64');
-  asset.bytes = asset.parts[0].body.bytes;
   return asset;  
 }
 

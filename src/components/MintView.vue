@@ -74,7 +74,6 @@ export default defineComponent({
   setup(props) {
     const store = useStore();
     console.log("****", props.expectedNetwork);
-    console.log("**** actions", actionAssets[0].bytes);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
