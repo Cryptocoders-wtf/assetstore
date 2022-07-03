@@ -26,8 +26,11 @@
     </div>
     <div v-if="selection && !selection.registered" class="border-solid border-slate-400 border-2 rounded-xl pl-2 pr-2">
       <img :src="selection.asset.image" class="w-24 inline-block rounded-xl" />
-      <div v-if="messageRef">
-        <p v-if="messageRef == 'message.minted'">
+      <div v-if="messageRef" class="mb-2">
+        <p v-if="messageRef == 'message.minting'">
+          処理中です...
+        </p>
+        <p v-else-if="messageRef == 'message.minted'">
           クラウドミンティングにご協力ありがとうございます。ブロックチェーンへの反映には少し時間がかかります。
           順調に反映されれば、このメッセージは自動的に消滅します。
         </p>
@@ -178,6 +181,7 @@ export default defineComponent({
       asset.soulbound = await networkContext.value.signer.getAddress();
       //console.log(asset.soulbound);
       try {
+        messageRef.value = "message.minting";
         const tx = await networkContext.value.contract.mintWithAsset(asset, 0);
         const result = await tx.wait();
         console.log("mint:gasUsed", result.gasUsed.toNumber());
