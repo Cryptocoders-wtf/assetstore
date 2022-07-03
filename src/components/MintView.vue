@@ -2,17 +2,13 @@
   <div>
     <div>
       <p class="mb-2">これは、フル・オンチェーンNFTの表現力をより高めるために、
-        ブロック・チェーン上にさざまななベクトル画像をアセットとして提供し、
-        皆で共有しようという「On-Chain Asset Store」プロジェクトの一環です。</p>
+        ブロック・チェーン上にさざまななベクトル画像をアップロードし、
+        人類の共有アセットとして活用しようという「On-Chain Asset Store」プロジェクトの一環です。</p>
       <p class="mb-2">大量のベクトル画像をチェーン上にアップロードするには多くの「ガス代」が必要ですが、
         それをNFTをミントする方に少しつづ負担していただく「クラウドミンティング」
         という手法をみなさんにお願いしています。</p>
       <p class="mb-2">下に表示されているGoogle Material Iconの一つをクリックし、
         リストの下に表示されるミントボタンを押して下さい。</p>
-      <p class="mb-2">クラウドミンティングにご協力していただいた方には、
-        「ソウルバウンドNFT」と呼ばれる
-        あなたのウォレット・アドレスと名前が永久に刻まれたNFT１つと、
-        転売用の「ボーナスNFT」を２つ、合計３つのNFTを発行します。</p>
     </div>
     <div>
       <span v-for="asset in actionAssetsRef" v-bind:key="asset.name">
@@ -28,7 +24,7 @@
         </span>
       </span>
     </div>
-    <div v-if="selection" class="border-solid border-slate-400 border-2 rounded-xl p-2">
+    <div v-if="selection && !selection.registered" class="border-solid border-slate-400 border-2 rounded-xl pl-2 pr-2">
       <img :src="selection.asset.image" class="w-24 inline-block rounded-xl" />
       <div v-if="tokenGate=='invalidNetwork'">
         <button @click="switchToValidNetwork">Switch Network</button>
@@ -38,7 +34,11 @@
       </div>
       <span v-else>
         <button  @click="mint" class="inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Mint</button>
-        <p>フリーミントですが、ガス代が0.02〜0.05ETH程度（混雑状況によって大きく変動）かかります。</p>
+        <p class="mb-2">フリーミントですが、ガス代が0.02〜0.05ETH程度かかります（混雑状況によって大きく変動）。</p>
+        <p class="mb-2">クラウドミンティングにご協力していただいた方には、
+        「ソウルバウンドNFT」と呼ばれる
+        あなたのウォレット・アドレスと名前が永久に刻まれたNFT１つと、
+        転売用の「ボーナスNFT」を２つ、合計３つのNFTを発行します。</p>
       </span>
     </div>
   
@@ -170,8 +170,12 @@ export default defineComponent({
     const markAsset = (assets: any, name:string) => {
       assets.forEach((element:any) => {
         if (element.asset.name == name) {
-          console.log("match");
+          console.log("match", name);
           element.registered = true;
+          // Hack: Even though the name is not unique enough, this is sufficient.
+          if (selection.value && name == selection.value.asset.name) {
+            selection.value = null;
+          }
         }
       });
       return assets.map((item:any)=>{return item});
