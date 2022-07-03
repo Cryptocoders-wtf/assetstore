@@ -26,9 +26,17 @@
     </div>
     <div v-if="selection && !selection.registered" class="border-solid border-slate-400 border-2 rounded-xl pl-2 pr-2">
       <img :src="selection.asset.image" class="w-24 inline-block rounded-xl" />
-      <span v-if="messageRef">
-        {{ messageRef }}
-      </span>
+      <div v-if="messageRef">
+        <p v-if="messageRef == 'message.minted'">
+          クラウドミンティングにご協力ありがとうございます。ブロックチェーンへの反映には少し時間がかかります。
+          順調に反映されれば、このメッセージは自動的に消滅します。
+        </p>
+        <p v-else>
+          <p>以下のエラーメッセージを受け取りました。</p>
+          <p class="text-red-400">{{ messageRef }}</p>
+          <p>再度、アイコンの選択からやり直してください。</p>
+        </p>
+      </div>
       <span v-else>
         <div v-if="tokenGate=='invalidNetwork'">
           <button @click="switchToValidNetwork">Switch Network</button>
