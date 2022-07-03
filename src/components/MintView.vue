@@ -162,20 +162,24 @@ export default defineComponent({
         return;
       }
       const asset = selection.value.asset.asset;
-      let result = await contractRO.functions.getAssetIdWithName(
-        asset.group, asset.category, asset.name
-      );
-      // Double-check if it's already minted
-      if (result[0].toNumber() > 0) {
-        selection.value = null;
-        return;
+      try {
+        const result = await contractRO.functions.getAssetIdWithName(
+          asset.group, asset.category, asset.name
+        );
+        // Double-check if it's already minted
+        if (result[0].toNumber() > 0) {
+          selection.value = null;
+          return;
+        }
+      } catch(e) {
+        // this is success        
       }
 
       asset.soulbound = await networkContext.value.signer.getAddress();
       //console.log(asset.soulbound);
       try {
         const tx = await networkContext.value.contract.mintWithAsset(asset, 0);
-        result = await tx.wait();
+        const result = await tx.wait();
         console.log("mint:gasUsed", result.gasUsed.toNumber());
         messageRef.value = "message.minted";
       } catch(e) {
