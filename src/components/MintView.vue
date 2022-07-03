@@ -44,7 +44,7 @@
                 class="mb-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Switch Network</button>
         </div>
         <div v-else-if="tokenGate=='noAccount'">
-          Please connect Metamask.
+          <p class="mb-2">Metamaskと接続してください。<Connect /></p>
         </div>
         <span v-else>
           <button  @click="mint" class="inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Mint</button>
@@ -84,6 +84,7 @@ import { ethers } from "ethers";
 import { actionAssets, socialAssets } from "../resources/materials";
 import { switchNetwork } from "../utils/MetaMask";
 import { getSystemErrorName } from "util";
+import Connect from "@/components/Connect.vue";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -94,6 +95,9 @@ const MaterialToken = {
 
 export default defineComponent({
   name: "MintView",
+  components: {
+    Connect
+  },
   props: [
     "network",
     "storeAddress",
