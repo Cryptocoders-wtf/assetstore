@@ -10,6 +10,7 @@ const lang = {
     hello: "hello world",
     noAccount: "Please connect Metamask.",
     invalidNetwork: "Please switch network to { networkName }.",
+    processing: "Processing...",
   },
   languages,
 };
