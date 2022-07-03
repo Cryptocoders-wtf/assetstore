@@ -26,19 +26,24 @@
     </div>
     <div v-if="selection && !selection.registered" class="border-solid border-slate-400 border-2 rounded-xl pl-2 pr-2">
       <img :src="selection.asset.image" class="w-24 inline-block rounded-xl" />
-      <div v-if="tokenGate=='invalidNetwork'">
-        <button @click="switchToValidNetwork">Switch Network</button>
-      </div>
-      <div v-else-if="tokenGate=='noAccount'">
-        Please connect Metamask.
-      </div>
+      <span v-if="messageRef">
+        {{ messageRef }}
+      </span>
       <span v-else>
-        <button  @click="mint" class="inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Mint</button>
-        <p class="mb-2">フリーミントですが、ガス代が0.02〜0.05ETH程度かかります（混雑状況によって大きく変動）。</p>
-        <p class="mb-2">クラウドミンティングにご協力していただいた方には、
-        「ソウルバウンドNFT」と呼ばれる
-        あなたのウォレット・アドレスと名前が永久に刻まれたNFT１つと、
-        転売用の「ボーナスNFT」を２つ、合計３つのNFTを発行します。</p>
+        <div v-if="tokenGate=='invalidNetwork'">
+          <button @click="switchToValidNetwork">Switch Network</button>
+        </div>
+        <div v-else-if="tokenGate=='noAccount'">
+          Please connect Metamask.
+        </div>
+        <span v-else>
+          <button  @click="mint" class="inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Mint</button>
+          <p class="mb-2">フリーミントですが、ガス代が0.02〜0.05ETH程度かかります（混雑状況によって大きく変動）。</p>
+          <p class="mb-2">クラウドミンティングにご協力していただいた方には、
+          「ソウルバウンドNFT」と呼ばれる
+          あなたのウォレット・アドレスと名前が永久に刻まれたNFT１つと、
+          転売用の「ボーナスNFT」を２つ、合計３つのNFTを発行します。</p>
+        </span>
       </span>
     </div>
   
@@ -89,6 +94,7 @@ export default defineComponent({
     const store = useStore();
     const actionAssetsRef = ref(actionAssets);
     const socialAssetsRef = ref(socialAssets);
+    const messageRef = ref(null as string | null);
     console.log("* expectedNetwork", props.expectedNetwork);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
@@ -130,6 +136,7 @@ export default defineComponent({
     const selection = ref(null as any);
     const onSelect = async (asset: any) => {
       console.log(asset);
+      messageRef.value = null;
       selection.value = {
         asset
       }
@@ -152,9 +159,15 @@ export default defineComponent({
 
       asset.soulbound = await networkContext.value.signer.getAddress();
       //console.log(asset.soulbound);
-      const tx = await networkContext.value.contract.mintWithAsset(asset, 0);
-      result = await tx.wait();
-      console.log("mint:gasUsed", result.gasUsed.toNumber());
+      try {
+        const tx = await networkContext.value.contract.mintWithAsset(asset, 0);
+        result = await tx.wait();
+        console.log("mint:gasUsed", result.gasUsed.toNumber());
+        messageRef.value = "message.minted";
+      } catch(e) {
+        console.log(e);
+        messageRef.value = e.message;
+      }
     }
 
     provider.once("block", () => {
@@ -264,7 +277,8 @@ export default defineComponent({
 
     return {
       groups, allCategories, allAssets, assets, actionAssetsRef, socialAssetsRef,
-      onSelect, selection, tokenGate, switchToValidNetwork, mint
+      onSelect, selection, tokenGate, switchToValidNetwork, mint, 
+      messageRef
     }
   }
 });
