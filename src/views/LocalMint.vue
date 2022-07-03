@@ -3,8 +3,8 @@
     <mint-view
       network="localhost" 
       :expectedNetwork="expectedNetwork"
-      storeAddress="0xB0f3A4aE1fDC1068f9364c5d7b1E42678B66D941"
-      tokenAddress="0xd5660525C2378294bfe3b8197f714CcBFD6654bb"
+      storeAddress="0x114e375B6FCC6d6fCb68c7A1d407E652C54F25FB"
+      tokenAddress="0xcD0048A5628B37B8f743cC2FeA18817A29e97270"
       />
   </div>
 </template>
@@ -20,7 +20,7 @@ export default defineComponent({
     MintView
   },
   setup() {
-    const expectedNetwork = ChainIds.RinkebyTestNet;
+    const expectedNetwork = ChainIds.Localhost;
     return {
       expectedNetwork
     }

@@ -34,7 +34,8 @@ export interface ProviderRpcError extends Error {
 export const ChainIds = {
   Mainnet: '0x1',
   RinkebyTestNet: '0x4',
-  Polygon: '0x89'
+  Polygon: '0x89',
+  Localhost : '0x7a69' // not sure
 };
 
 export const initializeEthereum = () => {

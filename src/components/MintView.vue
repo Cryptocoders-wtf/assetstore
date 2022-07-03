@@ -80,7 +80,7 @@ export default defineComponent({
     const store = useStore();
     const actionAssetsRef = ref(actionAssets);
     const socialAssetsRef = ref(socialAssets);
-    console.log("****", props.expectedNetwork);
+    console.log("* expectedNetwork", props.expectedNetwork);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
@@ -133,10 +133,10 @@ export default defineComponent({
       }
       const asset = selection.value.asset.asset;
       asset.soulbound = await networkContext.value.signer.getAddress();
-      console.log(asset.soulbound);
+      //console.log(asset.soulbound);
       const tx = await networkContext.value.contract.mintWithAsset(asset, 0);
       const result = await tx.wait();
-      console.log(result.gasUsed);
+      console.log("mint:gasUsed", result.gasUsed.toNumber());
     }
 
     provider.once("block", () => {
