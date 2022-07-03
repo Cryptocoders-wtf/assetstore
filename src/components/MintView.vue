@@ -1,15 +1,15 @@
 <template>
   <div>
     <div>
-      <p>これは、フル・オンチェーンNFTの表現力をより高めるために、
+      <p class="mb-2">これは、フル・オンチェーンNFTの表現力をより高めるために、
         ブロック・チェーン上にさざまななベクトル画像をアセットとして提供し、
         皆で共有しようという「On-Chain Asset Store」プロジェクトの一環です。</p>
-      <p>ベクトル画像をチェーン上にアップロードするには「ガス代」が必要ですが、
+      <p class="mb-2">大量のベクトル画像をチェーン上にアップロードするには多くの「ガス代」が必要ですが、
         それをNFTをミントする方に少しつづ負担していただく「クラウドミンティング」
         という手法をみなさんにお願いしています。</p>
-      <p>下に表示されているGoogle Material Iconの一つをクリックし、
-        リストの下に表示されるミントボタンを押して下さい。
-        クラウドミンティングにご協力していただいた方には、
+      <p class="mb-2">下に表示されているGoogle Material Iconの一つをクリックし、
+        リストの下に表示されるミントボタンを押して下さい。</p>
+      <p class="mb-2">クラウドミンティングにご協力していただいた方には、
         「ソウルバウンドNFT」と呼ばれる
         あなたのウォレット・アドレスと名前が永久に刻まれたNFT１つと、
         転売用の「ボーナスNFT」を２つ、合計３つのNFTを発行します。</p>
@@ -29,30 +29,25 @@
       </span>
     </div>
     <div v-if="selection" class="border-solid border-slate-400 border-2 rounded-xl p-2">
-      <div>
-        <img :src="selection.asset.image" class="w-24 inline-block rounded-xl" />
-      </div>
+      <img :src="selection.asset.image" class="w-24 inline-block rounded-xl" />
       <div v-if="tokenGate=='invalidNetwork'">
         <button @click="switchToValidNetwork">Switch Network</button>
       </div>
       <div v-else-if="tokenGate=='noAccount'">
         Please connect Metamask.
       </div>
-      <div v-else @click="mint">
-        Mint
-      </div>
+      <span v-else>
+        <button  @click="mint" class="inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Mint</button>
+        <p>フリーミントですが、ガス代が0.02〜0.05ETH程度（混雑状況によって大きく変動）かかります。</p>
+      </span>
     </div>
   
-    <div class="mt-20 mb-20">
-      *** Please ignore information below ***
+    <div class="mt-4 mb-4">
+      <p class="font-bold">【既にミント済みのMaterial Icon】</p>
     </div>
-    <div v-for="group in groups" v-bind:key="group">
-      <b>{{ group }}</b> 
-      <div v-for="category in allCategories[group]" v-bind:key="category">
-        <div>
-        {{ category }} 
-        </div>
-        <div v-if="allAssets[group] && allAssets[group][category]">
+    <span v-for="group in groups" v-bind:key="group">
+      <span v-for="category in allCategories[group]" v-bind:key="category">
+        <span v-if="allAssets[group] && allAssets[group][category]">
           <span v-for="assetId in allAssets[group][category]" v-bind:key="assetId">
             <span v-if="assets[assetId]">
               <img :src="assets[assetId].svg" class="w-16 inline-block rounded-xl" />
@@ -61,9 +56,9 @@
             ...
             </span>
           </span>
-        </div>
-      </div>
-    </div>
+        </span>
+      </span>
+    </span>
   </div>
 </template>
 
