@@ -141,10 +141,19 @@ export default defineComponent({
         return;
       }
       const asset = selection.value.asset.asset;
+      let result = await contractRO.functions.getAssetIdWithName(
+        asset.group, asset.category, asset.name
+      );
+      // Double-check if it's already minted
+      if (result[0].toNumber() > 0) {
+        selection.value = null;
+        return;
+      }
+
       asset.soulbound = await networkContext.value.signer.getAddress();
       //console.log(asset.soulbound);
       const tx = await networkContext.value.contract.mintWithAsset(asset, 0);
-      const result = await tx.wait();
+      result = await tx.wait();
       console.log("mint:gasUsed", result.gasUsed.toNumber());
     }
 
