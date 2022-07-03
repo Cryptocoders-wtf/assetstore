@@ -154,6 +154,10 @@ export default defineComponent({
     const onSelect = async (asset: any) => {
       console.log(asset);
       messageRef.value = null;
+      if (selection.value && selection.value.asset.name == asset.name) {
+        selection.value = null;
+        return;
+      }
       selection.value = {
         asset
       }
