@@ -34,11 +34,11 @@
           クラウドミンティングにご協力ありがとうございます。ブロックチェーンへの反映には少し時間がかかります。
           順調に反映されれば、このメッセージは自動的に消滅します。
         </p>
-        <p v-else>
+        <div v-else>
           <p>以下のエラーメッセージを受け取りました。</p>
           <p class="text-red-400">{{ messageRef }}</p>
           <p>再度、アイコンの選択からやり直してください。</p>
-        </p>
+        </div>
       </div>
       <span v-else>
         <div v-if="tokenGate=='invalidNetwork'">
@@ -186,7 +186,7 @@ export default defineComponent({
         const result = await tx.wait();
         console.log("mint:gasUsed", result.gasUsed.toNumber());
         messageRef.value = "message.minted";
-      } catch(e) {
+      } catch(e: any) {
         console.log(e);
         messageRef.value = e.message;
       }

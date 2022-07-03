@@ -12,11 +12,11 @@ import About from "../views/About.vue";
 
 const routeChildren: Array<RouteRecordRaw> = [
   {
-    path: "",
+    path: "home",
     component: Home,
   },
   {
-    path: "mint",
+    path: "",
     component: Mint,
   },
   {
