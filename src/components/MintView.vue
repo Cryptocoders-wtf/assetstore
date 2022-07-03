@@ -1,6 +1,20 @@
 <template>
   <div>
     <div>
+      <p>これは、フル・オンチェーンNFTの表現力をより高めるために、
+        ブロック・チェーン上にさざまななベクトル画像をアセットとして提供し、
+        皆で共有しようという「On-Chain Asset Store」プロジェクトの一環です。</p>
+      <p>ベクトル画像をチェーン上にアップロードするには「ガス代」が必要ですが、
+        それをNFTをミントする方に少しつづ負担していただく「クラウドミンティング」
+        という手法をみなさんにお願いしています。</p>
+      <p>下に表示されているGoogle Material Iconの一つをクリックし、
+        リストの下に表示されるミントボタンを押して下さい。
+        クラウドミンティングにご協力していただいた方には、
+        「ソウルバウンドNFT」と呼ばれる
+        あなたのウォレット・アドレスと名前が永久に刻まれたNFT１つと、
+        転売用の「ボーナスNFT」を２つ、合計３つのNFTを発行します。</p>
+    </div>
+    <div>
       <span v-for="asset in actionAssetsRef" v-bind:key="asset.name">
         <span v-if="!asset.registered">
         <img @click="() => {onSelect(asset)}" :src="asset.image" class="w-16 inline-block rounded-xl" />
@@ -14,7 +28,7 @@
         </span>
       </span>
     </div>
-    <div v-if="selection">
+    <div v-if="selection" class="border-solid border-slate-400 border-2 rounded-xl p-2">
       <div>
         <img :src="selection.asset.image" class="w-24 inline-block rounded-xl" />
       </div>
