@@ -27,9 +27,9 @@
       </span>
     </div>
     <div v-if="selection && !selection.registered" class="border-solid border-slate-400 border-2 rounded-xl pl-2 pr-2">
-      <img :src="selection.image1" class="w-24 inline-block rounded-xl" />
-      <img :src="selection.image2" class="w-24 inline-block rounded-xl" />
-      <img :src="selection.image3" class="w-24 inline-block rounded-xl" />
+      <img :src="selection.image1" class="w-24 inline-block rounded-xl m-2" />
+      <img :src="selection.image2" class="w-24 inline-block rounded-xl m-2" />
+      <img :src="selection.image3" class="w-24 inline-block rounded-xl m-2" />
       <div v-if="messageRef" class="mb-2">
         <p v-if="messageRef == 'message.minting'">
           処理中です...
