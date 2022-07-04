@@ -19,6 +19,7 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@material-design-icons/svg": "^0.11.4",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
     "@typescript-eslint/parser": "^5.19.0",
     "@vue/cli-plugin-eslint": "^5.0.4",
