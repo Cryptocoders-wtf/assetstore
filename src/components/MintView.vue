@@ -169,7 +169,7 @@ export default defineComponent({
       const image1 = 'data:image/svg+xml;base64,' + Buffer.from(asset.svg).toString('base64');
       selection.value = {
         image1: image1,
-        image2: 'data:image/svg+xml;base64,' + Buffer.from(image2).toString('base64'),
+        image2: 'data:image/svg+xml;base64,' + Buffer.from(image2[0]).toString('base64'),
         image3: asset.image,
         asset
       }
