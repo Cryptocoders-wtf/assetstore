@@ -62,7 +62,15 @@
             </label>
             <input v-model.trim="minterName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
             id="username" type="text" placeholder="お名前（オプション、Twitter名推奨）">
-            <button @click="mint" class="mt-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Mint</button>
+            <span v-if="validName">
+              <button @click="mint" 
+                class="mt-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Mint</button>
+
+            </span>
+            <span v-else>
+              <button @click="mint" disabled 
+                class="mt-2 inline-block px-6 py-2.5 bg-gray-400 text-gray-200 leading-tight rounded shadow-md ">Mint</button>
+            </span>
           </div>
           <p class="mb-2">フリーミントですが、ガス代が0.02〜0.05ETH程度かかります（混雑状況によって大きく変動）。</p>
           <p class="mb-2">クラウドミンティングにご協力していただいた方には、
@@ -129,7 +137,6 @@ export default defineComponent({
     const minterName = ref("");
     const validName = computed(() => {
       const length = encoder.encode(minterName.value).length;
-      console.log("length=", length);
       return length <= 32;
     });
 
