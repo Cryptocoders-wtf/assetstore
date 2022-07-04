@@ -3,8 +3,8 @@
     <mint-view
       network="localhost" 
       :expectedNetwork="expectedNetwork"
-      storeAddress="0x114e375B6FCC6d6fCb68c7A1d407E652C54F25FB"
-      tokenAddress="0xcD0048A5628B37B8f743cC2FeA18817A29e97270"
+      storeAddress="0x26291175Fa0Ea3C8583fEdEB56805eA68289b105"
+      tokenAddress="0x840748F7Fd3EA956E5f4c88001da5CC1ABCBc038"
       />
   </div>
 </template>
