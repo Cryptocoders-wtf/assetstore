@@ -56,10 +56,11 @@
         <span v-else>
           <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
-              お名前（Asset Storeに永久に刻まれます。最大３２バイト。Twitter名推奨）
+              Asset Storeに刻み込む名前。最大３２バイト。
             </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="お名前">
-            <button  @click="mint" class="mt-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Mint</button>
+            <input v-model.trim="minterName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+            id="username" type="text" placeholder="お名前（オプション、Twitter名推奨）">
+            <button @click="mint" class="mt-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Mint</button>
           </div>
           <p class="mb-2">フリーミントですが、ガス代が0.02〜0.05ETH程度かかります（混雑状況によって大きく変動）。</p>
           <p class="mb-2">クラウドミンティングにご協力していただいた方には、
@@ -122,6 +123,8 @@ export default defineComponent({
     const actionAssetsRef = ref(actionAssets);
     const socialAssetsRef = ref(socialAssets);
     const messageRef = ref(null as string | null);
+    const minterName = ref("");
+
     console.log("* expectedNetwork", props.expectedNetwork);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
@@ -203,6 +206,8 @@ export default defineComponent({
       //console.log(asset.soulbound);
       try {
         messageRef.value = "message.minting";
+        asset.minter = minterName.value;
+        console.log("***", asset);
         const tx = await networkContext.value.contract.mintWithAsset(asset, 0);
         const result = await tx.wait();
         console.log("mint:gasUsed", result.gasUsed.toNumber());
@@ -323,7 +328,7 @@ export default defineComponent({
     return {
       groups, allCategories, allAssets, assets, actionAssetsRef, socialAssetsRef,
       onSelect, selection, tokenGate, switchToValidNetwork, mint, 
-      messageRef
+      messageRef, minterName
     }
   }
 });
