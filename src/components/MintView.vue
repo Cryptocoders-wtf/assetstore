@@ -56,7 +56,9 @@
         <span v-else>
           <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
-              Asset Storeに刻み込む名前。最大３２バイト。
+              Asset Storeに刻み込む名前。
+              <span v-if="validName">最大32バイト。</span>
+              <span v-else class="text-red-600">最大32バイト。</span>
             </label>
             <input v-model.trim="minterName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
             id="username" type="text" placeholder="お名前（オプション、Twitter名推奨）">
@@ -123,7 +125,13 @@ export default defineComponent({
     const actionAssetsRef = ref(actionAssets);
     const socialAssetsRef = ref(socialAssets);
     const messageRef = ref(null as string | null);
+    const encoder = new TextEncoder();
     const minterName = ref("");
+    const validName = computed(() => {
+      const length = encoder.encode(minterName.value).length;
+      console.log("length=", length);
+      return length <= 32;
+    });
 
     console.log("* expectedNetwork", props.expectedNetwork);
     // Following two lines must be changed for other networks
@@ -328,7 +336,7 @@ export default defineComponent({
     return {
       groups, allCategories, allAssets, assets, actionAssetsRef, socialAssetsRef,
       onSelect, selection, tokenGate, switchToValidNetwork, mint, 
-      messageRef, minterName
+      messageRef, minterName, validName
     }
   }
 });
