@@ -27,7 +27,9 @@
       </span>
     </div>
     <div v-if="selection && !selection.registered" class="border-solid border-slate-400 border-2 rounded-xl pl-2 pr-2">
-      <img :src="selection.asset.image" class="w-24 inline-block rounded-xl" />
+      <img :src="selection.image1" class="w-24 inline-block rounded-xl" />
+      <img :src="selection.image2" class="w-24 inline-block rounded-xl" />
+      <img :src="selection.image3" class="w-24 inline-block rounded-xl" />
       <div v-if="messageRef" class="mb-2">
         <p v-if="messageRef == 'message.minting'">
           処理中です...
@@ -161,6 +163,9 @@ export default defineComponent({
         return;
       }
       selection.value = {
+        image1: asset.image,
+        image2: asset.image,
+        image3: asset.image,
         asset
       }
     }
