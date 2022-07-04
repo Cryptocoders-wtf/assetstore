@@ -149,6 +149,7 @@ export default defineComponent({
     }
 
     const assetStoreRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
+    const materialTokenRO = new ethers.Contract(props.tokenAddress, MaterialToken.wabi.abi, provider);
     const groups = ref([] as string[]);
     const allCategories = ref({} as {[group:string]:string[]});
     const allAssets = ref({} as {[group:string]:{[category:string]:string[]}});
@@ -162,10 +163,13 @@ export default defineComponent({
         selection.value = null;
         return;
       }
+      console.log(asset.svgPart);
+      //const image2 = await materialTokenRO.functions.generateSVG(0, asset.svgPart, "item");
       const image1 = 'data:image/svg+xml;base64,' + Buffer.from(asset.svg).toString('base64');
       selection.value = {
         image1: image1,
-        image2: asset.image,
+        image2: image1,
+        //image2: 'data:image/svg+xml;base64,' + Buffer.from(image2).toString('base64'),
         image3: asset.image,
         asset
       }
