@@ -3,8 +3,8 @@
     <mint-view
       network="rinkeby" 
       :expectedNetwork="expectedNetwork"
-      storeAddress="0x9E6C03CffCB92c60B137076526fd079212882968"
-      tokenAddress="0x7a711cbFb665ce4ACc0d86a9511130d6958a09D1"
+      storeAddress="0xF1075f20fB9457cF5B64d8AE94AecF05AFAA3071"
+      tokenAddress="0xD34E89f1750200559B574F0AD69dBcB268beD4bb"
       />
   </div>
 </template>
