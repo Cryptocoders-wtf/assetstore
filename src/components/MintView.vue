@@ -13,14 +13,16 @@
     <div>
       <span v-for="asset in actionAssetsRef" v-bind:key="asset.name">
         <span v-if="!asset.registered">
-        <img @click="() => {onSelect(asset)}" :src="asset.image" class="w-16 inline-block rounded-xl" />
+        <img @click="() => {onSelect(asset)}" :src="asset.image" 
+            class="cursor-pointer w-16 inline-block rounded-xl" />
         </span>
       </span>
     </div>
     <div>
       <span v-for="asset in socialAssetsRef" v-bind:key="asset.name">
         <span v-if="!asset.registered">
-        <img @click="() => {onSelect(asset)}" :src="asset.image" class="w-16 inline-block rounded-xl" />
+        <img @click="() => {onSelect(asset)}" :src="asset.image" 
+          class="cursor-pointer w-16 inline-block rounded-xl" />
         </span>
       </span>
     </div>
@@ -86,7 +88,7 @@ import { useStore } from "vuex";
 import { ethers } from "ethers";
 import { actionAssets, socialAssets } from "../resources/materials";
 import { switchNetwork } from "../utils/MetaMask";
-import { getSystemErrorName } from "util";
+//import { getSystemErrorName } from "util";
 import Connect from "@/components/Connect.vue";
 
 const AssetStore = {
