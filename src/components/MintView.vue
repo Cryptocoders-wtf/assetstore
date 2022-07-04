@@ -164,13 +164,13 @@ export default defineComponent({
         return;
       }
       console.log(asset.svgPart);
-      const image2 = await materialTokenRO.functions.generateSVG(0, asset.svgPart, "item");
-      console.log("image2", image2);
-      const image1 = 'data:image/svg+xml;base64,' + Buffer.from(asset.svg).toString('base64');
+      const image1 = await materialTokenRO.functions.generateSVG(0, asset.svgPart, "item");
+      const image2 = await materialTokenRO.functions.generateSVG(1, asset.svgPart, "item");
+      const image3 = await materialTokenRO.functions.generateSVG(2, asset.svgPart, "item");
       selection.value = {
-        image1: image1,
+        image1: 'data:image/svg+xml;base64,' + Buffer.from(image1[0]).toString('base64'),
         image2: 'data:image/svg+xml;base64,' + Buffer.from(image2[0]).toString('base64'),
-        image3: asset.image,
+        image3: 'data:image/svg+xml;base64,' + Buffer.from(image3[0]).toString('base64'),
         asset
       }
     }
