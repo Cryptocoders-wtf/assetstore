@@ -148,7 +148,7 @@ export default defineComponent({
       await switchNetwork(props.expectedNetwork);
     }
 
-    const contractRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
+    const assetStoreRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
     const groups = ref([] as string[]);
     const allCategories = ref({} as {[group:string]:string[]});
     const allAssets = ref({} as {[group:string]:{[category:string]:string[]}});
@@ -178,7 +178,7 @@ export default defineComponent({
       }
       const asset = selection.value.asset.asset;
       try {
-        const result = await contractRO.functions.getAssetIdWithName(
+        const result = await assetStoreRO.functions.getAssetIdWithName(
           asset.group, asset.category, asset.name
         );
         // Double-check if it's already minted
@@ -205,17 +205,17 @@ export default defineComponent({
     }
 
     provider.once("block", () => {
-      contractRO.on(contractRO.filters.GroupAdded(), (group) => {
+      assetStoreRO.on(assetStoreRO.filters.GroupAdded(), (group) => {
         console.log("**** got GroupAdded event", group);
         fetchGroups(group);
       });
-      contractRO.on(contractRO.filters.CategoryAdded(), (group, category) => {
+      assetStoreRO.on(assetStoreRO.filters.CategoryAdded(), (group, category) => {
         console.log("**** got CategoryAdded event", group, category);
         fetchCategories(group, category);
       });
-      contractRO.on(contractRO.filters.AssetRegistered(), async (from, assetId) => {
+      assetStoreRO.on(assetStoreRO.filters.AssetRegistered(), async (from, assetId) => {
         console.log("**** got AssetRegistered event", from, assetId.toNumber());
-        const attr = (await contractRO.functions.getAttributes(assetId))[0];
+        const attr = (await assetStoreRO.functions.getAttributes(assetId))[0];
         console.log(attr);
         const group = attr[0];
         const category = attr[1];
@@ -239,13 +239,13 @@ export default defineComponent({
 
     const fetchAsset = async (assetId:string) => {
       if (!assets.value[assetId]) {
-        const result = await contractRO.functions.generateSVG(assetId);
+        const result = await assetStoreRO.functions.generateSVG(assetId);
         const svg = 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64');
         const value = Object.assign({}, assets.value);
         value[assetId] = { svg };
         assets.value = value;
 
-        const assetInfo = await contractRO.functions.getAttributes(assetId);
+        const assetInfo = await assetStoreRO.functions.getAttributes(assetId);
         const category = assetInfo[0][1];
         const name = assetInfo[0][2];
         if (category == "UI Actions") {
@@ -257,11 +257,11 @@ export default defineComponent({
     };
 
     const fetchAssets = async(group:string, category:string) => {
-      const result = await contractRO.functions.getAssetCountInCategory(group, category);
+      const result = await assetStoreRO.functions.getAssetCountInCategory(group, category);
       console.log("fetchAssets called", group, category, result[0]);
       const assetCount = result[0];
       const promises = Array(assetCount).fill("").map(async (_,index) => {
-        let result = await contractRO.functions.getAssetIdInCategory(group, category, index);
+        let result = await assetStoreRO.functions.getAssetIdInCategory(group, category, index);
         const assetId = result[0].toNumber();
         fetchAsset(assetId);
         return assetId;
@@ -278,10 +278,10 @@ export default defineComponent({
     const fetchCategories = async(group:string, category: string | null) => {
       console.log("fetchCategories called", group);
 
-      const result = await contractRO.functions.getCategoryCount(group);
+      const result = await assetStoreRO.functions.getCategoryCount(group);
       const categoryCount = result[0];
       const promises = Array(categoryCount).fill("").map(async (_,index) => {
-        const result = await contractRO.functions.getCategoryNameAtIndex(group, index);
+        const result = await assetStoreRO.functions.getCategoryNameAtIndex(group, index);
         if (!category || category == result[0]) {
           fetchAssets(group, result[0]);
         }
@@ -296,10 +296,10 @@ export default defineComponent({
     };
 
     const fetchGroups = async (group: string | null) => {
-      const result = await contractRO.functions.getGroupCount();
+      const result = await assetStoreRO.functions.getGroupCount();
       const groupCount = result[0];
       const promises = Array(groupCount).fill("").map(async (_,index) => {
-        const result = await contractRO.functions.getGroupNameAtIndex(index);
+        const result = await assetStoreRO.functions.getGroupNameAtIndex(index);
         if (!group || group == result[0]) {
           fetchCategories(result[0], null);
         }
