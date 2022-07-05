@@ -101,6 +101,7 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
   asset.group = group;
   asset.category = category;
   asset.name = _asset.name;
+  asset.metadata = new Uint8Array();
   const width = _asset.width || _width;
   let svgPath = "";
   if (_asset.parts) {
