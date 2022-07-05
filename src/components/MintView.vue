@@ -27,7 +27,7 @@
       </span>
     </div>
     <div v-if="selection && !selection.registered" class="border-solid border-slate-400 border-2 rounded-xl pl-2 pr-2">
-      <div v-if="selection=='loading'">
+      <div v-if="selection.isLoading">
         <p class="mt-40 mb-40">Loading...</p>
       </div>
       <div v-else>
@@ -203,7 +203,10 @@ export default defineComponent({
         selection.value = null;
         return;
       }
-      selection.value = "loading";
+      selection.value = {
+        isLoading: true,
+        asset
+      };
       const image1 = await materialTokenRO.functions.generateSVG(0, asset.svgPart, "item");
       const image2 = await materialTokenRO.functions.generateSVG(1, asset.svgPart, "item");
       const image3 = await materialTokenRO.functions.generateSVG(2, asset.svgPart, "item");
