@@ -89,7 +89,9 @@
         <span v-if="allAssets[group] && allAssets[group][category]">
           <span v-for="assetId in allAssets[group][category]" v-bind:key="assetId">
             <span v-if="assets[assetId]">
-              <img :src="assets[assetId].svg" class="w-16 inline-block rounded-xl" />
+              <a :href="`${OpenSeaPath}/${(assetId-1) * 4}`" class="cursor-pointer">
+                <img :src="assets[assetId].svg" class="w-16 inline-block rounded-xl" />
+              </a>
             </span>
             <span v-else>
             ...
