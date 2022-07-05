@@ -210,9 +210,9 @@ export default defineComponent({
         isLoading: true,
         asset
       };
-      const image1 = await materialTokenRO.functions.generateSVG(0, asset.svgPart, "item");
-      const image2 = await materialTokenRO.functions.generateSVG(1, asset.svgPart, "item");
-      const image3 = await materialTokenRO.functions.generateSVG(2, asset.svgPart, "item");
+      const image1 = await materialTokenRO.functions.generateSVG(asset.svgPart, 0, "item");
+      const image2 = await materialTokenRO.functions.generateSVG(asset.svgPart, 1, "item");
+      const image3 = await materialTokenRO.functions.generateSVG(asset.svgPart, 2, "item");
       selection.value = {
         image1: 'data:image/svg+xml;base64,' + Buffer.from(image1[0]).toString('base64'),
         image2: 'data:image/svg+xml;base64,' + Buffer.from(image2[0]).toString('base64'),
@@ -293,7 +293,7 @@ export default defineComponent({
       if (!assets.value[assetId]) {
         const result = await assetStoreRO.functions.generateSVGPart(assetId);
         const attr = await assetStoreRO.functions.getAttributes(assetId);
-        const image = await materialTokenRO.functions.generateSVG(0, result[0], attr[0][3]);
+        const image = await materialTokenRO.functions.generateSVG(result[0], 0, attr[0][3]);
         const svg = 'data:image/svg+xml;base64,' + Buffer.from(image[0]).toString('base64');
         const value = Object.assign({}, assets.value);
         value[assetId] = { svg };
