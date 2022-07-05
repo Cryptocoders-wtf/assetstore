@@ -98,6 +98,10 @@
         </span>
       </span>
     </span>
+    <div>
+      <p><a :href="EtherscanStore" class="underline">AssetStore Etherscane</a></p>
+      <p><a :href="EtherscanToken" class="underline">MaterialToken Etherscane</a></p>
+    </div>
   </div>
 </template>
 
@@ -130,6 +134,11 @@ export default defineComponent({
   ],
   setup(props) {
     const store = useStore();
+    const EtherscanBase = "https://rinkeby.etherscan.io/address";
+    const OpenSeaBase = "https://testnets.opensea.io/assets/rinkeby";
+    const EtherscanStore = `${EtherscanBase}/${props.storeAddress}`;
+    const EtherscanToken = `${EtherscanBase}/${props.tokenAddress}`;
+    const OpenSeaPath = `${OpenSeaBase}/${props.tokenAddress}`;
     const actionAssetsRef = ref(actionAssets);
     const socialAssetsRef = ref(socialAssets);
     const messageRef = ref(null as string | null);
@@ -343,7 +352,8 @@ export default defineComponent({
     return {
       groups, allCategories, allAssets, assets, actionAssetsRef, socialAssetsRef,
       onSelect, selection, tokenGate, switchToValidNetwork, mint, 
-      messageRef, minterName, validName
+      messageRef, minterName, validName,
+      EtherscanStore, EtherscanToken, OpenSeaPath,
     }
   }
 });
