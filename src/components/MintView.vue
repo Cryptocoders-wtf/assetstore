@@ -89,7 +89,7 @@
         <span v-if="allAssets[group] && allAssets[group][category]">
           <span v-for="assetId in allAssets[group][category]" v-bind:key="assetId">
             <span v-if="assets[assetId]">
-              <a :href="`${OpenSeaPath}/${(assetId-1) * 4}`" class="cursor-pointer">
+              <a :href="`${OpenSeaPath}/${(assetId-1) * 4}`" class="cursor-pointer" target="_blank">
                 <img :src="assets[assetId].svg" class="w-16 inline-block rounded-xl" />
               </a>
             </span>
@@ -101,8 +101,8 @@
       </span>
     </span>
     <div>
-      <p><a :href="EtherscanStore" class="underline">AssetStore Etherscane</a></p>
-      <p><a :href="EtherscanToken" class="underline">MaterialToken Etherscane</a></p>
+      <p><a :href="EtherscanStore" class="underline" target="_blank">AssetStore Etherscane</a></p>
+      <p><a :href="EtherscanToken" class="underline" target="_blank">MaterialToken Etherscane</a></p>
     </div>
   </div>
 </template>
