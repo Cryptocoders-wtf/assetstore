@@ -27,58 +27,63 @@
       </span>
     </div>
     <div v-if="selection && !selection.registered" class="border-solid border-slate-400 border-2 rounded-xl pl-2 pr-2">
-      <img :src="selection.image1" class="w-24 inline-block rounded-xl m-2" />
-      <img :src="selection.image2" class="w-24 inline-block rounded-xl m-2" />
-      <img :src="selection.image3" class="w-24 inline-block rounded-xl m-2" />
-      <div v-if="messageRef" class="mb-2">
-        <p v-if="messageRef == 'message.minting'">
-          処理中です...
-        </p>
-        <p v-else-if="messageRef == 'message.minted'">
-          クラウドミンティングにご協力ありがとうございます。ブロックチェーンへの反映には少し時間がかかります。
-          順調に反映されれば、このメッセージは自動的に消滅します。
-        </p>
-        <div v-else>
-          <p>以下のエラーメッセージを受け取りました。</p>
-          <p class="text-red-400">{{ messageRef }}</p>
-          <p>再度、アイコンの選択からやり直してください。</p>
-        </div>
+      <div v-if="selection=='loading'">
+        <p class="mt-40 mb-40">Loading...</p>
       </div>
-      <span v-else>
-        <div v-if="tokenGate=='invalidNetwork'">
-          <span>ネットワークを切り替えて下さい。</span>
-          <button @click="switchToValidNetwork"
-                class="mb-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Switch Network</button>
-        </div>
-        <div v-else-if="tokenGate=='noAccount'">
-          <p class="mb-2">Metamaskと接続してください。<Connect /></p>
+      <div v-else>
+        <img :src="selection.image1" class="w-24 inline-block rounded-xl m-2" />
+        <img :src="selection.image2" class="w-24 inline-block rounded-xl m-2" />
+        <img :src="selection.image3" class="w-24 inline-block rounded-xl m-2" />
+        <div v-if="messageRef" class="mb-2">
+          <p v-if="messageRef == 'message.minting'">
+            処理中です...
+          </p>
+          <p v-else-if="messageRef == 'message.minted'">
+            クラウドミンティングにご協力ありがとうございます。ブロックチェーンへの反映には少し時間がかかります。
+            順調に反映されれば、このメッセージは自動的に消滅します。
+          </p>
+          <div v-else>
+            <p>以下のエラーメッセージを受け取りました。</p>
+            <p class="text-red-400">{{ messageRef }}</p>
+            <p>再度、アイコンの選択からやり直してください。</p>
+          </div>
         </div>
         <span v-else>
-          <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
-              Asset Storeに刻み込む名前。
-              <span v-if="validName">最大32バイト。</span>
-              <span v-else class="text-red-600">最大32バイト。</span>
-            </label>
-            <input v-model.trim="minterName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-            id="username" type="text" placeholder="お名前（オプション、Twitter名推奨）">
-            <span v-if="validName">
-              <button @click="mint" 
-                class="mt-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Mint</button>
-
-            </span>
-            <span v-else>
-              <button @click="mint" disabled 
-                class="mt-2 inline-block px-6 py-2.5 bg-gray-400 text-gray-200 leading-tight rounded shadow-md ">Mint</button>
-            </span>
+          <div v-if="tokenGate=='invalidNetwork'">
+            <span>ネットワークを切り替えて下さい。</span>
+            <button @click="switchToValidNetwork"
+                  class="mb-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Switch Network</button>
           </div>
-          <p class="mb-2">フリーミントですが、ガス代が0.02〜0.05ETH程度かかります（混雑状況によって大きく変動）。</p>
-          <p class="mb-2">クラウドミンティングにご協力していただいた方には、
-          「プライマリーNFT」と呼ばれる
-          あなたがクラウドミンティングに協力した証のNFT１つと、
-          転売用の「ボーナスNFT」を２つ、合計３つのNFTを発行します。</p>
+          <div v-else-if="tokenGate=='noAccount'">
+            <p class="mb-2">Metamaskと接続してください。<Connect /></p>
+          </div>
+          <span v-else>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                Asset Storeに刻み込む名前。
+                <span v-if="validName">最大32バイト。</span>
+                <span v-else class="text-red-600">最大32バイト。</span>
+              </label>
+              <input v-model.trim="minterName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+              id="username" type="text" placeholder="お名前（オプション、Twitter名推奨）">
+              <span v-if="validName">
+                <button @click="mint" 
+                  class="mt-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Mint</button>
+
+              </span>
+              <span v-else>
+                <button @click="mint" disabled 
+                  class="mt-2 inline-block px-6 py-2.5 bg-gray-400 text-gray-200 leading-tight rounded shadow-md ">Mint</button>
+              </span>
+            </div>
+            <p class="mb-2">フリーミントですが、ガス代が0.02〜0.05ETH程度かかります（混雑状況によって大きく変動）。</p>
+            <p class="mb-2">クラウドミンティングにご協力していただいた方には、
+            「プライマリーNFT」と呼ばれる
+            あなたがクラウドミンティングに協力した証のNFT１つと、
+            転売用の「ボーナスNFT」を２つ、合計３つのNFTを発行します。</p>
+          </span>
         </span>
-      </span>
+      </div>
     </div>
   
     <div class="mt-4 mb-4">
@@ -198,6 +203,7 @@ export default defineComponent({
         selection.value = null;
         return;
       }
+      selection.value = "loading";
       const image1 = await materialTokenRO.functions.generateSVG(0, asset.svgPart, "item");
       const image2 = await materialTokenRO.functions.generateSVG(1, asset.svgPart, "item");
       const image3 = await materialTokenRO.functions.generateSVG(2, asset.svgPart, "item");
