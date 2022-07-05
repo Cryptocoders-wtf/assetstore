@@ -291,9 +291,9 @@ export default defineComponent({
 
     const fetchAsset = async (assetId:string) => {
       if (!assets.value[assetId]) {
-        const result = await assetStoreRO.functions.generateSVGPart(assetId);
         const attr = await assetStoreRO.functions.getAttributes(assetId);
-        const image = await materialTokenRO.functions.generateSVG(result[0], 0, attr[0][3]);
+        const result = await assetStoreRO.functions.generateSVGPart(assetId, "item");
+        const image = await materialTokenRO.functions.generateSVG(result[0], 0, "item");
         const svg = 'data:image/svg+xml;base64,' + Buffer.from(image[0]).toString('base64');
         const value = Object.assign({}, assets.value);
         value[assetId] = { svg };
