@@ -28,7 +28,10 @@
     </div>
     <div v-if="selection && !selection.registered" class="border-solid border-slate-400 border-2 rounded-xl pl-2 pr-2">
       <div v-if="selection.isLoading">
-        <p class="mt-40 mb-40">Loading...</p>
+        <img :src="selection.asset.image" class="w-24 inline-block rounded-xl m-2" />
+        <img :src="selection.asset.image" class="w-24 inline-block rounded-xl m-2" />
+        <img :src="selection.asset.image" class="w-24 inline-block rounded-xl m-2" />
+        <p class="mb-40">ミントの準備中...</p>
       </div>
       <div v-else>
         <img :src="selection.image1" class="w-24 inline-block rounded-xl m-2" />
