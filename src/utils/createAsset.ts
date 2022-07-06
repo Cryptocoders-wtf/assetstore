@@ -111,6 +111,11 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
       part.body = compressPath(part.body, width);
       return part;
     });
+  } else if (_asset.bodies) {
+    asset.parts = _asset.bodies.map((body0:any) => {
+      const body = compressPath(body0, width);
+      return { body };
+    });
   } else {
     svgPath = normalizePath(_asset.body, width);
     asset.parts = [{
