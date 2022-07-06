@@ -192,7 +192,7 @@ export default defineComponent({
 
     const selection = ref(null as any);
     const onSelect = async (asset: any) => {
-      console.log(asset);
+      //console.log(asset);
       messageRef.value = null;
       if (selection.value && selection.value.asset.name == asset.name) {
         selection.value = null;
@@ -213,7 +213,7 @@ export default defineComponent({
       }
     }
     const mint = async() => {
-      console.log("*** mint", selection.value.asset.asset);
+      //console.log("*** mint", selection.value.asset.asset);
       if (!networkContext.value) {
         console.error("Mint: we are not supposed to come here");
         return;
@@ -237,7 +237,7 @@ export default defineComponent({
       try {
         messageRef.value = "message.minting";
         asset.minter = minterName.value;
-        console.log("***", asset);
+        console.log("*** minting", asset);
         const tx = await networkContext.value.contract.mintWithAsset(asset, 0);
         const result = await tx.wait();
         console.log("mint:gasUsed", result.gasUsed.toNumber());
@@ -260,7 +260,7 @@ export default defineComponent({
       assetStoreRO.on(assetStoreRO.filters.AssetRegistered(), async (from, assetId) => {
         console.log("**** got AssetRegistered event", from, assetId.toNumber());
         const attr = (await assetStoreRO.functions.getAttributes(assetId))[0];
-        console.log(attr);
+        //console.log(attr);
         const group = attr[0];
         const category = attr[1];
         fetchAssets(group, category);
@@ -302,7 +302,7 @@ export default defineComponent({
 
     const fetchAssets = async(group:string, category:string) => {
       const result = await assetStoreRO.functions.getAssetCountInCategory(group, category);
-      console.log("fetchAssets called", group, category, result[0]);
+      //console.log("fetchAssets called", group, category, result[0]);
       const assetCount = result[0];
       const promises = Array(assetCount).fill("").map(async (_,index) => {
         let result = await assetStoreRO.functions.getAssetIdInCategory(group, category, index);
@@ -320,7 +320,7 @@ export default defineComponent({
     };
 
     const fetchCategories = async(group:string, category: string | null) => {
-      console.log("fetchCategories called", group);
+      //console.log("fetchCategories called", group);
 
       const result = await assetStoreRO.functions.getCategoryCount(group);
       const categoryCount = result[0];
@@ -333,7 +333,7 @@ export default defineComponent({
       });
       const categories:string[] = await Promise.all(promises);
 
-      console.log("updating categories", group, categories);
+      //console.log("updating categories", group, categories);
       const value = Object.assign({}, allCategories.value) as {[group:string]:string[]};
       value[group] = categories;
       allCategories.value = value;
@@ -353,6 +353,12 @@ export default defineComponent({
     };
     fetchGroups(null);
 
+    const fetchTokens = async () => {
+      const result = await materialTokenRO.functions.totalSupply();
+      console.log("***** totalSupply", result[0].toNumber());
+    };
+    fetchTokens();
+    
     return {
       groups, allCategories, allAssets, assets, actionAssetsRef,
       onSelect, selection, tokenGate, switchToValidNetwork, mint, 
