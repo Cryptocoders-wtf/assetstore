@@ -115,7 +115,7 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
     asset.parts = _asset.bodies.map((body0:any) => {
       const body = compressPath(body0, width);
       svgPath = normalizePath(body0, width);
-      return { body };
+      return { body, color:"" };
     });
   } else {
     svgPath = normalizePath(_asset.body, width);
