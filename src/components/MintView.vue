@@ -19,6 +19,7 @@
       </span>
     </div>
     <div v-if="selection && !selection.registered" class="border-solid border-slate-400 border-2 rounded-xl pl-2 pr-2">
+      <p>{{ selection.asset.name }}</p>
       <div v-if="selection.isLoading">
         <img :src="selection.asset.image" class="w-16 inline-block rounded-xl m-2" />
         <img :src="selection.asset.image" class="w-16 inline-block rounded-xl m-2" />
