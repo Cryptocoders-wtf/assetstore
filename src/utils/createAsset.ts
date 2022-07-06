@@ -107,18 +107,21 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
   if (_asset.parts) {
     asset.parts = _asset.parts.map((part:any) => {
       part.color = part.color || "";
-      svgPath = normalizePath(part.body, width);
+      const path = normalizePath(part.body, width);
+      svgPath = `<path d="${path}" />`;
       part.body = compressPath(part.body, width);
       return part;
     });
   } else if (_asset.bodies) {
     asset.parts = _asset.bodies.map((body0:any) => {
       const body = compressPath(body0, width);
-      svgPath = normalizePath(body0, width);
+      const path = normalizePath(body0, width);
+      svgPath = `<path d="${path}" />`;
       return { body, color:"" };
     });
   } else {
-    svgPath = normalizePath(_asset.body, width);
+    const path = normalizePath(_asset.body, width);
+    svgPath = `<path d="${path}" />`;
     asset.parts = [{
       color: "",
       body: compressPath(_asset.body, width)
@@ -126,7 +129,7 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
   }
   asset.asset = Object.assign({}, asset)
   //asset.svgPath = svgPath;
-  asset.svgPart = '<g id="item"> <path d="' + svgPath + '" /> </g>'; 
+  asset.svgPart = `<g id="item">${svgPath}</g>`; 
   asset.svg = '<svg viewBox="0 0 1024 1024"  xmlns="http://www.w3.org/2000/svg">'
     + asset.svgPart
     + '</svg>';
