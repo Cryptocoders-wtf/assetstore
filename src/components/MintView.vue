@@ -14,29 +14,21 @@
       <span v-for="asset in actionAssetsRef" v-bind:key="asset.name">
         <span v-if="!asset.registered">
         <img @click="() => {onSelect(asset)}" :src="asset.image" 
-            class="cursor-pointer w-16 inline-block rounded-xl" />
-        </span>
-      </span>
-    </div>
-    <div>
-      <span v-for="asset in socialAssetsRef" v-bind:key="asset.name">
-        <span v-if="!asset.registered">
-        <img @click="() => {onSelect(asset)}" :src="asset.image" 
-          class="cursor-pointer w-16 inline-block rounded-xl" />
+            class="cursor-pointer w-10 inline-block rounded-xl" />
         </span>
       </span>
     </div>
     <div v-if="selection && !selection.registered" class="border-solid border-slate-400 border-2 rounded-xl pl-2 pr-2">
       <div v-if="selection.isLoading">
-        <img :src="selection.asset.image" class="w-24 inline-block rounded-xl m-2" />
-        <img :src="selection.asset.image" class="w-24 inline-block rounded-xl m-2" />
-        <img :src="selection.asset.image" class="w-24 inline-block rounded-xl m-2" />
+        <img :src="selection.asset.image" class="w-16 inline-block rounded-xl m-2" />
+        <img :src="selection.asset.image" class="w-16 inline-block rounded-xl m-2" />
+        <img :src="selection.asset.image" class="w-16 inline-block rounded-xl m-2" />
         <p class="mb-40">ミントの準備中...</p>
       </div>
       <div v-else>
-        <img :src="selection.image1" class="w-24 inline-block rounded-xl m-2" />
-        <img :src="selection.image2" class="w-24 inline-block rounded-xl m-2" />
-        <img :src="selection.image3" class="w-24 inline-block rounded-xl m-2" />
+        <img :src="selection.image1" class="w-16 inline-block rounded-xl m-2" />
+        <img :src="selection.image2" class="w-16 inline-block rounded-xl m-2" />
+        <img :src="selection.image3" class="w-16 inline-block rounded-xl m-2" />
         <div v-if="messageRef" class="mb-2">
           <p v-if="messageRef == 'message.minting'">
             処理中です...
@@ -119,7 +111,7 @@
 import { defineComponent, computed, ref } from "vue";
 import { useStore } from "vuex";
 import { ethers } from "ethers";
-import { actionAssets, socialAssets } from "../resources/materials";
+import { actionAssets } from "../resources/materials";
 import { switchNetwork } from "../utils/MetaMask";
 //import { getSystemErrorName } from "util";
 import Connect from "@/components/Connect.vue";
@@ -150,7 +142,6 @@ export default defineComponent({
     const EtherscanToken = `${EtherscanBase}/${props.tokenAddress}`;
     const OpenSeaPath = `${OpenSeaBase}/${props.tokenAddress}`;
     const actionAssetsRef = ref(actionAssets);
-    const socialAssetsRef = ref(socialAssets);
     const messageRef = ref(null as string | null);
     const encoder = new TextEncoder();
     const minterName = ref("");
@@ -304,8 +295,6 @@ export default defineComponent({
         const name = assetInfo[0][2];
         if (category == "UI Actions") {
           actionAssetsRef.value = markAsset(actionAssetsRef.value, name);
-        } else if (category == "Social") {
-          socialAssetsRef.value = markAsset(socialAssetsRef.value, name);
         }
       }
     };
@@ -364,7 +353,7 @@ export default defineComponent({
     fetchGroups(null);
 
     return {
-      groups, allCategories, allAssets, assets, actionAssetsRef, socialAssetsRef,
+      groups, allCategories, allAssets, assets, actionAssetsRef,
       onSelect, selection, tokenGate, switchToValidNetwork, mint, 
       messageRef, minterName, validName,
       EtherscanStore, EtherscanToken, OpenSeaPath,
