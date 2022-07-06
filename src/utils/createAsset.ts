@@ -108,7 +108,7 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
     asset.parts = _asset.parts.map((part:any) => {
       part.color = part.color || "";
       const path = normalizePath(part.body, width);
-      svgPath = `<path d="${path}" />`;
+      svgPath += `<path d="${path}" />`;
       part.body = compressPath(part.body, width);
       return part;
     });
@@ -116,7 +116,7 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
     asset.parts = _asset.bodies.map((body0:any) => {
       const body = compressPath(body0, width);
       const path = normalizePath(body0, width);
-      svgPath = `<path d="${path}" />`;
+      svgPath += `<path d="${path}" />`;
       return { body, color:"" };
     });
   } else {
