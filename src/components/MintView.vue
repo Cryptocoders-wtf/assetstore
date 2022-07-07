@@ -266,20 +266,6 @@ export default defineComponent({
       });
     });
     
-    const markAsset = (assets: any, name:string) => {
-      assets.forEach((element:any) => {
-        if (element.asset.name == name) {
-          console.log("match", name);
-          element.registered = true;
-          // Hack: Even though the name is not unique enough, this is sufficient.
-          if (selection.value && name == selection.value.asset.name) {
-            selection.value = null;
-          }
-        }
-      });
-      return assets.map((item:any)=>{return item});
-    };
-
     const fetchTokens = async () => {
       const result = await materialTokenRO.functions.totalSupply();
       const count = result[0].toNumber() / 4;
@@ -292,8 +278,17 @@ export default defineComponent({
         const attr = await assetStoreRO.functions.getAttributes(assetId);
         const name = attr[0][2];
 
-        // TBD: A lot of room to improve
-        actionAssetsRef.value = markAsset(actionAssetsRef.value, name);
+        // @notice O(n) operations
+        actionAssetsRef.value = actionAssetsRef.value.map((asset:any) => {
+          if (asset.asset.name == name) {
+            asset.registered = true;
+            // Hack: Even though the name is not unique enough, this is sufficient.
+            if (selection.value && name == selection.value.asset.name) {
+              selection.value = null;
+            }
+          }
+          return asset;
+        });
 
         const svgPart = await assetStoreRO.functions.generateSVGPart(assetId, "item");
         const svg = await materialTokenRO.functions.generateSVG(svgPart[0], 0, "item")
