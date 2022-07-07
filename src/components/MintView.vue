@@ -258,24 +258,12 @@ export default defineComponent({
     }
 
     provider.once("block", () => {
-      /*
-      assetStoreRO.on(assetStoreRO.filters.GroupAdded(), (group) => {
-        console.log("**** got GroupAdded event", group);
-        fetchGroups(group);
+      materialTokenRO.on(materialTokenRO.filters.Transfer(), async (from, to, tokenId) => {
+        console.log("Transfer", from, to, tokenId);
+        if (tokenId.toNumber() % 4 == 0) {
+          fetchTokens();
+        }
       });
-      assetStoreRO.on(assetStoreRO.filters.CategoryAdded(), (group, category) => {
-        console.log("**** got CategoryAdded event", group, category);
-        fetchCategories(group, category);
-      });
-      assetStoreRO.on(assetStoreRO.filters.AssetRegistered(), async (from, assetId) => {
-        console.log("**** got AssetRegistered event", from, assetId.toNumber());
-        const attr = (await assetStoreRO.functions.getAttributes(assetId))[0];
-        //console.log(attr);
-        const group = attr[0];
-        const category = attr[1];
-        fetchAssets(group, category);
-      });
-      */
     });
     
     const markAsset = (assets: any, name:string) => {
