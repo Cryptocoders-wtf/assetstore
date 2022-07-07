@@ -258,6 +258,7 @@ export default defineComponent({
     }
 
     provider.once("block", () => {
+      /*
       assetStoreRO.on(assetStoreRO.filters.GroupAdded(), (group) => {
         console.log("**** got GroupAdded event", group);
         fetchGroups(group);
@@ -274,6 +275,7 @@ export default defineComponent({
         const category = attr[1];
         fetchAssets(group, category);
       });
+      */
     });
     
     const markAsset = (assets: any, name:string) => {
@@ -289,78 +291,6 @@ export default defineComponent({
       });
       return assets.map((item:any)=>{return item});
     };
-
-    const fetchAsset = async (assetId:string) => {
-      if (!assets.value[assetId]) {
-        const attr = await assetStoreRO.functions.getAttributes(assetId);
-        const result = await assetStoreRO.functions.generateSVGPart(assetId, "item");
-        const image = await materialTokenRO.functions.generateSVG(result[0], 0, "item");
-        const svg = 'data:image/svg+xml;base64,' + Buffer.from(image[0]).toString('base64');
-        const value = Object.assign({}, assets.value);
-        value[assetId] = { svg };
-        assets.value = value;
-
-        const assetInfo = await assetStoreRO.functions.getAttributes(assetId);
-        const category = assetInfo[0][1];
-        const name = assetInfo[0][2];
-        if (category == "UI Actions") {
-          //actionAssetsRef.value = markAsset(actionAssetsRef.value, name);
-        }
-      }
-    };
-
-    const fetchAssets = async(group:string, category:string) => {
-      const result = await assetStoreRO.functions.getAssetCountInCategory(group, category);
-      //console.log("fetchAssets called", group, category, result[0]);
-      const assetCount = result[0];
-      const promises = Array(assetCount).fill("").map(async (_,index) => {
-        let result = await assetStoreRO.functions.getAssetIdInCategory(group, category, index);
-        const assetId = result[0].toNumber();
-        fetchAsset(assetId);
-        return assetId;
-      });
-      const assets:string[] = await Promise.all(promises);
-      const value = Object.assign({}, allAssets.value) as  {[group:string]:{[category:string]:string[]}};
-      if (!value[group]) {
-        value[group] = {};
-      }
-      value[group][category] = assets;
-      allAssets.value = value;   
-    };
-
-    const fetchCategories = async(group:string, category: string | null) => {
-      //console.log("fetchCategories called", group);
-
-      const result = await assetStoreRO.functions.getCategoryCount(group);
-      const categoryCount = result[0];
-      const promises = Array(categoryCount).fill("").map(async (_,index) => {
-        const result = await assetStoreRO.functions.getCategoryNameAtIndex(group, index);
-        if (!category || category == result[0]) {
-          fetchAssets(group, result[0]);
-        }
-        return result[0];
-      });
-      const categories:string[] = await Promise.all(promises);
-
-      //console.log("updating categories", group, categories);
-      const value = Object.assign({}, allCategories.value) as {[group:string]:string[]};
-      value[group] = categories;
-      allCategories.value = value;
-    };
-
-    const fetchGroups = async (group: string | null) => {
-      const result = await assetStoreRO.functions.getGroupCount();
-      const groupCount = result[0];
-      const promises = Array(groupCount).fill("").map(async (_,index) => {
-        const result = await assetStoreRO.functions.getGroupNameAtIndex(index);
-        if (!group || group == result[0]) {
-          fetchCategories(result[0], null);
-        }
-        return result[0];
-      });
-      groups.value = await Promise.all(promises);
-    };
-    fetchGroups(null);
 
     const fetchTokens = async () => {
       const result = await materialTokenRO.functions.totalSupply();
