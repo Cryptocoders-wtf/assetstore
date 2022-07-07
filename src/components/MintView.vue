@@ -259,8 +259,8 @@ export default defineComponent({
 
     provider.once("block", () => {
       materialTokenRO.on(materialTokenRO.filters.Transfer(), async (from, to, tokenId) => {
-        console.log("Transfer", from, to, tokenId);
-        if (tokenId.toNumber() % 4 == 0) {
+        if (tokenId.toNumber() % 4 == 0 && tokenId.toNumber() >= tokens.value.length * 4) {
+          console.log("*** event.Transfer calling fetchToken")
           fetchTokens();
         }
       });
