@@ -85,6 +85,13 @@
     <div class="mt-4 mb-4">
       <p class="font-bold">【既にミント済みのMaterial Icon】</p>
     </div>
+    <div>
+      <span v-for="token in tokens" :key="token.tokenId">
+        <a :href="`${OpenSeaPath}/${token.tokenId}`" class="cursor-pointer" target="_blank">
+          <img :src="token.image" class="w-16 inline-block rounded-xl" />
+        </a>
+      </span>
+    </div>
     <span v-for="group in groups" v-bind:key="group">
       <span v-for="category in allCategories[group]" v-bind:key="category">
         <span v-if="allAssets[group] && allAssets[group][category]">
@@ -185,6 +192,8 @@ export default defineComponent({
 
     const assetStoreRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
     const materialTokenRO = new ethers.Contract(props.tokenAddress, MaterialToken.wabi.abi, provider);
+    const tokens = ref([] as Array<any>);
+
     const groups = ref([] as string[]);
     const allCategories = ref({} as {[group:string]:string[]});
     const allAssets = ref({} as {[group:string]:{[category:string]:string[]}});
@@ -355,7 +364,19 @@ export default defineComponent({
 
     const fetchTokens = async () => {
       const result = await materialTokenRO.functions.totalSupply();
-      console.log("***** totalSupply", result[0].toNumber());
+      const count = result[0].toNumber() / 4;
+      console.log("***** count", count);
+      const promises = Array(count).fill({}).map(async (_, index) => {
+        const result = await materialTokenRO.functions.assetIdOfToken(index * 4);
+        const assetId = result[0].toNumber();
+        const svgPart = await assetStoreRO.functions.generateSVGPart(assetId, "item");
+        const svg = await materialTokenRO.functions.generateSVG(svgPart[0], 0, "item")
+        //console.log("*** assetId", index, assetId, svg[0]);
+        const image = 'data:image/svg+xml;base64,' + Buffer.from(svg[0]).toString('base64');
+        return { image, tokenId: index * 4 }
+      })
+      tokens.value = await Promise.all(promises);
+      console.log("*** tokens", tokens.value[0]);
     };
     fetchTokens();
     
@@ -363,7 +384,7 @@ export default defineComponent({
       groups, allCategories, allAssets, assets, actionAssetsRef,
       onSelect, selection, tokenGate, switchToValidNetwork, mint, 
       messageRef, minterName, validName,
-      EtherscanStore, EtherscanToken, OpenSeaPath,
+      EtherscanStore, EtherscanToken, OpenSeaPath, tokens
     }
   }
 });
