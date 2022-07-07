@@ -18,8 +18,8 @@
         </span>
       </span>
     </div>
-    <div v-if="selection && !selection.asset.registered" class="border-solid border-slate-400 border-2 rounded-xl pl-2 pr-2">
-      <p>{{ selection.asset.name }}</p>
+    <div v-if="selection && !selection.asset.registered" class="border shadow-md mt-2 rounded-xl pl-2 pr-2">
+      <p class="mt-2"><b>{{ selection.asset.name }}</b></p>
       <div v-if="selection.isLoading">
         <img :src="selection.asset.image" class="w-16 inline-block rounded-xl m-2" />
         <img :src="selection.asset.image" class="w-16 inline-block rounded-xl m-2" />
@@ -55,7 +55,7 @@
           </div>
           <span v-else>
             <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+              <label class="block text-gray-700 text-sm mb-1" for="username">
                 Asset Storeに刻み込む名前。
                 <span v-if="validName">最大32バイト。</span>
                 <span v-else class="text-red-600">最大32バイト。</span>
