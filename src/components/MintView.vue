@@ -88,26 +88,10 @@
     <div>
       <span v-for="token in tokens" :key="token.tokenId">
         <a :href="`${OpenSeaPath}/${token.tokenId}`" class="cursor-pointer" target="_blank">
-          <img :src="token.image" class="w-16 inline-block rounded-xl" />
+          <img :src="token.image" class="w-10 inline-block rounded-xl" />
         </a>
       </span>
     </div>
-    <span v-for="group in groups" v-bind:key="group">
-      <span v-for="category in allCategories[group]" v-bind:key="category">
-        <span v-if="allAssets[group] && allAssets[group][category]">
-          <span v-for="assetId in allAssets[group][category]" v-bind:key="assetId">
-            <span v-if="assets[assetId]">
-              <a :href="`${OpenSeaPath}/${(assetId-1) * 4}`" class="cursor-pointer" target="_blank">
-                <img :src="assets[assetId].svg" class="w-16 inline-block rounded-xl" />
-              </a>
-            </span>
-            <span v-else>
-            ...
-            </span>
-          </span>
-        </span>
-      </span>
-    </span>
     <div>
       <p><a :href="EtherscanStore" class="underline" target="_blank">AssetStore Etherscane</a></p>
       <p><a :href="EtherscanToken" class="underline" target="_blank">MaterialToken Etherscane</a></p>
@@ -193,11 +177,6 @@ export default defineComponent({
     const assetStoreRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
     const materialTokenRO = new ethers.Contract(props.tokenAddress, MaterialToken.wabi.abi, provider);
     const tokens = ref([] as Array<any>);
-
-    const groups = ref([] as string[]);
-    const allCategories = ref({} as {[group:string]:string[]});
-    const allAssets = ref({} as {[group:string]:{[category:string]:string[]}});
-    const assets = ref({} as {[assetId: string]: {[propId:string]:string}});
 
     const selection = ref(null as any);
     const onSelect = async (asset: any) => {
@@ -301,7 +280,7 @@ export default defineComponent({
     fetchTokens();
     
     return {
-      groups, allCategories, allAssets, assets, actionAssetsRef,
+      actionAssetsRef,
       onSelect, selection, tokenGate, switchToValidNetwork, mint, 
       messageRef, minterName, validName,
       EtherscanStore, EtherscanToken, OpenSeaPath, tokens
