@@ -109,8 +109,8 @@
       </span>
     </span>
     <div>
-      <p><a :href="EtherscanStore" class="underline" target="_blank">AssetStore Etherscane</a></p>
-      <p><a :href="EtherscanToken" class="underline" target="_blank">MaterialToken Etherscane</a></p>
+      <p><a :href="EtherscanStore" class="underline" target="_blank">AssetStore Etherscan</a></p>
+      <p><a :href="EtherscanToken" class="underline" target="_blank">MaterialToken Etherscan</a></p>
     </div>
   </div>
 </template>
