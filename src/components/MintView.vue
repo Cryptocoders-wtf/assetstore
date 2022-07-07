@@ -304,7 +304,7 @@ export default defineComponent({
         const category = assetInfo[0][1];
         const name = assetInfo[0][2];
         if (category == "UI Actions") {
-          actionAssetsRef.value = markAsset(actionAssetsRef.value, name);
+          //actionAssetsRef.value = markAsset(actionAssetsRef.value, name);
         }
       }
     };
@@ -365,15 +365,22 @@ export default defineComponent({
     const fetchTokens = async () => {
       const result = await materialTokenRO.functions.totalSupply();
       const count = result[0].toNumber() / 4;
-      console.log("***** count", count);
       const promises = Array(count).fill({}).map(async (_, index) => {
+        if (tokens.value[index]) {
+          return tokens.value[index]; // we already have it
+        }
         const result = await materialTokenRO.functions.assetIdOfToken(index * 4);
         const assetId = result[0].toNumber();
+        const attr = await assetStoreRO.functions.getAttributes(assetId);
+        const name = attr[0][2];
+
+        // TBD: A lot of room to improve
+        actionAssetsRef.value = markAsset(actionAssetsRef.value, name);
+
         const svgPart = await assetStoreRO.functions.generateSVGPart(assetId, "item");
         const svg = await materialTokenRO.functions.generateSVG(svgPart[0], 0, "item")
-        //console.log("*** assetId", index, assetId, svg[0]);
         const image = 'data:image/svg+xml;base64,' + Buffer.from(svg[0]).toString('base64');
-        return { image, tokenId: index * 4 }
+        return { image, name, tokenId: index * 4 }
       })
       tokens.value = await Promise.all(promises);
       console.log("*** tokens", tokens.value[0]);
