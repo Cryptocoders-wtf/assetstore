@@ -2,7 +2,7 @@
   <div class="max-w-xl mx-auto text-left p-2">
     <store-view
       network="localhost" 
-      storeAddress="0xB0f3A4aE1fDC1068f9364c5d7b1E42678B66D941"
+      :storeAddress="addresses.storeAddress"
       />
   </div>
 </template>
@@ -10,6 +10,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import StoreView from "@/components/StoreView.vue";
+import { addresses } from "../../../contract/cache/addresses_localhost";
 
 export default defineComponent({
   name: "HomePage",
@@ -18,6 +19,7 @@ export default defineComponent({
   },
   setup() {
     return {
+      addresses
     }
   }
 });
