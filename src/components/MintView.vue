@@ -92,7 +92,7 @@
         </a>
       </span>
     </div>
-    <div>
+    <div class="mt-2">
       <p><a :href="EtherscanStore" class="underline" target="_blank">AssetStore Etherscan</a></p>
       <p><a :href="EtherscanToken" class="underline" target="_blank">MaterialToken Etherscan</a></p>
     </div>
@@ -275,7 +275,6 @@ export default defineComponent({
         return { image, name, tokenId: index * 4 }
       })
       tokens.value = await Promise.all(promises);
-      console.log("*** tokens", tokens.value[0]);
     };
     fetchTokens();
     
