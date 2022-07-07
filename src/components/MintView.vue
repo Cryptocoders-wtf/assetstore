@@ -88,7 +88,7 @@
     <div>
       <span v-for="token in tokens" :key="token.tokenId">
         <a :href="`${OpenSeaPath}/${token.tokenId}`" class="cursor-pointer" target="_blank">
-          <img :src="token.image" class="w-10 inline-block rounded-xl" />
+          <img :src="token.image" class="w-14 inline-block rounded-xl" />
         </a>
       </span>
     </div>
