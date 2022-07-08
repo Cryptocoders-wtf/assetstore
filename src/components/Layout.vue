@@ -6,6 +6,7 @@
       router-link :to="localizedUrl('/local')" class="text-2xl">Dbg(H)</router-link> |
       <router-link :to="localizedUrl('/local_mint')" class="text-2xl">Dbg(M)</router-link 
       <Connect /> -->
+      <Languages class="mt-4" />
     </div>
     <router-view />
   </div>
@@ -30,7 +31,7 @@ interface UserData {
 export default defineComponent({
   name: "AppLayout",
   components: {
-    //Connect
+    Languages,
   },
   async setup() {
     const store = useStore();
