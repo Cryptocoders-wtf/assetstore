@@ -134,6 +134,10 @@ export default defineComponent({
     const EtherscanToken = `${EtherscanBase}/${props.tokenAddress}`;
     const OpenSeaPath = `${OpenSeaBase}/${props.tokenAddress}`;
     const actionAssetsRef = ref(actionAssets);
+    const assetIndex = actionAssets.reduce((prev:any, asset:any)=>{
+      prev[asset.asset.name] = asset;
+      return prev;
+    }, {});
     const messageRef = ref(null as string | null);
     const encoder = new TextEncoder();
     const minterName = ref("");
@@ -258,17 +262,14 @@ export default defineComponent({
         const attr = await assetStoreRO.functions.getAttributes(assetId);
         const name = attr[0][2];
 
-        // @notice O(n) operations
-        actionAssetsRef.value = actionAssetsRef.value.map((asset:any) => {
-          if (asset.asset.name == name) {
-            asset.registered = true;
-            // Hack: Even though the name is not unique enough, this is sufficient.
-            if (selection.value && name == selection.value.asset.name) {
-              selection.value = null;
-            }
+        const asset = assetIndex[name];
+        if (asset) {
+          asset.registered = true;
+          // Hack: Even though the name is not unique enough, this is sufficient.
+          if (selection.value && name == selection.value.asset.name) {
+            selection.value = null;
           }
-          return asset;
-        });
+        }
 
         const svgPart = await assetStoreRO.functions.generateSVGPart(assetId, "item");
         const svg = await materialTokenRO.functions.generateSVG(svgPart[0], 0, "item")
