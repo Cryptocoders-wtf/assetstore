@@ -225,6 +225,7 @@ export default defineComponent({
       try {
         messageRef.value = "message.minting";
         asset.minter = minterName.value;
+        asset.group = ""; // gas saving
         console.log("*** minting", asset);
         const tx = await networkContext.value.contract.mintWithAsset(asset, 0);
         const result = await tx.wait();
