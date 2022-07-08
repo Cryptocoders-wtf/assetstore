@@ -11,12 +11,18 @@
         リストの下に表示されるミントボタンを押して下さい。</p>
     </div>
     <div>
-      <span v-for="asset in actionAssetsRef" v-bind:key="asset.name">
-        <span v-if="!asset.registered">
-        <img @click="() => {onSelect(asset)}" :src="asset.image" 
-            class="cursor-pointer w-10 inline-block rounded-xl" />
+      <div v-if="availableAssets == null">
+        Loading...
+      </div>
+      <div v-else-if="availableAssets.length == 0">
+        Sold out
+      </div>
+      <div v-else>
+        <span v-for="asset in availableAssets" v-bind:key="asset.name">
+          <img @click="() => {onSelect(asset)}" :src="asset.image" 
+              class="cursor-pointer w-10 inline-block rounded-xl" />
         </span>
-      </span>
+      </div>
     </div>
     <div v-if="selection && !selection.asset.registered" class="border shadow-md mt-2 rounded-xl pl-2 pr-2">
       <p class="mt-2"><b>{{ selection.asset.name }}</b></p>
@@ -138,6 +144,7 @@ export default defineComponent({
       prev[asset.asset.name] = asset;
       return prev;
     }, {});
+    const availableAssets = ref(null as Array<any> | null);
     const messageRef = ref(null as string | null);
     const encoder = new TextEncoder();
     const minterName = ref("");
@@ -277,11 +284,14 @@ export default defineComponent({
         return { image, name, tokenId: index * 4 }
       })
       tokens.value = await Promise.all(promises);
+      availableAssets.value = actionAssetsRef.value.filter((asset:any) => {
+        return !asset.registered;
+      });
     };
     fetchTokens();
     
     return {
-      actionAssetsRef,
+      availableAssets,
       onSelect, selection, tokenGate, switchToValidNetwork, mint, 
       messageRef, minterName, validName,
       EtherscanStore, EtherscanToken, OpenSeaPath, tokens
