@@ -7,17 +7,18 @@
       <p class="mb-2">大量のベクトル画像をチェーン上にアップロードするには多くの「ガス代」が必要ですが、
         それをNFTをミントする方に少しつづ負担していただく「クラウドミンティング」
         という手法をみなさんにお願いしています。</p>
-      <p class="mb-2">下に表示されているGoogle Material Iconの一つをクリックし、
-        リストの下に表示されるミントボタンを押して下さい。</p>
     </div>
     <div>
       <div v-if="availableAssets == null">
-        Loading...
+        読み込み中です...
       </div>
       <div v-else-if="availableAssets.length == 0">
-        Sold out
+        今回の発行分（１００個）に関しては、クラウドミンティングが完了いたししました。ご協力、ありがとうございます。
+        さらにアイコンを追加する予定なので、少々お待ちください。
       </div>
       <div v-else>
+        <p class="mb-2">下に表示されているGoogle Material Iconの一つをクリックし、
+          下に表示されるミントボタンを押して下さい。</p>
         <span v-for="asset in availableAssets" v-bind:key="asset.name">
           <img @click="() => {onSelect(asset)}" :src="asset.image" 
               class="cursor-pointer w-10 inline-block rounded-xl" />
@@ -139,7 +140,6 @@ export default defineComponent({
     const EtherscanStore = `${EtherscanBase}/${props.storeAddress}`;
     const EtherscanToken = `${EtherscanBase}/${props.tokenAddress}`;
     const OpenSeaPath = `${OpenSeaBase}/${props.tokenAddress}`;
-    const actionAssetsRef = ref(actionAssets);
     const assetIndex = actionAssets.reduce((prev:any, asset:any)=>{
       prev[asset.asset.name] = asset;
       return prev;
@@ -284,7 +284,7 @@ export default defineComponent({
         return { image, name, tokenId: index * 4 }
       })
       tokens.value = await Promise.all(promises);
-      availableAssets.value = actionAssetsRef.value.filter((asset:any) => {
+      availableAssets.value = actionAssets.filter((asset:any) => {
         return !asset.registered;
       });
     };
