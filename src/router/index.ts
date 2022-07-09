@@ -6,6 +6,8 @@ import NotFound from "../components/NotFound.vue";
 import Local from "../views/Local.vue";
 import Home from "../views/Home.vue";
 import Mint from "../views/Mint.vue";
+import TestHome from "../views/TestHome.vue";
+import TestMint from "../views/TestMint.vue";
 import LocalMint from "../views/LocalMint.vue";
 import Account from "../views/Account.vue";
 import About from "../views/About.vue";
@@ -18,6 +20,14 @@ const routeChildren: Array<RouteRecordRaw> = [
   {
     path: "",
     component: Mint,
+  },
+  {
+    path: "test",
+    component: TestHome,
+  },
+  {
+    path: "test_mint",
+    component: TestMint,
   },
   {
     path: "local",
