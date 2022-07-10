@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
     <mint-view
-      network="rinkeby" 
+      network="mainnet" 
       :expectedNetwork="expectedNetwork"
       :storeAddress="addresses.storeAddress"
       :tokenAddress="addresses.tokenAddress"
@@ -13,7 +13,7 @@
 import { defineComponent } from "vue";
 import MintView from "@/components/MintView.vue";
 import { ChainIds } from "../utils/MetaMask";
-import { addresses } from "../../../contract/cache/addresses_rinkeby";
+import { addresses } from "../../../contract/cache/addresses_mainnet";
 
 export default defineComponent({
   name: "HomePage",
@@ -21,7 +21,7 @@ export default defineComponent({
     MintView
   },
   setup() {
-    const expectedNetwork = ChainIds.RinkebyTestNet;
+    const expectedNetwork = ChainIds.Mainnet;
     return {
       expectedNetwork,
       addresses

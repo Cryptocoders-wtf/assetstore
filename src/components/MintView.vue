@@ -135,8 +135,10 @@ export default defineComponent({
   ],
   setup(props) {
     const store = useStore();
-    const EtherscanBase = "https://rinkeby.etherscan.io/address";
-    const OpenSeaBase = "https://testnets.opensea.io/assets/rinkeby";
+    const EtherscanBase = (props.network == "rinkeby") ?
+           "https://rinkeby.etherscan.io/address" : "https://etherscan.io/address";
+    const OpenSeaBase = (props.network == "rinkeby") ?
+          "https://testnets.opensea.io/assets/rinkeby" : "https://opensea.io/assets/rinkeby";
     const EtherscanStore = `${EtherscanBase}/${props.storeAddress}`;
     const EtherscanToken = `${EtherscanBase}/${props.tokenAddress}`;
     const OpenSeaPath = `${OpenSeaBase}/${props.tokenAddress}`;
@@ -158,7 +160,7 @@ export default defineComponent({
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
     const provider = (props.network == "localhost") ?
-      new ethers.providers.JsonRpcProvider() : new ethers.providers.AlchemyProvider("rinkeby");
+      new ethers.providers.JsonRpcProvider() : new ethers.providers.AlchemyProvider(props.network);
 
     let prevProvider:ethers.providers.Web3Provider | null = null;
     const networkContext = computed(() => {
