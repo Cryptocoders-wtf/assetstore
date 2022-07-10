@@ -79,7 +79,7 @@
                   class="mt-2 inline-block px-6 py-2.5 bg-gray-400 text-gray-200 leading-tight rounded shadow-md ">Mint</button>
               </span>
             </div>
-            <p class="mb-2">フリーミントですが、ガス代が0.02〜0.05ETH程度かかります（混雑状況によって大きく変動）。</p>
+            <p class="mb-2">フリーミントですが、ガス代が0.005〜0.015ETH程度かかります（混雑状況によって大きく変動）。</p>
             <p class="mb-2">クラウドミンティングにご協力していただいた方には、
             「プライマリーNFT」と呼ばれる
             あなたがクラウドミンティングに協力した証のNFT１つと、
@@ -109,6 +109,7 @@
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
 import { useStore } from "vuex";
+import { useRoute } from 'vue-router';
 import { ethers } from "ethers";
 import { actionAssets } from "../resources/materials";
 import { switchNetwork } from "../utils/MetaMask";
@@ -135,10 +136,14 @@ export default defineComponent({
   ],
   setup(props) {
     const store = useStore();
+    const route = useRoute();
+    const affiliateId = (typeof route.query.ref == "string") ? parseInt(route.query.ref) || 0 : 0; 
+    console.log("***", affiliateId);
+
     const EtherscanBase = (props.network == "rinkeby") ?
            "https://rinkeby.etherscan.io/address" : "https://etherscan.io/address";
     const OpenSeaBase = (props.network == "rinkeby") ?
-          "https://testnets.opensea.io/assets/rinkeby" : "https://opensea.io/assets/rinkeby";
+          "https://testnets.opensea.io/assets/rinkeby" : "https://opensea.io/assets/ethereum";
     const EtherscanStore = `${EtherscanBase}/${props.storeAddress}`;
     const EtherscanToken = `${EtherscanBase}/${props.tokenAddress}`;
     const OpenSeaPath = `${OpenSeaBase}/${props.tokenAddress}`;
@@ -240,7 +245,7 @@ export default defineComponent({
         asset.minter = minterName.value;
         asset.group = ""; // gas saving
         console.log("*** minting", asset);
-        const tx = await networkContext.value.contract.mintWithAsset(asset, 0);
+        const tx = await networkContext.value.contract.mintWithAsset(asset, affiliateId);
         const result = await tx.wait();
         console.log("mint:gasUsed", result.gasUsed.toNumber());
         messageRef.value = "message.minted";
