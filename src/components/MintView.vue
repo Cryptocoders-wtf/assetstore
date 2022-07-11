@@ -79,17 +79,24 @@
                   class="mb-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Switch Network</button>
           </div>
           <div v-else-if="tokenGate=='noAccount'">
-            <p class="mb-2">Metamaskと接続してください。<Connect /></p>
+            <p v-if='lang==="ja"' class="mb-2">Metamaskと接続してください。<Connect /></p>
+            <p v-else class="mb-2">Please connect with Metamask.<Connect /></p>
           </div>
           <span v-else>
             <div class="mb-4">
-              <label class="block text-gray-700 text-sm mb-1" for="username">
+              <label v-if='lang==="ja"' class="block text-gray-700 text-sm mb-1" for="username">
                 Asset Storeに刻み込む名前。
                 <span v-if="validName">最大32バイト。</span>
                 <span v-else class="text-red-600">最大32バイト。</span>
               </label>
+              <label v-else class="block text-gray-700 text-sm mb-1" for="username">
+                Name to be permanently stored to the Asset Store.
+                <span v-if="validName">Maximum 32 bytes.</span>
+                <span v-else class="text-red-600">Maximum 32 bytes.</span>
+              </label>
               <input v-model.trim="minterName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-              id="username" type="text" placeholder="お名前（オプション、Twitter名推奨）">
+              id="username" type="text" 
+              :placeholder='lang==="ja" ? "お名前（オプション、Twitter名推奨）" : "Name (such as Twitter Id, optional)"'>
               <span v-if="validName">
                 <button @click="mint" 
                   class="mt-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Mint</button>
