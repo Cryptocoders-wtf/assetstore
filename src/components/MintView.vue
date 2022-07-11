@@ -28,8 +28,10 @@
           We are going to add more icons soon. Please stay tuned!</p>
       </div>
       <div v-else>
-        <p class="mb-2">下に表示されているGoogle Material Iconの一つをクリックし、
+        <p v-if='lang==="ja"' class="mb-2">下に表示されているGoogle Material Iconの一つをクリックし、
           下に表示されるミントボタンを押して下さい。</p>
+        <p v-else class="mb-2">Please select one of Material Icons below and the follow the instruction
+          displayed below those icons.</p>
         <span v-for="asset in availableAssets" v-bind:key="asset.name">
           <img @click="() => {onSelect(asset)}" :src="asset.image" 
               class="cursor-pointer w-10 inline-block rounded-xl" />
@@ -42,29 +44,37 @@
         <img :src="selection.asset.image" class="w-16 inline-block rounded-xl m-2" />
         <img :src="selection.asset.image" class="w-16 inline-block rounded-xl m-2" />
         <img :src="selection.asset.image" class="w-16 inline-block rounded-xl m-2" />
-        <p class="mb-40">ミントの準備中...</p>
+        <p v-if='lang==="ja"' class="mb-40">ミントの準備中...</p>
+        <p v-else class="mb-40">Preparing to mint...</p>
       </div>
       <div v-else>
         <img :src="selection.image1" class="w-16 inline-block rounded-xl m-2" />
         <img :src="selection.image2" class="w-16 inline-block rounded-xl m-2" />
         <img :src="selection.image3" class="w-16 inline-block rounded-xl m-2" />
         <div v-if="messageRef" class="mb-2">
-          <p v-if="messageRef == 'message.minting'">
-            処理中です...
-          </p>
-          <p v-else-if="messageRef == 'message.minted'">
-            クラウドミンティングにご協力ありがとうございます。ブロックチェーンへの反映には少し時間がかかります。
-            順調に反映されれば、このメッセージは自動的に消滅します。
-          </p>
+          <div v-if="messageRef == 'message.minting'">
+            <p v-if='lang==="ja"'>処理中です...</p>
+            <p v-else>Processing...</p>
+          </div>
+          <div v-else-if="messageRef == 'message.minted'">
+            <p v-if='lang==="ja"'>クラウドミンティングにご協力ありがとうございます。ブロックチェーンへの反映には少し時間がかかります。
+            順調に反映されれば、このメッセージは自動的に消滅します。</p>
+            <p v-else>Thank you for participating in this crowd-minting effort.
+              When the blockchain is updated, this message will dissapear automatically.
+            </p>
+          </div>
           <div v-else>
-            <p>以下のエラーメッセージを受け取りました。</p>
+            <p v-if='lang==="ja"'>以下のエラーメッセージを受け取りました。</p>
+            <p v-else>We have received the following error message.</p>
             <p class="text-red-400">{{ messageRef }}</p>
-            <p>再度、アイコンの選択からやり直してください。</p>
+            <p v-if='lang==="ja"'>再度、アイコンの選択からやり直してください。</p>
+            <p v-else>Please try again from the selection of an icon.</p>
           </div>
         </div>
         <span v-else>
           <div v-if="tokenGate=='invalidNetwork'">
-            <span>ネットワークを切り替えて下さい。</span>
+            <p v-if='lang==="ja"'>ネットワークを切り替えて下さい。</p>
+            <p v-else>Please switch the network.</p>
             <button @click="switchToValidNetwork"
                   class="mb-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Switch Network</button>
           </div>
