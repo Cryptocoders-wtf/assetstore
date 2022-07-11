@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div v-if='lang==="ja"'>
       <p class="mb-2">これは、フル・オンチェーンNFTの表現力をより高めるために、
         ブロック・チェーン上にさざまななベクトル画像をアップロードし、
         人類の共有アセットとして活用しようという「On-Chain Asset Store」プロジェクトの一環です。</p>
@@ -8,13 +8,24 @@
         それをNFTをミントする方に少しつづ負担していただく「クラウドミンティング」
         という手法をみなさんにお願いしています。</p>
     </div>
+    <div v-else>
+      <p class="mb-2">This is a part of "On-Chain Asset Store" project, 
+        which is an effort to make variety of vector assets available on
+        blockchains.</p>
+      <p class="mb-2">We are using the "crowd-minting", where each minter
+        pays a small amount of gas fees to upload vector images to blockchains,
+        and receives NFTs as rewards.</p>
+    </div>
     <div>
       <div v-if="availableAssets == null">
-        読み込み中です...
+        <p v-if='lang==="ja"'>読み込み中です...</p>
+        <p v-else>Loading...</p>
       </div>
       <div v-else-if="availableAssets.length == 0">
-        今回の発行分（{{ totalCount }}個）に関しては、クラウドミンティングが完了いたししました。ご協力、ありがとうございます。
-        さらにアイコンを追加する予定なので、少々お待ちください。
+        <p v-if='lang==="ja"'>今回の発行分（{{ totalCount }}個）に関しては、クラウドミンティングが完了いたししました。ご協力、ありがとうございます。
+        さらにアイコンを追加する予定なので、少々お待ちください。</p>
+        <p v-else>Thanks to all the minters, the initial release of {{ totalCount }} icons were sold out.
+          We are going to add more icons soon. Please stay tuned!</p>
       </div>
       <div v-else>
         <p class="mb-2">下に表示されているGoogle Material Iconの一つをクリックし、
@@ -110,6 +121,7 @@
 import { defineComponent, computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from 'vue-router';
+import { useI18n } from "vue-i18n";
 import { ethers } from "ethers";
 import { actionAssets } from "../resources/materials";
 import { switchNetwork } from "../utils/MetaMask";
@@ -135,6 +147,10 @@ export default defineComponent({
     "expectedNetwork"
   ],
   setup(props) {
+    const i18n = useI18n();
+    const lang = computed(() => {
+      return i18n.locale.value;
+    });
     const store = useStore();
     const route = useRoute();
     const affiliateId = (typeof route.query.ref == "string") ? parseInt(route.query.ref) || 0 : 0; 
@@ -298,6 +314,7 @@ export default defineComponent({
     fetchTokens();
     
     return {
+      lang,
       availableAssets, totalCount: actionAssets.length,
       onSelect, selection, tokenGate, switchToValidNetwork, mint, 
       messageRef, minterName, validName,
