@@ -35,7 +35,7 @@ export default defineComponent({
         }
         return route.path;
       })();
-      const newPath = `/${value.target.value}${basePath}`;
+      const newPath = `/${value.target.value}${basePath}${location.search}`;
       if (newPath !== route.path) {
         router.push(newPath);
       }
