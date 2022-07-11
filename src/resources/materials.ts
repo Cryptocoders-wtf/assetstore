@@ -1,12 +1,12 @@
 import { loadAssets } from "../utils/createAsset";
 
-import { action50 } from "../../../contract/cache/action50";
+import { assets } from "../../../contract/cache/alert";
 
 export const actions = {
   group: "Material Icons (Apache 2.0)",
-  category: "UI Actions",
+  category: "Alert",
   width: 24, height: 24,
-  assets: action50
+  assets: assets
 };
 
 export const actionAssets = loadAssets(actions);

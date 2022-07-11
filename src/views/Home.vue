@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
     <store-view
-      network="rinkeby" 
+      network="mainnet" 
       :storeAddress="addresses.storeAddress"
       />
   </div>
@@ -10,7 +10,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import StoreView from "@/components/StoreView.vue";
-import { addresses } from "../../../contract/cache/addresses_rinkeby";
+import { addresses } from "../../../contract/cache/addresses_mainnet";
 
 export default defineComponent({
   name: "HomePage",

@@ -314,24 +314,27 @@ export default defineComponent({
         if (tokens.value[index]) {
           return tokens.value[index]; // we already have it
         }
-        const result = await materialTokenRO.functions.assetIdOfToken(index * 4);
-        const assetId = result[0].toNumber();
-        const attr = await assetStoreRO.functions.getAttributes(assetId);
-        const name = attr[0][2];
 
-        const asset = assetIndex[name];
-        if (asset) {
-          asset.registered = true;
-          // Hack: Even though the name is not unique enough, this is sufficient.
-          if (selection.value && name == selection.value.asset.name) {
-            selection.value = null;
+        const result = await materialTokenRO.functions.assetIdOfToken((index) * 4);
+        const assetId = result[0].toNumber();
+        if (index > 450) {
+          const attr = await assetStoreRO.functions.getAttributes(assetId);
+          const name = attr[0][2];
+
+          const asset = assetIndex[name];
+          if (asset) {
+            asset.registered = true;
+            // Hack: Even though the name is not unique enough, this is sufficient.
+            if (selection.value && name == selection.value.asset.name) {
+              selection.value = null;
+            }
           }
         }
 
         const svgPart = await assetStoreRO.functions.generateSVGPart(assetId, "item");
         const svg = await materialTokenRO.functions.generateSVG(svgPart[0], 0, "item")
         const image = 'data:image/svg+xml;base64,' + Buffer.from(svg[0]).toString('base64');
-        return { image, name, tokenId: index * 4 }
+        return { image, tokenId: index * 4 }
       })
       tokens.value = await Promise.all(promises);
       availableAssets.value = actionAssets.filter((asset:any) => {

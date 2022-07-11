@@ -40,7 +40,7 @@ export default defineComponent({
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
     const provider = (props.network == "localhost") ?
-      new ethers.providers.JsonRpcProvider() : new ethers.providers.AlchemyProvider("rinkeby");
+      new ethers.providers.JsonRpcProvider() : new ethers.providers.AlchemyProvider(props.network);
 
     const contractRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
     const groups = ref([] as string[]);
