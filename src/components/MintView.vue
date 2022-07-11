@@ -7,16 +7,23 @@
       <p class="mb-2">大量のベクトル画像をチェーン上にアップロードするには多くの「ガス代」が必要ですが、
         それをNFTをミントする方に少しつづ負担していただく「クラウドミンティング」
         という手法をみなさんにお願いしています。</p>
-      <p class="mb-2">下に表示されているGoogle Material Iconの一つをクリックし、
-        リストの下に表示されるミントボタンを押して下さい。</p>
     </div>
     <div>
-      <span v-for="asset in actionAssetsRef" v-bind:key="asset.name">
-        <span v-if="!asset.registered">
-        <img @click="() => {onSelect(asset)}" :src="asset.image" 
-            class="cursor-pointer w-10 inline-block rounded-xl" />
+      <div v-if="availableAssets == null">
+        読み込み中です...
+      </div>
+      <div v-else-if="availableAssets.length == 0">
+        今回の発行分（{{ totalCount }}個）に関しては、クラウドミンティングが完了いたししました。ご協力、ありがとうございます。
+        さらにアイコンを追加する予定なので、少々お待ちください。
+      </div>
+      <div v-else>
+        <p class="mb-2">下に表示されているGoogle Material Iconの一つをクリックし、
+          下に表示されるミントボタンを押して下さい。</p>
+        <span v-for="asset in availableAssets" v-bind:key="asset.name">
+          <img @click="() => {onSelect(asset)}" :src="asset.image" 
+              class="cursor-pointer w-10 inline-block rounded-xl" />
         </span>
-      </span>
+      </div>
     </div>
     <div v-if="selection && !selection.asset.registered" class="border shadow-md mt-2 rounded-xl pl-2 pr-2">
       <p class="mt-2"><b>{{ selection.asset.name }}</b></p>
@@ -72,7 +79,7 @@
                   class="mt-2 inline-block px-6 py-2.5 bg-gray-400 text-gray-200 leading-tight rounded shadow-md ">Mint</button>
               </span>
             </div>
-            <p class="mb-2">フリーミントですが、ガス代が0.02〜0.05ETH程度かかります（混雑状況によって大きく変動）。</p>
+            <p class="mb-2">フリーミントですが、ガス代が0.005〜0.015ETH程度かかります（混雑状況によって大きく変動）。</p>
             <p class="mb-2">クラウドミンティングにご協力していただいた方には、
             「プライマリーNFT」と呼ばれる
             あなたがクラウドミンティングに協力した証のNFT１つと、
@@ -102,6 +109,7 @@
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
 import { useStore } from "vuex";
+import { useRoute } from 'vue-router';
 import { ethers } from "ethers";
 import { actionAssets } from "../resources/materials";
 import { switchNetwork } from "../utils/MetaMask";
@@ -128,12 +136,22 @@ export default defineComponent({
   ],
   setup(props) {
     const store = useStore();
-    const EtherscanBase = "https://rinkeby.etherscan.io/address";
-    const OpenSeaBase = "https://testnets.opensea.io/assets/rinkeby";
+    const route = useRoute();
+    const affiliateId = (typeof route.query.ref == "string") ? parseInt(route.query.ref) || 0 : 0; 
+    console.log("***", affiliateId);
+
+    const EtherscanBase = (props.network == "rinkeby") ?
+           "https://rinkeby.etherscan.io/address" : "https://etherscan.io/address";
+    const OpenSeaBase = (props.network == "rinkeby") ?
+          "https://testnets.opensea.io/assets/rinkeby" : "https://opensea.io/assets/ethereum";
     const EtherscanStore = `${EtherscanBase}/${props.storeAddress}`;
     const EtherscanToken = `${EtherscanBase}/${props.tokenAddress}`;
     const OpenSeaPath = `${OpenSeaBase}/${props.tokenAddress}`;
-    const actionAssetsRef = ref(actionAssets);
+    const assetIndex = actionAssets.reduce((prev:any, asset:any)=>{
+      prev[asset.asset.name] = asset;
+      return prev;
+    }, {});
+    const availableAssets = ref(null as Array<any> | null);
     const messageRef = ref(null as string | null);
     const encoder = new TextEncoder();
     const minterName = ref("");
@@ -147,7 +165,7 @@ export default defineComponent({
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
     const provider = (props.network == "localhost") ?
-      new ethers.providers.JsonRpcProvider() : new ethers.providers.AlchemyProvider("rinkeby");
+      new ethers.providers.JsonRpcProvider() : new ethers.providers.AlchemyProvider(props.network);
 
     let prevProvider:ethers.providers.Web3Provider | null = null;
     const networkContext = computed(() => {
@@ -227,7 +245,7 @@ export default defineComponent({
         asset.minter = minterName.value;
         asset.group = ""; // gas saving
         console.log("*** minting", asset);
-        const tx = await networkContext.value.contract.mintWithAsset(asset, 0);
+        const tx = await networkContext.value.contract.mintWithAsset(asset, affiliateId);
         const result = await tx.wait();
         console.log("mint:gasUsed", result.gasUsed.toNumber());
         messageRef.value = "message.minted";
@@ -258,17 +276,14 @@ export default defineComponent({
         const attr = await assetStoreRO.functions.getAttributes(assetId);
         const name = attr[0][2];
 
-        // @notice O(n) operations
-        actionAssetsRef.value = actionAssetsRef.value.map((asset:any) => {
-          if (asset.asset.name == name) {
-            asset.registered = true;
-            // Hack: Even though the name is not unique enough, this is sufficient.
-            if (selection.value && name == selection.value.asset.name) {
-              selection.value = null;
-            }
+        const asset = assetIndex[name];
+        if (asset) {
+          asset.registered = true;
+          // Hack: Even though the name is not unique enough, this is sufficient.
+          if (selection.value && name == selection.value.asset.name) {
+            selection.value = null;
           }
-          return asset;
-        });
+        }
 
         const svgPart = await assetStoreRO.functions.generateSVGPart(assetId, "item");
         const svg = await materialTokenRO.functions.generateSVG(svgPart[0], 0, "item")
@@ -276,11 +291,14 @@ export default defineComponent({
         return { image, name, tokenId: index * 4 }
       })
       tokens.value = await Promise.all(promises);
+      availableAssets.value = actionAssets.filter((asset:any) => {
+        return !asset.registered;
+      });
     };
     fetchTokens();
     
     return {
-      actionAssetsRef,
+      availableAssets, totalCount: actionAssets.length,
       onSelect, selection, tokenGate, switchToValidNetwork, mint, 
       messageRef, minterName, validName,
       EtherscanStore, EtherscanToken, OpenSeaPath, tokens
