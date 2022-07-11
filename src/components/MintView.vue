@@ -107,18 +107,28 @@
                   class="mt-2 inline-block px-6 py-2.5 bg-gray-400 text-gray-200 leading-tight rounded shadow-md ">Mint</button>
               </span>
             </div>
-            <p class="mb-2">フリーミントですが、ガス代が0.005〜0.015ETH程度かかります（混雑状況によって大きく変動）。</p>
-            <p class="mb-2">クラウドミンティングにご協力していただいた方には、
-            「プライマリーNFT」と呼ばれる
-            あなたがクラウドミンティングに協力した証のNFT１つと、
-            転売用の「ボーナスNFT」を２つ、合計３つのNFTを発行します。</p>
+            <div v-if='lang==="ja"'>
+              <p class="mb-2">フリーミントですが、ガス代が0.005〜0.015ETH程度かかります（混雑状況によって大きく変動）。</p>
+              <p class="mb-2">クラウドミンティングにご協力していただいた方には、
+              「プライマリーNFT」と呼ばれる
+              あなたがクラウドミンティングに協力した証のNFT１つと、
+              転売用の「ボーナスNFT」を２つ、合計３つのNFTを発行します。</p>
+            </div>
+            <div v-else>
+              <p class="mb-2">This is a free mint, but you need to pay the gas fee, 
+                which is typically 0.005〜0.015ETH.</p>
+              <p class="mb-2">If you participate in this crowd-minting effort, 
+                you will receive not only the primary NFT (which is the proof that
+                you are one of minters), but also two additional bonus NFTs.</p>
+            </div>
           </span>
         </span>
       </div>
     </div>
   
     <div class="mt-4 mb-4">
-      <p class="font-bold">【既にミント済みのMaterial Icon】</p>
+      <p v-if='lang==="ja"' class="font-bold">【既にミント済みのMaterial Icon】</p>
+      <p v-else class="font-bold">List of crowd-minted Material Icons.</p>
     </div>
     <div>
       <span v-for="token in tokens" :key="token.tokenId">
