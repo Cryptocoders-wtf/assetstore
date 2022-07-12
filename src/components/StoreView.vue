@@ -26,12 +26,17 @@
               class="cursor-pointer w-10 inline-block rounded-xl" />
           <div v-if="asset.assetId == selectedAsset.assetId" class="mt-2 mb-2 border shadow-md rounded-xs p-2">
             <div v-if="selectedAsset.name">
-              <p class="text-xs">
+              <p>A sample code to fetch the SVG image of this asset.</p>
+              <p class="text-xs mt-1">
                 {{ `let result = await assetStore.functions.getAssetIdWithName("${selectedGroup}", "${selectedCategory}", "${selectedAsset.name}");` }}<br/>
                 {{ `const assetId = result[0].toNumber(); // ${asset.assetId}` }}<br/>
-                {{ `result = await assetStoreRO.functions.generateSVG(assetId);` }}<br/>
+                {{ `result = await assetStore.functions.generateSVG(assetId);` }}<br/>
+                {{ `const svg = result[0];` }}<br/>
               </p>
-              <pre class="text-xs">{{ asset.svg }}</pre>
+              <p class="mt-2">The contents of variable "svg" will be:</p>
+              <div class="mt-2 overflow-x-scroll">
+                <pre class="text-xs">{{ asset.svg }}</pre>
+              </div>
             </div>
             <p v-else>...</p>
           </div>
@@ -81,9 +86,11 @@ export default defineComponent({
       
       // 
       const assetStore = assetStoreRO;
-      const result = await assetStore.functions.getAssetIdWithName("Material Icons (Apache 2.0)", "Alert", "error outline");
-      const assetId = result[0].toNumber();
-      console.log("###", assetId);
+      let result = await assetStore.functions.getAssetIdWithName("Material Icons (Apache 2.0)", "Alert", "auto delete");
+      const assetId = result[0].toNumber(); // 459
+      result = await assetStore.functions.generateSVG(assetId);
+      const svg = result[0];
+      console.log("###", svg);
     };
 
     const categorySelected = async (e) => {
