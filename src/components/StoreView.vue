@@ -160,8 +160,7 @@ export default defineComponent({
     return {
       groups, groupSelected, selectedGroup,
       categories, categorySelected, selectedCategory,
-      assets, assetSelected, selectedAsset,
-      network: props.network, storeAddress: props.storeAddress
+      assets, assetSelected, selectedAsset
     }
   }
 });
