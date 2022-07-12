@@ -13,7 +13,7 @@
 import { defineComponent } from "vue";
 import MintView from "@/components/MintView.vue";
 import { ChainIds } from "../utils/MetaMask";
-import { addresses } from "../../../contract/cache/addresses_mainnet";
+import { addresses } from "../../generated/addresses_mainnet";
 
 export default defineComponent({
   name: "HomePage",

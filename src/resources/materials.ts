@@ -1,6 +1,6 @@
 import { loadAssets } from "../utils/createAsset";
 
-import { assets } from "../../../contract/cache/av";
+import { assets } from "../../generated/av";
 
 export const actions = {
   group: "Material Icons (Apache 2.0)",

@@ -14,7 +14,7 @@ import About from "../views/About.vue";
 
 const routeChildren: Array<RouteRecordRaw> = [
   {
-    path: "home",
+    path: "assets",
     component: Home,
   },
   {

@@ -10,7 +10,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import StoreView from "@/components/StoreView.vue";
-import { addresses } from "../../../contract/cache/addresses_mainnet";
+import { addresses } from "../../generated/addresses_mainnet";
 
 export default defineComponent({
   name: "HomePage",
