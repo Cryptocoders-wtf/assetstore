@@ -29,12 +29,18 @@
             <div v-if="selectedAsset.name">
               <p>A sample code to fetch the SVG image of this asset.</p>
               <p class="text-xs mt-1">
-                {{ `let result = await assetStore.functions.getAssetIdWithName("${selectedGroup}", "${selectedCategory}", "${selectedAsset.name}");` }}<br/>
+                {{ `const provider = new ethers.providers.AlchemyProvider("${network}");` }}<br/>
+                {{ `const storeAddress = "${storeAddress}";` }}<br/>
+                {{ `const assetStore = new ethers.Contract(storeAddress, AssetStore.abi, provider);` }}<br/>
+                {{ `const group = "${selectedGroup}";` }}<br/>
+                {{ `const category = "${selectedCategory}";` }}<br/>
+                {{ `const name = "${selectedAsset.name}";` }}<br/>
+                {{ `let result = await assetStore.functions.getAssetIdWithName(group, category, name);` }}<br/>
                 {{ `const assetId = result[0].toNumber(); // ${asset.assetId}` }}<br/>
                 {{ `result = await assetStore.functions.generateSVG(assetId);` }}<br/>
                 {{ `const svg = result[0];` }}<br/>
               </p>
-              <p class="mt-2">The contents of variable "svg" will be:</p>
+              <p class="mt-2">The contents of the variable "svg":</p>
               <div class="mt-2 overflow-x-scroll">
                 <pre class="text-xs">{{ asset.svg }}</pre>
               </div>
@@ -88,13 +94,21 @@ export default defineComponent({
         selectedAsset.value = Object.assign({}, asset);
       }
       
-      // 
-      const assetStore = assetStoreRO;
-      let result = await assetStore.functions.getAssetIdWithName("Material Icons (Apache 2.0)", "Alert", "auto delete");
-      const assetId = result[0].toNumber(); // 459
+      // Pasted generated code
+      /*
+      const provider = new ethers.providers.AlchemyProvider("mainnet");
+      const storeAddress = "0x847A044aF5225f994C60f43e8cF74d20F756187C";
+      const assetStore = new ethers.Contract(storeAddress, AssetStore.wabi.abi, provider);
+      const group = "Material Icons (Apache 2.0)";
+      const category = "Alert";
+      const name = "error outline";
+      let result = await assetStore.functions.getAssetIdWithName(group, category, name);
+      const assetId = result[0].toNumber(); // 461
       result = await assetStore.functions.generateSVG(assetId);
       const svg = result[0];
+
       console.log("###", svg);
+      */
     };
 
     const categorySelected = async (e:any) => {
@@ -142,7 +156,8 @@ export default defineComponent({
     return {
       groups, groupSelected, selectedGroup,
       categories, categorySelected, selectedCategory,
-      assets, assetSelected, selectedAsset
+      assets, assetSelected, selectedAsset,
+      network: props.network, storeAddress: props.storeAddress
     }
   }
 });
