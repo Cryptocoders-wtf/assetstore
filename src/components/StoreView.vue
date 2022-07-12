@@ -1,23 +1,20 @@
 <template>
   <div>
-    <div v-for="group in groups" v-bind:key="group">
-      <b>{{ group }}</b> 
-      <div v-for="category in allCategories[group]" v-bind:key="category">
-        <div>
-        {{ category }} 
-        </div>
-        <div v-if="allAssets[group] && allAssets[group][category]">
-          <span v-for="assetId in allAssets[group][category]" v-bind:key="assetId">
-            <span v-if="assets[assetId]">
-              <img :src="assets[assetId].svg" class="w-16 inline-block rounded-xl" />
-            </span>
-            <span v-else>
-            ...
-            </span>
-          </span>
-        </div>
-      </div>
-    </div>
+    <select class="form-select block
+      w-full
+      px-3
+      py-1.5
+      text-base
+      font-normal
+      text-gray-700
+      bg-white bg-clip-padding bg-no-repeat
+      border border-solid border-gray-300
+      rounded" @change="groupSelected">
+      <option selected disabled value="">Please select a group</option>
+      <option v-for="group in groups" v-bind:key="group" :value="group">
+        {{ group }}
+      </option>
+    </select>
   </div>
 </template>
 
@@ -44,28 +41,15 @@ export default defineComponent({
 
     const contractRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
     const groups = ref([] as string[]);
-    const allCategories = ref({} as {[group:string]:string[]});
-    const allAssets = ref({} as {[group:string]:{[category:string]:string[]}});
-    const assets = ref({} as {[assetId: string]: {[propId:string]:string}});
 
     provider.once("block", () => {
       contractRO.on(contractRO.filters.GroupAdded(), (group) => {
         console.log("[event/GroupAdded]", group);
         fetchGroups(group);
       });
-      contractRO.on(contractRO.filters.CategoryAdded(), (group, category) => {
-        console.log("[event/CategoryAdded]", group, category);
-        fetchCategories(group, category);
-      });
-      contractRO.on(contractRO.filters.AssetRegistered(), async (from, assetId) => {
-        console.log("[event/AssetRegistered]", from, assetId.toNumber());
-        const attr = (await contractRO.functions.getAttributes(assetId))[0];
-        const group = attr[0];
-        const category = attr[1];
-        fetchAssets(group, category);
-      });
     });
 
+    /*
     const fetchAsset = async (assetId:string) => {
       if (!assets.value[assetId]) {
         const result = await contractRO.functions.generateSVG(assetId);
@@ -113,23 +97,25 @@ export default defineComponent({
       value[group] = categories;
       allCategories.value = value;
     };
+    */
 
-    const fetchGroups = async (group: string | null) => {
+    const groupSelected = (e) => {
+      console.log("groupSelected", e.target.value);
+    };
+
+    const fetchGroups = async () => {
       const result = await contractRO.functions.getGroupCount();
       const groupCount = result[0];
       const promises = Array(groupCount).fill("").map(async (_,index) => {
         const result = await contractRO.functions.getGroupNameAtIndex(index);
-        if (!group || group == result[0]) {
-          fetchCategories(result[0], null);
-        }
         return result[0];
       });
       groups.value = await Promise.all(promises);
     };
-    fetchGroups(null);
+    fetchGroups();
 
     return {
-      groups, allCategories, allAssets, assets
+      groups, groupSelected
     }
   }
 });
