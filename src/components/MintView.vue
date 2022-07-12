@@ -126,11 +126,11 @@
       </div>
     </div>
   
-    <div class="mt-4 mb-4">
-      <p v-if='lang==="ja"' class="font-bold">【既にミント済みのMaterial Icon】</p>
-      <p v-else class="font-bold">List of crowd-minted Material Icons.</p>
-    </div>
-    <div>
+    <div v-if="tokens.length > 0">
+      <div class="mt-4 mb-4">
+        <p v-if='lang==="ja"' class="font-bold">【既にミント済みのMaterial Icon】</p>
+        <p v-else class="font-bold">List of crowd-minted Material Icons.</p>
+      </div>
       <span v-for="token in tokens" :key="token.tokenId">
         <a :href="`${OpenSeaPath}/${token.tokenId}`" class="cursor-pointer" target="_blank">
           <img :src="token.image" class="w-14 inline-block rounded-xl" />
