@@ -310,14 +310,14 @@ export default defineComponent({
     const fetchTokens = async () => {
       const result = await materialTokenRO.functions.totalSupply();
       const count = result[0].toNumber() / 4;
-      const promises = Array(count).fill({}).map(async (_, index) => {
+      const promises2 = Array(count).fill({}).map(async (_, index) => {
         if (tokens.value[index]) {
-          return tokens.value[index]; // we already have it
+          return index; // we already have it
         }
 
-        const result = await materialTokenRO.functions.assetIdOfToken((index) * 4);
-        const assetId = result[0].toNumber();
-        if (index > 450) {
+        if (index > 460) {
+          const result = await materialTokenRO.functions.assetIdOfToken((index) * 4);
+          const assetId = result[0].toNumber();
           const attr = await assetStoreRO.functions.getAttributes(assetId);
           const name = attr[0][2];
 
@@ -330,16 +330,26 @@ export default defineComponent({
             }
           }
         }
+        return index;        
+      });
+      await Promise.all(promises2);
+      availableAssets.value = actionAssets.filter((asset:any) => {
+        return !asset.registered;
+      });
 
+      const promises = Array(count).fill({}).map(async (_, index) => {
+        if (tokens.value[index]) {
+          return tokens.value[index]; // we already have it
+        }
+
+        const result = await materialTokenRO.functions.assetIdOfToken((index) * 4);
+        const assetId = result[0].toNumber();
         const svgPart = await assetStoreRO.functions.generateSVGPart(assetId, "item");
         const svg = await materialTokenRO.functions.generateSVG(svgPart[0], 0, "item")
         const image = 'data:image/svg+xml;base64,' + Buffer.from(svg[0]).toString('base64');
         return { image, tokenId: index * 4 }
-      })
-      tokens.value = await Promise.all(promises);
-      availableAssets.value = actionAssets.filter((asset:any) => {
-        return !asset.registered;
       });
+      tokens.value = await Promise.all(promises);
     };
     fetchTokens();
     
