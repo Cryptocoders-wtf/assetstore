@@ -74,7 +74,7 @@ export default defineComponent({
     const assets = ref([] as object[]);
     const selectedAsset = ref({} as object);
 
-    const assetSelected = async (asset) => {
+    const assetSelected = async (asset:any) => {
       console.log("assetSelected", asset);
       selectedAsset.value = asset;
       if (!asset.name) {
@@ -93,7 +93,7 @@ export default defineComponent({
       console.log("###", svg);
     };
 
-    const categorySelected = async (e) => {
+    const categorySelected = async (e:any) => {
       console.log("categorySelected", e.target.value);
       selectedCategory.value = e.target.value;
       assets.value = [];
@@ -111,7 +111,7 @@ export default defineComponent({
       assets.value = await Promise.all(promises);
     };
 
-    const groupSelected = async (e) => {
+    const groupSelected = async (e:any) => {
       console.log("groupSelected", e.target.value);
       selectedGroup.value = e.target.value;
       categories.value = [];
