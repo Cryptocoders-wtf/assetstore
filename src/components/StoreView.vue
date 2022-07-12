@@ -22,14 +22,16 @@
 
     <div v-if="assets.length > 0" class="mt-2">
       <span v-for="asset in assets" :key="asset.assetId">
-          <img @click="() => { assetSelected(asset); }" :src="asset.svg" 
+          <img @click="() => { assetSelected(asset); }" :src="asset.image" 
               class="cursor-pointer w-10 inline-block rounded-xl" />
           <div v-if="asset.assetId == selectedAsset.assetId" class="mt-2 mb-2 border shadow-md rounded-xs p-2">
             <div v-if="selectedAsset.name">
               <p class="text-xs">
-                {{ `const result = await assetStore.functions.getAssetIdWithName("${selectedGroup}", "${selectedCategory}", "${selectedAsset.name}");` }}<br/>
+                {{ `let result = await assetStore.functions.getAssetIdWithName("${selectedGroup}", "${selectedCategory}", "${selectedAsset.name}");` }}<br/>
                 {{ `const assetId = result[0].toNumber(); // ${asset.assetId}` }}<br/>
+                {{ `result = await assetStoreRO.functions.generateSVG(assetId);` }}<br/>
               </p>
+              <pre class="text-xs">{{ asset.svg }}</pre>
             </div>
             <p v-else>...</p>
           </div>
@@ -95,8 +97,9 @@ export default defineComponent({
         let result = await assetStoreRO.functions.getAssetIdInCategory(selectedGroup.value, selectedCategory.value, index);
         const assetId = result[0].toNumber();
         result = await assetStoreRO.functions.generateSVG(assetId);
-        const svg = 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64');
-        return { index, assetId, svg };
+        const svg = result[0];
+        const image = 'data:image/svg+xml;base64,' + Buffer.from(svg).toString('base64');
+        return { index, assetId, svg, image };
       });
       assets.value = await Promise.all(promises);
     };
