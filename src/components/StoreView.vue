@@ -21,6 +21,7 @@
     </select>
 
     <div v-if="assets.length > 0" class="mt-2">
+      <p class="mb-2">Please select one of assets below.</p>
       <span v-for="asset in assets" :key="asset.assetId">
           <img @click="() => { assetSelected(asset); }" :src="asset.image" 
               class="cursor-pointer w-10 inline-block rounded-xl" />
@@ -41,6 +42,9 @@
             <p v-else>...</p>
           </div>
       </span>
+    </div>
+    <div v-else-if="selectedCategory">
+      <p class="mt-2">Loading...</p>
     </div>
   </div>
 </template>
