@@ -24,8 +24,14 @@
       <span v-for="asset in assets" :key="asset.assetId">
           <img @click="() => { assetSelected(asset); }" :src="asset.svg" 
               class="cursor-pointer w-10 inline-block rounded-xl" />
-          <div v-if="asset.assetId == selectedAsset.assetId" class="mt-2 mb-2 border shadow-md rounded-xl pl-2 pr-2">
-            <p>{{ asset.assetId }}</p>
+          <div v-if="asset.assetId == selectedAsset.assetId" class="mt-2 mb-2 border shadow-md rounded-xs p-2">
+            <div v-if="selectedAsset.name">
+              <p class="text-xs">
+                {{ `const result = await assetStore.functions.getAssetIdWithName("${selectedGroup}", "${selectedCategory}", "${selectedAsset.name}");` }}<br/>
+                {{ `const assetId = result[0].toNumber(); // ${asset.assetId}` }}<br/>
+              </p>
+            </div>
+            <p v-else>...</p>
           </div>
       </span>
     </div>
@@ -53,7 +59,7 @@ export default defineComponent({
     const provider = (props.network == "localhost") ?
       new ethers.providers.JsonRpcProvider() : new ethers.providers.AlchemyProvider(props.network);
 
-    const contractRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
+    const assetStoreRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
     const groups = ref([] as string[]);
     const selectedGroup = ref("");
     const categories = ref([] as string[]);
@@ -61,71 +67,34 @@ export default defineComponent({
     const assets = ref([] as object[]);
     const selectedAsset = ref({} as object);
 
-    /*
-    const fetchAsset = async (assetId:string) => {
-      if (!assets.value[assetId]) {
-        const result = await contractRO.functions.generateSVG(assetId);
-        const svg = 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64');
-        const value = Object.assign({}, assets.value);
-        value[assetId] = { svg };
-        assets.value = value;
-      }
-    };
-
-    const fetchAssets = async(group:string, category:string) => {
-      const result = await contractRO.functions.getAssetCountInCategory(group, category);
-      console.log("fetchAssets called", group, category, result[0]);
-      const assetCount = result[0];
-      const promises = Array(assetCount).fill("").map(async (_,index) => {
-        let result = await contractRO.functions.getAssetIdInCategory(group, category, index);
-        const assetId = result[0].toNumber();
-        fetchAsset(assetId);
-        return assetId;
-      });
-      const assets:string[] = await Promise.all(promises);
-      const value = Object.assign({}, allAssets.value) as  {[group:string]:{[category:string]:string[]}};
-      if (!value[group]) {
-        value[group] = {};
-      }
-      value[group][category] = assets;
-      allAssets.value = value;   
-    };
-
-    const fetchCategories = async(group:string, category: string | null) => {
-      console.log("fetchCategories called", group);
-
-      const result = await contractRO.functions.getCategoryCount(group);
-      const categoryCount = result[0];
-      const promises = Array(categoryCount).fill("").map(async (_,index) => {
-        const result = await contractRO.functions.getCategoryNameAtIndex(group, index);
-        if (!category || category == result[0]) {
-          fetchAssets(group, result[0]);
-        }
-        return result[0];
-      });
-      const categories:string[] = await Promise.all(promises);
-
-      const value = Object.assign({}, allCategories.value) as {[group:string]:string[]};
-      value[group] = categories;
-      allCategories.value = value;
-    };
-    */
-
-    const assetSelected = (asset) => {
+    const assetSelected = async (asset) => {
       console.log("assetSelected", asset);
       selectedAsset.value = asset;
+      if (!asset.name) {
+        const result = await assetStoreRO.getAttributes(asset.assetId);
+        asset.name = result.name;
+        console.log(asset);
+        selectedAsset.value = Object.assign({}, asset);
+      }
+      
+      // 
+      const assetStore = assetStoreRO;
+      const result = await assetStore.functions.getAssetIdWithName("Material Icons (Apache 2.0)", "Alert", "error outline");
+      const assetId = result[0].toNumber();
+      console.log("###", assetId);
     };
 
     const categorySelected = async (e) => {
       console.log("categorySelected", e.target.value);
       selectedCategory.value = e.target.value;
       assets.value = [];
-      const result = await contractRO.functions.getAssetCountInCategory(selectedGroup.value, selectedCategory.value);
+      selectedAsset.value = {};
+      const result = await assetStoreRO.functions.getAssetCountInCategory(selectedGroup.value, selectedCategory.value);
       const assetCount = result[0];
       const promises = Array(assetCount).fill("").map(async (_,index) => {
-        let result = await contractRO.functions.getAssetIdInCategory(selectedGroup.value, selectedCategory.value, index);
+        let result = await assetStoreRO.functions.getAssetIdInCategory(selectedGroup.value, selectedCategory.value, index);
         const assetId = result[0].toNumber();
-        result = await contractRO.functions.generateSVG(assetId);
+        result = await assetStoreRO.functions.generateSVG(assetId);
         const svg = 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64');
         return { index, assetId, svg };
       });
@@ -136,20 +105,20 @@ export default defineComponent({
       console.log("groupSelected", e.target.value);
       selectedGroup.value = e.target.value;
       categories.value = [];
-      const result = await contractRO.functions.getCategoryCount(selectedGroup.value);
+      const result = await assetStoreRO.functions.getCategoryCount(selectedGroup.value);
       const categoryCount = result[0];
       const promises = Array(categoryCount).fill("").map(async (_,index) => {
-        const result = await contractRO.functions.getCategoryNameAtIndex(selectedGroup.value, index);
+        const result = await assetStoreRO.functions.getCategoryNameAtIndex(selectedGroup.value, index);
         return result[0];
       });
       categories.value = await Promise.all(promises);
     };
 
     const fetchGroups = async () => {
-      const result = await contractRO.functions.getGroupCount();
+      const result = await assetStoreRO.functions.getGroupCount();
       const groupCount = result[0];
       const promises = Array(groupCount).fill("").map(async (_,index) => {
-        const result = await contractRO.functions.getGroupNameAtIndex(index);
+        const result = await assetStoreRO.functions.getGroupNameAtIndex(index);
         return result[0];
       });
       groups.value = await Promise.all(promises);
@@ -157,8 +126,8 @@ export default defineComponent({
     fetchGroups();
 
     return {
-      groups, groupSelected,
-      categories, categorySelected,
+      groups, groupSelected, selectedGroup,
+      categories, categorySelected, selectedCategory,
       assets, assetSelected, selectedAsset
     }
   }
