@@ -4,7 +4,8 @@
       w-full px-3 py-1.5 text-base font-normal text-gray-700
       bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded"
       @change="groupSelected">
-      <option selected disabled value="">Please select a group</option>
+      <option v-if="groups.length > 0" selected disabled value="">Please select a group</option>
+      <option v-else selected disabled value="">Loading groups...</option>
       <option v-for="group in groups" v-bind:key="group" :value="group">
         {{ group }}
       </option>
@@ -19,6 +20,9 @@
         {{ category }}
       </option>
     </select>
+    <div v-else-if="selectedGroup">
+      <p class="mt-2">Loading categories...</p>
+    </div>
 
     <div v-if="assets.length > 0" class="mt-2">
       <p class="mb-2">Please select one of assets below.</p>
@@ -50,7 +54,7 @@
       </span>
     </div>
     <div v-else-if="selectedCategory">
-      <p class="mt-2">Loading...</p>
+      <p class="mt-2">Loading assets...</p>
     </div>
   </div>
 </template>
