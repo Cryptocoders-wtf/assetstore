@@ -20,9 +20,10 @@
       </option>
     </select>
 
-    <div v-if="assets.length > 0">
-      <span v-for="asset in assets" :key="asset.assetId">
-        {{ asset.assetId }}
+    <div v-if="assets.length > 0" class="mt-2">
+      <span v-for="(asset, index) in assets" :key="asset.assetId">
+          <img @click="() => { assetSelected(index); }" :src="asset.svg" 
+              class="cursor-pointer w-10 inline-block rounded-xl" />
       </span>
     </div>
   </div>
@@ -106,6 +107,10 @@ export default defineComponent({
     };
     */
 
+    const assetSelected = (index) => {
+      console.log("assetSelected", index);
+    };
+
     const categorySelected = async (e) => {
       console.log("categorySelected", e.target.value);
       selectedCategory.value = e.target.value;
@@ -115,8 +120,9 @@ export default defineComponent({
       const promises = Array(assetCount).fill("").map(async (_,index) => {
         let result = await contractRO.functions.getAssetIdInCategory(selectedGroup.value, selectedCategory.value, index);
         const assetId = result[0].toNumber();
-        //fetchAsset(assetId);
-        return { assetId };
+        result = await contractRO.functions.generateSVG(assetId);
+        const svg = 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64');
+        return { assetId, svg };
       });
       assets.value = await Promise.all(promises);
     };
@@ -148,7 +154,7 @@ export default defineComponent({
     return {
       groups, groupSelected,
       categories, categorySelected,
-      assets
+      assets, assetSelected
     }
   }
 });
