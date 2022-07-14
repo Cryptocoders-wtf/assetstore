@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-if="assetCount > 0" class="mb-2">
+      Total Asset Count: {{ assetCount }} 
+    </div>
     <select class="form-select block
       w-full px-3 py-1.5 text-base font-normal text-gray-700
       bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded"
@@ -79,6 +82,7 @@ export default defineComponent({
     const assets = ref([] as object[]);
     const selectedAsset = ref({} as any);
     const sampleCode = ref("");
+    const assetCount = ref(0);
 
     const assetSelected = async (asset:any) => {
       // console.log("assetSelected", asset);
@@ -157,6 +161,12 @@ export default defineComponent({
       });
       groups.value = await Promise.all(promises);
     };
+  
+    const fetchAssetCount = async () => {
+      const result = await assetStoreRO.functions.getAssetCount();
+      assetCount.value = result[0].toNumber();
+    };
+    fetchAssetCount();
     fetchGroups();
 
     const copySample = () => {
@@ -167,6 +177,7 @@ export default defineComponent({
     };
 
     return {
+      assetCount,
       groups, groupSelected, selectedGroup,
       categories, categorySelected, selectedCategory,
       assets, assetSelected, selectedAsset,
