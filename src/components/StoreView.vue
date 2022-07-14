@@ -31,11 +31,11 @@
               class="cursor-pointer w-10 inline-block rounded-xl" />
           <div v-if="asset.assetId == selectedAsset.assetId" class="mt-2 mb-2 border shadow-md rounded-xs p-2">
             <div v-if="selectedAsset.name">
-              <p>A sample code to fetch the SVG image of this asset. <button @click="copySample">copy</button></p>
+              <p>A sample code to fetch the SVG image of this asset. <button class="border rounded-md shadow-md pl-2 pr-2" @click="copySample">copy</button></p>
               <div class="mt-1 overflow-x-scroll">
                 <pre class="text-xs">{{ sampleCode }}</pre>
               </div>
-              <p class="mt-2">The contents of the variable "svg". <button @click="copySVG">copy</button></p>
+              <p class="mt-2">The contents of the variable "svg". <button  class="border rounded-md shadow-md pl-2 pr-2" @click="copySVG">copy</button></p>
               <div class="mt-2 overflow-x-scroll">
                 <pre class="text-xs">{{ asset.svg }}</pre>
               </div>
