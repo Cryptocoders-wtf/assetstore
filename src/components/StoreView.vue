@@ -31,11 +31,11 @@
               class="cursor-pointer w-10 inline-block rounded-xl" />
           <div v-if="asset.assetId == selectedAsset.assetId" class="mt-2 mb-2 border shadow-md rounded-xs p-2">
             <div v-if="selectedAsset.name">
-              <p>A sample code to fetch the SVG image of this asset.</p>
+              <p>A sample code to fetch the SVG image of this asset. <button @click="copySample">copy</button></p>
               <div class="mt-1 overflow-x-scroll">
                 <pre class="text-xs">{{ sampleCode }}</pre>
               </div>
-              <p class="mt-2">The contents of the variable "svg":</p>
+              <p class="mt-2">The contents of the variable "svg". <button @click="copySVG">copy</button></p>
               <div class="mt-2 overflow-x-scroll">
                 <pre class="text-xs">{{ asset.svg }}</pre>
               </div>
@@ -101,6 +101,7 @@ export default defineComponent({
           `const resultSVG = await assetStore.functions.generateSVG(assetId);`,
           `const svg = resultSVG[0];`,
       ].join('\n');
+
       /*
       const provider = new ethers.providers.AlchemyProvider("mainnet");
       const storeAddress = "0x847A044aF5225f994C60f43e8cF74d20F756187C";
@@ -158,11 +159,18 @@ export default defineComponent({
     };
     fetchGroups();
 
+    const copySample = () => {
+      navigator.clipboard.writeText(sampleCode.value);
+    };
+    const copySVG = () => {
+      navigator.clipboard.writeText(selectedAsset.value.svg);
+    };
+
     return {
       groups, groupSelected, selectedGroup,
       categories, categorySelected, selectedCategory,
       assets, assetSelected, selectedAsset,
-      sampleCode
+      sampleCode, copySample, copySVG
     }
   }
 });
