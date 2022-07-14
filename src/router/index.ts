@@ -30,7 +30,7 @@ const routeChildren: Array<RouteRecordRaw> = [
     component: TestMint,
   },
   {
-    path: "local",
+    path: "local_asset",
     component: Local,
   },
   {
