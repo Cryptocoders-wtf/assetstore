@@ -315,7 +315,7 @@ export default defineComponent({
           return index; // we already have it
         }
 
-        if (index > 460) {
+        if (index > 580) {
           const result = await materialTokenRO.functions.assetIdOfToken((index) * 4);
           const assetId = result[0].toNumber();
           const attr = await assetStoreRO.functions.getAttributes(assetId);
