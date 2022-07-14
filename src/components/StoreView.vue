@@ -32,18 +32,9 @@
           <div v-if="asset.assetId == selectedAsset.assetId" class="mt-2 mb-2 border shadow-md rounded-xs p-2">
             <div v-if="selectedAsset.name">
               <p>A sample code to fetch the SVG image of this asset.</p>
-              <p class="text-xs mt-1">
-                {{ `const provider = new ethers.providers.AlchemyProvider("${network}");` }}<br/>
-                {{ `const storeAddress = "${storeAddress}";` }}<br/>
-                {{ `const assetStore = new ethers.Contract(storeAddress, AssetStore.abi, provider);` }}<br/>
-                {{ `const group = "${selectedGroup}";` }}<br/>
-                {{ `const category = "${selectedCategory}";` }}<br/>
-                {{ `const name = "${selectedAsset.name}";` }}<br/>
-                {{ `const resultAsset = await assetStore.functions.getAssetIdWithName(group, category, name);` }}<br/>
-                {{ `const assetId = resultAsset[0].toNumber(); // ${asset.assetId}` }}<br/>
-                {{ `const resultSVG = await assetStore.functions.generateSVG(assetId);` }}<br/>
-                {{ `const svg = resultSVG[0];` }}<br/>
-              </p>
+              <div class="mt-1 overflow-x-scroll">
+                <pre class="text-xs">{{ sampleCode }}</pre>
+              </div>
               <p class="mt-2">The contents of the variable "svg":</p>
               <div class="mt-2 overflow-x-scroll">
                 <pre class="text-xs">{{ asset.svg }}</pre>
@@ -86,7 +77,8 @@ export default defineComponent({
     const categories = ref([] as string[]);
     const selectedCategory = ref("");
     const assets = ref([] as object[]);
-    const selectedAsset = ref({} as object);
+    const selectedAsset = ref({} as any);
+    const sampleCode = ref("");
 
     const assetSelected = async (asset:any) => {
       // console.log("assetSelected", asset);
@@ -97,7 +89,18 @@ export default defineComponent({
         //console.log(asset);
         selectedAsset.value = Object.assign({}, asset);
       }
-      
+      sampleCode.value = [
+          `const provider = new ethers.providers.AlchemyProvider("${props.network}");`,
+          `const storeAddress = "${props.storeAddress}";`,
+          `const assetStore = new ethers.Contract(storeAddress, AssetStore.abi, provider);`,
+          `const group = "${selectedGroup.value}";`,
+          `const category = "${selectedCategory.value}";`,
+          `const name = "${selectedAsset.value.name}";`,
+          `const resultAsset = await assetStore.functions.getAssetIdWithName(group, category, name);`,
+          `const assetId = resultAsset[0].toNumber(); // ${selectedAsset.value.assetId}`,
+          `const resultSVG = await assetStore.functions.generateSVG(assetId);`,
+          `const svg = resultSVG[0];`,
+      ].join('\n');
       /*
       const provider = new ethers.providers.AlchemyProvider("mainnet");
       const storeAddress = "0x847A044aF5225f994C60f43e8cF74d20F756187C";
@@ -158,7 +161,8 @@ export default defineComponent({
     return {
       groups, groupSelected, selectedGroup,
       categories, categorySelected, selectedCategory,
-      assets, assetSelected, selectedAsset
+      assets, assetSelected, selectedAsset,
+      sampleCode
     }
   }
 });
