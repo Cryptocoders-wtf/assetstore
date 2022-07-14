@@ -89,7 +89,7 @@ export default defineComponent({
     const selectedAsset = ref({} as object);
 
     const assetSelected = async (asset:any) => {
-      console.log("assetSelected", asset);
+      // console.log("assetSelected", asset);
       selectedAsset.value = asset;
       if (!asset.name) {
         const result = await assetStoreRO.getAttributes(asset.assetId);
