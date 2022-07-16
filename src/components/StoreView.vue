@@ -31,7 +31,7 @@
       <p class="mb-2">Please select one of assets below.</p>
       <span v-for="asset in assets" :key="asset.assetId">
           <img @click="() => { assetSelected(asset); }" :src="asset.image" 
-              class="cursor-pointer w-10 inline-block rounded-xl" />
+              class="cursor-pointer w-32 inline-block rounded-xl" />
           <div v-if="asset.assetId == selectedAsset.assetId" class="mt-2 mb-2 border shadow-md rounded-xs p-2">
             <div v-if="selectedAsset.name">
               <p>A sample code to fetch the SVG image of this asset. <button class="border rounded-md shadow-md pl-2 pr-2" @click="copySample">copy</button></p>
@@ -131,7 +131,9 @@ export default defineComponent({
       const promises = Array(assetCount).fill("").map(async (_,index) => {
         let result = await assetStoreRO.functions.getAssetIdInCategory(selectedGroup.value, selectedCategory.value, index);
         const assetId = result[0].toNumber();
-        result = await assetStoreRO.functions.generateSVG(assetId);
+        console.log("*** assetId", assetId);
+        result = await assetStoreRO.functions.generateSVG(assetId); //, { gasLimit: 6000000000 });
+        console.log("*** got SVG", assetId);
         const svg = result[0];
         const image = 'data:image/svg+xml;base64,' + Buffer.from(svg).toString('base64');
         return { index, assetId, svg, image };
