@@ -150,7 +150,7 @@ import { useStore } from "vuex";
 import { useRoute } from 'vue-router';
 import { useI18n } from "vue-i18n";
 import { ethers } from "ethers";
-import { actionAssets } from "../resources/materials";
+import { loadedAssets } from "../resources/kamon";
 import { switchNetwork } from "../utils/MetaMask";
 //import { getSystemErrorName } from "util";
 import Connect from "@/components/Connect.vue";
@@ -190,7 +190,7 @@ export default defineComponent({
     const EtherscanStore = `${EtherscanBase}/${props.storeAddress}`;
     const EtherscanToken = `${EtherscanBase}/${props.tokenAddress}`;
     const OpenSeaPath = `${OpenSeaBase}/${props.tokenAddress}`;
-    const assetIndex = actionAssets.reduce((prev:any, asset:any)=>{
+    const assetIndex = loadedAssets.reduce((prev:any, asset:any)=>{
       prev[asset.asset.name] = asset;
       return prev;
     }, {});
@@ -333,7 +333,7 @@ export default defineComponent({
         return index;        
       });
       await Promise.all(promises2);
-      availableAssets.value = actionAssets.filter((asset:any) => {
+      availableAssets.value = loadedAssets.filter((asset:any) => {
         return !asset.registered;
       });
 
@@ -355,7 +355,7 @@ export default defineComponent({
     
     return {
       lang,
-      availableAssets, totalCount: actionAssets.length,
+      availableAssets, totalCount: loadedAssets.length,
       onSelect, selection, tokenGate, switchToValidNetwork, mint, 
       messageRef, minterName, validName,
       EtherscanStore, EtherscanToken, OpenSeaPath, tokens

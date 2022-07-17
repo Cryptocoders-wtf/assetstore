@@ -1,6 +1,6 @@
 import { loadAssets } from "../utils/createAsset";
 
-import { assets } from "../../generated/hardware";
+import { assets } from "../../generated/kamon_assets";
 
 export const actions = {
   group: "Material Icons (Apache 2.0)",
