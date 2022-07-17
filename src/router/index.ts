@@ -8,6 +8,7 @@ import Home from "../views/Home.vue";
 import Mint from "../views/Mint.vue";
 import TestHome from "../views/TestHome.vue";
 import TestMint from "../views/TestMint.vue";
+import TestMintKamon from "../views/TestMintKamon.vue";
 import LocalMint from "../views/LocalMint.vue";
 import Account from "../views/Account.vue";
 import About from "../views/About.vue";
@@ -28,6 +29,10 @@ const routeChildren: Array<RouteRecordRaw> = [
   {
     path: "test_mint",
     component: TestMint,
+  },
+  {
+    path: "test_kamon",
+    component: TestMintKamon,
   },
   {
     path: "local_asset",
