@@ -317,7 +317,7 @@ export default defineComponent({
         }
 
         if (index >= 0) {
-          const result = await tokenRO.functions.assetIdOfToken((index) * 4);
+          const result = await tokenRO.functions.assetIdOfToken((index) * tokensPerAsset.value);
           const assetId = result[0].toNumber();
           const attr = await assetStoreRO.functions.getAttributes(assetId);
           const name = attr[0][2];
@@ -343,12 +343,12 @@ export default defineComponent({
           return tokens.value[index]; // we already have it
         }
 
-        const result = await tokenRO.functions.assetIdOfToken((index) * 4);
+        const result = await tokenRO.functions.assetIdOfToken(index * tokensPerAsset.value);
         const assetId = result[0].toNumber();
         const svgPart = await assetStoreRO.functions.generateSVGPart(assetId, "item");
         const svg = await tokenRO.functions.generateSVG(svgPart[0], 0, "item")
         const image = 'data:image/svg+xml;base64,' + Buffer.from(svg[0]).toString('base64');
-        return { image, tokenId: index * 4 }
+        return { image, tokenId: index * tokensPerAsset.value }
       });
       tokens.value = await Promise.all(promises);
     };
