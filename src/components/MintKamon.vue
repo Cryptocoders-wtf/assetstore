@@ -28,9 +28,9 @@
           We are going to add more icons soon. Please stay tuned!</p>
       </div>
       <div v-else>
-        <p v-if='lang==="ja"' class="mb-2">下に表示されているGoogle Material Iconの一つをクリックし、
+        <p v-if='lang==="ja"' class="mb-2">下に表示されている家紋の一つをクリックし、
           下に表示されるミントボタンを押して下さい。</p>
-        <p v-else class="mb-2">Please select one of Material Icons below and the follow the instruction
+        <p v-else class="mb-2">Please select one of Kamons below and the follow the instruction
           displayed below those icons.</p>
         <span v-for="asset in availableAssets" v-bind:key="asset.name">
           <img @click="() => {onSelect(asset)}" :src="asset.image" 
@@ -128,8 +128,8 @@
   
     <div v-if="tokens.length > 0">
       <div class="mt-4 mb-4">
-        <p v-if='lang==="ja"' class="font-bold">【既にミント済みのMaterial Icon】</p>
-        <p v-else class="font-bold">List of crowd-minted Material Icons.</p>
+        <p v-if='lang==="ja"' class="font-bold">ミント済みの家紋NFT</p>
+        <p v-else class="font-bold">List of crowd-minted Kamon NFTs</p>
       </div>
       <span v-for="token in tokens" :key="token.tokenId">
         <a :href="`${OpenSeaPath}/${token.tokenId}`" class="cursor-pointer" target="_blank">

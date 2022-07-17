@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import MintView from "@/components/MintView.vue";
+import MintView from "@/components/MintKamon.vue";
 import { ChainIds } from "../utils/MetaMask";
 import { addresses } from "../../../contract/cache/addresses_rinkeby";
 
