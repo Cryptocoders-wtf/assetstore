@@ -309,7 +309,7 @@ export default defineComponent({
     
     const fetchTokens = async () => {
       const result = await tokenRO.functions.totalSupply();
-      const count = result[0].toNumber() / 4;
+      const count = result[0].toNumber() / 10;
       const promises2 = Array(count).fill({}).map(async (_, index) => {
         if (tokens.value[index]) {
           return index; // we already have it
