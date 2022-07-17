@@ -46,9 +46,8 @@
         <p v-else class="mb-40">Preparing to mint...</p>
       </div>
       <div v-else>
-        <img :src="selection.image1" class="w-16 inline-block rounded-xl m-2" />
-        <img :src="selection.image2" class="w-16 inline-block rounded-xl m-2" />
-        <img :src="selection.image3" class="w-16 inline-block rounded-xl m-2" />
+        <img v-for="image in selection.images" :key="image"
+          :src="image" class="w-16 inline-block rounded-xl m-2" />
         <div v-if="messageRef" class="mb-2">
           <div v-if="messageRef == 'message.minting'">
             <p v-if='lang==="ja"'>処理中です...</p>
@@ -236,7 +235,7 @@ export default defineComponent({
     const assetStoreRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
     const tokenRO = new ethers.Contract(props.tokenAddress, KamonToken.wabi.abi, provider);
     const tokens = ref([] as Array<any>);
-    const tokensPerAsset = ref(1);
+    const tokensPerAsset = ref(10000);
     const fetchTokensPerAsset = async () => {
       const result = await tokenRO.functions.tokensPerAsset();
       tokensPerAsset.value = result[0].toNumber();
@@ -255,8 +254,14 @@ export default defineComponent({
         isLoading: true,
         asset
       };
-      //let i;
-      //for (i=0; <)
+      const promices = Array(tokensPerAsset.value - 1).fill("").map((_, index) => {
+        return tokenRO.functions.generateSVG(asset.svgPart, index, "item");
+      });
+      const images = (await Promise.all(promices)).map(result => {
+        return 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64');
+      });
+      console.log(images);
+
       const image1 = await tokenRO.functions.generateSVG(asset.svgPart, 0, "item");
       const image2 = await tokenRO.functions.generateSVG(asset.svgPart, 1, "item");
       const image3 = await tokenRO.functions.generateSVG(asset.svgPart, 2, "item");
@@ -264,6 +269,7 @@ export default defineComponent({
         image1: 'data:image/svg+xml;base64,' + Buffer.from(image1[0]).toString('base64'),
         image2: 'data:image/svg+xml;base64,' + Buffer.from(image2[0]).toString('base64'),
         image3: 'data:image/svg+xml;base64,' + Buffer.from(image3[0]).toString('base64'),
+        images,
         asset
       }
     }
