@@ -42,8 +42,6 @@
       <p class="mt-2"><b>{{ selection.asset.name }}</b></p>
       <div v-if="selection.isLoading">
         <img :src="selection.asset.image" class="w-16 inline-block rounded-xl m-2" />
-        <img :src="selection.asset.image" class="w-16 inline-block rounded-xl m-2" />
-        <img :src="selection.asset.image" class="w-16 inline-block rounded-xl m-2" />
         <p v-if='lang==="ja"' class="mb-40">ミントの準備中...</p>
         <p v-else class="mb-40">Preparing to mint...</p>
       </div>
@@ -238,6 +236,12 @@ export default defineComponent({
     const assetStoreRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
     const tokenRO = new ethers.Contract(props.tokenAddress, KamonToken.wabi.abi, provider);
     const tokens = ref([] as Array<any>);
+    const tokensPerAsset = ref(1);
+    const fetchTokensPerAsset = async () => {
+      const result = await tokenRO.functions.tokensPerAsset();
+      tokensPerAsset.value = result[0].toNumber();
+    }
+    fetchTokensPerAsset(); 
 
     const selection = ref(null as any);
     const onSelect = async (asset: any) => {
@@ -251,6 +255,8 @@ export default defineComponent({
         isLoading: true,
         asset
       };
+      //let i;
+      //for (i=0; <)
       const image1 = await tokenRO.functions.generateSVG(asset.svgPart, 0, "item");
       const image2 = await tokenRO.functions.generateSVG(asset.svgPart, 1, "item");
       const image3 = await tokenRO.functions.generateSVG(asset.svgPart, 2, "item");
@@ -308,8 +314,8 @@ export default defineComponent({
     });
     
     const fetchTokens = async () => {
-      const result = await tokenRO.functions.totalSupply();
-      const count = result[0].toNumber() / 10;
+      const resultSupply = await tokenRO.functions.totalSupply();
+      const count = resultSupply[0].toNumber() / tokensPerAsset.value;
       const promises2 = Array(count).fill({}).map(async (_, index) => {
         if (tokens.value[index]) {
           return index; // we already have it
