@@ -235,12 +235,7 @@ export default defineComponent({
     const assetStoreRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
     const tokenRO = new ethers.Contract(props.tokenAddress, KamonToken.wabi.abi, provider);
     const tokens = ref([] as Array<any>);
-    const tokensPerAsset = ref(10000);
-    const fetchTokensPerAsset = async () => {
-      const result = await tokenRO.functions.tokensPerAsset();
-      tokensPerAsset.value = result[0].toNumber();
-    }
-    fetchTokensPerAsset(); 
+    const tokensPerAsset = ref(0);
 
     const selection = ref(null as any);
     const onSelect = async (asset: any) => {
@@ -309,6 +304,11 @@ export default defineComponent({
     });
     
     const fetchTokens = async () => {
+      if (tokensPerAsset.value == 0) {
+        const result = await tokenRO.functions.tokensPerAsset();
+        tokensPerAsset.value = result[0].toNumber();
+      }
+
       const resultSupply = await tokenRO.functions.totalSupply();
       const count = resultSupply[0].toNumber() / tokensPerAsset.value;
       const promises2 = Array(count).fill({}).map(async (_, index) => {
