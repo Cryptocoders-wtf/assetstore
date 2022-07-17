@@ -254,7 +254,7 @@ export default defineComponent({
         isLoading: true,
         asset
       };
-      const promices = Array(tokensPerAsset.value - 1).fill("").map((_, index) => {
+      const promices = Array(tokensPerAsset.value-1).fill("").map((_, index) => {
         return tokenRO.functions.generateSVG(asset.svgPart, index, "item");
       });
       const images = (await Promise.all(promices)).map(result => {
