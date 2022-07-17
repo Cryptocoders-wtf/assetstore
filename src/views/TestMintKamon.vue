@@ -4,7 +4,7 @@
       network="rinkeby" 
       :expectedNetwork="expectedNetwork"
       :storeAddress="addresses.storeAddress"
-      :tokenAddress="addresses.tokenAddress"
+      :tokenAddress="kamon_addresses.kamonAddress"
       />
   </div>
 </template>
@@ -14,6 +14,7 @@ import { defineComponent } from "vue";
 import MintView from "@/components/MintKamon.vue";
 import { ChainIds } from "../utils/MetaMask";
 import { addresses } from "../../../contract/cache/addresses_rinkeby";
+import { kamon_addresses } from "../../../contract/cache/addresses_kamon_rinkeby";
 
 export default defineComponent({
   name: "HomePage",
@@ -24,7 +25,7 @@ export default defineComponent({
     const expectedNetwork = ChainIds.RinkebyTestNet;
     return {
       expectedNetwork,
-      addresses
+      addresses, kamon_addresses
     }
   }
 });
