@@ -105,7 +105,7 @@
               </span>
             </div>
             <div v-if='lang==="ja"'>
-              <p class="mb-2">フリーミントですが、ガス代が0.005〜0.015ETH程度かかります（混雑状況によって大きく変動）。</p>
+              <p class="mb-2">フリーミントですが、ガス代が0.03〜0.23ETH程度かかります（混雑状況によって大きく変動）。</p>
               <p class="mb-2">クラウドミンティングにご協力していただいた方には、
               「プライマリーNFT」と呼ばれる
               あなたがクラウドミンティングに協力した証のNFT１つと、
@@ -113,7 +113,7 @@
             </div>
             <div v-else>
               <p class="mb-2">This is a free mint, but you need to pay the gas fee, 
-                which is typically 0.005〜0.015ETH.</p>
+                which is typically 0.03〜0.23ETH.</p>
               <p class="mb-2">If you participate in this crowd-minting effort, 
                 you will receive not only the primary NFT (which is the proof that
                 you are one of minters), but also two additional bonus NFTs.</p>
