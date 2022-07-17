@@ -139,7 +139,7 @@
     </div>
     <div class="mt-2">
       <p><a :href="EtherscanStore" class="underline" target="_blank">AssetStore Etherscan</a></p>
-      <p><a :href="EtherscanToken" class="underline" target="_blank">MaterialToken Etherscan</a></p>
+      <p><a :href="EtherscanToken" class="underline" target="_blank">KamonToken Etherscan</a></p>
     </div>
   </div>
 </template>
@@ -158,8 +158,8 @@ import Connect from "@/components/Connect.vue";
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
 };
-const MaterialToken = {
-  wabi: require("../abis/MaterialToken.json"), // wrapped abi
+const KamonToken = {
+  wabi: require("../abis/KamonToken.json"), // wrapped abi
 };
 
 export default defineComponent({
@@ -215,7 +215,7 @@ export default defineComponent({
       if (store.state.account && store.state.chainId == props.expectedNetwork) {
         const provider = new ethers.providers.Web3Provider(store.state.ethereum);
         const signer = provider.getSigner();
-        const contract = new ethers.Contract(props.tokenAddress, MaterialToken.wabi.abi, signer);
+        const contract = new ethers.Contract(props.tokenAddress, KamonToken.wabi.abi, signer);
 
         return { provider, signer, contract };
       }
@@ -236,7 +236,7 @@ export default defineComponent({
     }
 
     const assetStoreRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
-    const materialTokenRO = new ethers.Contract(props.tokenAddress, MaterialToken.wabi.abi, provider);
+    const tokenRO = new ethers.Contract(props.tokenAddress, KamonToken.wabi.abi, provider);
     const tokens = ref([] as Array<any>);
 
     const selection = ref(null as any);
@@ -251,9 +251,9 @@ export default defineComponent({
         isLoading: true,
         asset
       };
-      const image1 = await materialTokenRO.functions.generateSVG(asset.svgPart, 0, "item");
-      const image2 = await materialTokenRO.functions.generateSVG(asset.svgPart, 1, "item");
-      const image3 = await materialTokenRO.functions.generateSVG(asset.svgPart, 2, "item");
+      const image1 = await tokenRO.functions.generateSVG(asset.svgPart, 0, "item");
+      const image2 = await tokenRO.functions.generateSVG(asset.svgPart, 1, "item");
+      const image3 = await tokenRO.functions.generateSVG(asset.svgPart, 2, "item");
       selection.value = {
         image1: 'data:image/svg+xml;base64,' + Buffer.from(image1[0]).toString('base64'),
         image2: 'data:image/svg+xml;base64,' + Buffer.from(image2[0]).toString('base64'),
@@ -299,7 +299,7 @@ export default defineComponent({
     }
 
     provider.once("block", () => {
-      materialTokenRO.on(materialTokenRO.filters.Transfer(), async (from, to, tokenId) => {
+      tokenRO.on(tokenRO.filters.Transfer(), async (from, to, tokenId) => {
         if (tokenId.toNumber() % 4 == 0 && tokenId.toNumber() >= tokens.value.length * 4) {
           console.log("*** event.Transfer calling fetchToken")
           fetchTokens();
@@ -308,7 +308,7 @@ export default defineComponent({
     });
     
     const fetchTokens = async () => {
-      const result = await materialTokenRO.functions.totalSupply();
+      const result = await tokenRO.functions.totalSupply();
       const count = result[0].toNumber() / 4;
       const promises2 = Array(count).fill({}).map(async (_, index) => {
         if (tokens.value[index]) {
@@ -316,7 +316,7 @@ export default defineComponent({
         }
 
         if (index >= 0) {
-          const result = await materialTokenRO.functions.assetIdOfToken((index) * 4);
+          const result = await tokenRO.functions.assetIdOfToken((index) * 4);
           const assetId = result[0].toNumber();
           const attr = await assetStoreRO.functions.getAttributes(assetId);
           const name = attr[0][2];
@@ -342,10 +342,10 @@ export default defineComponent({
           return tokens.value[index]; // we already have it
         }
 
-        const result = await materialTokenRO.functions.assetIdOfToken((index) * 4);
+        const result = await tokenRO.functions.assetIdOfToken((index) * 4);
         const assetId = result[0].toNumber();
         const svgPart = await assetStoreRO.functions.generateSVGPart(assetId, "item");
-        const svg = await materialTokenRO.functions.generateSVG(svgPart[0], 0, "item")
+        const svg = await tokenRO.functions.generateSVG(svgPart[0], 0, "item")
         const image = 'data:image/svg+xml;base64,' + Buffer.from(svg[0]).toString('base64');
         return { image, tokenId: index * 4 }
       });
