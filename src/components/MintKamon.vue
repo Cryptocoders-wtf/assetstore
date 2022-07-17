@@ -260,18 +260,7 @@ export default defineComponent({
       const images = (await Promise.all(promices)).map(result => {
         return 'data:image/svg+xml;base64,' + Buffer.from(result[0]).toString('base64');
       });
-      console.log(images);
-
-      const image1 = await tokenRO.functions.generateSVG(asset.svgPart, 0, "item");
-      const image2 = await tokenRO.functions.generateSVG(asset.svgPart, 1, "item");
-      const image3 = await tokenRO.functions.generateSVG(asset.svgPart, 2, "item");
-      selection.value = {
-        image1: 'data:image/svg+xml;base64,' + Buffer.from(image1[0]).toString('base64'),
-        image2: 'data:image/svg+xml;base64,' + Buffer.from(image2[0]).toString('base64'),
-        image3: 'data:image/svg+xml;base64,' + Buffer.from(image3[0]).toString('base64'),
-        images,
-        asset
-      }
+      selection.value = { images, asset };
     }
     const mint = async() => {
       //console.log("*** mint", selection.value.asset.asset);
