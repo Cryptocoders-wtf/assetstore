@@ -39,7 +39,7 @@
       </div>
     </div>
     <div v-if="selection && !selection.asset.registered" class="border shadow-md mt-2 rounded-xl pl-2 pr-2">
-      <p class="mt-2"><b>{{ selection.asset.name }}</b></p>
+      <p class="mt-2"><b>{{ selection.asset.name }}, {{ selection.asset.category }}</b></p>
       <div v-if="selection.isLoading">
         <img :src="selection.asset.image" class="w-16 inline-block rounded-xl m-2" />
         <p v-if='lang==="ja"' class="mb-40">ミントの準備中...</p>
