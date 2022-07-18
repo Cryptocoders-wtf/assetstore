@@ -103,30 +103,41 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
   asset.name = _asset.name;
   asset.metadata = new Uint8Array();
   const width = _asset.width || _width;
-  let svgPath = "";
-  if (_asset.parts) {
-    asset.parts = _asset.parts.map((part:any) => {
-      part.color = part.color || "";
-      const path = normalizePath(part.body, width);
-      svgPath += `<path d="${path}" />`;
-      part.body = compressPath(part.body, width);
-      return part;
-    });
-  } else if (_asset.bodies) {
-    asset.parts = _asset.bodies.map((body0:any) => {
-      const body = compressPath(body0, width);
-      const path = normalizePath(body0, width);
-      svgPath += `<path d="${path}" />`;
-      return { body, color:"" };
-    });
-  } else {
-    const path = normalizePath(_asset.body, width);
-    svgPath = `<path d="${path}" />`;
-    asset.parts = [{
-      color: "",
-      body: compressPath(_asset.body, width)
-    }];
-  }
+  const svgPath = (() => {
+    if (_asset.parts) {
+      return _asset.parts.map((part:any) => {
+        const path = normalizePath(part.body, width);
+        return `<path d="${path}" />`;
+      }).join("");
+    } else if (_asset.bodies) {
+      return _asset.bodies.map((body0:any) => {
+        const path = normalizePath(body0, width);
+        return `<path d="${path}" />`;
+      }).join("");
+    } else {
+      const path = normalizePath(_asset.body, width);
+      return `<path d="${path}" />`;
+    }
+  })();
+  asset.parts = (() => {
+    if (_asset.parts) {
+      return _asset.parts.map((part:any) => {
+        part.color = part.color || "";
+        part.body = compressPath(part.body, width);
+        return part;
+      });
+    } else if (_asset.bodies) {
+      return _asset.bodies.map((body0:any) => {
+        const body = compressPath(body0, width);
+        return { body, color:"" };
+      });
+    } else {
+      return [{
+        color: "",
+        body: compressPath(_asset.body, width)
+      }];
+    }
+  })();
   asset.asset = Object.assign({}, asset)
   //asset.svgPath = svgPath;
   asset.svgPart = `<g id="item">${svgPath}</g>`; 
@@ -134,6 +145,7 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
     + asset.svgPart
     + '</svg>';
   asset.image = 'data:image/svg+xml;base64,' + Buffer.from(asset.svg).toString('base64');
+  console.log(asset);
   return asset;  
 }
 
