@@ -132,8 +132,13 @@ export default defineComponent({
         let result = await assetStoreRO.functions.getAssetIdInCategory(selectedGroup.value, selectedCategory.value, index);
         const assetId = result[0].toNumber();
         console.log("*** assetId", assetId);
-        result = await assetStoreRO.functions.generateSVG(assetId); //, { gasLimit: 6000000000 });
-        console.log("*** got SVG", assetId);
+        try {
+          result = await assetStoreRO.functions.generateSVG(assetId); //, { gasLimit: 6000000000 });
+          console.log("*** got SVG", assetId);
+        } catch(e) {
+          const resultAttr = await assetStoreRO.functions.getAttributes(assetId);
+          console.error("*** failed to get SVG", assetId, resultAttr[0][2], e.message);
+        }
         const svg = result[0];
         const image = 'data:image/svg+xml;base64,' + Buffer.from(svg).toString('base64');
         return { index, assetId, svg, image };
