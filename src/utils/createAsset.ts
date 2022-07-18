@@ -1,6 +1,7 @@
-const assetBase:any = {
-  width: 24, height: 24,
-  minter: ""
+const assetBase: any = {
+  width: 24,
+  height: 24,
+  minter: "",
 };
 
 const regexNum = /[+-]?(\d*\.\d*|\d+)/;
@@ -8,77 +9,83 @@ const regexNumG = /[+-]?(\d*\.\d*|\d+)/g;
 const regexDivG = /[,\s]+/g;
 const encoder = new TextEncoder();
 
-const normalizePath = (body:string, width:number) => {
-  const ret = body.replace(regexNumG, (str:string)=>{
+const normalizePath = (body: string, width: number) => {
+  const ret = body.replace(regexNumG, (str: string) => {
     return ` ${parseFloat(str)} `;
   });
   const items = ret.split(regexDivG);
 
   let isArc = false;
   let offset = 0;
-  const numArray2:Array<string> = items.reduce((prev:Array<string>, item:string) => {
-    if (regexNum.test(item)) {
-      let value = Math.round(parseFloat(item) * 1024 / width);
-      if (isArc) {
-        const off7 = offset % 7;
-        if (off7 >=2 && off7 <=4) {
-          // we don't want to normalize 'angle', and two flags for 'a' or 'A'
-          value = Math.round(parseFloat(item));        
+  const numArray2: Array<string> = items.reduce(
+    (prev: Array<string>, item: string) => {
+      if (regexNum.test(item)) {
+        let value = Math.round((parseFloat(item) * 1024) / width);
+        if (isArc) {
+          const off7 = offset % 7;
+          if (off7 >= 2 && off7 <= 4) {
+            // we don't want to normalize 'angle', and two flags for 'a' or 'A'
+            value = Math.round(parseFloat(item));
+          }
+          offset++;
         }
-        offset++;
-      }
-      prev.push(value.toString());
-    } else {
-      prev.push(item);
-      const ch = item.substring(-1);
-      if (ch == 'a' || ch == 'A') {
-        isArc = true;
-        offset = 0;
+        prev.push(value.toString());
       } else {
-        isArc = false;
+        prev.push(item);
+        const ch = item.substring(-1);
+        if (ch == "a" || ch == "A") {
+          isArc = true;
+          offset = 0;
+        } else {
+          isArc = false;
+        }
       }
-    }
-    return prev;
-  }, []);
+      return prev;
+    },
+    []
+  );
 
-  return numArray2.join(' ');
-} 
+  return numArray2.join(" ");
+};
 
-const compressPath = (body:string, width:number) => {
-  const ret = body.replace(regexNumG, (str:string)=>{
+const compressPath = (body: string, width: number) => {
+  const ret = body.replace(regexNumG, (str: string) => {
     return ` ${parseFloat(str)} `;
   });
   const items = ret.split(regexDivG);
 
   let isArc = false;
   let offset = 0;
-  const numArray:Array<number> = items.reduce((prev:Array<number>, item:string) => {
-    if (regexNum.test(item)) {
-      let value = Math.round(parseFloat(item) * 1024 / width);
-      if (isArc) {
-        const off7 = offset % 7;
-        if (off7 >=2 && off7 <=4) {
-          // we don't want to normalize 'angle', and two flags for 'a' or 'A'
-          value = Math.round(parseFloat(item));        
+  const numArray: Array<number> = items.reduce(
+    (prev: Array<number>, item: string) => {
+      if (regexNum.test(item)) {
+        let value = Math.round((parseFloat(item) * 1024) / width);
+        if (isArc) {
+          const off7 = offset % 7;
+          if (off7 >= 2 && off7 <= 4) {
+            // we don't want to normalize 'angle', and two flags for 'a' or 'A'
+            value = Math.round(parseFloat(item));
+          }
+          offset++;
         }
-        offset++;
-      }
-      prev.push(value + 0x100 + 1024);
-    } else {
-      let i;
-      for (i = 0; i < item.length; i++) {
-        prev.push(item.charCodeAt(i));
-      }
-      const ch = item.substring(-1);
-      if (ch == 'a' || ch == 'A') {
-        isArc = true;
-        offset = 0;
+        prev.push(value + 0x100 + 1024);
       } else {
-        isArc = false;
+        let i;
+        for (i = 0; i < item.length; i++) {
+          prev.push(item.charCodeAt(i));
+        }
+        const ch = item.substring(-1);
+        if (ch == "a" || ch == "A") {
+          isArc = true;
+          offset = 0;
+        } else {
+          isArc = false;
+        }
       }
-    }
-    return prev;
-  }, []);
+      return prev;
+    },
+    []
+  );
 
   // 12-bit middle-endian compression
   const bytes = new Uint8Array((numArray.length * 3 + 1) / 2);
@@ -86,7 +93,7 @@ const compressPath = (body:string, width:number) => {
     const offset = Math.floor(index / 2) * 3;
     if (index % 2 == 0) {
       bytes[offset] = value % 0x100; // low 8 bits in the first byte
-      bytes[offset + 1] = (value >> 8) & 0x0f; // hight 4 bits in the low 4 bits of middle byte 
+      bytes[offset + 1] = (value >> 8) & 0x0f; // hight 4 bits in the low 4 bits of middle byte
     } else {
       bytes[offset + 2] = value % 0x100; // low 8 bits in the third byte
       bytes[offset + 1] |= (value >> 8) * 0x10; // high 4 bits in the high 4 bits of middle byte
@@ -94,9 +101,14 @@ const compressPath = (body:string, width:number) => {
   });
 
   return bytes;
-} 
+};
 
-export const createAsset = (_asset:any, group:string, category:string, _width:number) => {
+export const createAsset = (
+  _asset: any,
+  group: string,
+  category: string,
+  _width: number
+) => {
   const asset = Object.assign({}, assetBase);
   asset.group = group;
   asset.category = category;
@@ -105,15 +117,19 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
   const width = _asset.width || _width;
   const svgPath = (() => {
     if (_asset.parts) {
-      return _asset.parts.map((part:any) => {
-        const path = normalizePath(part.body, width);
-        return `<path d="${path}" />`;
-      }).join("");
+      return _asset.parts
+        .map((part: any) => {
+          const path = normalizePath(part.body, width);
+          return `<path d="${path}" />`;
+        })
+        .join("");
     } else if (_asset.bodies) {
-      return _asset.bodies.map((body0:any) => {
-        const path = normalizePath(body0, width);
-        return `<path d="${path}" />`;
-      }).join("");
+      return _asset.bodies
+        .map((body0: any) => {
+          const path = normalizePath(body0, width);
+          return `<path d="${path}" />`;
+        })
+        .join("");
     } else {
       const path = normalizePath(_asset.body, width);
       return `<path d="${path}" />`;
@@ -121,36 +137,45 @@ export const createAsset = (_asset:any, group:string, category:string, _width:nu
   })();
   asset.parts = (() => {
     if (_asset.parts) {
-      return _asset.parts.map((part:any) => {
+      return _asset.parts.map((part: any) => {
         part.color = part.color || "";
         part.body = compressPath(part.body, width);
         return part;
       });
     } else if (_asset.bodies) {
-      return _asset.bodies.map((body0:any) => {
+      return _asset.bodies.map((body0: any) => {
         const body = compressPath(body0, width);
-        return { body, color:"" };
+        return { body, color: "" };
       });
     } else {
-      return [{
-        color: "",
-        body: compressPath(_asset.body, width)
-      }];
+      return [
+        {
+          color: "",
+          body: compressPath(_asset.body, width),
+        },
+      ];
     }
   })();
-  asset.asset = Object.assign({}, asset)
+  asset.asset = Object.assign({}, asset);
   //asset.svgPath = svgPath;
-  asset.svgPart = `<g id="item">${svgPath}</g>`; 
-  asset.svg = '<svg viewBox="0 0 1024 1024"  xmlns="http://www.w3.org/2000/svg">'
-    + asset.svgPart
-    + '</svg>';
-  asset.image = 'data:image/svg+xml;base64,' + Buffer.from(asset.svg).toString('base64');
+  asset.svgPart = `<g id="item">${svgPath}</g>`;
+  asset.svg =
+    '<svg viewBox="0 0 1024 1024"  xmlns="http://www.w3.org/2000/svg">' +
+    asset.svgPart +
+    "</svg>";
+  asset.image =
+    "data:image/svg+xml;base64," + Buffer.from(asset.svg).toString("base64");
   console.log(asset);
-  return asset;  
-}
+  return asset;
+};
 
-export const loadAssets = (_resource:any) => {
-  return _resource.assets.map((asset:any) => {
-    return createAsset(asset, _resource.group, _resource.category, _resource.width);
+export const loadAssets = (_resource: any) => {
+  return _resource.assets.map((asset: any) => {
+    return createAsset(
+      asset,
+      _resource.group,
+      _resource.category,
+      _resource.width
+    );
   });
-}
+};

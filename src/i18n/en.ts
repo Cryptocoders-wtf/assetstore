@@ -4,7 +4,7 @@ const lang = {
   menu: {
     connect: "Connect",
     connected: "Connected",
-    nometamask: "No Metamask"
+    nometamask: "No Metamask",
   },
   message: {
     hello: "hello world",

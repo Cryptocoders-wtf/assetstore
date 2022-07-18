@@ -11,8 +11,7 @@ import { initializeEthereum } from "./utils/MetaMask";
 export default defineComponent({
   setup() {
     initializeEthereum();
-    return {
-    };
+    return {};
   },
 });
 </script>

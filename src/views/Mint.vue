@@ -1,11 +1,11 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
     <mint-view
-      network="mainnet" 
+      network="mainnet"
       :expectedNetwork="expectedNetwork"
       :storeAddress="addresses.storeAddress"
       :tokenAddress="addresses.tokenAddress"
-      />
+    />
   </div>
 </template>
 
@@ -18,14 +18,14 @@ import { addresses } from "../../generated/addresses_mainnet";
 export default defineComponent({
   name: "HomePage",
   components: {
-    MintView
+    MintView,
   },
   setup() {
     const expectedNetwork = ChainIds.Mainnet;
     return {
       expectedNetwork,
-      addresses
-    }
-  }
+      addresses,
+    };
+  },
 });
 </script>

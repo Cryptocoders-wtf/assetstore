@@ -49,11 +49,11 @@ export default createStore<State>({
       return state.user !== null && state.user !== undefined;
     },
     displayAccount: (state: State) => {
-      const account = state.account; 
+      const account = state.account;
       if (!account) {
         return "";
       }
-      return account.substring(0,6) + "..." + account.substring(38);
+      return account.substring(0, 6) + "..." + account.substring(38);
     },
   },
   actions: {},

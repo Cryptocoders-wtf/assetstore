@@ -1,11 +1,11 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
     <mint-view
-      network="localhost" 
+      network="localhost"
       :expectedNetwork="expectedNetwork"
       :storeAddress="addresses.storeAddress"
       :tokenAddress="addresses.tokenAddress"
-      />
+    />
   </div>
 </template>
 
@@ -18,14 +18,14 @@ import { addresses } from "../../../contract/cache/addresses_localhost";
 export default defineComponent({
   name: "HomePage",
   components: {
-    MintView
+    MintView,
   },
   setup() {
     const expectedNetwork = ChainIds.Localhost;
     return {
       expectedNetwork,
-      addresses
-    }
-  }
+      addresses,
+    };
+  },
 });
 </script>
