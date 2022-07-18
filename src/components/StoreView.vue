@@ -32,7 +32,7 @@
       <span v-for="asset in assets" :key="asset.assetId">
           <img @click="() => { assetSelected(asset); }" :src="asset.image" 
               class="cursor-pointer w-32 inline-block rounded-xl" />
-          <div v-if="asset.assetId == selectedAsset.assetId" class="mt-2 mb-2 border shadow-md rounded-xs p-2">
+          <div v-if="asset.assetId == selectedAsset?.assetId" class="mt-2 mb-2 border shadow-md rounded-xs p-2">
             <div v-if="selectedAsset.name">
               <p>A sample code to fetch the SVG image of this asset. <button class="border rounded-md shadow-md pl-2 pr-2" @click="copySample">copy</button></p>
               <div class="mt-1 overflow-x-scroll">
@@ -56,6 +56,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { ethers } from "ethers";
+import { AssetData } from "@/models/asset";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -80,11 +81,11 @@ export default defineComponent({
     const categories = ref<string[]>([]);
     const selectedCategory = ref("");
     const assets = ref<object[]>([]);
-    const selectedAsset = ref<any>({});
+    const selectedAsset = ref<AssetData | null>(null);
     const sampleCode = ref("");
     const assetCount = ref(0);
 
-    const assetSelected = async (asset:any) => {
+    const assetSelected = async (asset: AssetData) => {
       // console.log("assetSelected", asset);
       selectedAsset.value = asset;
       if (!asset.name) {
@@ -125,7 +126,7 @@ export default defineComponent({
       console.log("categorySelected", e.target.value);
       selectedCategory.value = e.target.value;
       assets.value = [];
-      selectedAsset.value = {};
+      selectedAsset.value = null;
       const result = await assetStoreRO.functions.getAssetCountInCategory(selectedGroup.value, selectedCategory.value);
       const assetCount = result[0];
       const promises = Array(assetCount).fill("").map(async (_,index) => {
@@ -135,9 +136,9 @@ export default defineComponent({
         try {
           result = await assetStoreRO.functions.generateSVG(assetId); //, { gasLimit: 6000000000 });
           console.log("*** got SVG", assetId);
-        } catch(e:any) {
+        } catch(error: any) {
           const resultAttr = await assetStoreRO.functions.getAttributes(assetId);
-          console.error("*** failed to get SVG", assetId, resultAttr[0][2], e.message);
+          console.error("*** failed to get SVG", assetId, resultAttr[0][2], error.message);
           result = ["N/A"];
         }
         const svg = result[0];
@@ -181,7 +182,9 @@ export default defineComponent({
       navigator.clipboard.writeText(sampleCode.value);
     };
     const copySVG = () => {
-      navigator.clipboard.writeText(selectedAsset.value.svg);
+      if (selectedAsset.value) {
+        navigator.clipboard.writeText(selectedAsset.value.svg);
+      }
     };
 
     return {

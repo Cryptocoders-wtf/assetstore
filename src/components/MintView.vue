@@ -154,6 +154,7 @@ import { actionAssets } from "../resources/materials";
 import { switchNetwork } from "../utils/MetaMask";
 //import { getSystemErrorName } from "util";
 import Connect from "@/components/Connect.vue";
+import { AssetData } from "@/models/asset";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
