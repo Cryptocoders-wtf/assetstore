@@ -75,12 +75,12 @@ export default defineComponent({
       new ethers.providers.JsonRpcProvider() : new ethers.providers.AlchemyProvider(props.network);
 
     const assetStoreRO = new ethers.Contract(props.storeAddress, AssetStore.wabi.abi, provider);
-    const groups = ref([] as string[]);
+    const groups = ref<string[]>([]);
     const selectedGroup = ref("");
-    const categories = ref([] as string[]);
+    const categories = ref<string[]>([]);
     const selectedCategory = ref("");
-    const assets = ref([] as object[]);
-    const selectedAsset = ref({} as any);
+    const assets = ref<object[]>([]);
+    const selectedAsset = ref<any>({});
     const sampleCode = ref("");
     const assetCount = ref(0);
 
