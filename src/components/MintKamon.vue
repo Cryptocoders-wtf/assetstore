@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="mb-2 text-xl font-bold">
+      Kamon Symbols by Hakko Daiodo
+    </div>
     <div v-if='lang==="ja"'>
       <p class="mb-2">これは、フル・オンチェーンNFTの表現力をより高めるために、
         ブロック・チェーン上にさまざまなベクトル画像をアップロードし、
@@ -34,7 +37,7 @@
           displayed below those icons.</p>
         <span v-for="asset in availableAssets" v-bind:key="asset.name">
           <img @click="() => {onSelect(asset)}" :src="asset.image" 
-              class="cursor-pointer w-10 inline-block rounded-xl" />
+              class="cursor-pointer w-16 inline-block rounded-xl" />
         </span>
       </div>
     </div>
@@ -126,7 +129,7 @@
     <div v-if="tokens.length > 0">
       <div class="mt-4 mb-4">
         <p v-if='lang==="ja"' class="font-bold">ミント済みの家紋NFT</p>
-        <p v-else class="font-bold">List of crowd-minted Kamon NFTs</p>
+        <p v-else class="font-bold">List of crowd-minted Kamon Symbol NFTs</p>
       </div>
       <span v-for="token in tokens" :key="token.tokenId">
         <a :href="`${OpenSeaPath}/${token.tokenId}`" class="cursor-pointer" target="_blank">
