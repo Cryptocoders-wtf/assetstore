@@ -9,7 +9,7 @@
         人類の共有アセットとして活用しようという「On-Chain Asset Store」プロジェクトの一環です。</p>
       <p class="mb-2">大量のベクトル画像をチェーン上にアップロードするには多くの「ガス代」が必要ですが、
         それをNFTをミントする方に少しつづ負担していただく「クラウドミンティング」
-        という手法をみなさんにお願いしています。</p>
+        への参加をみなさんにお願いしています。</p>
     </div>
     <div v-else>
       <p class="mb-2">This is a part of "On-Chain Asset Store" project, 
@@ -26,15 +26,15 @@
       </div>
       <div v-else-if="availableAssets.length == 0">
         <p v-if='lang==="ja"'>今回の発行分（{{ totalCount }}個）に関しては、クラウドミンティングが完了いたししました。ご協力、ありがとうございます。
-        さらにアイコンを追加する予定なので、少々お待ちください。</p>
-        <p v-else>Thanks to all the minters, the initial release of {{ totalCount }} icons were sold out.
-          We are going to add more icons soon. Please stay tuned!</p>
+        さらにNFTを追加する予定なので、少々お待ちください。</p>
+        <p v-else>Thanks to all the minters, the initial release of {{ totalCount }} NFTs were sold out.
+          We are going to add more NTFs soon. Please stay tuned!</p>
       </div>
       <div v-else>
         <p v-if='lang==="ja"' class="mb-2">下に表示されている家紋の一つをクリックし、
-          下に表示されるミントボタンを押して下さい。</p>
-        <p v-else class="mb-2">Please select one of Kamons below and the follow the instruction
-          displayed below those icons.</p>
+          下に表示されるミントボタンを押して下さい（家紋のベクトルデータは<a class="underline" href='http://hakko-daiodo.com'>発行大王堂様</a>よりご提供いただいています）。</p>
+        <p v-else class="mb-2">Please select one of Kamon Symbols below and the follow the instruction
+          displayed further below (all vector data were provided by <a class="underline" href='http://hakko-daiodo.com'>Hakko Daiodo</a>).</p>
         <span v-for="asset in availableAssets" v-bind:key="asset.name">
           <img @click="() => {onSelect(asset)}" :src="asset.image" 
               class="cursor-pointer w-16 inline-block rounded-xl" />
@@ -63,12 +63,16 @@
               When the blockchain is updated, this message will dissapear automatically.
             </p>
           </div>
+          <div v-else-if="messageRef == 'message.not_available'" class="text-red-400">
+            <p v-if='lang==="ja"'>残念ながら、他のユーザーによりちょうどミントされたところです。別の画像を選択してください。</p>
+            <p v-else>Another user has just minted this NFT. Please select another image.</p>
+          </div>
           <div v-else>
             <p v-if='lang==="ja"'>以下のエラーメッセージを受け取りました。</p>
             <p v-else>We have received the following error message.</p>
             <p class="text-red-400">{{ messageRef }}</p>
-            <p v-if='lang==="ja"'>再度、アイコンの選択からやり直してください。</p>
-            <p v-else>Please try again from the selection of an icon.</p>
+            <p v-if='lang==="ja"'>再度、画像の選択からやり直してください。</p>
+            <p v-else>Please try again from the selection of an image.</p>
           </div>
         </div>
         <span v-else>
@@ -110,13 +114,12 @@
             <div v-if='lang==="ja"'>
               <p class="mb-2">フリーミントですが、ガス代が0.03〜0.23ETH程度かかります（画像の複雑さや混雑状況によって大きく変動）。</p>
               <p class="mb-2">クラウドミンティングにご協力していただいた方には、
-              「プライマリーNFT」と呼ばれる
-              あなたがクラウドミンティングに協力した証のNFT1つと、
+              「プライマリーNFT」と呼ばれるあなたがクラウドミンティングに協力した証のNFT1つと、
               転売用の「ボーナスNFT」を{{tokensPerAsset-2}}つ、合計{{tokensPerAsset-1}}つのNFTを発行します。</p>
             </div>
             <div v-else>
               <p class="mb-2">This is a free mint, but you need to pay the gas fee, 
-                which is typically 0.03〜0.23ETH (depending on the complexity of the image AND the traffic).</p>
+                which is typically 0.03〜0.23ETH (depending on the complexity of the image, assuming the Gas price is ~15 Gwei).</p>
               <p class="mb-2">If you participate in this crowd-minting effort, 
                 you will receive not only the primary NFT (which is the proof that
                 you are one of minters), but also {{tokensPerAsset-2}} additional bonus NFTs.</p>
@@ -127,7 +130,7 @@
     </div>
   
     <div v-if="tokens.length > 0">
-      <div class="mt-4 mb-4">
+      <div class="mt-4 mb-2">
         <p v-if='lang==="ja"' class="font-bold">ミント済みの家紋NFT</p>
         <p v-else class="font-bold">List of crowd-minted Kamon Symbol NFTs</p>
       </div>
@@ -138,8 +141,23 @@
       </span>
     </div>
     <div class="mt-2">
-      <p><a :href="EtherscanStore" class="underline" target="_blank">AssetStore Etherscan</a></p>
-      <p><a :href="EtherscanToken" class="underline" target="_blank">KamonToken Etherscan</a></p>
+      <div class="mt-4 mb-2">
+        <p v-if='lang==="ja"' class="font-bold">参考リンク</p>
+        <p v-else class="font-bold">Resources</p>
+      </div>
+      <p>Etherscan:
+        <a :href="EtherscanStore" class="underline" target="_blank">AssetStore</a>,
+        <a :href="EtherscanToken" class="underline" target="_blank">KamonToken</a>
+      </p>
+      <p>Github:
+        <a href="https://github.com/Cryptocoders-wtf/assetstore-contract" class="underline" target="_blank">Github (Contract)</a>,
+        <a href="https://github.com/Cryptocoders-wtf/assetstore" class="underline" target="_blank">Github (Web UI)</a>
+      </p>
+      <p>Discord: <a href="https://discord.gg/4JGURQujXK" class="underline" target="_blank">On-chain Asset Store</a></p>
+      <p>Twitter:
+        <a href="https://twitter.com/nounsfes" class="underline" target="_blank">@nounsfes (English)</a>,
+        <a href="https://twitter.com/snakajima" class="underline" target="_blank">@snakajima (Japanese)</a>
+      </p>
     </div>
   </div>
 </template>
@@ -273,7 +291,7 @@ export default defineComponent({
         );
         // Double-check if it's already minted
         if (result[0].toNumber() > 0) {
-          selection.value = null;
+          messageRef.value = "message.not_available";
           return;
         }
       } catch(e) {
