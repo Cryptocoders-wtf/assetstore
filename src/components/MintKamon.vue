@@ -9,7 +9,7 @@
         人類の共有アセットとして活用しようという「On-Chain Asset Store」プロジェクトの一環です。</p>
       <p class="mb-2">大量のベクトル画像をチェーン上にアップロードするには多くの「ガス代」が必要ですが、
         それをNFTをミントする方に少しつづ負担していただく「クラウドミンティング」
-        という手法をみなさんにお願いしています。</p>
+        への参加をみなさんにお願いしています。</p>
     </div>
     <div v-else>
       <p class="mb-2">This is a part of "On-Chain Asset Store" project, 
@@ -32,9 +32,9 @@
       </div>
       <div v-else>
         <p v-if='lang==="ja"' class="mb-2">下に表示されている家紋の一つをクリックし、
-          下に表示されるミントボタンを押して下さい。</p>
-        <p v-else class="mb-2">Please select one of Kamons below and the follow the instruction
-          displayed further below.</p>
+          下に表示されるミントボタンを押して下さい（家紋のベクトルデータは<a class="underline" href='http://hakko-daiodo.com'>発行大王堂様</a>よりご提供いただいています）。</p>
+        <p v-else class="mb-2">Please select one of Kamon Symbols below and the follow the instruction
+          displayed further below (all vector data were provided by <a class="underline" href='http://hakko-daiodo.com'>Hakko Daiodo</a>).</p>
         <span v-for="asset in availableAssets" v-bind:key="asset.name">
           <img @click="() => {onSelect(asset)}" :src="asset.image" 
               class="cursor-pointer w-16 inline-block rounded-xl" />
