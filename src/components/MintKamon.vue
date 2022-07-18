@@ -114,13 +114,12 @@
             <div v-if='lang==="ja"'>
               <p class="mb-2">フリーミントですが、ガス代が0.03〜0.23ETH程度かかります（画像の複雑さや混雑状況によって大きく変動）。</p>
               <p class="mb-2">クラウドミンティングにご協力していただいた方には、
-              「プライマリーNFT」と呼ばれる
-              あなたがクラウドミンティングに協力した証のNFT1つと、
+              「プライマリーNFT」と呼ばれるあなたがクラウドミンティングに協力した証のNFT1つと、
               転売用の「ボーナスNFT」を{{tokensPerAsset-2}}つ、合計{{tokensPerAsset-1}}つのNFTを発行します。</p>
             </div>
             <div v-else>
               <p class="mb-2">This is a free mint, but you need to pay the gas fee, 
-                which is typically 0.03〜0.23ETH (depending on the complexity of the image AND the traffic).</p>
+                which is typically 0.03〜0.23ETH (depending on the complexity of the image, assuming the Gas price is ~15 Gwei).</p>
               <p class="mb-2">If you participate in this crowd-minting effort, 
                 you will receive not only the primary NFT (which is the proof that
                 you are one of minters), but also {{tokensPerAsset-2}} additional bonus NFTs.</p>
@@ -131,7 +130,7 @@
     </div>
   
     <div v-if="tokens.length > 0">
-      <div class="mt-4 mb-4">
+      <div class="mt-4 mb-2">
         <p v-if='lang==="ja"' class="font-bold">ミント済みの家紋NFT</p>
         <p v-else class="font-bold">List of crowd-minted Kamon Symbol NFTs</p>
       </div>
@@ -142,8 +141,23 @@
       </span>
     </div>
     <div class="mt-2">
-      <p><a :href="EtherscanStore" class="underline" target="_blank">AssetStore Etherscan</a></p>
-      <p><a :href="EtherscanToken" class="underline" target="_blank">KamonToken Etherscan</a></p>
+      <div class="mt-4 mb-2">
+        <p v-if='lang==="ja"' class="font-bold">参考リンク</p>
+        <p v-else class="font-bold">Resources</p>
+      </div>
+      <p>Etherscan:
+        <a :href="EtherscanStore" class="underline" target="_blank">AssetStore</a>,
+        <a :href="EtherscanToken" class="underline" target="_blank">KamonToken</a>
+      </p>
+      <p>Github:
+        <a href="https://github.com/Cryptocoders-wtf/assetstore-contract" class="underline" target="_blank">Github (Contract)</a>,
+        <a href="https://github.com/Cryptocoders-wtf/assetstore" class="underline" target="_blank">Github (Web UI)</a>
+      </p>
+      <p>Discord: <a href="https://discord.gg/4JGURQujXK" class="underline" target="_blank">On-chain Asset Store</a></p>
+      <p>Twitter:
+        <a href="https://twitter.com/nounsfes" class="underline" target="_blank">@nounsfes (English)</a>,
+        <a href="https://twitter.com/snakajima" class="underline" target="_blank">@snakajima (Japanese)</a>
+      </p>
     </div>
   </div>
 </template>
