@@ -135,7 +135,7 @@ export default defineComponent({
         try {
           result = await assetStoreRO.functions.generateSVG(assetId); //, { gasLimit: 6000000000 });
           console.log("*** got SVG", assetId);
-        } catch(e) {
+        } catch(e:any) {
           const resultAttr = await assetStoreRO.functions.getAttributes(assetId);
           console.error("*** failed to get SVG", assetId, resultAttr[0][2], e.message);
           result = ["N/A"];

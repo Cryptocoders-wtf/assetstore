@@ -116,7 +116,7 @@
             </div>
             <div v-else>
               <p class="mb-2">This is a free mint, but you need to pay the gas fee, 
-                which is typically 0.03〜0.23ETH　(depending on the complexity of the image AND the traffic).</p>
+                which is typically 0.03〜0.23ETH (depending on the complexity of the image AND the traffic).</p>
               <p class="mb-2">If you participate in this crowd-minting effort, 
                 you will receive not only the primary NFT (which is the proof that
                 you are one of minters), but also {{tokensPerAsset-2}} additional bonus NFTs.</p>
@@ -133,7 +133,7 @@
       </div>
       <span v-for="token in tokens" :key="token.tokenId">
         <a :href="`${OpenSeaPath}/${token.tokenId}`" class="cursor-pointer" target="_blank">
-          <img :src="token.image" class="w-14 inline-block rounded-xl" />
+          <img :src="token.image" class="w-14 inline-block rounded-xl mr-1 mb-1" />
         </a>
       </span>
     </div>
@@ -349,7 +349,7 @@ export default defineComponent({
         const result = await tokenRO.functions.assetIdOfToken(index * tokensPerAsset.value);
         const assetId = result[0].toNumber();
         const svgPart = await assetStoreRO.functions.generateSVGPart(assetId, "item");
-        const svg = await tokenRO.functions.generateSVG(svgPart[0], 0, "item")
+        const svg = await tokenRO.functions.generateSVG(svgPart[0], 8, "item")
         const image = 'data:image/svg+xml;base64,' + Buffer.from(svg[0]).toString('base64');
         return { image, tokenId: index * tokensPerAsset.value }
       });
