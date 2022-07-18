@@ -138,6 +138,7 @@ export default defineComponent({
         } catch(e) {
           const resultAttr = await assetStoreRO.functions.getAttributes(assetId);
           console.error("*** failed to get SVG", assetId, resultAttr[0][2], e.message);
+          result = ["N/A"];
         }
         const svg = result[0];
         const image = 'data:image/svg+xml;base64,' + Buffer.from(svg).toString('base64');
