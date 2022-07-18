@@ -26,15 +26,15 @@
       </div>
       <div v-else-if="availableAssets.length == 0">
         <p v-if='lang==="ja"'>今回の発行分（{{ totalCount }}個）に関しては、クラウドミンティングが完了いたししました。ご協力、ありがとうございます。
-        さらにアイコンを追加する予定なので、少々お待ちください。</p>
-        <p v-else>Thanks to all the minters, the initial release of {{ totalCount }} icons were sold out.
-          We are going to add more icons soon. Please stay tuned!</p>
+        さらにNFTを追加する予定なので、少々お待ちください。</p>
+        <p v-else>Thanks to all the minters, the initial release of {{ totalCount }} NFTs were sold out.
+          We are going to add more NTFs soon. Please stay tuned!</p>
       </div>
       <div v-else>
         <p v-if='lang==="ja"' class="mb-2">下に表示されている家紋の一つをクリックし、
           下に表示されるミントボタンを押して下さい。</p>
         <p v-else class="mb-2">Please select one of Kamons below and the follow the instruction
-          displayed below those icons.</p>
+          displayed further below.</p>
         <span v-for="asset in availableAssets" v-bind:key="asset.name">
           <img @click="() => {onSelect(asset)}" :src="asset.image" 
               class="cursor-pointer w-16 inline-block rounded-xl" />
@@ -63,12 +63,16 @@
               When the blockchain is updated, this message will dissapear automatically.
             </p>
           </div>
+          <div v-else-if="messageRef == 'message.not_available'" class="text-red-400">
+            <p v-if='lang==="ja"'>残念ながら、他のユーザーによりちょうどミントされたところです。別の画像を選択してください。</p>
+            <p v-else>Another user has just minted this NFT. Please select another image.</p>
+          </div>
           <div v-else>
             <p v-if='lang==="ja"'>以下のエラーメッセージを受け取りました。</p>
             <p v-else>We have received the following error message.</p>
             <p class="text-red-400">{{ messageRef }}</p>
-            <p v-if='lang==="ja"'>再度、アイコンの選択からやり直してください。</p>
-            <p v-else>Please try again from the selection of an icon.</p>
+            <p v-if='lang==="ja"'>再度、画像の選択からやり直してください。</p>
+            <p v-else>Please try again from the selection of an image.</p>
           </div>
         </div>
         <span v-else>
@@ -273,7 +277,7 @@ export default defineComponent({
         );
         // Double-check if it's already minted
         if (result[0].toNumber() > 0) {
-          selection.value = null;
+          messageRef.value = "message.not_available";
           return;
         }
       } catch(e) {
