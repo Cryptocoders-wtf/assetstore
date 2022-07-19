@@ -106,7 +106,6 @@
         </div>
         <span v-else>
           <NetworkGate :expectedNetwork="expectedNetwork">
-            <p>Hello World!</p>
             <div class="mb-4">
               <label
                 v-if="lang === 'ja'"
