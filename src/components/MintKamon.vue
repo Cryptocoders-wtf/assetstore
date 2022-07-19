@@ -105,23 +105,8 @@
           </div>
         </div>
         <span v-else>
-          <div v-if="tokenGate == 'invalidNetwork'">
-            <p v-if="lang === 'ja'">ネットワークを切り替えて下さい。</p>
-            <p v-else>Please switch the network.</p>
-            <button
-              @click="switchToValidNetwork"
-              class="mb-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out"
-            >
-              Switch Network
-            </button>
-          </div>
-          <div v-else-if="tokenGate == 'noAccount'">
-            <p v-if="lang === 'ja'" class="mb-2">
-              Metamaskと接続してください。<Connect />
-            </p>
-            <p v-else class="mb-2">Please connect with Metamask.<Connect /></p>
-          </div>
-          <span v-else>
+          <NetworkGate :expectedNetwork="expectedNetwork">
+            <p>Hello World!</p>
             <div class="mb-4">
               <label
                 v-if="lang === 'ja'"
@@ -195,7 +180,7 @@
                 {{ tokensPerAsset - 2 }} additional bonus NFTs.
               </p>
             </div>
-          </span>
+          </NetworkGate>
         </span>
       </div>
     </div>
@@ -213,14 +198,12 @@ import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { ethers } from "ethers";
 import { loadedAssets } from "../resources/kamon";
-import { switchNetwork } from "../utils/MetaMask";
-//import { getSystemErrorName } from "util";
-import Connect from "@/components/Connect.vue";
 import { AssetData, OriginalAssetData, MintSelectionAsset } from "@/models/asset";
 import { Token } from "@/models/token";
 import References from "@/components/References.vue";
 import NFTList from "@/components/NFTList.vue";
 import KeyMessage from "@/components/KeyMessage.vue";
+import NetworkGate from "@/components/NetworkGate.vue";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -232,7 +215,7 @@ const KamonToken = {
 export default defineComponent({
   name: "MintView",
   components: {
-    Connect, References, NFTList, KeyMessage
+    References, NFTList, KeyMessage, NetworkGate
   },
   props: ["network", "storeAddress", "tokenAddress", "expectedNetwork"],
   setup(props) {
@@ -296,19 +279,6 @@ export default defineComponent({
       }
       return null;
     });
-    const tokenGate = computed(() => {
-      if (!store.state.account) {
-        return "noAccount";
-      }
-      if (store.state.chainId != props.expectedNetwork) {
-        return "invalidNetwork";
-      }
-      return "valid";
-    });
-
-    const switchToValidNetwork = async () => {
-      await switchNetwork(props.expectedNetwork);
-    };
 
     const assetStoreRO = new ethers.Contract(
       props.storeAddress,
@@ -480,8 +450,6 @@ export default defineComponent({
       totalCount: loadedAssets.length,
       onSelect,
       selection,
-      tokenGate,
-      switchToValidNetwork,
       mint,
       messageRef,
       minterName,

@@ -1,0 +1,58 @@
+<template>
+  <div>
+    <div v-if="networkGate == 'invalidNetwork'">
+      <p v-if="lang === 'ja'">ネットワークを切り替えて下さい。</p>
+      <p v-else>Please switch the network.</p>
+      <button
+        @click="switchToValidNetwork"
+        class="mb-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out"
+      >
+        Switch Network
+      </button>
+    </div>
+    <div v-else-if="networkGate == 'noAccount'">
+      <p v-if="lang === 'ja'" class="mb-2">
+        Metamaskと接続してください。<Connect />
+      </p>
+      <p v-else class="mb-2">Please connect with Metamask.<Connect /></p>
+    </div>
+    <div v-else>
+      <slot />
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, computed } from "vue";
+import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
+import { switchNetwork } from "../utils/MetaMask";
+import Connect from "@/components/Connect.vue";
+
+export default defineComponent({
+  props: ["expectedNetwork"],
+  components: {
+    Connect
+  },
+  setup(props) {
+    const i18n = useI18n();
+    const lang = computed(() => {
+      return i18n.locale.value;
+    });
+    const store = useStore();
+    const networkGate = computed(() => {
+      if (!store.state.account) {
+        return "noAccount";
+      }
+      if (store.state.chainId != props.expectedNetwork) {
+        return "invalidNetwork";
+      }
+      return "valid";
+    });
+    const switchToValidNetwork = async () => {
+      await switchNetwork(props.expectedNetwork);
+    };
+    return { lang, networkGate, switchToValidNetwork };
+  }    
+});
+</script>
