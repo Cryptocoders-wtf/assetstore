@@ -192,8 +192,10 @@
               <p class="mb-2">
                 クラウドミンティングにご協力していただいた方には、
                 「プライマリーNFT」と呼ばれる
-                あなたがクラウドミンティングに協力した証のNFT１つと、
-                転売用の「ボーナスNFT」を２つ、合計３つのNFTを発行します。
+                あなたがクラウドミンティングに協力した証のNFT1つと、
+                転売用の「ボーナスNFT」を{{ tokensPerAsset - 2 }}つ、合計{{
+                  tokensPerAsset - 1
+                }}つのNFTを発行します。
               </p>
             </div>
             <div v-else>
@@ -204,7 +206,8 @@
               <p class="mb-2">
                 If you participate in this crowd-minting effort, you will
                 receive not only the primary NFT (which is the proof that you
-                are one of minters), but also two additional bonus NFTs.
+                are one of minters), but also
+                {{ tokensPerAsset - 2 }} additional bonus NFTs.
               </p>
             </div>
           </span>
@@ -350,12 +353,13 @@ export default defineComponent({
       AssetStore.wabi.abi,
       provider
     );
-    const materialTokenRO = new ethers.Contract(
+    const tokenRo = new ethers.Contract(
       props.tokenAddress,
       MaterialToken.wabi.abi,
       provider
     );
     const tokens = ref<Token[]>([]);
+    const tokensPerAsset = ref(4); // hard-coded only for MaterialToken
 
     const selection = ref<MintSelectionAsset | null>(null);
     const onSelect = async (asset: OriginalAssetData) => {
@@ -369,10 +373,10 @@ export default defineComponent({
         isLoading: true,
         asset,
       };
-      const promices = Array(4 - 1)
+      const promices = Array(tokensPerAsset.value - 1)
         .fill("")
         .map((_, index) => {
-          return materialTokenRO.functions.generateSVG(asset.svgPart, index, "item");
+          return tokenRo.functions.generateSVG(asset.svgPart, index, "item");
         });
       const images = (await Promise.all(promices)).map((result) => {
         return (
@@ -429,8 +433,8 @@ export default defineComponent({
     };
 
     provider.once("block", () => {
-      materialTokenRO.on(
-        materialTokenRO.filters.Transfer(),
+      tokenRo.on(
+        tokenRo.filters.Transfer(),
         async (from, to, tokenId) => {
           if (
             tokenId.toNumber() % 4 == 0 &&
@@ -444,7 +448,7 @@ export default defineComponent({
     });
 
     const fetchTokens = async () => {
-      const result = await materialTokenRO.functions.totalSupply();
+      const result = await tokenRo.functions.totalSupply();
       const count = result[0].toNumber() / 4;
       const promises2 = Array(count)
         .fill({})
@@ -454,7 +458,7 @@ export default defineComponent({
           }
 
           if (index > 580) {
-            const result = await materialTokenRO.functions.assetIdOfToken(
+            const result = await tokenRo.functions.assetIdOfToken(
               index * 4
             );
             const assetId = result[0].toNumber();
@@ -484,7 +488,7 @@ export default defineComponent({
             return tokens.value[index]; // we already have it
           }
 
-          const result = await materialTokenRO.functions.assetIdOfToken(
+          const result = await tokenRo.functions.assetIdOfToken(
             index * 4
           );
           const assetId = result[0].toNumber();
@@ -492,7 +496,7 @@ export default defineComponent({
             assetId,
             "item"
           );
-          const svg = await materialTokenRO.functions.generateSVG(
+          const svg = await tokenRo.functions.generateSVG(
             svgPart[0],
             0,
             "item"
@@ -521,7 +525,7 @@ export default defineComponent({
       EtherscanStore,
       EtherscanToken,
       OpenSeaPath,
-      tokens,
+      tokens, tokensPerAsset
     };
   },
 });
