@@ -37,7 +37,8 @@ export interface OriginalAssetDataSet {
 export interface MintSelectionAsset {
   isLoading?: boolean;
   asset: OriginalAssetData;
-  image1?: string;
+  images?: string[]; // generic way
+  image1?: string; // old way
   image2?: string;
   image3?: string;
   soulbound?: string;

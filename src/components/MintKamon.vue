@@ -305,6 +305,8 @@ import { loadedAssets } from "../resources/kamon";
 import { switchNetwork } from "../utils/MetaMask";
 //import { getSystemErrorName } from "util";
 import Connect from "@/components/Connect.vue";
+import { AssetData, OriginalAssetData, MintSelectionAsset } from "@/models/asset";
+import { Token } from "@/models/token";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -341,12 +343,12 @@ export default defineComponent({
     const EtherscanStore = `${EtherscanBase}/${props.storeAddress}`;
     const EtherscanToken = `${EtherscanBase}/${props.tokenAddress}`;
     const OpenSeaPath = `${OpenSeaBase}/${props.tokenAddress}`;
-    const assetIndex = loadedAssets.reduce((prev: any, asset: any) => {
+    const assetIndex = loadedAssets.reduce((prev: {[key: string]: AssetData}, asset: AssetData) => {
       prev[asset.name] = asset;
       return prev;
     }, {});
-    const availableAssets = ref(null as Array<any> | null);
-    const messageRef = ref(null as string | null);
+    const availableAssets = ref<AssetData[] | null>(null);
+    const messageRef = ref<string | null>(null);
     const encoder = new TextEncoder();
     const minterName = ref("");
     const validName = computed(() => {
@@ -404,11 +406,11 @@ export default defineComponent({
       KamonToken.wabi.abi,
       provider
     );
-    const tokens = ref([] as Array<any>);
+    const tokens = ref<Token[]>([]);
     const tokensPerAsset = ref(0);
 
-    const selection = ref(null as any);
-    const onSelect = async (asset: any) => {
+    const selection = ref<MintSelectionAsset | null>(null);
+    const onSelect = async (asset: OriginalAssetData) => {      
       //console.log(asset);
       messageRef.value = null;
       if (selection.value && selection.value.asset.name == asset.name) {
@@ -436,6 +438,10 @@ export default defineComponent({
       //console.log("*** mint", selection.value.asset.asset);
       if (!networkContext.value) {
         console.error("Mint: we are not supposed to come here");
+        return;
+      }
+      if (!selection.value) {
+        console.error("Mint: no selection");
         return;
       }
       const asset = selection.value.asset;
@@ -521,7 +527,7 @@ export default defineComponent({
           return index;
         });
       await Promise.all(promises2);
-      availableAssets.value = loadedAssets.filter((asset: any) => {
+      availableAssets.value = loadedAssets.filter((asset: OriginalAssetData) => {
         return !asset.registered;
       });
 
