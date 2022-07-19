@@ -8,8 +8,9 @@ const regexNum = /[+-]?(\d*\.\d*|\d+)/;
 const regexNumG = /[+-]?(\d*\.\d*|\d+)/g;
 const regexDivG = /[,\s]+/g;
 
-const reduceFun = (width: number, func1: (val: number) => number) => {
-  return (prev: {isArc: boolean, offset: number, numArray: Array<number>}, item: string) => {
+// T is number or string
+const reduceFun = <T>(width: number, func1: (val: number) => T, func2: (item: string) => T[]) => {
+  return (prev: {isArc: boolean, offset: number, numArray: T[]}, item: string) => {
     if (regexNum.test(item)) {
       let value = Math.round((parseFloat(item) * 1024) / width);
       if (prev.isArc) {
@@ -20,11 +21,9 @@ const reduceFun = (width: number, func1: (val: number) => number) => {
         }
         prev.offset++;
       }
-      prev.numArray.push(value + 0x100 + 1024);
+      prev.numArray.push(func1(value));
     } else {
-      const codes = item.split("").map((char) => {
-        return char.charCodeAt(0);
-      });
+      const codes = func2(item);
       codes.map((code) => {
         prev.numArray.push(code);
       });
@@ -46,37 +45,14 @@ export const normalizePath = (body: string, width: number) => {
   });
   const items = ret.split(regexDivG);
 
-  let isArc = false;
-  let offset = 0;
-  const numArray2: Array<string> = items.reduce(
-    (prev: Array<string>, item: string) => {
-      if (regexNum.test(item)) {
-        let value = Math.round((parseFloat(item) * 1024) / width);
-        if (isArc) {
-          const off7 = offset % 7;
-          if (off7 >= 2 && off7 <= 4) {
-            // we don't want to normalize 'angle', and two flags for 'a' or 'A'
-            value = Math.round(parseFloat(item));
-          }
-          offset++;
-        }
-        prev.push(value.toString());
-      } else {
-        prev.push(item);
-        const ch = item.substring(-1);
-        if (ch == "a" || ch == "A") {
-          isArc = true;
-          offset = 0;
-        } else {
-          isArc = false;
-        }
-      }
-      return prev;
-    },
-    []
-  );
-
-  return numArray2.join(" ");
+  const func1 = (value: number) => {
+    return value.toString();
+  };
+  const func2 = (item: string) => {
+    return [item];
+  };
+  const { numArray } = items.reduce(reduceFun<string>(width, func1, func2), {isArc: false, offset: 0, numArray: []});
+  return numArray.join(" ");
 };
 export const compressPath = (body: string, width: number) => {
   const ret = body.replace(regexNumG, (str: string) => {
@@ -86,12 +62,17 @@ export const compressPath = (body: string, width: number) => {
 
   const func1 = (value: number) => {
     return value + 0x100 + 1024;
-  }
-  const { numArray } = items.reduce(reduceFun(width, func1), {isArc: false, offset: 0, numArray: []});
+  };
+  const func2 = (item: string) => {
+    return item.split("").map((char) => {
+      return char.charCodeAt(0);
+    });
+  };
+  const { numArray } = items.reduce(reduceFun<number>(width, func1, func2), {isArc: false, offset: 0, numArray: []});
 
   // 12-bit middle-endian compression
   const bytes = new Uint8Array((numArray.length * 3 + 1) / 2);
-  numArray.map((value, index) => {
+  numArray.map((value: number, index) => {
     const offset = Math.floor(index / 2) * 3;
     if (index % 2 == 0) {
       bytes[offset] = value % 0x100; // low 8 bits in the first byte
