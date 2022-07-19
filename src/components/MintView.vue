@@ -1,30 +1,7 @@
 <template>
   <div>
     <div class="mb-2 text-xl font-bold">Google Material Icons</div>
-    <div v-if="lang === 'ja'">
-      <p class="mb-2">
-        これは、フル・オンチェーンNFTの表現力をより高めるために、
-        ブロック・チェーン上にさまざまなベクトル画像をアップロードし、
-        人類の共有アセットとして活用しようという「On-Chain Asset
-        Store」プロジェクトの一環です。
-      </p>
-      <p class="mb-2">
-        大量のベクトル画像をチェーン上にアップロードするには多くの「ガス代」が必要ですが、
-        それをNFTをミントする方に少しつづ負担していただく「クラウドミンティング」
-        という手法をみなさんにお願いしています。
-      </p>
-    </div>
-    <div v-else>
-      <p class="mb-2">
-        This is a part of "On-Chain Asset Store" project, which is an effort to
-        make variety of vector assets available on blockchains.
-      </p>
-      <p class="mb-2">
-        We are using the "crowd-minting", where each minter pays a small amount
-        of gas fees to upload vector images to blockchains, and receives NFTs as
-        rewards.
-      </p>
-    </div>
+    <KeyMessage />
     <div>
       <div v-if="availableAssets == null">
         <p v-if="lang === 'ja'">読み込み中です...</p>
@@ -236,6 +213,7 @@ import { AssetData, OriginalAssetData, MintSelectionAsset } from "@/models/asset
 import { Token } from "@/models/token";
 import References from "@/components/References.vue";
 import NFTList from "@/components/NFTList.vue";
+import KeyMessage from "@/components/KeyMessage.vue";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -247,7 +225,7 @@ const MaterialToken = {
 export default defineComponent({
   name: "MintView",
   components: {
-    Connect, References, NFTList
+    Connect, References, NFTList, KeyMessage
   },
   props: ["network", "storeAddress", "tokenAddress", "expectedNetwork"],
   setup(props) {
