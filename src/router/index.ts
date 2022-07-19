@@ -11,8 +11,6 @@ import TestMint from "../views/TestMint.vue";
 import TestMintKamon from "../views/TestMintKamon.vue";
 import LocalMint from "../views/LocalMint.vue";
 import LocalMintKamon from "../views/LocalMintKamon.vue";
-import Account from "../views/Account.vue";
-import About from "../views/About.vue";
 
 const routeChildren: Array<RouteRecordRaw> = [
   {
@@ -46,10 +44,6 @@ const routeChildren: Array<RouteRecordRaw> = [
   {
     path: "local_kamon",
     component: LocalMintKamon,
-  },
-  {
-    path: "about",
-    component: About,
   },
 ];
 
