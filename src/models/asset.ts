@@ -8,6 +8,10 @@ export interface AssetData {
 
 
 // for import data
+export interface OriginalAssetPart {
+  body: string | Uint8Array;
+  color?: string;
+};
 export interface OriginalAssetData {
   name: string;
   group?: string;
@@ -15,7 +19,7 @@ export interface OriginalAssetData {
   width?: number;
   height?: number;
   bodies?: string[];
-  parts?: { body: string; }[]
+  parts?: OriginalAssetPart[]
   body?: string;
 }
 export interface OriginalAssetDataSet {

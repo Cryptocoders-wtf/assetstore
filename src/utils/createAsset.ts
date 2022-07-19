@@ -1,5 +1,5 @@
 import { assetBase, compressPath, normalizePath } from "./pathUtils";
-import { OriginalAssetData, OriginalAssetDataSet } from "@/models/asset";
+import { OriginalAssetData, OriginalAssetDataSet, OriginalAssetPart } from "@/models/asset";
 
 export const createAsset = (
   _asset: OriginalAssetData,
@@ -16,14 +16,14 @@ export const createAsset = (
   const svgPath = (() => {
     if (_asset.parts) {
       return _asset.parts
-        .map((part: any) => {
-          const path = normalizePath(part.body, width);
+        .map((part: OriginalAssetPart) => {
+          const path = normalizePath(part.body as string, width);
           return `<path d="${path}" />`;
         })
         .join("");
     } else if (_asset.bodies) {
       return _asset.bodies
-        .map((body0: any) => {
+        .map((body0: string) => {
           const path = normalizePath(body0, width);
           return `<path d="${path}" />`;
         })
@@ -35,13 +35,13 @@ export const createAsset = (
   })();
   asset.parts = (() => {
     if (_asset.parts) {
-      return _asset.parts.map((part: any) => {
+      return _asset.parts.map((part: OriginalAssetPart) => {
         part.color = part.color || "";
-        part.body = compressPath(part.body, width);
+        part.body = compressPath(part.body as string, width);
         return part;
       });
     } else if (_asset.bodies) {
-      return _asset.bodies.map((body0: any) => {
+      return _asset.bodies.map((body0: string) => {
         const body = compressPath(body0, width);
         return { body, color: "" };
       });
