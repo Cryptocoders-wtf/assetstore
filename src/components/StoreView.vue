@@ -91,6 +91,12 @@
             <div class="mt-2 overflow-x-scroll">
               <pre class="text-xs">{{ asset.svg }}</pre>
             </div>
+            <div> 
+              <img
+                :src="asset.image"
+                class="cursor-pointer w-64 inline-block rounded-xl"
+              />
+            </div>
           </div>
           <p v-else>...</p>
         </div>
