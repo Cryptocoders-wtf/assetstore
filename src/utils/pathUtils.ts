@@ -28,22 +28,25 @@ const reduceFun = <T>(width: number, func1: (val: number) => T, func2: (item: st
         prev.numArray.push(code);
       });
       const ch = item.substring(-1);
-      if (ch == "a" || ch == "A") {
-        prev.isArc = true;
+      prev.isArc = (ch == "a" || ch == "A");
+      if (prev.isArc) {
         prev.offset = 0;
-      } else {
-        prev.isArc = false;
       }
     }
     return prev;
   };
 };
 
-export const normalizePath = (body: string, width: number) => {
+const initialValue = {isArc: false, offset: 0, numArray: []};
+const prepareBody = (body: string) => {
   const ret = body.replace(regexNumG, (str: string) => {
     return ` ${parseFloat(str)} `;
   });
   const items = ret.split(regexDivG);
+  return items;
+};
+export const normalizePath = (body: string, width: number) => {
+  const items = prepareBody(body);
 
   const func1 = (value: number) => {
     return value.toString();
@@ -51,14 +54,11 @@ export const normalizePath = (body: string, width: number) => {
   const func2 = (item: string) => {
     return [item];
   };
-  const { numArray } = items.reduce(reduceFun<string>(width, func1, func2), {isArc: false, offset: 0, numArray: []});
+  const { numArray } = items.reduce(reduceFun<string>(width, func1, func2), initialValue);
   return numArray.join(" ");
 };
 export const compressPath = (body: string, width: number) => {
-  const ret = body.replace(regexNumG, (str: string) => {
-    return ` ${parseFloat(str)} `;
-  });
-  const items = ret.split(regexDivG);
+  const items = prepareBody(body);
 
   const func1 = (value: number) => {
     return value + 0x100 + 1024;
@@ -68,7 +68,7 @@ export const compressPath = (body: string, width: number) => {
       return char.charCodeAt(0);
     });
   };
-  const { numArray } = items.reduce(reduceFun<number>(width, func1, func2), {isArc: false, offset: 0, numArray: []});
+  const { numArray } = items.reduce(reduceFun<number>(width, func1, func2), initialValue);
 
   // 12-bit middle-endian compression
   const bytes = new Uint8Array((numArray.length * 3 + 1) / 2);
