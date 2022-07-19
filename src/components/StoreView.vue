@@ -158,7 +158,7 @@ export default defineComponent({
       */
     };
 
-    const categorySelected = async (e: any) => {
+    const categorySelected = async (e: Event & {target: HTMLInputElement}) => {
       console.log("categorySelected", e.target.value);
       selectedCategory.value = e.target.value;
       assets.value = [];
@@ -201,7 +201,7 @@ export default defineComponent({
       assets.value = await Promise.all(promises);
     };
 
-    const groupSelected = async (e: any) => {
+    const groupSelected = async (e: Event & {target: HTMLInputElement}) => {
       console.log("groupSelected", e.target.value);
       selectedGroup.value = e.target.value;
       categories.value = [];

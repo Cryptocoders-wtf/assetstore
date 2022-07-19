@@ -62,7 +62,6 @@ export const createAsset = (
     "</svg>";
   asset.image =
     "data:image/svg+xml;base64," + Buffer.from(asset.svg).toString("base64");
-  console.log(asset);
   return asset;
 };
 

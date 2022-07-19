@@ -288,12 +288,12 @@ export default defineComponent({
     const EtherscanStore = `${EtherscanBase}/${props.storeAddress}`;
     const EtherscanToken = `${EtherscanBase}/${props.tokenAddress}`;
     const OpenSeaPath = `${OpenSeaBase}/${props.tokenAddress}`;
-    const assetIndex = actionAssets.reduce((prev: any, asset: any) => {
+    const assetIndex = actionAssets.reduce((prev: {[key: string]: AssetData}, asset: AssetData) => {
       prev[asset.name] = asset;
       return prev;
     }, {});
-    const availableAssets = ref(null as Array<any> | null);
-    const messageRef = ref(null as string | null);
+    const availableAssets = ref<AssetData[] | null>(null);
+    const messageRef = ref<string | null>(null);
     const encoder = new TextEncoder();
     const minterName = ref("");
     const validName = computed(() => {
@@ -351,9 +351,9 @@ export default defineComponent({
       MaterialToken.wabi.abi,
       provider
     );
-    const tokens = ref([] as Array<any>);
+    const tokens = ref<Array<any>>([]);
 
-    const selection = ref(null as any);
+    const selection = ref<any>(null);
     const onSelect = async (asset: any) => {
       //console.log(asset);
       messageRef.value = null;

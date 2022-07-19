@@ -1,7 +1,8 @@
 import { assetBase, compressPath } from "./pathUtils";
+import { OriginalAssetData, OriginalAssetDataSet } from "@/models/asset";
 
 export const createAsset = (
-  _asset: any,
+  _asset: OriginalAssetData,
   group: string,
   category: string,
   _width: number
@@ -21,20 +22,20 @@ export const createAsset = (
     asset.parts = [
       {
         color: "",
-        body: compressPath(_asset.body, width),
+        body: compressPath(_asset.body || "", width),
       },
     ];
   }
   return asset;
 };
 
-export const loadAssets = (_resource: any) => {
-  return _resource.assets.map((asset: any) => {
+export const loadAssets = (_resource: OriginalAssetDataSet) => {
+  return _resource.assets.map((asset: OriginalAssetData) => {
     return createAsset(
       asset,
-      _resource.group,
-      _resource.category,
-      _resource.width
+      _resource.group || "",
+      _resource.category || "",
+      _resource.width || 24
     );
   });
 };
