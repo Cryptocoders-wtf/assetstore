@@ -51,10 +51,6 @@ const routeChildren: Array<RouteRecordRaw> = [
     path: "about",
     component: About,
   },
-  {
-    path: "account",
-    component: Account,
-  },
 ];
 
 const routes: Array<RouteRecordRaw> = [
