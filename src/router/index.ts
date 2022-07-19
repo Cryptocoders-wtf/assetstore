@@ -14,12 +14,16 @@ import LocalMintKamon from "../views/LocalMintKamon.vue";
 
 const routeChildren: Array<RouteRecordRaw> = [
   {
-    path: "assets",
+    path: "",
     component: Home,
   },
   {
-    path: "",
+    path: "material",
     component: Mint,
+  },
+  {
+    path: "kamon",
+    component: TestMintKamon,
   },
   {
     path: "test",

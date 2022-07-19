@@ -2,9 +2,9 @@
   <div class="layout">
     <div id="nav" class="mb-2 mt-2">
       <!--img class="mb-4" src="@/assets/banner.svg" /-->
-      <router-link :to="localizedUrl('/')" class="text-2xl">Mint</router-link> |
-      <router-link :to="localizedUrl('/assets')" class="text-2xl"
-        >Assets</router-link
+      <router-link :to="localizedUrl('/')" class="text-md">Home</router-link> |
+      <router-link :to="localizedUrl('/material')" class="text-md">Material</router-link> |
+      <router-link :to="localizedUrl('/kamon')" class="text-md">Kamon</router-link
       >
       <Languages class="mt-4" />
     </div>
