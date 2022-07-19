@@ -232,18 +232,8 @@
         </a>
       </span>
     </div>
-    <div class="mt-2">
-      <p>
-        <a :href="EtherscanStore" class="underline" target="_blank"
-          >AssetStore Etherscan</a
-        >
-      </p>
-      <p>
-        <a :href="EtherscanToken" class="underline" target="_blank"
-          >MaterialToken Etherscan</a
-        >
-      </p>
-    </div>
+    <References :EtherscanStore="EtherscanStore" :EtherscanToken="EtherscanToken"
+              TokenName="MaterialToken" />
   </div>
 </template>
 
@@ -259,6 +249,7 @@ import { switchNetwork } from "../utils/MetaMask";
 import Connect from "@/components/Connect.vue";
 import { AssetData, OriginalAssetData, MintSelectionAsset } from "@/models/asset";
 import { Token } from "@/models/token";
+import References from "@/components/References.vue";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -270,7 +261,7 @@ const MaterialToken = {
 export default defineComponent({
   name: "MintView",
   components: {
-    Connect,
+    Connect, References
   },
   props: ["network", "storeAddress", "tokenAddress", "expectedNetwork"],
   setup(props) {
