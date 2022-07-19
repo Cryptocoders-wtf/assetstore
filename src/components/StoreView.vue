@@ -16,7 +16,7 @@
         It will explain how to access the image. 
       </p>
     </div>
-    <div v-if="assetCount > 0" class="mb-2">
+    <div v-if="assetCount > 0" class="mb-2 font-bold">
       Total Asset Count: {{ assetCount }}
     </div>
     <select
@@ -105,6 +105,7 @@
     <div v-else-if="selectedCategory">
       <p class="mt-2">Loading assets...</p>
     </div>
+    <References :EtherscanStore="EtherscanStore" />
   </div>
 </template>
 
@@ -114,6 +115,7 @@ import { useI18n } from "vue-i18n";
 import { ethers } from "ethers";
 import { AssetData } from "@/models/asset";
 import KeyMessage from "@/components/KeyMessage.vue";
+import References from "@/components/References.vue";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -123,7 +125,7 @@ export default defineComponent({
   name: "StoreView",
   props: ["network", "storeAddress"],
   components: {
-    KeyMessage
+    KeyMessage, References
   },
   setup(props) {
     const i18n = useI18n();
@@ -151,6 +153,11 @@ export default defineComponent({
     const selectedAsset = ref<AssetData | null>(null);
     const sampleCode = ref("");
     const assetCount = ref(0);
+    const EtherscanBase =
+      props.network == "rinkeby"
+        ? "https://rinkeby.etherscan.io/address"
+        : "https://etherscan.io/address";
+    const EtherscanStore = `${EtherscanBase}/${props.storeAddress}`;
 
     const assetSelected = async (asset: AssetData) => {
       // console.log("assetSelected", asset);
@@ -283,7 +290,7 @@ export default defineComponent({
     };
 
     return {
-      lang,
+      lang, EtherscanStore,
       assetCount,
       groups,
       groupSelected,
