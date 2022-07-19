@@ -37,7 +37,6 @@ const reduceFun = <T>(width: number, func1: (val: number) => T, func2: (item: st
   };
 };
 
-const initialValue = {isArc: false, offset: 0, numArray: []};
 const prepareBody = (body: string) => {
   const ret = body.replace(regexNumG, (str: string) => {
     return ` ${parseFloat(str)} `;
@@ -54,7 +53,7 @@ export const normalizePath = (body: string, width: number) => {
   const func2 = (item: string) => {
     return [item];
   };
-  const { numArray } = items.reduce(reduceFun<string>(width, func1, func2), initialValue);
+  const { numArray } = items.reduce(reduceFun<string>(width, func1, func2), {isArc: false, offset: 0, numArray: []});
   return numArray.join(" ");
 };
 export const compressPath = (body: string, width: number) => {
@@ -68,7 +67,7 @@ export const compressPath = (body: string, width: number) => {
       return char.charCodeAt(0);
     });
   };
-  const { numArray } = items.reduce(reduceFun<number>(width, func1, func2), initialValue);
+  const { numArray } = items.reduce(reduceFun<number>(width, func1, func2), {isArc: false, offset: 0, numArray: []});
 
   // 12-bit middle-endian compression
   const bytes = new Uint8Array((numArray.length * 3 + 1) / 2);
