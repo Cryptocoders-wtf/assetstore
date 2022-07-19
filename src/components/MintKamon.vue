@@ -241,6 +241,7 @@
         </a>
       </span>
     </div>
+    <References :EtherscanStore="EtherscanStore" :EtherscanToken="EtherscanToken" />
     <div class="mt-2">
       <div class="mt-4 mb-2">
         <p v-if="lang === 'ja'" class="font-bold">参考リンク</p>
@@ -307,6 +308,7 @@ import { switchNetwork } from "../utils/MetaMask";
 import Connect from "@/components/Connect.vue";
 import { AssetData, OriginalAssetData, MintSelectionAsset } from "@/models/asset";
 import { Token } from "@/models/token";
+import References from "@/components/References.vue";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -318,7 +320,7 @@ const KamonToken = {
 export default defineComponent({
   name: "MintView",
   components: {
-    Connect,
+    Connect, References
   },
   props: ["network", "storeAddress", "tokenAddress", "expectedNetwork"],
   setup(props) {
