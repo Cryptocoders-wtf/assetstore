@@ -22,10 +22,12 @@ const reduceFun = (width: number, func1: (val: number) => number) => {
       }
       prev.numArray.push(value + 0x100 + 1024);
     } else {
-      let i;
-      for (i = 0; i < item.length; i++) {
-        prev.numArray.push(item.charCodeAt(i));
-      }
+      const codes = item.split("").map((char) => {
+        return char.charCodeAt(0);
+      });
+      codes.map((code) => {
+        prev.numArray.push(code);
+      });
       const ch = item.substring(-1);
       if (ch == "a" || ch == "A") {
         prev.isArc = true;
