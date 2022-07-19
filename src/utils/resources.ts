@@ -1,5 +1,5 @@
 import { assetBase, compressPath } from "./pathUtils";
-import { OriginalAssetData, OriginalAssetDataSet } from "@/models/asset";
+import { OriginalAssetData, OriginalAssetDataSet, OriginalAssetPart } from "@/models/asset";
 
 export const createAsset = (
   _asset: OriginalAssetData,
@@ -13,9 +13,9 @@ export const createAsset = (
   asset.name = _asset.name;
   const width = _asset.width || _width;
   if (_asset.parts) {
-    asset.parts = _asset.parts.map((part: any) => {
+    asset.parts = _asset.parts.map((part: OriginalAssetPart) => {
       part.color = part.color || "";
-      part.body = compressPath(part.body, width);
+      part.body = compressPath(part.body as string, width);
       return part;
     });
   } else {

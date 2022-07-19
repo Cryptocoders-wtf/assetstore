@@ -251,7 +251,8 @@ import { actionAssets } from "../resources/materials";
 import { switchNetwork } from "../utils/MetaMask";
 //import { getSystemErrorName } from "util";
 import Connect from "@/components/Connect.vue";
-import { AssetData } from "@/models/asset";
+import { AssetData, OriginalAssetData, MintSelectionAsset } from "@/models/asset";
+import { Token } from "@/models/token";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -351,10 +352,10 @@ export default defineComponent({
       MaterialToken.wabi.abi,
       provider
     );
-    const tokens = ref<Array<any>>([]);
+    const tokens = ref<Token[]>([]);
 
-    const selection = ref<any>(null);
-    const onSelect = async (asset: any) => {
+    const selection = ref<MintSelectionAsset | null>(null);
+    const onSelect = async (asset: OriginalAssetData) => {
       //console.log(asset);
       messageRef.value = null;
       if (selection.value && selection.value.asset.name == asset.name) {
@@ -397,6 +398,10 @@ export default defineComponent({
       //console.log("*** mint", selection.value.asset.asset);
       if (!networkContext.value) {
         console.error("Mint: we are not supposed to come here");
+        return;
+      }
+      if (!selection.value) {
+        console.error("Mint: Not select asset");
         return;
       }
       const asset = selection.value.asset;
@@ -480,7 +485,7 @@ export default defineComponent({
           return index;
         });
       await Promise.all(promises2);
-      availableAssets.value = actionAssets.filter((asset: any) => {
+      availableAssets.value = actionAssets.filter((asset: OriginalAssetData) => {
         return !asset.registered;
       });
 

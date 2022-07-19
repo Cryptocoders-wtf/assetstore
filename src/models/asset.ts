@@ -21,6 +21,10 @@ export interface OriginalAssetData {
   bodies?: string[];
   parts?: OriginalAssetPart[]
   body?: string;
+  svgPart?: string;
+  registered?: boolean;
+  minter?: string;
+  soulbound?: string;
 }
 export interface OriginalAssetDataSet {
   group?: string;
@@ -28,4 +32,13 @@ export interface OriginalAssetDataSet {
   width?: number;
   height: number;
   assets: OriginalAssetData[];
+}
+
+export interface MintSelectionAsset {
+  isLoading?: boolean;
+  asset: OriginalAssetData;
+  image1?: string;
+  image2?: string;
+  image3?: string;
+  soulbound?: string;
 }
