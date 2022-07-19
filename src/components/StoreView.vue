@@ -11,9 +11,9 @@
     </div>
     <div v-else>
       <p class="mb-2">
-        You are able to see the list of vector asset uploaed to the block chain by minters.
+        You are able to see the list of vector assets already uploaded to the blockchain by minters.
         Please select "group" and "category", and click one of images below.
-        It will explain how to access the image. 
+        It will explain how to access the vector data. 
       </p>
     </div>
     <div v-if="assetCount > 0" class="mb-2 font-bold">
