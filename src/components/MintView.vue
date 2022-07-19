@@ -88,9 +88,12 @@
         <p v-else class="mb-40">Preparing to mint...</p>
       </div>
       <div v-else>
-        <img :src="selection.image1" class="w-16 inline-block rounded-xl m-2" />
-        <img :src="selection.image2" class="w-16 inline-block rounded-xl m-2" />
-        <img :src="selection.image3" class="w-16 inline-block rounded-xl m-2" />
+        <img
+          v-for="image in selection.images"
+          :key="image"
+          :src="image"
+          class="w-16 inline-block rounded-xl m-2"
+        />
         <div v-if="messageRef" class="mb-2">
           <div v-if="messageRef == 'message.minting'">
             <p v-if="lang === 'ja'">処理中です...</p>
@@ -366,33 +369,18 @@ export default defineComponent({
         isLoading: true,
         asset,
       };
-      const image1 = await materialTokenRO.functions.generateSVG(
-        asset.svgPart,
-        0,
-        "item"
-      );
-      const image2 = await materialTokenRO.functions.generateSVG(
-        asset.svgPart,
-        1,
-        "item"
-      );
-      const image3 = await materialTokenRO.functions.generateSVG(
-        asset.svgPart,
-        2,
-        "item"
-      );
-      selection.value = {
-        image1:
+      const promices = Array(4 - 1)
+        .fill("")
+        .map((_, index) => {
+          return materialTokenRO.functions.generateSVG(asset.svgPart, index, "item");
+        });
+      const images = (await Promise.all(promices)).map((result) => {
+        return (
           "data:image/svg+xml;base64," +
-          Buffer.from(image1[0]).toString("base64"),
-        image2:
-          "data:image/svg+xml;base64," +
-          Buffer.from(image2[0]).toString("base64"),
-        image3:
-          "data:image/svg+xml;base64," +
-          Buffer.from(image3[0]).toString("base64"),
-        asset,
-      };
+          Buffer.from(result[0]).toString("base64")
+        );
+      });
+      selection.value = { images, asset };
     };
     const mint = async () => {
       //console.log("*** mint", selection.value.asset.asset);
