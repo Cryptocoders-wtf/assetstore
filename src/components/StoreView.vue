@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="mb-2 text-xl font-bold">On-chain Asset Store</div>
     <div v-if="assetCount > 0" class="mb-2">
       Total Asset Count: {{ assetCount }}
     </div>

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="mb-2 text-xl font-bold">Google Material Icons</div>
     <div v-if="lang === 'ja'">
       <p class="mb-2">
         これは、フル・オンチェーンNFTの表現力をより高めるために、
