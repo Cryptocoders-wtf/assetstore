@@ -8,10 +8,12 @@
       Etherscan:
       <a :href="EtherscanStore" class="underline" target="_blank"
         >AssetStore</a
-      >,
-      <a :href="EtherscanToken" class="underline" target="_blank"
-        >KamonToken</a
       >
+      <span v-if="TokenName">,
+        <a :href="EtherscanToken" class="underline" target="_blank"
+          >{{ TokenName }}</a
+        >
+      </span>
     </p>
     <p>
       Github:
@@ -57,7 +59,7 @@ import { defineComponent, computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
-  props: ["EtherscanStore", "EtherscanToken"],
+  props: ["EtherscanStore", "EtherscanToken", "TokenName"],
   setup(props) {
     const i18n = useI18n();
     const lang = computed(() => {
