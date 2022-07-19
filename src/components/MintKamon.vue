@@ -282,7 +282,7 @@ export default defineComponent({
     const route = useRoute();
     const affiliateId =
       typeof route.query.ref == "string" ? parseInt(route.query.ref) || 0 : 0;
-    console.log("***", affiliateId);
+    //console.log("***", affiliateId);
 
     const EtherscanBase =
       props.network == "rinkeby"
@@ -308,7 +308,7 @@ export default defineComponent({
       return length <= 32;
     });
 
-    console.log("* expectedNetwork", props.expectedNetwork);
+    console.log("* network", props.expectedNetwork);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
