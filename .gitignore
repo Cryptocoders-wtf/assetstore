@@ -2,6 +2,7 @@
 node_modules
 /dist
 /src/generated
+/.firebase
 
 # local env files
 .env.local
