@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="mb-2 text-xl font-bold">On-chain Asset Store</div>
+    <KeyMessage />
     <div v-if="assetCount > 0" class="mb-2">
       Total Asset Count: {{ assetCount }}
     </div>
@@ -91,6 +92,7 @@
 import { defineComponent, ref } from "vue";
 import { ethers } from "ethers";
 import { AssetData } from "@/models/asset";
+import KeyMessage from "@/components/KeyMessage.vue";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -99,6 +101,9 @@ const AssetStore = {
 export default defineComponent({
   name: "StoreView",
   props: ["network", "storeAddress"],
+  components: {
+    KeyMessage
+  },
   setup(props) {
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
