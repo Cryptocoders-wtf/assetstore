@@ -2,6 +2,20 @@
   <div>
     <div class="mb-2 text-xl font-bold">On-chain Asset Store</div>
     <KeyMessage />
+    <div v-if="lang === 'ja'">
+      <p class="mb-2">
+        以下は、これまでクラウドミントによりブロックチェーン上にセーブされたベクトルアセットで、
+        他のスマートコントラクトからアクセスが可能になっています。
+        グループ、カテゴリーを選び、表示されたイメージとクリックすると、アクセスの方法が表示されます。
+      </p>
+    </div>
+    <div v-else>
+      <p class="mb-2">
+        You are able to see the list of vector asset uploaed to the block chain by minters.
+        Please select "group" and "category", and click one of images below.
+        It will explain how to access the image. 
+      </p>
+    </div>
     <div v-if="assetCount > 0" class="mb-2">
       Total Asset Count: {{ assetCount }}
     </div>
@@ -46,7 +60,7 @@
             }
           "
           :src="asset.image"
-          class="cursor-pointer w-32 inline-block rounded-xl"
+          class="cursor-pointer w-12 inline-block rounded-xl"
         />
         <div
           v-if="asset.assetId == selectedAsset?.assetId"
@@ -66,7 +80,7 @@
               <pre class="text-xs">{{ sampleCode }}</pre>
             </div>
             <p class="mt-2">
-              The contents of the variable "svg".
+              The fetched "svg" data.
               <button
                 class="border rounded-md shadow-md pl-2 pr-2"
                 @click="copySVG"
@@ -89,7 +103,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { ethers } from "ethers";
 import { AssetData } from "@/models/asset";
 import KeyMessage from "@/components/KeyMessage.vue";
@@ -105,6 +120,10 @@ export default defineComponent({
     KeyMessage
   },
   setup(props) {
+    const i18n = useI18n();
+    const lang = computed(() => {
+      return i18n.locale.value;
+    });
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
@@ -258,6 +277,7 @@ export default defineComponent({
     };
 
     return {
+      lang,
       assetCount,
       groups,
       groupSelected,

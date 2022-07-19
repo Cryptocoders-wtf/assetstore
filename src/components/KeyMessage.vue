@@ -20,7 +20,7 @@
       </p>
       <p class="mb-2">
         We are using the "crowd-minting", where each minter pays a small amount
-        of gas fees to upload vector images to blockchains, and receives NFTs as
+        of gas fees to upload vector images to blockchains, and receives multiple NFTs as
         rewards.
       </p>
     </div>
