@@ -223,24 +223,7 @@
       </div>
     </div>
 
-    <div v-if="tokens.length > 0">
-      <div class="mt-4 mb-2">
-        <p v-if="lang === 'ja'" class="font-bold">ミント済みの家紋NFT</p>
-        <p v-else class="font-bold">List of crowd-minted Kamon Symbol NFTs</p>
-      </div>
-      <span v-for="token in tokens" :key="token.tokenId">
-        <a
-          :href="`${OpenSeaPath}/${token.tokenId}`"
-          class="cursor-pointer"
-          target="_blank"
-        >
-          <img
-            :src="token.image"
-            class="w-14 inline-block rounded-xl mr-1 mb-1"
-          />
-        </a>
-      </span>
-    </div>
+    <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
     <References :EtherscanStore="EtherscanStore" :EtherscanToken="EtherscanToken"
               TokenName="KamonToken" />
   </div>
@@ -259,6 +242,7 @@ import Connect from "@/components/Connect.vue";
 import { AssetData, OriginalAssetData, MintSelectionAsset } from "@/models/asset";
 import { Token } from "@/models/token";
 import References from "@/components/References.vue";
+import NFTList from "@/components/NFTList.vue";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -270,7 +254,7 @@ const KamonToken = {
 export default defineComponent({
   name: "MintView",
   components: {
-    Connect, References
+    Connect, References, NFTList
   },
   props: ["network", "storeAddress", "tokenAddress", "expectedNetwork"],
   setup(props) {
