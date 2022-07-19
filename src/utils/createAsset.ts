@@ -53,7 +53,6 @@ export const createAsset = (
       ];
     }
   })();
-  asset.asset = Object.assign({}, asset);
   //asset.svgPath = svgPath;
   asset.svgPart = `<g id="item">${svgPath}</g>`;
   asset.svg =
