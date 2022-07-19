@@ -342,7 +342,7 @@ export default defineComponent({
     const EtherscanToken = `${EtherscanBase}/${props.tokenAddress}`;
     const OpenSeaPath = `${OpenSeaBase}/${props.tokenAddress}`;
     const assetIndex = loadedAssets.reduce((prev: any, asset: any) => {
-      prev[asset.asset.name] = asset;
+      prev[asset.name] = asset;
       return prev;
     }, {});
     const availableAssets = ref(null as Array<any> | null);
@@ -438,7 +438,7 @@ export default defineComponent({
         console.error("Mint: we are not supposed to come here");
         return;
       }
-      const asset = selection.value.asset.asset;
+      const asset = selection.value.asset;
       try {
         const result = await assetStoreRO.functions.getAssetIdWithName(
           asset.group,
