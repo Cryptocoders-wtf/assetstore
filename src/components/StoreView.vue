@@ -153,12 +153,12 @@ export default defineComponent({
     const selectedAsset = ref<AssetData | null>(null);
     const sampleCode = ref("");
     const assetCount = ref(0);
-    const EtherscanBase =
-      props.addresses.network == "rinkeby"
-        ? "https://rinkeby.etherscan.io/address"
-        : "https://etherscan.io/address";
-    const EtherscanStore = `${EtherscanBase}/${props.addresses.storeAddress}`;
-
+    const EtherscanStore = computed(() => {
+      if (props.addresses.EtherscanBase) {
+        return `${props.addresses.EtherscanBase}/${props.addresses.storeAddress}`;
+      }
+      return null;
+    });
     const assetSelected = async (asset: AssetData) => {
       // console.log("assetSelected", asset);
       selectedAsset.value = asset;

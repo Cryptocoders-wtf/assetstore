@@ -19,6 +19,7 @@ export const getAddresses = (network: string) => {
   if (network == "rinkeby") {
     return {
       network,
+      EtherscanBase: "https://rinkeby.etherscan.io/address",
       chainId: ChainIds.RinkebyTestNet,
       storeAddress: rinkeby.storeAddress,
       tokenAddress: rinkeby.tokenAddress,
@@ -28,6 +29,7 @@ export const getAddresses = (network: string) => {
   if (network == "mainnet") {
     return {
       network,
+      EtherscanBase: "https://etherscan.io/address",
       chainId: ChainIds.Mainnet,
       storeAddress: mainnet.storeAddress,
       tokenAddress: mainnet.tokenAddress

@@ -4,7 +4,7 @@
       <p v-if="lang === 'ja'" class="font-bold">参考リンク</p>
       <p v-else class="font-bold">Resources</p>
     </div>
-    <p>
+    <p v-if="EtherscanStore">
       Etherscan:
       <a :href="EtherscanStore" class="underline" target="_blank"
         >AssetStore</a
