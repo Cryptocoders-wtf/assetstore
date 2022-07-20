@@ -27,7 +27,7 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   props: ["tokens", "OpenSeaPath"],
-  setup(props) {
+  setup() {
     const i18n = useI18n();
     const lang = computed(() => {
       return i18n.locale.value;

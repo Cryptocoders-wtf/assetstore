@@ -32,8 +32,7 @@ import { defineComponent, computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
-  props: ["EtherscanStore", "EtherscanToken", "TokenName"],
-  setup(props) {
+  setup() {
     const i18n = useI18n();
     const lang = computed(() => {
       return i18n.locale.value;
