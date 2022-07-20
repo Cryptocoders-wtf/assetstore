@@ -13,13 +13,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, onMounted } from "vue";
-import { useStore } from "vuex";
-
+import { defineComponent } from "vue";
 import { useI18nParam } from "@/i18n/utils";
-
 import Languages from "@/components/Languages.vue";
-import Connect from "@/components/Connect.vue";
 
 export default defineComponent({
   name: "AppLayout",
@@ -27,7 +23,6 @@ export default defineComponent({
     Languages,
   },
   async setup() {
-    const store = useStore();
     useI18nParam();
 
     return {
