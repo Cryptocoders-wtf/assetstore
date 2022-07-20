@@ -5,7 +5,7 @@ import NotFound from "../components/NotFound.vue";
 
 import Home from "../views/Home.vue";
 import Mint from "../views/Mint.vue";
-import TestMintKamon from "../views/TestMintKamon.vue";
+import MintKamon from "../views/MintKamon.vue";
 
 const routeChildren: Array<RouteRecordRaw> = [
   {
@@ -18,7 +18,7 @@ const routeChildren: Array<RouteRecordRaw> = [
   },
   {
     path: "kamon",
-    component: TestMintKamon,
+    component: MintKamon,
   },
 ];
 
