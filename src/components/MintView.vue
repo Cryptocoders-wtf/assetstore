@@ -98,7 +98,7 @@
           </div>
         </div>
         <span v-else>
-          <NetworkGate :expectedNetwork="expectedNetwork">
+          <NetworkGate :expectedNetwork="addresses.chainId">
             <div class="mb-4">
               <label
                 v-if="lang === 'ja'"
@@ -209,7 +209,7 @@ export default defineComponent({
   components: {
     References, NFTList, KeyMessage, NetworkGate
   },
-  props: ["network", "storeAddress", "tokenAddress", "expectedNetwork"],
+  props: ["addresses"],
   setup(props) {
     const i18n = useI18n();
     const lang = computed(() => {
@@ -222,16 +222,16 @@ export default defineComponent({
     //console.log("***", affiliateId);
 
     const EtherscanBase =
-      props.network == "rinkeby"
+      props.addresses.network == "rinkeby"
         ? "https://rinkeby.etherscan.io/address"
         : "https://etherscan.io/address";
     const OpenSeaBase =
-      props.network == "rinkeby"
+      props.addresses.network == "rinkeby"
         ? "https://testnets.opensea.io/assets/rinkeby"
         : "https://opensea.io/assets/ethereum";
-    const EtherscanStore = `${EtherscanBase}/${props.storeAddress}`;
-    const EtherscanToken = `${EtherscanBase}/${props.tokenAddress}`;
-    const OpenSeaPath = `${OpenSeaBase}/${props.tokenAddress}`;
+    const EtherscanStore = `${EtherscanBase}/${props.addresses.storeAddress}`;
+    const EtherscanToken = `${EtherscanBase}/${props.addresses.tokenAddress}`;
+    const OpenSeaPath = `${OpenSeaBase}/${props.addresses.tokenAddress}`;
     const assetIndex = actionAssets.reduce((prev: {[key: string]: AssetData}, asset: AssetData) => {
       prev[asset.name] = asset;
       return prev;
@@ -245,24 +245,24 @@ export default defineComponent({
       return length <= 32;
     });
 
-    console.log("* network", props.expectedNetwork);
+    console.log("* network", props.addresses.chainId);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
     const provider =
-      props.network == "localhost"
+      props.addresses.network == "localhost"
         ? new ethers.providers.JsonRpcProvider()
-        : new ethers.providers.AlchemyProvider(props.network);
+        : new ethers.providers.AlchemyProvider(props.addresses.network);
 
     let prevProvider: ethers.providers.Web3Provider | null = null;
     const networkContext = computed(() => {
-      if (store.state.account && store.state.chainId == props.expectedNetwork) {
+      if (store.state.account && store.state.chainId == props.addresses.chainId) {
         const provider = new ethers.providers.Web3Provider(
           store.state.ethereum
         );
         const signer = provider.getSigner();
         const contract = new ethers.Contract(
-          props.tokenAddress,
+          props.addresses.tokenAddress,
           MaterialToken.wabi.abi,
           signer
         );
@@ -273,12 +273,12 @@ export default defineComponent({
     });
 
     const assetStoreRO = new ethers.Contract(
-      props.storeAddress,
+      props.addresses.storeAddress,
       AssetStore.wabi.abi,
       provider
     );
     const tokenRo = new ethers.Contract(
-      props.tokenAddress,
+      props.addresses.tokenAddress,
       MaterialToken.wabi.abi,
       provider
     );

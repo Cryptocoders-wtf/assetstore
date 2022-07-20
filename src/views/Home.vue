@@ -7,8 +7,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
-import StoreView from "@/components/StoreView.vue";
 import { getAddresses } from "@/utils/networks";
+import StoreView from "@/components/StoreView.vue";
 
 export default defineComponent({
   name: "HomePage",

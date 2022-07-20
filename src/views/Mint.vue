@@ -1,19 +1,14 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
-    <mint-view
-      network="mainnet"
-      :expectedNetwork="expectedNetwork"
-      :storeAddress="addresses.storeAddress"
-      :tokenAddress="addresses.tokenAddress"
-    />
+    <mint-view :addresses="addresses" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useRoute } from "vue-router";
+import { getAddresses } from "@/utils/networks";
 import MintView from "@/components/MintView.vue";
-import { ChainIds } from "../utils/MetaMask";
-import { addresses } from "../../generated/addresses_mainnet";
 
 export default defineComponent({
   name: "HomePage",
@@ -21,9 +16,10 @@ export default defineComponent({
     MintView,
   },
   setup() {
-    const expectedNetwork = ChainIds.Mainnet;
+    const route = useRoute();
+    const network = (typeof route.query.network == "string") ? route.query.network : "mainnet";
+    const addresses = getAddresses(network);
     return {
-      expectedNetwork,
       addresses,
     };
   },
