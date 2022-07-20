@@ -1,20 +1,14 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
-    <mint-view
-      network="rinkeby"
-      :expectedNetwork="expectedNetwork"
-      :storeAddress="addresses.storeAddress"
-      :tokenAddress="kamon_addresses.kamonAddress"
-    />
+    <mint-view :addresses="addresses" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useRoute } from "vue-router";
+import { getAddresses } from "@/utils/networks";
 import MintView from "@/components/MintKamon.vue";
-import { ChainIds } from "../utils/MetaMask";
-import { addresses } from "../../../contract/cache/addresses_rinkeby";
-import { kamon_addresses } from "../../../contract/cache/addresses_kamon_rinkeby";
 
 export default defineComponent({
   name: "HomePage",
@@ -22,11 +16,11 @@ export default defineComponent({
     MintView,
   },
   setup() {
-    const expectedNetwork = ChainIds.RinkebyTestNet;
+    const route = useRoute();
+    const network = (typeof route.query.network == "string") ? route.query.network : "mainnet";
+    const addresses = getAddresses(network);
     return {
-      expectedNetwork,
       addresses,
-      kamon_addresses,
     };
   },
 });

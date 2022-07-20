@@ -1,8 +1,8 @@
 
 import { ChainIds } from "../utils/MetaMask";
 import { addresses as mainnet } from "../../generated/addresses_mainnet";
-import { addresses as localhost } from "../../generated/addresses_localhost";
-import { addresses as rinkeby } from "../../generated/addresses_rinkeby";
+import { addresses as localhost } from "../../../contract/cache/addresses_localhost";
+import { addresses as rinkeby } from "../../../contract/cache/addresses_rinkeby";
 import { kamon_addresses as kamon_localhost } from "../../../contract/cache/addresses_kamon_localhost";
 import { kamon_addresses as kamon_rinkeby } from "../../../contract/cache/addresses_kamon_rinkeby";
 
