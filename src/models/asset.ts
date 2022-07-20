@@ -6,12 +6,11 @@ export interface AssetData {
   svg: string;
 }
 
-
 // for import data
 export interface OriginalAssetPart {
   body: string | Uint8Array;
   color?: string;
-};
+}
 export interface OriginalAssetData {
   name: string;
   group?: string;
@@ -19,7 +18,7 @@ export interface OriginalAssetData {
   width?: number;
   height?: number;
   bodies?: string[];
-  parts?: OriginalAssetPart[]
+  parts?: OriginalAssetPart[];
   body?: string;
   svgPart?: string;
   registered?: boolean;
@@ -37,6 +36,6 @@ export interface OriginalAssetDataSet {
 export interface MintSelectionAsset {
   isLoading?: boolean;
   asset: OriginalAssetData;
-  images?: string[]; 
+  images?: string[];
   soulbound?: string;
 }

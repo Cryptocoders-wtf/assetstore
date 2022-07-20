@@ -6,13 +6,12 @@
     </div>
     <p>
       Etherscan:
-      <a :href="EtherscanStore" class="underline" target="_blank"
-        >AssetStore</a
-      >
-      <span v-if="TokenName">,
-        <a :href="EtherscanToken" class="underline" target="_blank"
-          >{{ TokenName }}</a
-        >
+      <a :href="EtherscanStore" class="underline" target="_blank">AssetStore</a>
+      <span v-if="TokenName"
+        >,
+        <a :href="EtherscanToken" class="underline" target="_blank">{{
+          TokenName
+        }}</a>
       </span>
     </p>
     <p>
@@ -32,10 +31,7 @@
     </p>
     <p>
       Discord:
-      <a
-        href="https://discord.gg/4JGURQujXK"
-        class="underline"
-        target="_blank"
+      <a href="https://discord.gg/4JGURQujXK" class="underline" target="_blank"
         >On-chain Asset Store</a
       >
     </p>
@@ -44,10 +40,7 @@
       <a href="https://twitter.com/nounsfes" class="underline" target="_blank"
         >@nounsfes (English)</a
       >,
-      <a
-        href="https://twitter.com/snakajima"
-        class="underline"
-        target="_blank"
+      <a href="https://twitter.com/snakajima" class="underline" target="_blank"
         >@snakajima (Japanese)</a
       >
     </p>
@@ -60,9 +53,9 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   props: {
-    EtherscanStore: String, 
-    EtherscanToken: String, 
-    TokenName: String
+    EtherscanStore: String,
+    EtherscanToken: String,
+    TokenName: String,
   },
   setup() {
     const i18n = useI18n();
@@ -70,6 +63,6 @@ export default defineComponent({
       return i18n.locale.value;
     });
     return { lang };
-  }    
+  },
 });
 </script>

@@ -9,8 +9,15 @@ const regexNumG = /[+-]?(\d*\.\d*|\d+)/g;
 const regexDivG = /[,\s]+/g;
 
 // T is number or string
-const reduceFun = <T>(width: number, func1: (val: number) => T, func2: (item: string) => T[]) => {
-  return (prev: {isArc: boolean, offset: number, numArray: T[]}, item: string) => {
+const reduceFun = <T>(
+  width: number,
+  func1: (val: number) => T,
+  func2: (item: string) => T[]
+) => {
+  return (
+    prev: { isArc: boolean; offset: number; numArray: T[] },
+    item: string
+  ) => {
     if (regexNum.test(item)) {
       let value = Math.round((parseFloat(item) * 1024) / width);
       if (prev.isArc) {
@@ -28,7 +35,7 @@ const reduceFun = <T>(width: number, func1: (val: number) => T, func2: (item: st
         prev.numArray.push(code);
       });
       const ch = item.substring(-1);
-      prev.isArc = (ch == "a" || ch == "A");
+      prev.isArc = ch == "a" || ch == "A";
       if (prev.isArc) {
         prev.offset = 0;
       }
@@ -53,7 +60,11 @@ export const normalizePath = (body: string, width: number) => {
   const func2 = (item: string) => {
     return [item];
   };
-  const { numArray } = items.reduce(reduceFun<string>(width, func1, func2), {isArc: false, offset: 0, numArray: []});
+  const { numArray } = items.reduce(reduceFun<string>(width, func1, func2), {
+    isArc: false,
+    offset: 0,
+    numArray: [],
+  });
   return numArray.join(" ");
 };
 export const compressPath = (body: string, width: number) => {
@@ -67,7 +78,11 @@ export const compressPath = (body: string, width: number) => {
       return char.charCodeAt(0);
     });
   };
-  const { numArray } = items.reduce(reduceFun<number>(width, func1, func2), {isArc: false, offset: 0, numArray: []});
+  const { numArray } = items.reduce(reduceFun<number>(width, func1, func2), {
+    isArc: false,
+    offset: 0,
+    numArray: [],
+  });
 
   // 12-bit middle-endian compression
   const bytes = new Uint8Array((numArray.length * 3 + 1) / 2);
@@ -84,4 +99,3 @@ export const compressPath = (body: string, width: number) => {
 
   return bytes;
 };
-
