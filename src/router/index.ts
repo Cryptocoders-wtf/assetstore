@@ -3,14 +3,9 @@ import Layout from "../components/Layout.vue";
 import Blank from "../components/Blank.vue";
 import NotFound from "../components/NotFound.vue";
 
-import Local from "../views/Local.vue";
 import Home from "../views/Home.vue";
 import Mint from "../views/Mint.vue";
-import TestHome from "../views/TestHome.vue";
-import TestMint from "../views/TestMint.vue";
 import TestMintKamon from "../views/TestMintKamon.vue";
-import LocalMint from "../views/LocalMint.vue";
-import LocalMintKamon from "../views/LocalMintKamon.vue";
 
 const routeChildren: Array<RouteRecordRaw> = [
   {
@@ -24,30 +19,6 @@ const routeChildren: Array<RouteRecordRaw> = [
   {
     path: "kamon",
     component: TestMintKamon,
-  },
-  {
-    path: "test",
-    component: TestHome,
-  },
-  {
-    path: "test_mint",
-    component: TestMint,
-  },
-  {
-    path: "test_kamon",
-    component: TestMintKamon,
-  },
-  {
-    path: "local_asset",
-    component: Local,
-  },
-  {
-    path: "local_mint",
-    component: LocalMint,
-  },
-  {
-    path: "local_kamon",
-    component: LocalMintKamon,
   },
 ];
 
