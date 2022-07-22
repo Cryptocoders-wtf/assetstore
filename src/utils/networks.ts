@@ -1,4 +1,3 @@
-
 import { ChainIds } from "../utils/MetaMask";
 import { addresses as mainnet } from "../../generated/addresses_mainnet";
 import { addresses as localhost } from "../../../contract/cache/addresses_localhost";
@@ -14,8 +13,8 @@ export const getAddresses = (network: string) => {
       chainId: ChainIds.Localhost,
       storeAddress: localhost.storeAddress,
       tokenAddress: localhost.tokenAddress,
-      kamonAddress: kamon_localhost.kamonAddress
-    }
+      kamonAddress: kamon_localhost.kamonAddress,
+    };
   }
   if (network == "rinkeby") {
     return {
@@ -24,8 +23,8 @@ export const getAddresses = (network: string) => {
       chainId: ChainIds.RinkebyTestNet,
       storeAddress: rinkeby.storeAddress,
       tokenAddress: rinkeby.tokenAddress,
-      kamonAddress: kamon_rinkeby.kamonAddress
-    }
+      kamonAddress: kamon_rinkeby.kamonAddress,
+    };
   }
   if (network == "mainnet") {
     return {
@@ -34,8 +33,8 @@ export const getAddresses = (network: string) => {
       chainId: ChainIds.Mainnet,
       storeAddress: mainnet.storeAddress,
       tokenAddress: mainnet.tokenAddress,
-      kamonAddress: kamon_mainnet.kamonAddress
-    }
+      kamonAddress: kamon_mainnet.kamonAddress,
+    };
   }
   console.error("**** unexpected");
-}
+};

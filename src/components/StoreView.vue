@@ -11,9 +11,9 @@
     </div>
     <div v-else>
       <p class="mb-2">
-        You are able to see the list of vector assets already uploaded to the blockchain by minters.
-        Please select "group" and "category", and click one of images below.
-        It will explain how to access the vector data. 
+        You are able to see the list of vector assets already uploaded to the
+        blockchain by minters. Please select "group" and "category", and click
+        one of images below. It will explain how to access the vector data.
       </p>
     </div>
     <div v-if="assetCount > 0" class="mb-2 font-bold">
@@ -91,7 +91,7 @@
             <div class="mt-2 overflow-x-scroll">
               <pre class="text-xs">{{ asset.svg }}</pre>
             </div>
-            <div> 
+            <div>
               <img
                 :src="asset.image"
                 class="cursor-pointer w-64 inline-block rounded-xl"
@@ -125,7 +125,8 @@ export default defineComponent({
   name: "StoreView",
   props: ["addresses"],
   components: {
-    KeyMessage, References
+    KeyMessage,
+    References,
   },
   setup(props) {
     const i18n = useI18n();
@@ -196,7 +197,9 @@ export default defineComponent({
       */
     };
 
-    const categorySelected = async (e: Event & {target: HTMLInputElement}) => {
+    const categorySelected = async (
+      e: Event & { target: HTMLInputElement }
+    ) => {
       console.log("categorySelected", e.target.value);
       selectedCategory.value = e.target.value;
       assets.value = [];
@@ -239,7 +242,7 @@ export default defineComponent({
       assets.value = await Promise.all(promises);
     };
 
-    const groupSelected = async (e: Event & {target: HTMLInputElement}) => {
+    const groupSelected = async (e: Event & { target: HTMLInputElement }) => {
       console.log("groupSelected", e.target.value);
       selectedGroup.value = e.target.value;
       categories.value = [];
@@ -290,7 +293,8 @@ export default defineComponent({
     };
 
     return {
-      lang, EtherscanStore,
+      lang,
+      EtherscanStore,
       assetCount,
       groups,
       groupSelected,

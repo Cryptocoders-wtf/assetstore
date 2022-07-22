@@ -33,6 +33,6 @@ export default defineComponent({
       return i18n.locale.value;
     });
     return { lang };
-  }    
+  },
 });
 </script>

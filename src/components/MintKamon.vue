@@ -185,8 +185,11 @@
     </div>
 
     <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
-    <References :EtherscanStore="EtherscanStore" :EtherscanToken="EtherscanToken"
-              TokenName="KamonToken" />
+    <References
+      :EtherscanStore="EtherscanStore"
+      :EtherscanToken="EtherscanToken"
+      TokenName="KamonToken"
+    />
   </div>
 </template>
 
@@ -197,7 +200,11 @@ import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { ethers } from "ethers";
 import { loadedAssets } from "../resources/kamon";
-import { AssetData, OriginalAssetData, MintSelectionAsset } from "@/models/asset";
+import {
+  AssetData,
+  OriginalAssetData,
+  MintSelectionAsset,
+} from "@/models/asset";
 import { Token } from "@/models/token";
 import References from "@/components/References.vue";
 import NFTList from "@/components/NFTList.vue";
@@ -214,7 +221,10 @@ const KamonToken = {
 export default defineComponent({
   name: "MintView",
   components: {
-    References, NFTList, KeyMessage, NetworkGate
+    References,
+    NFTList,
+    KeyMessage,
+    NetworkGate,
   },
   props: ["addresses"],
   setup(props) {
@@ -239,10 +249,13 @@ export default defineComponent({
     const EtherscanStore = `${EtherscanBase}/${props.addresses.storeAddress}`;
     const EtherscanToken = `${EtherscanBase}/${props.addresses.kamonAddress}`;
     const OpenSeaPath = `${OpenSeaBase}/${props.addresses.kamonAddress}`;
-    const assetIndex = loadedAssets.reduce((prev: {[key: string]: AssetData}, asset: AssetData) => {
-      prev[asset.name] = asset;
-      return prev;
-    }, {});
+    const assetIndex = loadedAssets.reduce(
+      (prev: { [key: string]: AssetData }, asset: AssetData) => {
+        prev[asset.name] = asset;
+        return prev;
+      },
+      {}
+    );
     const availableAssets = ref<AssetData[] | null>(null);
     const messageRef = ref<string | null>(null);
     const encoder = new TextEncoder();
@@ -263,7 +276,10 @@ export default defineComponent({
 
     let prevProvider: ethers.providers.Web3Provider | null = null;
     const networkContext = computed(() => {
-      if (store.state.account && store.state.chainId == props.addresses.chainId) {
+      if (
+        store.state.account &&
+        store.state.chainId == props.addresses.chainId
+      ) {
         const provider = new ethers.providers.Web3Provider(
           store.state.ethereum
         );
@@ -293,7 +309,7 @@ export default defineComponent({
     const tokensPerAsset = ref(0);
 
     const selection = ref<MintSelectionAsset | null>(null);
-    const onSelect = async (asset: OriginalAssetData) => {      
+    const onSelect = async (asset: OriginalAssetData) => {
       //console.log(asset);
       messageRef.value = null;
       if (selection.value && selection.value.asset.name == asset.name) {
@@ -410,9 +426,11 @@ export default defineComponent({
           return index;
         });
       await Promise.all(promises2);
-      availableAssets.value = loadedAssets.filter((asset: OriginalAssetData) => {
-        return !asset.registered;
-      });
+      availableAssets.value = loadedAssets.filter(
+        (asset: OriginalAssetData) => {
+          return !asset.registered;
+        }
+      );
 
       const promises = Array(count)
         .fill({})

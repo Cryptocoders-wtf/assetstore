@@ -19,9 +19,9 @@
         make variety of vector assets available on blockchains.
       </p>
       <p class="mb-2">
-        We are using a "crowd-minting" method, where each minter pays a small amount
-        of gas fees to upload a vector image to the blockchain, and receives multiple NFTs as
-        rewards.
+        We are using a "crowd-minting" method, where each minter pays a small
+        amount of gas fees to upload a vector image to the blockchain, and
+        receives multiple NFTs as rewards.
       </p>
     </div>
   </div>
@@ -38,6 +38,6 @@ export default defineComponent({
       return i18n.locale.value;
     });
     return { lang };
-  }    
+  },
 });
 </script>

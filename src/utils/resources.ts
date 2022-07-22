@@ -1,5 +1,9 @@
 import { assetBase, compressPath } from "./pathUtils";
-import { OriginalAssetData, OriginalAssetDataSet, OriginalAssetPart } from "@/models/asset";
+import {
+  OriginalAssetData,
+  OriginalAssetDataSet,
+  OriginalAssetPart,
+} from "@/models/asset";
 
 export const createAsset = (
   _asset: OriginalAssetData,

@@ -1,5 +1,9 @@
 import { assetBase, compressPath, normalizePath } from "./pathUtils";
-import { OriginalAssetData, OriginalAssetDataSet, OriginalAssetPart } from "@/models/asset";
+import {
+  OriginalAssetData,
+  OriginalAssetDataSet,
+  OriginalAssetPart,
+} from "@/models/asset";
 
 export const createAsset = (
   _asset: OriginalAssetData,
@@ -29,7 +33,7 @@ export const createAsset = (
         })
         .join("");
     } else {
-      const path = normalizePath(_asset.body||"", width);
+      const path = normalizePath(_asset.body || "", width);
       return `<path d="${path}" />`;
     }
   })();
@@ -49,7 +53,7 @@ export const createAsset = (
       return [
         {
           color: "",
-          body: compressPath(_asset.body||"", width),
+          body: compressPath(_asset.body || "", width),
         },
       ];
     }
@@ -69,8 +73,8 @@ export const loadAssets = (_resource: OriginalAssetDataSet) => {
   return _resource.assets.map((asset: OriginalAssetData) => {
     return createAsset(
       asset,
-      _resource.group||"",
-      _resource.category||"",
+      _resource.group || "",
+      _resource.category || "",
       _resource.width || 24
     );
   });

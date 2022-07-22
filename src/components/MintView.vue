@@ -178,8 +178,11 @@
     </div>
 
     <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
-    <References :EtherscanStore="EtherscanStore" :EtherscanToken="EtherscanToken"
-              TokenName="MaterialToken" />
+    <References
+      :EtherscanStore="EtherscanStore"
+      :EtherscanToken="EtherscanToken"
+      TokenName="MaterialToken"
+    />
   </div>
 </template>
 
@@ -190,7 +193,11 @@ import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { ethers } from "ethers";
 import { actionAssets } from "../resources/materials";
-import { AssetData, OriginalAssetData, MintSelectionAsset } from "@/models/asset";
+import {
+  AssetData,
+  OriginalAssetData,
+  MintSelectionAsset,
+} from "@/models/asset";
 import { Token } from "@/models/token";
 import References from "@/components/References.vue";
 import NFTList from "@/components/NFTList.vue";
@@ -207,7 +214,10 @@ const MaterialToken = {
 export default defineComponent({
   name: "MintView",
   components: {
-    References, NFTList, KeyMessage, NetworkGate
+    References,
+    NFTList,
+    KeyMessage,
+    NetworkGate,
   },
   props: ["addresses"],
   setup(props) {
@@ -232,10 +242,13 @@ export default defineComponent({
     const EtherscanStore = `${EtherscanBase}/${props.addresses.storeAddress}`;
     const EtherscanToken = `${EtherscanBase}/${props.addresses.tokenAddress}`;
     const OpenSeaPath = `${OpenSeaBase}/${props.addresses.tokenAddress}`;
-    const assetIndex = actionAssets.reduce((prev: {[key: string]: AssetData}, asset: AssetData) => {
-      prev[asset.name] = asset;
-      return prev;
-    }, {});
+    const assetIndex = actionAssets.reduce(
+      (prev: { [key: string]: AssetData }, asset: AssetData) => {
+        prev[asset.name] = asset;
+        return prev;
+      },
+      {}
+    );
     const availableAssets = ref<AssetData[] | null>(null);
     const messageRef = ref<string | null>(null);
     const encoder = new TextEncoder();
@@ -256,7 +269,10 @@ export default defineComponent({
 
     let prevProvider: ethers.providers.Web3Provider | null = null;
     const networkContext = computed(() => {
-      if (store.state.account && store.state.chainId == props.addresses.chainId) {
+      if (
+        store.state.account &&
+        store.state.chainId == props.addresses.chainId
+      ) {
         const provider = new ethers.providers.Web3Provider(
           store.state.ethereum
         );
@@ -357,18 +373,15 @@ export default defineComponent({
     };
 
     provider.once("block", () => {
-      tokenRo.on(
-        tokenRo.filters.Transfer(),
-        async (from, to, tokenId) => {
-          if (
-            tokenId.toNumber() % 4 == 0 &&
-            tokenId.toNumber() >= tokens.value.length * 4
-          ) {
-            console.log("*** event.Transfer calling fetchToken");
-            fetchTokens();
-          }
+      tokenRo.on(tokenRo.filters.Transfer(), async (from, to, tokenId) => {
+        if (
+          tokenId.toNumber() % 4 == 0 &&
+          tokenId.toNumber() >= tokens.value.length * 4
+        ) {
+          console.log("*** event.Transfer calling fetchToken");
+          fetchTokens();
         }
-      );
+      });
     });
 
     const fetchTokens = async () => {
@@ -382,9 +395,7 @@ export default defineComponent({
           }
 
           if (index > 580) {
-            const result = await tokenRo.functions.assetIdOfToken(
-              index * 4
-            );
+            const result = await tokenRo.functions.assetIdOfToken(index * 4);
             const assetId = result[0].toNumber();
             const attr = await assetStoreRO.functions.getAttributes(assetId);
             const name = attr[0][2];
@@ -401,9 +412,11 @@ export default defineComponent({
           return index;
         });
       await Promise.all(promises2);
-      availableAssets.value = actionAssets.filter((asset: OriginalAssetData) => {
-        return !asset.registered;
-      });
+      availableAssets.value = actionAssets.filter(
+        (asset: OriginalAssetData) => {
+          return !asset.registered;
+        }
+      );
 
       const promises = Array(count)
         .fill({})
@@ -412,9 +425,7 @@ export default defineComponent({
             return tokens.value[index]; // we already have it
           }
 
-          const result = await tokenRo.functions.assetIdOfToken(
-            index * 4
-          );
+          const result = await tokenRo.functions.assetIdOfToken(index * 4);
           const assetId = result[0].toNumber();
           const svgPart = await assetStoreRO.functions.generateSVGPart(
             assetId,
@@ -447,7 +458,8 @@ export default defineComponent({
       EtherscanStore,
       EtherscanToken,
       OpenSeaPath,
-      tokens, tokensPerAsset
+      tokens,
+      tokensPerAsset,
     };
   },
 });

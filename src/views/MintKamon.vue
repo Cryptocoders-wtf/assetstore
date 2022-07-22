@@ -17,7 +17,8 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
-    const network = (typeof route.query.network == "string") ? route.query.network : "mainnet";
+    const network =
+      typeof route.query.network == "string" ? route.query.network : "mainnet";
     const addresses = getAddresses(network);
     return {
       addresses,

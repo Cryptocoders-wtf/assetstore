@@ -6,7 +6,7 @@ const lang = {
   },
   mint: {
     switchNetwork: "ネットワークを切り替えて下さい。",
-    connectMetamask: "Metamaskと接続してください。"
+    connectMetamask: "Metamaskと接続してください。",
   },
   languages,
 };
