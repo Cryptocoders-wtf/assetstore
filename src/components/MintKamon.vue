@@ -11,11 +11,11 @@
         <p v-if="lang === 'ja'">
           今回の発行分（{{
             totalCount
-          }}個）に関しては、クラウドミンティングが完了いたししました。ご協力、ありがとうございます。
+          }}個）に関しては、クラウドミントが完了いたししました。ご協力、ありがとうございます。
           さらにNFTを追加する予定なので、少々お待ちください。
         </p>
         <p v-else>
-          Thanks to all the minters, the initial release of
+          Thanks to all the minters, the current release of
           {{ totalCount }} NFTs were sold out. We are going to add more NTFs
           soon. Please stay tuned!
         </p>
