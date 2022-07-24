@@ -44,7 +44,7 @@
       <option
         v-for="category in categories"
         :key="category"
-        :value="selectedGroup"
+        :value="category"
       >
         {{ category }}
       </option>
