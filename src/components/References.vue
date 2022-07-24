@@ -1,8 +1,7 @@
 <template>
   <div class="mt-2">
     <div class="mt-4 mb-2">
-      <p v-if="lang === 'ja'" class="font-bold">参考リンク</p>
-      <p v-else class="font-bold">Resources</p>
+      <p class="font-bold">{{ $t("message.resources") }}</p>
     </div>
     <p v-if="EtherscanStore">
       Etherscan:
