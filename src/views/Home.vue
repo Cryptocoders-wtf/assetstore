@@ -1,13 +1,14 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
-    <store-view network="mainnet" :storeAddress="addresses.storeAddress" />
+    <store-view :addresses="addresses" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useRoute } from "vue-router";
+import { getAddresses } from "@/utils/networks";
 import StoreView from "@/components/StoreView.vue";
-import { addresses } from "../../generated/addresses_mainnet";
 
 export default defineComponent({
   name: "HomePage",
@@ -15,6 +16,10 @@ export default defineComponent({
     StoreView,
   },
   setup() {
+    const route = useRoute();
+    const network =
+      typeof route.query.network == "string" ? route.query.network : "mainnet";
+    const addresses = getAddresses(network);
     return {
       addresses,
     };

@@ -8,7 +8,7 @@
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import { getAddresses } from "@/utils/networks";
-import MintView from "@/components/MintView.vue";
+import MintView from "@/components/MintKamon.vue";
 
 export default defineComponent({
   name: "HomePage",

@@ -123,7 +123,7 @@ const AssetStore = {
 
 export default defineComponent({
   name: "StoreView",
-  props: ["network", "storeAddress"],
+  props: ["addresses"],
   components: {
     KeyMessage,
     References,
@@ -137,12 +137,12 @@ export default defineComponent({
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
     const provider =
-      props.network == "localhost"
+      props.addresses.network == "localhost"
         ? new ethers.providers.JsonRpcProvider()
-        : new ethers.providers.AlchemyProvider(props.network);
+        : new ethers.providers.AlchemyProvider(props.addresses.network);
 
     const assetStoreRO = new ethers.Contract(
-      props.storeAddress,
+      props.addresses.storeAddress,
       AssetStore.wabi.abi,
       provider
     );
@@ -154,12 +154,12 @@ export default defineComponent({
     const selectedAsset = ref<AssetData | null>(null);
     const sampleCode = ref("");
     const assetCount = ref(0);
-    const EtherscanBase =
-      props.network == "rinkeby"
-        ? "https://rinkeby.etherscan.io/address"
-        : "https://etherscan.io/address";
-    const EtherscanStore = `${EtherscanBase}/${props.storeAddress}`;
-
+    const EtherscanStore = computed(() => {
+      if (props.addresses.EtherscanBase) {
+        return `${props.addresses.EtherscanBase}/${props.addresses.storeAddress}`;
+      }
+      return null;
+    });
     const assetSelected = async (asset: AssetData) => {
       // console.log("assetSelected", asset);
       selectedAsset.value = asset;
@@ -170,8 +170,8 @@ export default defineComponent({
         selectedAsset.value = Object.assign({}, asset);
       }
       sampleCode.value = [
-        `const provider = new ethers.providers.AlchemyProvider("${props.network}");`,
-        `const storeAddress = "${props.storeAddress}";`,
+        `const provider = new ethers.providers.AlchemyProvider("${props.addresses.network}");`,
+        `const storeAddress = "${props.addresses.storeAddress}";`,
         `const assetStore = new ethers.Contract(storeAddress, AssetStore.abi, provider);`,
         `const group = "${selectedGroup.value}";`,
         `const category = "${selectedCategory.value}";`,

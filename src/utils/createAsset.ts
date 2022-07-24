@@ -22,6 +22,9 @@ export const createAsset = (
       return _asset.parts
         .map((part: OriginalAssetPart) => {
           const path = normalizePath(part.body as string, width);
+          if (part.color) {
+            return `<path d="${path}" fill="${part.color}" />`;
+          }
           return `<path d="${path}" />`;
         })
         .join("");
