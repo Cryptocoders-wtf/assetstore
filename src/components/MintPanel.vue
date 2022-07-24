@@ -135,7 +135,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from "vue";
+import { defineComponent, computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import NetworkGate from "@/components/NetworkGate.vue";
@@ -160,6 +160,12 @@ export default defineComponent({
       return length <= 32;
     });
     const messageRef = ref<string | null>(null);
+    watch(
+      () => props.selection,
+      (selection) => {
+        messageRef.value = null;
+      }
+    );
     const encoder = new TextEncoder();
     const mint = async () => {
       //console.log("*** mint", selection.value.asset.asset);
