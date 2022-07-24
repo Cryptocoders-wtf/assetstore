@@ -9,7 +9,7 @@ import MintKamon from "../views/MintKamon.vue";
 
 const routeChildren: Array<RouteRecordRaw> = [
   {
-    path: "",
+    path: "/",
     component: Home,
   },
   {
@@ -20,6 +20,10 @@ const routeChildren: Array<RouteRecordRaw> = [
     path: "kamon",
     component: MintKamon,
   },
+  {
+    path: ":path1(group)?/:group?/:path2(category)?/:category?",
+    component: Home,
+  },
 ];
 
 const routes: Array<RouteRecordRaw> = [
@@ -28,7 +32,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Layout,
     children: [
       {
-        path: "/:lang",
+        path: "/:lang(en|ja)",
         component: Blank,
         children: routeChildren,
       },

@@ -21,15 +21,18 @@
     </div>
     <select
       class="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded"
-      @change="groupSelected"
+      v-model="selectedGroup"
     >
-      <option v-if="groups.length > 0" selected disabled value="">
-        Please select a group
-      </option>
-      <option v-else selected disabled value="">Loading groups...</option>
-      <option v-for="group in groups" v-bind:key="group" :value="group">
-        {{ group }}
-      </option>
+      <option v-if="groups.length === 0" selected disabled value="">Loading groups...</option>
+
+      <template v-else v-for="group in groups" :key="group.key">
+        <option :value="group.key" v-if="group.key===''" disabled>
+          {{ group.value }}
+        </option>
+        <option :value="group.key" v-else>
+          {{ group.value }}
+        </option>
+      </template>
     </select>
 
     <select
@@ -40,8 +43,8 @@
       <option selected disabled value="">Please select a category</option>
       <option
         v-for="category in categories"
-        v-bind:key="category"
-        :value="category"
+        :key="category"
+        :value="selectedGroup"
       >
         {{ category }}
       </option>
@@ -110,7 +113,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { ethers } from "ethers";
 import { AssetData } from "@/models/asset";
@@ -120,6 +123,9 @@ import References from "@/components/References.vue";
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
 };
+import { useRouter, useRoute } from "vue-router";
+
+import { useLocalizedPath } from "@/i18n/utils";
 
 export default defineComponent({
   name: "StoreView",
@@ -129,6 +135,10 @@ export default defineComponent({
     References,
   },
   setup(props) {
+    const router = useRouter();
+    const route = useRoute();
+    const { getLocalizedPath } = useLocalizedPath();
+
     const i18n = useI18n();
     const lang = computed(() => {
       return i18n.locale.value;
@@ -146,8 +156,10 @@ export default defineComponent({
       AssetStore.wabi.abi,
       provider
     );
-    const groups = ref<string[]>([]);
-    const selectedGroup = ref("");
+    const groups = ref<{ value: string; key: string; }[]>([]);
+    
+    const selectedGroup = ref(route.params.group || "");
+    
     const categories = ref<string[]>([]);
     const selectedCategory = ref("");
     const assets = ref<object[]>([]);
@@ -242,26 +254,33 @@ export default defineComponent({
       assets.value = await Promise.all(promises);
     };
 
-    const groupSelected = async (e: Event & { target: HTMLInputElement }) => {
-      console.log("groupSelected", e.target.value);
-      selectedGroup.value = e.target.value;
-      categories.value = [];
-      const result = await assetStoreRO.functions.getCategoryCount(
-        selectedGroup.value
-      );
-      const categoryCount = result[0];
-      const promises = Array(categoryCount)
-        .fill("")
-        .map(async (_, index) => {
-          const result = await assetStoreRO.functions.getCategoryNameAtIndex(
-            selectedGroup.value,
-            index
-          );
-          return result[0];
-        });
-      categories.value = await Promise.all(promises);
-    };
-
+    const updateSelectedGroup = async () => {
+      console.log(selectedGroup.value);
+      if (selectedGroup.value) {
+        const path = getLocalizedPath(`/group/${selectedGroup.value}`);
+        router.push(path);
+        
+        categories.value = [];
+        const result = await assetStoreRO.functions.getCategoryCount(
+          selectedGroup.value
+        );
+        const categoryCount = result[0];
+        const promises = Array(categoryCount)
+          .fill("")
+          .map(async (_, index) => {
+            const result = await assetStoreRO.functions.getCategoryNameAtIndex(
+              selectedGroup.value,
+              index
+            );
+            return result[0];
+          });
+        categories.value = await Promise.all(promises);
+      }
+    }
+    watch(selectedGroup, () => {
+      updateSelectedGroup();
+    });
+    updateSelectedGroup();
     const fetchGroups = async () => {
       const result = await assetStoreRO.functions.getGroupCount();
       const groupCount = result[0];
@@ -271,9 +290,16 @@ export default defineComponent({
           const result = await assetStoreRO.functions.getGroupNameAtIndex(
             index
           );
-          return result[0];
+          return {
+            key: result[0],
+            value: result[0],
+          };
         });
-      groups.value = await Promise.all(promises);
+      
+      groups.value = [{
+        value: "Please select a group",
+        key: "",
+      }].concat(await Promise.all(promises));
     };
 
     const fetchAssetCount = async () => {
@@ -297,7 +323,6 @@ export default defineComponent({
       EtherscanStore,
       assetCount,
       groups,
-      groupSelected,
       selectedGroup,
       categories,
       categorySelected,

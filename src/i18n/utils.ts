@@ -24,3 +24,14 @@ export const useI18nParam = () => {
   });
   i18n.locale.value = lang.value;
 };
+
+export const useLocalizedPath = () => {
+  const route = useRoute();
+  const getLocalizedPath = (path: string) => {
+    const lang = (route.params.lang as string) || "en";
+    return `/${lang}` + path;
+  };
+  return {
+    getLocalizedPath
+  };
+};
