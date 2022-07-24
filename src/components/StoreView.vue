@@ -161,10 +161,13 @@ export default defineComponent({
     );
     const groups = ref<{ value: string; key: string; }[]>([]);
     
-    const selectedGroup = ref(route.params.group || "");
+    const selectedGroup = ref<string>(route.params.group as string|| "");
     
     const categories = ref<{ value: string; key: string; }[]>([]);
     const selectedCategory = ref("");
+
+    const categoriesCache: {[key: string]: any} = {};
+    
     const assets = ref<object[]>([]);
     const selectedAsset = ref<AssetData | null>(null);
     const sampleCode = ref("");
@@ -262,16 +265,19 @@ export default defineComponent({
     const updateSelectedGroup = async () => {
       console.log(selectedGroup.value);
       if (selectedGroup.value) {
-        assets.value = [];
-        selectedCategory.value = "";
-        const path = getLocalizedPath(`/group/${selectedGroup.value}`);
-        router.push(path);
-        
         categories.value = [];
-        const result = await assetStoreRO.functions.getCategoryCount(
+        selectedCategory.value = "";
+        assets.value = [];
+        router.push(getLocalizedPath(`/group/${selectedGroup.value}`));
+        
+        if (categoriesCache[selectedGroup.value]) {
+          categories.value = categoriesCache[selectedGroup.value];
+          return ;
+        }
+        const counterResult = await assetStoreRO.functions.getCategoryCount(
           selectedGroup.value
         );
-        const categoryCount = result[0];
+        const categoryCount = counterResult[0];
         const promises = Array(categoryCount)
           .fill("")
           .map(async (_, index) => {
@@ -284,10 +290,13 @@ export default defineComponent({
               key: result[0],
             };
           });
-        categories.value = [{
+        const categoryData = [{
           value: "Please select a category",
           key: "",
         }].concat(await Promise.all(promises));
+
+        categoriesCache[selectedGroup.value] = categoryData;
+        categories.value = categoryData;
       }
     }
     watch(selectedGroup, () => {
