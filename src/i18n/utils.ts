@@ -32,6 +32,6 @@ export const useLocalizedPath = () => {
     return `/${lang}` + path;
   };
   return {
-    getLocalizedPath
+    getLocalizedPath,
   };
 };

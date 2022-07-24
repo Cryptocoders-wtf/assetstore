@@ -23,10 +23,12 @@
       class="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded"
       v-model="selectedGroup"
     >
-      <option v-if="groups.length === 0" selected disabled value="">Loading groups...</option>
+      <option v-if="groups.length === 0" selected disabled value="">
+        Loading groups...
+      </option>
 
       <template v-else v-for="group in groups" :key="group.key">
-        <option :value="group.key" v-if="group.key===''" disabled>
+        <option :value="group.key" v-if="group.key === ''" disabled>
           {{ group.value }}
         </option>
         <option :value="group.key" v-else>
@@ -40,11 +42,8 @@
       class="form-select block mt-2 w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded"
       v-model="selectedCategory"
     >
-      <template
-        v-for="category in categories"
-        :key="category"
-        >
-        <option :value="category.key" v-if="category.key===''" disabled>
+      <template v-for="category in categories" :key="category">
+        <option :value="category.key" v-if="category.key === ''" disabled>
           {{ category.value }}
         </option>
         <option :value="category.key" v-else>
@@ -159,18 +158,18 @@ export default defineComponent({
       AssetStore.wabi.abi,
       provider
     );
-    const groups = ref<{ value: string; key: string; }[]>([]);
-    
-    const selectedGroup = ref<string>(route.params.group as string|| "");
-    
-    const categories = ref<{ value: string; key: string; }[]>([]);
+    const groups = ref<{ value: string; key: string }[]>([]);
+
+    const selectedGroup = ref<string>((route.params.group as string) || "");
+
+    const categories = ref<{ value: string; key: string }[]>([]);
     const selectedCategory = ref("");
 
-    const categoriesCache: {[key: string]: any} = {};
-    
+    const categoriesCache: { [key: string]: any } = {};
+
     const assets = ref<object[]>([]);
-    const assetsCache: {[key: string]: any} = {};
-    
+    const assetsCache: { [key: string]: any } = {};
+
     const selectedAsset = ref<AssetData | null>(null);
     const sampleCode = ref("");
     const assetCount = ref(0);
@@ -224,7 +223,7 @@ export default defineComponent({
       const cacheKey = [selectedGroup.value, selectedCategory.value].join("--");
       if (assetsCache[cacheKey]) {
         assets.value = assetsCache[cacheKey];
-        return ;
+        return;
       }
       const result = await assetStoreRO.functions.getAssetCountInCategory(
         selectedGroup.value,
@@ -279,10 +278,10 @@ export default defineComponent({
         selectedCategory.value = "";
         assets.value = [];
         router.push(getLocalizedPath(`/group/${selectedGroup.value}`));
-        
+
         if (categoriesCache[selectedGroup.value]) {
           categories.value = categoriesCache[selectedGroup.value];
-          return ;
+          return;
         }
         const counterResult = await assetStoreRO.functions.getCategoryCount(
           selectedGroup.value
@@ -300,15 +299,17 @@ export default defineComponent({
               key: result[0],
             };
           });
-        const categoryData = [{
-          value: "Please select a category",
-          key: "",
-        }].concat(await Promise.all(promises));
+        const categoryData = [
+          {
+            value: "Please select a category",
+            key: "",
+          },
+        ].concat(await Promise.all(promises));
 
         categoriesCache[selectedGroup.value] = categoryData;
         categories.value = categoryData;
       }
-    }
+    };
     watch(selectedGroup, () => {
       updateSelectedGroup();
     });
@@ -327,11 +328,13 @@ export default defineComponent({
             value: result[0],
           };
         });
-      
-      groups.value = [{
-        value: "Please select a group",
-        key: "",
-      }].concat(await Promise.all(promises));
+
+      groups.value = [
+        {
+          value: "Please select a group",
+          key: "",
+        },
+      ].concat(await Promise.all(promises));
     };
 
     const fetchAssetCount = async () => {
