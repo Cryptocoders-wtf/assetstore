@@ -38,16 +38,19 @@
     <select
       v-if="categories.length > 0"
       class="form-select block mt-2 w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded"
-      @change="categorySelected"
+      v-model="selectedCategory"
     >
-      <option selected disabled value="">Please select a category</option>
-      <option
+      <template
         v-for="category in categories"
         :key="category"
-        :value="category"
-      >
-        {{ category }}
-      </option>
+        >
+        <option :value="category.key" v-if="category.key===''" disabled>
+          {{ category.value }}
+        </option>
+        <option :value="category.key" v-else>
+          {{ category.value }}
+        </option>
+      </template>
     </select>
     <div v-else-if="selectedGroup">
       <p class="mt-2">Loading categories...</p>
@@ -160,7 +163,7 @@ export default defineComponent({
     
     const selectedGroup = ref(route.params.group || "");
     
-    const categories = ref<string[]>([]);
+    const categories = ref<{ value: string; key: string; }[]>([]);
     const selectedCategory = ref("");
     const assets = ref<object[]>([]);
     const selectedAsset = ref<AssetData | null>(null);
@@ -209,11 +212,7 @@ export default defineComponent({
       */
     };
 
-    const categorySelected = async (
-      e: Event & { target: HTMLInputElement }
-    ) => {
-      console.log("categorySelected", e.target.value);
-      selectedCategory.value = e.target.value;
+    const updateSelectedCategory = async () => {
       assets.value = [];
       selectedAsset.value = null;
       const result = await assetStoreRO.functions.getAssetCountInCategory(
@@ -253,10 +252,18 @@ export default defineComponent({
         });
       assets.value = await Promise.all(promises);
     };
+    watch(selectedCategory, async () => {
+      console.log("categorySelected", selectedCategory.value);
+      if (selectedCategory.value !== "") {
+        updateSelectedCategory();
+      }
+    });
 
     const updateSelectedGroup = async () => {
       console.log(selectedGroup.value);
       if (selectedGroup.value) {
+        assets.value = [];
+        selectedCategory.value = "";
         const path = getLocalizedPath(`/group/${selectedGroup.value}`);
         router.push(path);
         
@@ -272,9 +279,15 @@ export default defineComponent({
               selectedGroup.value,
               index
             );
-            return result[0];
+            return {
+              value: result[0],
+              key: result[0],
+            };
           });
-        categories.value = await Promise.all(promises);
+        categories.value = [{
+          value: "Please select a category",
+          key: "",
+        }].concat(await Promise.all(promises));
       }
     }
     watch(selectedGroup, () => {
@@ -325,7 +338,6 @@ export default defineComponent({
       groups,
       selectedGroup,
       categories,
-      categorySelected,
       selectedCategory,
       assets,
       assetSelected,
