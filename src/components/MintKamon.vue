@@ -52,7 +52,8 @@
       class="border shadow-md mt-2 rounded-xl pl-2 pr-2"
     >
       <MintPanel :selection="selection" :networkContext="networkContext" :addresses="addresses"
-                :tokensPerAsset="tokensPerAsset" :assetStoreRO="assetStoreRO"/>
+                :tokensPerAsset="tokensPerAsset" :assetStoreRO="assetStoreRO"
+                :priceRange="{ low:0.04, high: 0.23 }"/>
     </div>
 
     <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
@@ -123,8 +124,6 @@ export default defineComponent({
       {}
     );
     const availableAssets = ref<AssetData[] | null>(null);
-    const messageRef = ref<string | null>(null);
-    const encoder = new TextEncoder();
 
     console.log("* network", props.addresses.chainId);
     // Following two lines must be changed for other networks
@@ -172,7 +171,6 @@ export default defineComponent({
     const selection = ref<MintSelectionAsset | null>(null);
     const onSelect = async (asset: OriginalAssetData) => {
       //console.log(asset);
-      messageRef.value = null;
       if (selection.value && selection.value.asset.name == asset.name) {
         selection.value = null;
         return;
@@ -283,7 +281,6 @@ export default defineComponent({
       totalCount: loadedAssets.length,
       onSelect,
       selection,
-      messageRef,
       networkContext,
       assetStoreRO,
       EtherscanStore,

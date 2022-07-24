@@ -105,7 +105,7 @@
           </div>
           <div v-if="lang === 'ja'">
             <p class="mb-2">
-              フリーミントですが、ガス代が0.03〜0.23ETH程度かかります（画像の複雑さや混雑状況によって大きく変動）。
+              フリーミントですが、ガス代が{{priceRange.low}}〜{{priceRange.high}}ETH程度かかります（画像の複雑さや混雑状況によって大きく変動）。
             </p>
             <p class="mb-2">
               クラウドミンティングにご協力していただいた方には、
@@ -118,7 +118,7 @@
           <div v-else>
             <p class="mb-2">
               This is a free mint, but you need to pay the gas fee, which is
-              typically 0.03〜0.23ETH (depending on the complexity of the
+              typically {{priceRange.low}}〜{{priceRange.high}}ETH (depending on the complexity of the
               image, assuming the Gas price is ~15 Gwei).
             </p>
             <p class="mb-2">
@@ -141,7 +141,7 @@ import { useRoute } from "vue-router";
 import NetworkGate from "@/components/NetworkGate.vue";
 
 export default defineComponent({
-  props: ["selection", "addresses", "tokensPerAsset", "networkContext", "assetStoreRO"],
+  props: ["selection", "addresses", "tokensPerAsset", "networkContext", "assetStoreRO", "priceRange"],
   components: {
     NetworkGate,
   },
