@@ -171,7 +171,7 @@ export default defineComponent({
         console.error("Mint: no selection");
         return;
       }
-      const asset = props.selection.value.asset;
+      const asset = props.selection.asset;
       try {
         const result = await props.assetStoreRO.functions.getAssetIdWithName(
           asset.group,
