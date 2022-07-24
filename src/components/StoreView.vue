@@ -159,18 +159,16 @@ export default defineComponent({
       provider
     );
     const groups = ref<{ value: string; key: string }[]>([]);
+    const categories = ref<{ value: string; key: string }[]>([]);
+    const assets = ref<object[]>([]);
 
     const selectedGroup = ref<string>((route.params.group as string) || "");
-
-    const categories = ref<{ value: string; key: string }[]>([]);
-    const selectedCategory = ref("");
+    const selectedCategory = ref<string>((route.params.category as string) || "");
+    const selectedAsset = ref<AssetData | null>(null);
 
     const categoriesCache: { [key: string]: any } = {};
-
-    const assets = ref<object[]>([]);
     const assetsCache: { [key: string]: any } = {};
 
-    const selectedAsset = ref<AssetData | null>(null);
     const sampleCode = ref("");
     const assetCount = ref(0);
     const EtherscanStore = computed(() => {
@@ -272,12 +270,9 @@ export default defineComponent({
     });
 
     const updateSelectedGroup = async () => {
-      console.log(selectedGroup.value);
       if (selectedGroup.value) {
-        categories.value = [];
-        selectedCategory.value = "";
+
         assets.value = [];
-        router.push(getLocalizedPath(`/group/${selectedGroup.value}`));
 
         if (categoriesCache[selectedGroup.value]) {
           categories.value = categoriesCache[selectedGroup.value];
@@ -311,9 +306,11 @@ export default defineComponent({
       }
     };
     watch(selectedGroup, () => {
+      categories.value = [];
+      selectedCategory.value = "";
+
       updateSelectedGroup();
     });
-    updateSelectedGroup();
     const fetchGroups = async () => {
       const result = await assetStoreRO.functions.getGroupCount();
       const groupCount = result[0];
@@ -337,6 +334,17 @@ export default defineComponent({
       ].concat(await Promise.all(promises));
     };
 
+    updateSelectedGroup();
+    updateSelectedCategory();
+    watch([selectedGroup, selectedCategory], async () => {
+      if (selectedCategory.value) {
+        router.push(getLocalizedPath(`/group/${selectedGroup.value}/category/${selectedCategory.value}`));
+      } else if (selectedGroup.value) {
+        router.push(getLocalizedPath(`/group/${selectedGroup.value}`));
+      } else {
+        router.push(getLocalizedPath(`/`));
+      }
+    });
     const fetchAssetCount = async () => {
       const result = await assetStoreRO.functions.getAssetCount();
       assetCount.value = result[0].toNumber();
