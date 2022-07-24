@@ -11,6 +11,7 @@ const lang = {
     connectMetamask: "Please connect with Metamask.",
   },
   message: {
+    notFoundMessage: "Page not Found",
     hello: "hello world",
     noAccount: "Please connect Metamask.",
     invalidNetwork: "Please switch network to { networkName }.",
