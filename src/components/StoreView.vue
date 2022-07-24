@@ -163,7 +163,9 @@ export default defineComponent({
     const assets = ref<object[]>([]);
 
     const selectedGroup = ref<string>((route.params.group as string) || "");
-    const selectedCategory = ref<string>((route.params.category as string) || "");
+    const selectedCategory = ref<string>(
+      (route.params.category as string) || ""
+    );
     const selectedAsset = ref<AssetData | null>(null);
 
     const categoriesCache: { [key: string]: any } = {};
@@ -215,6 +217,9 @@ export default defineComponent({
     };
 
     const updateSelectedCategory = async () => {
+      if (selectedCategory.value === "") {
+        return;
+      }
       assets.value = [];
       selectedAsset.value = null;
 
@@ -264,46 +269,44 @@ export default defineComponent({
     };
     watch(selectedCategory, async () => {
       console.log("categorySelected", selectedCategory.value);
-      if (selectedCategory.value !== "") {
-        updateSelectedCategory();
-      }
+      updateSelectedCategory();
     });
 
     const updateSelectedGroup = async () => {
-      if (selectedGroup.value) {
-
-        assets.value = [];
-
-        if (categoriesCache[selectedGroup.value]) {
-          categories.value = categoriesCache[selectedGroup.value];
-          return;
-        }
-        const counterResult = await assetStoreRO.functions.getCategoryCount(
-          selectedGroup.value
-        );
-        const categoryCount = counterResult[0];
-        const promises = Array(categoryCount)
-          .fill("")
-          .map(async (_, index) => {
-            const result = await assetStoreRO.functions.getCategoryNameAtIndex(
-              selectedGroup.value,
-              index
-            );
-            return {
-              value: result[0],
-              key: result[0],
-            };
-          });
-        const categoryData = [
-          {
-            value: "Please select a category",
-            key: "",
-          },
-        ].concat(await Promise.all(promises));
-
-        categoriesCache[selectedGroup.value] = categoryData;
-        categories.value = categoryData;
+      if (selectedGroup.value === "") {
+        return;
       }
+      assets.value = [];
+
+      if (categoriesCache[selectedGroup.value]) {
+        categories.value = categoriesCache[selectedGroup.value];
+        return;
+      }
+      const counterResult = await assetStoreRO.functions.getCategoryCount(
+        selectedGroup.value
+      );
+      const categoryCount = counterResult[0];
+      const promises = Array(categoryCount)
+        .fill("")
+        .map(async (_, index) => {
+          const result = await assetStoreRO.functions.getCategoryNameAtIndex(
+            selectedGroup.value,
+            index
+          );
+          return {
+            value: result[0],
+            key: result[0],
+          };
+        });
+      const categoryData = [
+        {
+          value: "Please select a category",
+          key: "",
+        },
+      ].concat(await Promise.all(promises));
+
+      categoriesCache[selectedGroup.value] = categoryData;
+      categories.value = categoryData;
     };
     watch(selectedGroup, () => {
       categories.value = [];
@@ -338,7 +341,11 @@ export default defineComponent({
     updateSelectedCategory();
     watch([selectedGroup, selectedCategory], async () => {
       if (selectedCategory.value) {
-        router.push(getLocalizedPath(`/group/${selectedGroup.value}/category/${selectedCategory.value}`));
+        router.push(
+          getLocalizedPath(
+            `/group/${selectedGroup.value}/category/${selectedCategory.value}`
+          )
+        );
       } else if (selectedGroup.value) {
         router.push(getLocalizedPath(`/group/${selectedGroup.value}`));
       } else {
