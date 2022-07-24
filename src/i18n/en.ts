@@ -11,6 +11,10 @@ const lang = {
     material: "Material",
     kamon: "Kamon",
   },
+  keyMessage: {
+    message1: 'This is a part of "On-Chain Asset Store" project, which is an effort to make variety of vector assets available on blockchains.',
+    message2: 'We are using a "crowd-minting" method, where each minter pays a small amount of gas fees to upload a vector image to the blockchain, and receives multiple NFTs as rewards.',
+  },
   mint: {
     switchNetwork: "Please switch the network.",
     connectMetamask: "Please connect with Metamask.",
