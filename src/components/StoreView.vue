@@ -2,29 +2,18 @@
   <div>
     <div class="mb-2 text-xl font-bold">On-chain Asset Store</div>
     <KeyMessage />
-    <div v-if="lang === 'ja'">
-      <p class="mb-2">
-        以下は、これまでクラウドミントによりブロックチェーン上にセーブされたベクトルアセットで、
-        他のスマートコントラクトからアクセスが可能になっています。
-        グループ、カテゴリーを選び、表示されたイメージとクリックすると、アクセスの方法が表示されます。
-      </p>
-    </div>
-    <div v-else>
-      <p class="mb-2">
-        You are able to see the list of vector assets already uploaded to the
-        blockchain by minters. Please select "group" and "category", and click
-        one of images below. It will explain how to access the vector data.
-      </p>
-    </div>
+    <p class="mb-2">
+      {{ $t("storyView.message") }}
+    </p>
     <div v-if="assetCount > 0" class="mb-2 font-bold">
-      Total Asset Count: {{ assetCount }}
+      {{ $t("storyView.totalAssetCount") }} : {{ assetCount }}
     </div>
     <select
       class="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded"
       v-model="selectedGroup"
     >
       <option v-if="groups.length === 0" selected disabled value="">
-        Loading groups...
+        {{ $t("storyView.loadingGroups") }}
       </option>
 
       <template v-else v-for="group in groups" :key="group.key">
@@ -52,11 +41,11 @@
       </template>
     </select>
     <div v-else-if="selectedGroup">
-      <p class="mt-2">Loading categories...</p>
+      <p class="mt-2">{{ $t("storyView.loadingCategories") }}</p>
     </div>
 
     <div v-if="assets.length > 0" class="mt-2">
-      <p class="mb-2">Please select one of assets below.</p>
+      <p class="mb-2">{{ $t("storyView.selectAssets") }}</p>
       <span v-for="asset in assets" :key="asset.assetId">
         <img
           @click="
@@ -73,24 +62,24 @@
         >
           <div v-if="selectedAsset.name">
             <p>
-              A sample code to fetch the SVG image of this asset.
+              {{ $t("storyView.sampleCodeMessage") }}
               <button
                 class="border rounded-md shadow-md pl-2 pr-2"
                 @click="copySample"
               >
-                copy
+                {{ $t("message.copy") }}
               </button>
             </p>
             <div class="mt-1 overflow-x-scroll">
               <pre class="text-xs">{{ sampleCode }}</pre>
             </div>
             <p class="mt-2">
-              The fetched "svg" data.
+               {{ $t("storyView.fetchedImage") }}
               <button
                 class="border rounded-md shadow-md pl-2 pr-2"
                 @click="copySVG"
               >
-                copy
+                {{ $t("message.copy") }}
               </button>
             </p>
             <div class="mt-2 overflow-x-scroll">
@@ -108,7 +97,7 @@
       </span>
     </div>
     <div v-else-if="selectedCategory">
-      <p class="mt-2">Loading assets...</p>
+      <p class="mt-2">{{ $t("storyView.loadingAssets") }}</p>
     </div>
     <References :EtherscanStore="EtherscanStore" />
   </div>
