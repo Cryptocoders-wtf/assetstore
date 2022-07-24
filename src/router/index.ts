@@ -51,7 +51,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "",
         component: NotFound,
-      }
+      },
     ],
   },
 ];

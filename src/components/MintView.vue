@@ -4,7 +4,7 @@
     <KeyMessage />
     <div>
       <div v-if="availableAssets == null">
-        <p>{{ $t("message.loading")}}</p>
+        <p>{{ $t("message.loading") }}</p>
       </div>
       <div v-else-if="availableAssets.length == 0">
         <p v-if="lang === 'ja'">

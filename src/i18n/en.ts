@@ -12,8 +12,10 @@ const lang = {
     kamon: "Kamon",
   },
   keyMessage: {
-    message1: 'This is a part of "On-Chain Asset Store" project, which is an effort to make variety of vector assets available on blockchains.',
-    message2: 'We are using a "crowd-minting" method, where each minter pays a small amount of gas fees to upload a vector image to the blockchain, and receives multiple NFTs as rewards.',
+    message1:
+      'This is a part of "On-Chain Asset Store" project, which is an effort to make variety of vector assets available on blockchains.',
+    message2:
+      'We are using a "crowd-minting" method, where each minter pays a small amount of gas fees to upload a vector image to the blockchain, and receives multiple NFTs as rewards.',
   },
   mint: {
     switchNetwork: "Please switch the network.",
@@ -31,7 +33,8 @@ const lang = {
     loading: "Loading...",
   },
   storyView: {
-    message: 'You are able to see the list of vector assets already uploaded to the blockchain by minters. Please select "group" and "category", and click one of images below. It will explain how to access the vector data.',
+    message:
+      'You are able to see the list of vector assets already uploaded to the blockchain by minters. Please select "group" and "category", and click one of images below. It will explain how to access the vector data.',
     totalAssetCount: "Total Asset Count",
     loadingGroups: "Loading groups...",
     loadingCategories: "Loading categories...",

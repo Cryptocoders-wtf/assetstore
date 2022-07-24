@@ -1,10 +1,10 @@
 <template>
   <div>
     <p class="mb-2">
-      {{ $t("keyMessage.message1")}}
+      {{ $t("keyMessage.message1") }}
     </p>
     <p class="mb-2">
-      {{ $t("keyMessage.message2")}}
+      {{ $t("keyMessage.message2") }}
     </p>
   </div>
 </template>

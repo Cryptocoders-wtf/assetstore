@@ -74,7 +74,7 @@
               <pre class="text-xs">{{ sampleCode }}</pre>
             </div>
             <p class="mt-2">
-               {{ $t("storyView.fetchedImage") }}
+              {{ $t("storyView.fetchedImage") }}
               <button
                 class="border rounded-md shadow-md pl-2 pr-2"
                 @click="copySVG"
