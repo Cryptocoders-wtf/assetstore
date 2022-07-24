@@ -169,6 +169,8 @@ export default defineComponent({
     const categoriesCache: {[key: string]: any} = {};
     
     const assets = ref<object[]>([]);
+    const assetsCache: {[key: string]: any} = {};
+    
     const selectedAsset = ref<AssetData | null>(null);
     const sampleCode = ref("");
     const assetCount = ref(0);
@@ -218,6 +220,12 @@ export default defineComponent({
     const updateSelectedCategory = async () => {
       assets.value = [];
       selectedAsset.value = null;
+
+      const cacheKey = [selectedGroup.value, selectedCategory.value].join("--");
+      if (assetsCache[cacheKey]) {
+        assets.value = assetsCache[cacheKey];
+        return ;
+      }
       const result = await assetStoreRO.functions.getAssetCountInCategory(
         selectedGroup.value,
         selectedCategory.value
@@ -253,7 +261,9 @@ export default defineComponent({
             "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
           return { index, assetId, svg, image };
         });
-      assets.value = await Promise.all(promises);
+      const assetsData = await Promise.all(promises);
+      assetsCache[cacheKey] = assetsData;
+      assets.value = assetsData;
     };
     watch(selectedCategory, async () => {
       console.log("categorySelected", selectedCategory.value);
