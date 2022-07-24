@@ -51,6 +51,7 @@
       v-if="selection && !selection.asset.registered"
       class="border shadow-md mt-2 rounded-xl pl-2 pr-2"
     >
+      <MintPanel :selection="selection" />
       <p class="mt-2">
         <b>{{ selection.asset.name }}, {{ selection.asset.category }}</b>
       </p>
@@ -210,6 +211,7 @@ import References from "@/components/References.vue";
 import NFTList from "@/components/NFTList.vue";
 import KeyMessage from "@/components/KeyMessage.vue";
 import NetworkGate from "@/components/NetworkGate.vue";
+import MintPanel from "@/components/MintPanel.vue";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -225,6 +227,7 @@ export default defineComponent({
     NFTList,
     KeyMessage,
     NetworkGate,
+    MintPanel,
   },
   props: ["addresses"],
   setup(props) {
