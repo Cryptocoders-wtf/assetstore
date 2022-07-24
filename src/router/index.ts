@@ -46,7 +46,13 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/:page(.*)",
     name: "NotFoundPage",
-    component: NotFound,
+    component: Layout,
+    children: [
+      {
+        path: "",
+        component: NotFound,
+      }
+    ],
   },
 ];
 
