@@ -25,7 +25,10 @@ const lang = {
     noAccount: "Please connect Metamask.",
     invalidNetwork: "Please switch network to { networkName }.",
     processing: "Processing...",
-    copy: "copy", 
+    copy: "copy",
+    nftListTitle: "List of crowd-minted NFTs",
+    resources: "Resources",
+    loading: "Loading...",
   },
   storyView: {
     message: 'You are able to see the list of vector assets already uploaded to the blockchain by minters. Please select "group" and "category", and click one of images below. It will explain how to access the vector data.',
