@@ -6,6 +6,11 @@ const lang = {
     connected: "Connected",
     nometamask: "No Metamask",
   },
+  header: {
+    home: "Home",
+    material: "Material",
+    kamon: "Kamon",
+  },
   mint: {
     switchNetwork: "Please switch the network.",
     connectMetamask: "Please connect with Metamask.",
