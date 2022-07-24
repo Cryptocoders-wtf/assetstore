@@ -20,6 +20,10 @@ const routeChildren: Array<RouteRecordRaw> = [
     path: "kamon",
     component: MintKamon,
   },
+  {
+    path: "group/:group?/:path(category)?/:category?",
+    component: Home,
+  },
 ];
 
 const routes: Array<RouteRecordRaw> = [
@@ -28,7 +32,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Layout,
     children: [
       {
-        path: "/:lang",
+        path: "/:lang(en|ja)",
         component: Blank,
         children: routeChildren,
       },

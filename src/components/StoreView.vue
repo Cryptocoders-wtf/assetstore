@@ -21,30 +21,35 @@
     </div>
     <select
       class="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded"
-      @change="groupSelected"
+      v-model="selectedGroup"
     >
-      <option v-if="groups.length > 0" selected disabled value="">
-        Please select a group
+      <option v-if="groups.length === 0" selected disabled value="">
+        Loading groups...
       </option>
-      <option v-else selected disabled value="">Loading groups...</option>
-      <option v-for="group in groups" v-bind:key="group" :value="group">
-        {{ group }}
-      </option>
+
+      <template v-else v-for="group in groups" :key="group.key">
+        <option :value="group.key" v-if="group.key === ''" disabled>
+          {{ group.value }}
+        </option>
+        <option :value="group.key" v-else>
+          {{ group.value }}
+        </option>
+      </template>
     </select>
 
     <select
       v-if="categories.length > 0"
       class="form-select block mt-2 w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded"
-      @change="categorySelected"
+      v-model="selectedCategory"
     >
-      <option selected disabled value="">Please select a category</option>
-      <option
-        v-for="category in categories"
-        v-bind:key="category"
-        :value="category"
-      >
-        {{ category }}
-      </option>
+      <template v-for="category in categories" :key="category">
+        <option :value="category.key" v-if="category.key === ''" disabled>
+          {{ category.value }}
+        </option>
+        <option :value="category.key" v-else>
+          {{ category.value }}
+        </option>
+      </template>
     </select>
     <div v-else-if="selectedGroup">
       <p class="mt-2">Loading categories...</p>
@@ -110,7 +115,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { ethers } from "ethers";
 import { AssetData } from "@/models/asset";
@@ -120,6 +125,9 @@ import References from "@/components/References.vue";
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
 };
+import { useRouter, useRoute } from "vue-router";
+
+import { useLocalizedPath } from "@/i18n/utils";
 
 export default defineComponent({
   name: "StoreView",
@@ -129,6 +137,10 @@ export default defineComponent({
     References,
   },
   setup(props) {
+    const router = useRouter();
+    const route = useRoute();
+    const { getLocalizedPath } = useLocalizedPath();
+
     const i18n = useI18n();
     const lang = computed(() => {
       return i18n.locale.value;
@@ -146,12 +158,19 @@ export default defineComponent({
       AssetStore.wabi.abi,
       provider
     );
-    const groups = ref<string[]>([]);
-    const selectedGroup = ref("");
-    const categories = ref<string[]>([]);
-    const selectedCategory = ref("");
+    const groups = ref<{ value: string; key: string }[]>([]);
+    const categories = ref<{ value: string; key: string }[]>([]);
     const assets = ref<object[]>([]);
+
+    const selectedGroup = ref<string>((route.params.group as string) || "");
+    const selectedCategory = ref<string>(
+      (route.params.category as string) || ""
+    );
     const selectedAsset = ref<AssetData | null>(null);
+
+    const categoriesCache: { [key: string]: any } = {};
+    const assetsCache: { [key: string]: any } = {};
+
     const sampleCode = ref("");
     const assetCount = ref(0);
     const EtherscanStore = computed(() => {
@@ -197,13 +216,18 @@ export default defineComponent({
       */
     };
 
-    const categorySelected = async (
-      e: Event & { target: HTMLInputElement }
-    ) => {
-      console.log("categorySelected", e.target.value);
-      selectedCategory.value = e.target.value;
+    const updateSelectedCategory = async () => {
+      if (selectedCategory.value === "") {
+        return;
+      }
       assets.value = [];
       selectedAsset.value = null;
+
+      const cacheKey = [selectedGroup.value, selectedCategory.value].join("--");
+      if (assetsCache[cacheKey]) {
+        assets.value = assetsCache[cacheKey];
+        return;
+      }
       const result = await assetStoreRO.functions.getAssetCountInCategory(
         selectedGroup.value,
         selectedCategory.value
@@ -239,17 +263,29 @@ export default defineComponent({
             "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
           return { index, assetId, svg, image };
         });
-      assets.value = await Promise.all(promises);
+      const assetsData = await Promise.all(promises);
+      assetsCache[cacheKey] = assetsData;
+      assets.value = assetsData;
     };
+    watch(selectedCategory, async () => {
+      console.log("categorySelected", selectedCategory.value);
+      updateSelectedCategory();
+    });
 
-    const groupSelected = async (e: Event & { target: HTMLInputElement }) => {
-      console.log("groupSelected", e.target.value);
-      selectedGroup.value = e.target.value;
-      categories.value = [];
-      const result = await assetStoreRO.functions.getCategoryCount(
+    const updateSelectedGroup = async () => {
+      if (selectedGroup.value === "") {
+        return;
+      }
+      assets.value = [];
+
+      if (categoriesCache[selectedGroup.value]) {
+        categories.value = categoriesCache[selectedGroup.value];
+        return;
+      }
+      const counterResult = await assetStoreRO.functions.getCategoryCount(
         selectedGroup.value
       );
-      const categoryCount = result[0];
+      const categoryCount = counterResult[0];
       const promises = Array(categoryCount)
         .fill("")
         .map(async (_, index) => {
@@ -257,11 +293,27 @@ export default defineComponent({
             selectedGroup.value,
             index
           );
-          return result[0];
+          return {
+            value: result[0],
+            key: result[0],
+          };
         });
-      categories.value = await Promise.all(promises);
-    };
+      const categoryData = [
+        {
+          value: "Please select a category",
+          key: "",
+        },
+      ].concat(await Promise.all(promises));
 
+      categoriesCache[selectedGroup.value] = categoryData;
+      categories.value = categoryData;
+    };
+    watch(selectedGroup, () => {
+      categories.value = [];
+      selectedCategory.value = "";
+
+      updateSelectedGroup();
+    });
     const fetchGroups = async () => {
       const result = await assetStoreRO.functions.getGroupCount();
       const groupCount = result[0];
@@ -271,11 +323,35 @@ export default defineComponent({
           const result = await assetStoreRO.functions.getGroupNameAtIndex(
             index
           );
-          return result[0];
+          return {
+            key: result[0],
+            value: result[0],
+          };
         });
-      groups.value = await Promise.all(promises);
+
+      groups.value = [
+        {
+          value: "Please select a group",
+          key: "",
+        },
+      ].concat(await Promise.all(promises));
     };
 
+    updateSelectedGroup();
+    updateSelectedCategory();
+    watch([selectedGroup, selectedCategory], async () => {
+      if (selectedCategory.value) {
+        router.push(
+          getLocalizedPath(
+            `/group/${selectedGroup.value}/category/${selectedCategory.value}`
+          )
+        );
+      } else if (selectedGroup.value) {
+        router.push(getLocalizedPath(`/group/${selectedGroup.value}`));
+      } else {
+        router.push(getLocalizedPath(`/`));
+      }
+    });
     const fetchAssetCount = async () => {
       const result = await assetStoreRO.functions.getAssetCount();
       assetCount.value = result[0].toNumber();
@@ -297,10 +373,8 @@ export default defineComponent({
       EtherscanStore,
       assetCount,
       groups,
-      groupSelected,
       selectedGroup,
       categories,
-      categorySelected,
       selectedCategory,
       assets,
       assetSelected,
