@@ -261,12 +261,12 @@ export default defineComponent({
       totalCount: loadedAssets.length,
       onSelect,
       selection,
-      assetStoreRO,
       EtherscanStore,
       EtherscanToken,
       OpenSeaPath,
       tokens,
       tokensPerAsset,
+      assetStoreRO,
       tokenAbi: KamonToken.wabi.abi,
     };
   },
