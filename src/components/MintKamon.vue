@@ -51,7 +51,7 @@
       v-if="selection && !selection.asset.registered"
       class="border shadow-md mt-2 rounded-xl pl-2 pr-2"
     >
-      <MintPanel :selection="selection" :networkContext="networkContext" :addresses="addresses"
+      <MintPanel :selection="selection" :tokenAbi="tokenAbi" :addresses="addresses"
                 :tokensPerAsset="tokensPerAsset" :assetStoreRO="assetStoreRO"
                 :priceRange="{ low:0.04, high: 0.23 }"/>
     </div>
@@ -133,27 +133,6 @@ export default defineComponent({
       props.addresses.network == "localhost"
         ? new ethers.providers.JsonRpcProvider()
         : new ethers.providers.AlchemyProvider(props.addresses.network);
-
-    let prevProvider: ethers.providers.Web3Provider | null = null;
-    const networkContext = computed(() => {
-      if (
-        store.state.account &&
-        store.state.chainId == props.addresses.chainId
-      ) {
-        const provider = new ethers.providers.Web3Provider(
-          store.state.ethereum
-        );
-        const signer = provider.getSigner();
-        const contract = new ethers.Contract(
-          props.addresses.kamonAddress,
-          KamonToken.wabi.abi,
-          signer
-        );
-
-        return { provider, signer, contract };
-      }
-      return null;
-    });
 
     const assetStoreRO = new ethers.Contract(
       props.addresses.storeAddress,
@@ -281,13 +260,13 @@ export default defineComponent({
       totalCount: loadedAssets.length,
       onSelect,
       selection,
-      networkContext,
       assetStoreRO,
       EtherscanStore,
       EtherscanToken,
       OpenSeaPath,
       tokens,
       tokensPerAsset,
+      tokenAbi: KamonToken.wabi.abi,
     };
   },
 });

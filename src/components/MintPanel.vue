@@ -136,12 +136,14 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref, watch } from "vue";
+import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { ethers } from "ethers";
 import NetworkGate from "@/components/NetworkGate.vue";
 
 export default defineComponent({
-  props: ["selection", "addresses", "tokensPerAsset", "networkContext", "assetStoreRO", "priceRange"],
+  props: ["selection", "addresses", "tokensPerAsset", "tokenAbi", "assetStoreRO", "priceRange"],
   components: {
     NetworkGate,
   },
@@ -151,9 +153,31 @@ export default defineComponent({
       return i18n.locale.value;
     });
     const route = useRoute();
+    const store = useStore();
+
     const affiliateId =
       typeof route.query.ref == "string" ? parseInt(route.query.ref) || 0 : 0;
-    //console.log("***", affiliateId);
+
+    const networkContext = computed(() => {
+      if (
+        store.state.account &&
+        store.state.chainId == props.addresses.chainId
+      ) {
+        const provider = new ethers.providers.Web3Provider(
+          store.state.ethereum
+        );
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          props.addresses.kamonAddress,
+          props.tokenAbi,
+          signer
+        );
+
+        return { provider, signer, contract };
+      }
+      return null;
+    });
+
     const minterName = ref("");
     const validName = computed(() => {
       const length = encoder.encode(minterName.value).length;
@@ -169,7 +193,7 @@ export default defineComponent({
     const encoder = new TextEncoder();
     const mint = async () => {
       //console.log("*** mint", selection.value.asset.asset);
-      if (!props.networkContext) {
+      if (!networkContext.value) {
         console.error("Mint: we are not supposed to come here");
         return;
       }
@@ -193,14 +217,14 @@ export default defineComponent({
         // this is success
       }
 
-      asset.soulbound = await props.networkContext.signer.getAddress();
+      asset.soulbound = await networkContext.value.signer.getAddress();
       //console.log(asset.soulbound);
       try {
         messageRef.value = "message.minting";
         asset.minter = minterName.value;
         asset.group = ""; // gas saving
         console.log("*** minting", asset);
-        const tx = await props.networkContext.contract.mintWithAsset(
+        const tx = await networkContext.value.contract.mintWithAsset(
           asset,
           affiliateId
         );
