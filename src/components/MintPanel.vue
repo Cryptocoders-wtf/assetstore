@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div
+      v-if="selection && !selection.asset.registered"
+      class="border shadow-md mt-2 rounded-xl pl-2 pr-2"
+    >
     <p class="mt-2">
       <b>{{ selection.asset.name }}, {{ selection.asset.category }}</b>
     </p>

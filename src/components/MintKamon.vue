@@ -22,17 +22,23 @@
       </div>
       <div v-else>
         <p v-if="lang === 'ja'" class="mb-2">
-          下に表示されている家紋の一つをクリックし、
-          下に表示されるミントボタンを押して下さい（家紋のベクトルデータは<a
+          下に表示されている画像の一つをクリックし、
+          下に表示されるミントボタンを押して下さい。
+        </p>
+        <p v-else class="mb-2">
+          Please select one of images below and the follow the
+          instruction displayed further below.
+        </p>
+        <p v-if="lang === 'ja'" class="mb-2">
+          * 家紋のベクトルデータは<a
             class="underline"
             href="http://hakko-daiodo.com"
             >発行大王堂様</a
-          >よりご提供いただいています）。
+          >よりご提供いただいています。
         </p>
         <p v-else class="mb-2">
-          Please select one of Kamon Symbols below and the follow the
-          instruction displayed further below (all vector data were provided by
-          <a class="underline" href="http://hakko-daiodo.com">Hakko Daiodo</a>).
+          *All Kamon vector data were provided by
+          <a class="underline" href="http://hakko-daiodo.com">Hakko Daiodo</a>.
         </p>
         <span v-for="asset in availableAssets" v-bind:key="asset.name">
           <img
@@ -47,14 +53,9 @@
         </span>
       </div>
     </div>
-    <div
-      v-if="selection && !selection.asset.registered"
-      class="border shadow-md mt-2 rounded-xl pl-2 pr-2"
-    >
-      <MintPanel :selection="selection" :tokenAbi="tokenAbi" :addresses="addresses"
+    <MintPanel :selection="selection" :tokenAbi="tokenAbi" :addresses="addresses"
                 :tokensPerAsset="tokensPerAsset" :assetStoreRO="assetStoreRO"
                 :priceRange="{ low:0.04, high: 0.23 }"/>
-    </div>
 
     <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
     <References
