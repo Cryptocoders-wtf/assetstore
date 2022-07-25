@@ -47,9 +47,6 @@ import { getAddresses } from "@/utils/const";
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
 };
-const contentsToken = {
-  wabi: require("../abis/MaterialToken.json"), // wrapped abi
-};
 
 export default defineComponent({
   name: "MintView",
@@ -60,7 +57,7 @@ export default defineComponent({
     MintPanel,
     AssetsPanel,
   },
-  props: ["addresses", "title", "priceRange"],
+  props: ["addresses", "title", "priceRange", "contentsToken"],
   setup(props) {
     const tokenOffset = (props.addresses.network == "rinkeby") ? 0 : 580;
     const svgStyle = 0;
@@ -90,7 +87,7 @@ export default defineComponent({
     );
     const tokenRO = new ethers.Contract(
       props.addresses.tokenAddress,
-      contentsToken.wabi.abi,
+      props.contentsToken.wabi.abi,
       provider
     );
     const tokens = ref<Token[]>([]);
@@ -162,7 +159,7 @@ export default defineComponent({
       tokens,
       tokensPerAsset,
       assetStoreRO,
-      tokenAbi: contentsToken.wabi.abi,
+      tokenAbi: props.contentsToken.wabi.abi,
     };
   },
 });

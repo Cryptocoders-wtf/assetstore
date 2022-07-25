@@ -2,6 +2,7 @@
   <div class="max-w-xl mx-auto text-left p-2">
     <mint-view :addresses="addresses" title="Google Material Icons"
       :priceRange="{ low: 0.05, high: 0.15 }"
+      :contentsToken="contentsToken"
      />
   </div>
 </template>
@@ -11,6 +12,10 @@ import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import { getContractAddresses } from "@/utils/networks";
 import MintView from "@/components/MintView.vue";
+
+const contentsToken = {
+  wabi: require("../abis/MaterialToken.json"), // wrapped abi
+};
 
 export default defineComponent({
   name: "HomePage",
@@ -24,7 +29,7 @@ export default defineComponent({
     const addresses = getContractAddresses(network)!;
     addresses.tokenAddress = addresses.materialAddress;
     return {
-      addresses,
+      addresses, contentsToken,
     };
   },
 });
