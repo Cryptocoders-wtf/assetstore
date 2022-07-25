@@ -6,6 +6,7 @@ import NotFound from "../components/NotFound.vue";
 import Assets from "../views/Assets.vue";
 import Materials from "../views/Materials.vue";
 import Kamons from "../views/Kamons.vue";
+import Emoji from "../views/Emoji.vue";
 
 const routeChildren: Array<RouteRecordRaw> = [
   {
@@ -19,6 +20,10 @@ const routeChildren: Array<RouteRecordRaw> = [
   {
     path: "kamon",
     component: Kamons,
+  },
+  {
+    path: "emoji",
+    component: Emoji,
   },
   {
     path: "group/:group?/:path(category)?/:category?",
