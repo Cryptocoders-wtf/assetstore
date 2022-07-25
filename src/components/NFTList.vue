@@ -21,17 +21,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
-import { useI18n } from "vue-i18n";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   props: ["tokens", "OpenSeaPath"],
-  setup() {
-    const i18n = useI18n();
-    const lang = computed(() => {
-      return i18n.locale.value;
-    });
-    return { lang };
-  },
 });
 </script>
