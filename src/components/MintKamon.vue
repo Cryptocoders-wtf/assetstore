@@ -15,7 +15,7 @@
       :addresses="addresses"
       :tokensPerAsset="tokensPerAsset"
       :assetStoreRO="assetStoreRO"
-      :priceRange="{ low: 0.04, high: 0.23 }"
+      :priceRange="priceRange"
     />
 
     <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
@@ -60,7 +60,7 @@ export default defineComponent({
     MintPanel,
     AssetsPanel,
   },
-  props: ["addresses", "title"],
+  props: ["addresses", "title", "priceRange"],
   setup(props) {
     const tokenOffset = -1;
     const svgStyle = 8;

@@ -7,13 +7,14 @@
       :availableAssets="availableAssets"
       :loadedAssets="loadedAssets"
     />
+      <slot />
     <MintPanel
       :selection="selection"
       :tokenAbi="tokenAbi"
       :addresses="addresses"
       :tokensPerAsset="tokensPerAsset"
       :assetStoreRO="assetStoreRO"
-      :priceRange="{ low: 0.05, high: 0.15 }"
+      :priceRange="priceRange"
     />
 
     <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
@@ -58,7 +59,7 @@ export default defineComponent({
     MintPanel,
     AssetsPanel,
   },
-  props: ["addresses", "title"],
+  props: ["addresses", "title", "priceRange"],
   setup(props) {
     const tokenOffset = (props.addresses.network == "rinkeby") ? 0 : 580;
     const svgStyle = 0;

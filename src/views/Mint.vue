@@ -1,6 +1,8 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
-    <mint-view :addresses="addresses" title="Google Material Icons" />
+    <mint-view :addresses="addresses" title="Google Material Icons"
+      :priceRange="{ low: 0.05, high: 0.15 }"
+     />
   </div>
 </template>
 
