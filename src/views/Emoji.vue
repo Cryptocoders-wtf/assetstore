@@ -3,7 +3,7 @@
     <mint-view
       :addresses="addresses"
       title="Open Emoji National Flags"
-      :priceRange="{ low: 0.04, high: 0.23 }"
+      :priceRange="{ low: 0.08, high: 0.35 }"
       :contentsToken="contentsToken"
       :loadedAssets="loadedAssets"
       :options="options"
