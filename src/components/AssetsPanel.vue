@@ -5,12 +5,12 @@
     </div>
     <div v-else-if="availableAssets.length == 0">
       <p>
-        {{ $tc('assetPanel.thanks', {totalCount: loadedAssets.length}) }}
+        {{ $tc("assetPanel.thanks", { totalCount: loadedAssets.length }) }}
       </p>
     </div>
     <div v-else>
       <p class="mb-2">
-        {{ $t('assetPanel.mint') }}
+        {{ $t("assetPanel.mint") }}
       </p>
       <slot />
       <span v-for="asset in availableAssets" v-bind:key="asset.name">

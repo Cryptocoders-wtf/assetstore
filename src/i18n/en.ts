@@ -46,7 +46,8 @@ const lang = {
   },
   assetPanel: {
     mint: "Please select one of images below and the follow the instruction displayed further below.",
-    thanks: "Thanks to all the minters, the current release of { totalCount } NFTs were sold out. We are going to add more NTFs soon. Please stay tuned!",
+    thanks:
+      "Thanks to all the minters, the current release of { totalCount } NFTs were sold out. We are going to add more NTFs soon. Please stay tuned!",
   },
   languages,
 };

@@ -67,7 +67,7 @@ export default defineComponent({
     const isSignedIn = computed(() => store.getters.isSignedIn);
     const isBusy = ref(false);
     const connect = async () => {
-      isBusy.value = true
+      isBusy.value = true;
       try {
         await requestAccount(); // ethereum.on('accountsChanged') in App.vue will handle the result
       } catch (e) {

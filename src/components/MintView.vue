@@ -54,7 +54,14 @@ export default defineComponent({
     MintPanel,
     AssetsPanel,
   },
-  props: ["addresses", "title", "priceRange", "contentsToken", "loadedAssets", "options"],
+  props: [
+    "addresses",
+    "title",
+    "priceRange",
+    "contentsToken",
+    "loadedAssets",
+    "options",
+  ],
   setup(props) {
     const { EtherscanStore, EtherscanToken, OpenSeaPath } = getAddresses(
       props.addresses.network,
