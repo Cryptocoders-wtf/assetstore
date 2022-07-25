@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mb-2 text-xl font-bold">Google Material Icons</div>
+    <div class="mb-2 text-xl font-bold">{{ title }}</div>
     <KeyMessage />
     <AssetsPanel
       @on-select="(asset) => onSelect(asset)"
@@ -58,7 +58,7 @@ export default defineComponent({
     MintPanel,
     AssetsPanel,
   },
-  props: ["addresses"],
+  props: ["addresses", "title"],
   setup(props) {
     const tokenOffset = (props.addresses.network == "rinkeby") ? 0 : 580;
     const svgStyle = 0;

@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
-    <mint-view :addresses="addresses" />
+    <mint-view :addresses="addresses" title="Google Material Icons" />
   </div>
 </template>
 

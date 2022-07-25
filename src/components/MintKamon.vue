@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mb-2 text-xl font-bold">Kamon Symbols by Hakko Daiodo</div>
+    <div class="mb-2 text-xl font-bold">{{ title }}</div>
     <KeyMessage />
     <AssetsPanel
       @on-select="(asset) => onSelect(asset)"
@@ -62,7 +62,7 @@ export default defineComponent({
     AssetsPanel,
     KamonMessage,
   },
-  props: ["addresses"],
+  props: ["addresses", "title"],
   setup(props) {
     const tokenOffset = -1;
     const svgStyle = 8;
