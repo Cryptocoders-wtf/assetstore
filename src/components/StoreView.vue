@@ -219,7 +219,7 @@ export default defineComponent({
     const updateSelectedCategory = async () => {
       assets.value = [];
       selectedAsset.value = null;
-      if (selectedCategory.value === "") {
+      if (selectedCategory.value === "" || selectedCategory.value === undefined) {
         return;
       }
 
@@ -274,7 +274,7 @@ export default defineComponent({
 
     const updateSelectedGroup = async () => {
       assets.value = [];
-      if (selectedGroup.value === "") {
+      if (selectedGroup.value === "" || selectedGroup.value === undefined) {
         return;
       }
 
