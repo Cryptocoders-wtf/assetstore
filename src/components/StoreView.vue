@@ -206,11 +206,11 @@ export default defineComponent({
     };
 
     const updateSelectedCategory = async () => {
-      if (selectedCategory.value === "") {
-        return;
-      }
       assets.value = [];
       selectedAsset.value = null;
+      if (selectedCategory.value === "" || selectedCategory.value === undefined) {
+        return;
+      }
 
       const cacheKey = [selectedGroup.value, selectedCategory.value].join("--");
       if (assetsCache[cacheKey]) {
@@ -262,10 +262,10 @@ export default defineComponent({
     });
 
     const updateSelectedGroup = async () => {
-      if (selectedGroup.value === "") {
+      assets.value = [];
+      if (selectedGroup.value === "" || selectedGroup.value === undefined) {
         return;
       }
-      assets.value = [];
 
       if (categoriesCache[selectedGroup.value]) {
         categories.value = categoriesCache[selectedGroup.value];
@@ -339,6 +339,20 @@ export default defineComponent({
         router.push(getLocalizedPath(`/group/${selectedGroup.value}`));
       } else {
         router.push(getLocalizedPath(`/`));
+      }
+    });
+    
+    const routeParams = computed(() => {
+      return [route.params.group as string, route.params.category as string];
+    });
+    watch(routeParams, () => {
+      const [group, category] = routeParams.value
+      // console.log(group, selectedGroup.value, category, selectedCategory.value)
+      if (group !== selectedGroup.value) {
+        selectedGroup.value = group;
+      }
+      if (category !== selectedCategory.value) {
+        selectedCategory.value = category;
       }
     });
     const fetchAssetCount = async () => {
