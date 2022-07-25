@@ -46,7 +46,7 @@ import { getAddresses } from "@/utils/const";
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
 };
-const MaterialToken = {
+const contentsToken = {
   wabi: require("../abis/MaterialToken.json"), // wrapped abi
 };
 
@@ -61,6 +61,10 @@ export default defineComponent({
   },
   props: ["addresses"],
   setup(props) {
+    const tokenOffset = 580;
+    const svgStyle = 0;
+    const initTokenPer = 4;
+    
     const {
       EtherscanBase,
       OpenSeaBase,
@@ -87,11 +91,11 @@ export default defineComponent({
     );
     const tokenRO = new ethers.Contract(
       props.addresses.tokenAddress,
-      MaterialToken.wabi.abi,
+      contentsToken.wabi.abi,
       provider
     );
     const tokens = ref<Token[]>([]);
-    const {onSelect, selection, tokensPerAsset } = useOnSelect(4, tokenRO);
+    const {onSelect, selection, tokensPerAsset } = useOnSelect(initTokenPer, tokenRO);
 
     provider.once("block", () => {
       tokenRO.on(tokenRO.filters.Transfer(), async (from, to, tokenId) => {
@@ -106,8 +110,8 @@ export default defineComponent({
     });
 
     const fetchPrimaryTokens = async () => {
-      const result = await tokenRO.functions.totalSupply();
-      const count = result[0].toNumber() / tokensPerAsset.value;
+      const resultSupply = await tokenRO.functions.totalSupply();
+      const count = resultSupply[0].toNumber() / tokensPerAsset.value;
       const promises2 = Array(count)
         .fill({})
         .map(async (_, index) => {
@@ -115,8 +119,10 @@ export default defineComponent({
             return index; // we already have it
           }
 
-          if (index > 580) {
-            const result = await tokenRO.functions.assetIdOfToken(index * 4);
+          if (index > tokenOffset) {
+            const result = await tokenRO.functions.assetIdOfToken(
+              index * tokensPerAsset.value
+            );
             const assetId = result[0].toNumber();
             const attr = await assetStoreRO.functions.getAttributes(assetId);
             const name = attr[0][2];
@@ -135,7 +141,7 @@ export default defineComponent({
       await Promise.all(promises2);
       availableAssets.value = loadedAssets.filter(assetFilter);
 
-      fetchTokens(count, tokens.value, tokensPerAsset.value, 0, assetStoreRO, tokenRO, (updateTokens) => {
+      fetchTokens(count, tokens.value, tokensPerAsset.value, svgStyle, assetStoreRO, tokenRO, (updateTokens) => {
         tokens.value = updateTokens;
       });
     };
@@ -152,7 +158,7 @@ export default defineComponent({
       tokens,
       tokensPerAsset,
       assetStoreRO,
-      tokenAbi: MaterialToken.wabi.abi,
+      tokenAbi: contentsToken.wabi.abi,
     };
   },
 });
