@@ -2,46 +2,8 @@
   <div>
     <div class="mb-2 text-xl font-bold">Google Material Icons</div>
     <KeyMessage />
-    <div>
-      <div v-if="availableAssets == null">
-        <p v-if="lang === 'ja'">読み込み中です...</p>
-        <p v-else>Loading...</p>
-      </div>
-      <div v-else-if="availableAssets.length == 0">
-        <p v-if="lang === 'ja'">
-          今回の発行分（{{
-            totalCount
-          }}個）に関しては、クラウドミンティングが完了いたししました。ご協力、ありがとうございます。
-          さらにアイコンを追加する予定なので、少々お待ちください。
-        </p>
-        <p v-else>
-          Thanks to all the minters, the initial release of
-          {{ totalCount }} icons were sold out. We are going to add more icons
-          soon. Please stay tuned!
-        </p>
-      </div>
-      <div v-else>
-        <p v-if="lang === 'ja'" class="mb-2">
-          下に表示されているGoogle Material Iconの一つをクリックし、
-          下に表示されるミントボタンを押して下さい。
-        </p>
-        <p v-else class="mb-2">
-          Please select one of Material Icons below and the follow the
-          instruction displayed below those icons.
-        </p>
-        <span v-for="asset in availableAssets" v-bind:key="asset.name">
-          <img
-            @click="
-              () => {
-                onSelect(asset);
-              }
-            "
-            :src="asset.image"
-            class="cursor-pointer w-10 inline-block rounded-xl"
-          />
-        </span>
-      </div>
-    </div>
+    <AssetsPanel @on-select="(asset: OriginalAssetData) => onSelect(asset)"
+      :availableAssets="availableAssets" :loadedAssets="loadedAssets" />
     <MintPanel :selection="selection" :tokenAbi="tokenAbi" :addresses="addresses"
             :tokensPerAsset="tokensPerAsset" :assetStoreRO="assetStoreRO"
             :priceRange="{ low:0.05, high: 0.15 }"/>
@@ -72,6 +34,7 @@ import References from "@/components/References.vue";
 import NFTList from "@/components/NFTList.vue";
 import KeyMessage from "@/components/KeyMessage.vue";
 import MintPanel from "@/components/MintPanel.vue";
+import AssetsPanel from "@/components/AssetsPanel.vue";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -87,6 +50,7 @@ export default defineComponent({
     NFTList,
     KeyMessage,
     MintPanel,
+    AssetsPanel,
   },
   props: ["addresses"],
   setup(props) {
@@ -242,8 +206,8 @@ export default defineComponent({
 
     return {
       lang,
-      availableAssets,
-      totalCount: actionAssets.length,
+      availableAssets, 
+      loadedAssets: actionAssets,
       onSelect,
       selection,
       EtherscanStore,
