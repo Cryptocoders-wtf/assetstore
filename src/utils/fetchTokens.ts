@@ -35,7 +35,6 @@ export const fetchTokens = async (count:number, tokens:Token[], tokensPerAsset: 
   for (i=0; i<promises.length; i++) {
     const token = await promises[i];
     updateTokens.push(token);
+    callback(updateTokens.map(token=>{return token;}));
   }
-
-  callback(updateTokens);
 };

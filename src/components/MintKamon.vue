@@ -71,8 +71,6 @@ export default defineComponent({
     const initTokenPer = 0;
     
     const {
-      EtherscanBase,
-      OpenSeaBase,
       EtherscanStore,
       EtherscanToken,
       OpenSeaPath,

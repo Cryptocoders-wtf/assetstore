@@ -61,13 +61,11 @@ export default defineComponent({
   },
   props: ["addresses"],
   setup(props) {
-    const tokenOffset = 580;
+    const tokenOffset = (props.addresses.network == "rinkeby") ? 0 : 580;
     const svgStyle = 0;
     const initTokenPer = 4;
     
     const {
-      EtherscanBase,
-      OpenSeaBase,
       EtherscanStore,
       EtherscanToken,
       OpenSeaPath,
