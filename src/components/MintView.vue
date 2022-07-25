@@ -30,7 +30,6 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { ethers } from "ethers";
-import { loadedAssets } from "../resources/materials";
 import { AssetData } from "@/models/asset";
 import { Token } from "@/models/token";
 import References from "@/components/References.vue";
@@ -55,14 +54,14 @@ export default defineComponent({
     MintPanel,
     AssetsPanel,
   },
-  props: ["addresses", "title", "priceRange", "contentsToken", "options"],
+  props: ["addresses", "title", "priceRange", "contentsToken", "loadedAssets", "options"],
   setup(props) {
     const { EtherscanStore, EtherscanToken, OpenSeaPath } = getAddresses(
       props.addresses.network,
       props.addresses.storeAddress,
       props.addresses.tokenAddress
     );
-    const assetIndex = loadedAssets.reduce(assetsReduce, {});
+    const assetIndex = props.loadedAssets.reduce(assetsReduce, {});
     const availableAssets = ref<AssetData[] | null>(null);
 
     console.log("* network", props.addresses.chainId);
@@ -137,7 +136,7 @@ export default defineComponent({
           return index;
         });
       await Promise.all(promises2);
-      availableAssets.value = loadedAssets.filter(assetFilter);
+      availableAssets.value = props.loadedAssets.filter(assetFilter);
 
       fetchTokens(
         count,
@@ -155,7 +154,6 @@ export default defineComponent({
 
     return {
       availableAssets,
-      loadedAssets,
       onSelect,
       selection,
       EtherscanStore,

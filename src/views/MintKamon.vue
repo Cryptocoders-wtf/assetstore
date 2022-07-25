@@ -5,6 +5,7 @@
       title="Kamon Symbols by Hakko Daiodo"
       :priceRange="{ low: 0.04, high: 0.23 }"
       :contentsToken="contentsToken"
+      :loadedAssets="loadedAssets"
       :options="options"
     >
       <KamonMessage />
@@ -18,6 +19,7 @@ import { useRoute } from "vue-router";
 import { getContractAddresses } from "@/utils/networks";
 import MintView from "@/components/MintKamon.vue";
 import KamonMessage from "@/components/KamonMessage.vue";
+import { loadedAssets } from "../resources/kamon";
 
 const contentsToken = {
   wabi: require("../abis/KamonToken.json"), // wrapped abi
@@ -44,6 +46,7 @@ export default defineComponent({
     return {
       addresses,
       contentsToken,
+      loadedAssets,
       options,
     };
   },
