@@ -1,4 +1,6 @@
-export const assetBase: any = {
+import { AssetBase } from "@/models/asset";
+
+export const assetBase: AssetBase = {
   width: 24,
   height: 24,
   minter: "",

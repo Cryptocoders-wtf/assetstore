@@ -11,6 +11,21 @@ export interface OriginalAssetPart {
   body: string | Uint8Array;
   color?: string;
 }
+
+export interface AssetBase {
+  width: number;
+  height: number;
+  minter: string;
+  name?: string;
+  group?: string;
+  category?: string;
+  svgPart?: string;
+  image?: string;
+  svg?: string;
+  metadata?: Uint8Array;
+  parts?: OriginalAssetPart[];
+}
+
 export interface OriginalAssetData {
   name: string;
   group?: string;
