@@ -12,7 +12,7 @@
         :src="selection.asset.image"
         class="w-16 inline-block rounded-xl m-2"
       />
-      <p class="mb-40">{{ $t("message.preparing") }}</p>
+      <p class="mb-40">{{ $t("mintPanel.preparing") }}</p>
     </div>
     <div v-else>
       <img
