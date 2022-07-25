@@ -7,17 +7,7 @@
       :availableAssets="availableAssets"
       :loadedAssets="loadedAssets"
     >
-      <p v-if="lang === 'ja'" class="mb-2">
-        * 家紋のベクトルデータは<a
-          class="underline"
-          href="http://hakko-daiodo.com"
-          >発行大王堂様</a
-        >よりご提供いただいています。
-      </p>
-      <p v-else class="mb-2">
-        *All Kamon vector data were provided by
-        <a class="underline" href="http://hakko-daiodo.com">Hakko Daiodo</a>.
-      </p>
+      <KamonMessage />
     </AssetsPanel>
     <MintPanel
       :selection="selection"
@@ -39,7 +29,6 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
 import { ethers } from "ethers";
 import { loadedAssets } from "../resources/kamon";
 import {
@@ -53,12 +42,15 @@ import NFTList from "@/components/NFTList.vue";
 import KeyMessage from "@/components/KeyMessage.vue";
 import MintPanel from "@/components/MintPanel.vue";
 import AssetsPanel from "@/components/AssetsPanel.vue";
+import KamonMessage from "@/components/KamonMessage.vue";
+import { assetsReduce, useOnSelect, assetFilter } from "@/utils/mintUtils";
 import { fetchTokens } from "@/utils/fetchTokens";
+import { getAddresses } from "@/utils/const";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
 };
-const KamonToken = {
+const contentsToken = {
   wabi: require("../abis/KamonToken.json"), // wrapped abi
 };
 
@@ -70,32 +62,22 @@ export default defineComponent({
     KeyMessage,
     MintPanel,
     AssetsPanel,
+    KamonMessage,
   },
   props: ["addresses"],
   setup(props) {
-    const i18n = useI18n();
-    const lang = computed(() => {
-      return i18n.locale.value;
-    });
-
-    const EtherscanBase =
-      props.addresses.network == "rinkeby"
-        ? "https://rinkeby.etherscan.io/address"
-        : "https://etherscan.io/address";
-    const OpenSeaBase =
-      props.addresses.network == "rinkeby"
-        ? "https://testnets.opensea.io/assets/rinkeby"
-        : "https://opensea.io/assets/ethereum";
-    const EtherscanStore = `${EtherscanBase}/${props.addresses.storeAddress}`;
-    const EtherscanToken = `${EtherscanBase}/${props.addresses.kamonAddress}`;
-    const OpenSeaPath = `${OpenSeaBase}/${props.addresses.kamonAddress}`;
-    const assetIndex = loadedAssets.reduce(
-      (prev: { [key: string]: AssetData }, asset: AssetData) => {
-        prev[asset.name] = asset;
-        return prev;
-      },
-      {}
-    );
+    const tokenOffset = -1;
+    const svgStyle = 8;
+    const initTokenPer = 0;
+    
+    const {
+      EtherscanBase,
+      OpenSeaBase,
+      EtherscanStore,
+      EtherscanToken,
+      OpenSeaPath,
+    } = getAddresses(props.addresses.network, props.addresses.storeAddress, props.addresses.kamonAddress) 
+    const assetIndex = loadedAssets.reduce(assetsReduce, {});
     const availableAssets = ref<AssetData[] | null>(null);
 
     console.log("* network", props.addresses.chainId);
@@ -114,36 +96,11 @@ export default defineComponent({
     );
     const tokenRO = new ethers.Contract(
       props.addresses.kamonAddress,
-      KamonToken.wabi.abi,
+      contentsToken.wabi.abi,
       provider
     );
     const tokens = ref<Token[]>([]);
-    const tokensPerAsset = ref(0);
-
-    const selection = ref<MintSelectionAsset | null>(null);
-    const onSelect = async (asset: OriginalAssetData) => {
-      //console.log(asset);
-      if (selection.value && selection.value.asset.name == asset.name) {
-        selection.value = null;
-        return;
-      }
-      selection.value = {
-        isLoading: true,
-        asset,
-      };
-      const promises = Array(tokensPerAsset.value - 1)
-        .fill("")
-        .map((_, index) => {
-          return tokenRO.functions.generateSVG(asset.svgPart, index, "item");
-        });
-      const images = (await Promise.all(promises)).map((result) => {
-        return (
-          "data:image/svg+xml;base64," +
-          Buffer.from(result[0]).toString("base64")
-        );
-      });
-      selection.value = { images, asset };
-    };
+    const {onSelect, selection, tokensPerAsset } = useOnSelect(initTokenPer, tokenRO);
 
     provider.once("block", () => {
       tokenRO.on(tokenRO.filters.Transfer(), async (from, to, tokenId) => {
@@ -172,7 +129,7 @@ export default defineComponent({
             return index; // we already have it
           }
 
-          if (index >= 0) {
+          if (index > tokenOffset) {
             const result = await tokenRO.functions.assetIdOfToken(
               index * tokensPerAsset.value
             );
@@ -192,20 +149,15 @@ export default defineComponent({
           return index;
         });
       await Promise.all(promises2);
-      availableAssets.value = loadedAssets.filter(
-        (asset: OriginalAssetData) => {
-          return !asset.registered;
-        }
-      );
+      availableAssets.value = loadedAssets.filter(assetFilter);
 
-      fetchTokens(count, tokens.value, tokensPerAsset.value, 8, assetStoreRO, tokenRO, (updateTokens) => {
+      fetchTokens(count, tokens.value, tokensPerAsset.value, svgStyle, assetStoreRO, tokenRO, (updateTokens) => {
         tokens.value = updateTokens;
       });
     };
     fetchGoldenTokens();
 
     return {
-      lang,
       availableAssets,
       loadedAssets,
       onSelect,
@@ -216,7 +168,7 @@ export default defineComponent({
       tokens,
       tokensPerAsset,
       assetStoreRO,
-      tokenAbi: KamonToken.wabi.abi,
+      tokenAbi: contentsToken.wabi.abi,
     };
   },
 });
