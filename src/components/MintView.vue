@@ -2,11 +2,19 @@
   <div>
     <div class="mb-2 text-xl font-bold">Google Material Icons</div>
     <KeyMessage />
-    <AssetsPanel @on-select="(asset: OriginalAssetData) => onSelect(asset)"
-      :availableAssets="availableAssets" :loadedAssets="loadedAssets" />
-    <MintPanel :selection="selection" :tokenAbi="tokenAbi" :addresses="addresses"
-            :tokensPerAsset="tokensPerAsset" :assetStoreRO="assetStoreRO"
-            :priceRange="{ low:0.05, high: 0.15 }"/>
+    <AssetsPanel
+      @on-select="(asset: OriginalAssetData) => onSelect(asset)"
+      :availableAssets="availableAssets"
+      :loadedAssets="loadedAssets"
+    />
+    <MintPanel
+      :selection="selection"
+      :tokenAbi="tokenAbi"
+      :addresses="addresses"
+      :tokensPerAsset="tokensPerAsset"
+      :assetStoreRO="assetStoreRO"
+      :priceRange="{ low: 0.05, high: 0.15 }"
+    />
 
     <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
     <References
@@ -206,7 +214,7 @@ export default defineComponent({
 
     return {
       lang,
-      availableAssets, 
+      availableAssets,
       loadedAssets: actionAssets,
       onSelect,
       selection,

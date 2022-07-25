@@ -1,8 +1,8 @@
 <template>
   <div
-      v-if="selection && !selection.asset.registered"
-      class="border shadow-md mt-2 rounded-xl pl-2 pr-2"
-    >
+    v-if="selection && !selection.asset.registered"
+    class="border shadow-md mt-2 rounded-xl pl-2 pr-2"
+  >
     <p class="mt-2">
       <b>{{ selection.asset.name }}, {{ selection.asset.category }}</b>
     </p>
@@ -44,8 +44,7 @@
             残念ながら、他のユーザーによりちょうどミントされたところです。別の画像を選択してください。
           </p>
           <p v-else>
-            Another user has just minted this NFT. Please select another
-            image.
+            Another user has just minted this NFT. Please select another image.
           </p>
         </div>
         <div v-else>
@@ -108,7 +107,9 @@
           </div>
           <div v-if="lang === 'ja'">
             <p class="mb-2">
-              フリーミントですが、ガス代が{{priceRange.low}}〜{{priceRange.high}}ETH程度かかります（画像の複雑さや混雑状況によって大きく変動）。
+              フリーミントですが、ガス代が{{ priceRange.low }}〜{{
+                priceRange.high
+              }}ETH程度かかります（画像の複雑さや混雑状況によって大きく変動）。
             </p>
             <p class="mb-2">
               クラウドミンティングにご協力していただいた方には、
@@ -121,13 +122,14 @@
           <div v-else>
             <p class="mb-2">
               This is a free mint, but you need to pay the gas fee, which is
-              typically {{priceRange.low}}〜{{priceRange.high}}ETH (depending on the complexity of the
-              image, assuming the Gas price is ~15 Gwei).
+              typically {{ priceRange.low }}〜{{ priceRange.high }}ETH
+              (depending on the complexity of the image, assuming the Gas price
+              is ~15 Gwei).
             </p>
             <p class="mb-2">
-              If you participate in this crowd-minting effort, you will
-              receive not only the primary NFT (which is the proof that you
-              are one of minters), but also
+              If you participate in this crowd-minting effort, you will receive
+              not only the primary NFT (which is the proof that you are one of
+              minters), but also
               {{ tokensPerAsset - 2 }} additional bonus NFTs.
             </p>
           </div>
@@ -146,7 +148,14 @@ import { ethers } from "ethers";
 import NetworkGate from "@/components/NetworkGate.vue";
 
 export default defineComponent({
-  props: ["selection", "addresses", "tokensPerAsset", "tokenAbi", "assetStoreRO", "priceRange"],
+  props: [
+    "selection",
+    "addresses",
+    "tokensPerAsset",
+    "tokenAbi",
+    "assetStoreRO",
+    "priceRange",
+  ],
   components: {
     NetworkGate,
   },
@@ -240,10 +249,12 @@ export default defineComponent({
       }
     };
     return {
-      lang, minterName, validName, mint, messageRef
-    }
-  }
+      lang,
+      minterName,
+      validName,
+      mint,
+      messageRef,
+    };
+  },
 });
 </script>
-
-

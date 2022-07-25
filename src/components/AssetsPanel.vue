@@ -13,8 +13,8 @@
       </p>
       <p v-else>
         Thanks to all the minters, the current release of
-        {{ totalCount }} NFTs were sold out. We are going to add more NTFs
-        soon. Please stay tuned!
+        {{ totalCount }} NFTs were sold out. We are going to add more NTFs soon.
+        Please stay tuned!
       </p>
     </div>
     <div v-else>
@@ -23,8 +23,8 @@
         下に表示されるミントボタンを押して下さい。
       </p>
       <p v-else class="mb-2">
-        Please select one of images below and the follow the
-        instruction displayed further below.
+        Please select one of images below and the follow the instruction
+        displayed further below.
       </p>
       <slot />
       <span v-for="asset in availableAssets" v-bind:key="asset.name">
@@ -50,8 +50,8 @@ export default defineComponent({
     });
     return {
       totalCount: props.loadedAssets.length,
-      lang
-    }
-  }
+      lang,
+    };
+  },
 });
 </script>

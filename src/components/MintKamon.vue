@@ -2,8 +2,11 @@
   <div>
     <div class="mb-2 text-xl font-bold">Kamon Symbols by Hakko Daiodo</div>
     <KeyMessage />
-    <AssetsPanel @on-select="(asset) => onSelect(asset)"
-      :availableAssets="availableAssets" :loadedAssets="loadedAssets">
+    <AssetsPanel
+      @on-select="(asset) => onSelect(asset)"
+      :availableAssets="availableAssets"
+      :loadedAssets="loadedAssets"
+    >
       <p v-if="lang === 'ja'" class="mb-2">
         * 家紋のベクトルデータは<a
           class="underline"
@@ -16,9 +19,14 @@
         <a class="underline" href="http://hakko-daiodo.com">Hakko Daiodo</a>.
       </p>
     </AssetsPanel>
-    <MintPanel :selection="selection" :tokenAbi="tokenAbi" :addresses="addresses"
-                :tokensPerAsset="tokensPerAsset" :assetStoreRO="assetStoreRO"
-                :priceRange="{ low:0.04, high: 0.23 }"/>
+    <MintPanel
+      :selection="selection"
+      :tokenAbi="tokenAbi"
+      :addresses="addresses"
+      :tokensPerAsset="tokensPerAsset"
+      :assetStoreRO="assetStoreRO"
+      :priceRange="{ low: 0.04, high: 0.23 }"
+    />
 
     <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
     <References
@@ -222,8 +230,8 @@ export default defineComponent({
 
     return {
       lang,
-      availableAssets, loadedAssets,
-      totalCount: loadedAssets.length,
+      availableAssets,
+      loadedAssets,
       onSelect,
       selection,
       EtherscanStore,
