@@ -32,14 +32,15 @@ export default defineComponent({
     const addresses = getContractAddresses(network)!;
     addresses.tokenAddress = addresses.materialAddress;
     const options = {
-      tokenOffset: addresses.network == "rinkeby" ? -1 : 580, 
-      svgStyle: 0, 
-      initTokenPer: 4
+      tokenOffset: addresses.network == "rinkeby" ? -1 : 580,
+      svgStyle: 0,
+      initTokenPer: 4,
+      tokenName: "MaterialToken",
     };
     return {
       addresses,
       contentsToken,
-      options
+      options,
     };
   },
 });

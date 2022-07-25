@@ -5,7 +5,7 @@
       title="Kamon Symbols by Hakko Daiodo"
       :priceRange="{ low: 0.04, high: 0.23 }"
       :contentsToken="contentsToken"
-      :options="{tokenOffset:-1, svgStyle:8, initTokenPer:0}"
+      :options="options"
     >
       <KamonMessage />
     </mint-view>
@@ -35,9 +35,16 @@ export default defineComponent({
       typeof route.query.network == "string" ? route.query.network : "mainnet";
     const addresses = getContractAddresses(network)!;
     addresses.tokenAddress = addresses.kamonAddress;
+    const options = {
+      tokenOffset: -1,
+      svgStyle: 8,
+      initTokenPer: 0,
+      tokenName: "KamonToken",
+    };
     return {
       addresses,
       contentsToken,
+      options,
     };
   },
 });
