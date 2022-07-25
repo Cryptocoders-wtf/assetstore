@@ -28,5 +28,14 @@ export const fetchTokens = async (count:number, tokens:Token[], tokensPerAsset: 
         Buffer.from(svg[0]).toString("base64");
       return { image, tokenId: index * tokensPerAsset };
     });
-  callback(await Promise.all(promises));
+
+  // Sequencial version of callback(await Promise.all(promises));
+  const updateTokens:Token[] = [];
+  let i;
+  for (i=0; i<promises.length; i++) {
+    const token = await promises[i];
+    updateTokens.push(token);
+  }
+
+  callback(updateTokens);
 };
