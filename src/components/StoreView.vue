@@ -337,8 +337,6 @@ export default defineComponent({
         );
       } else if (selectedGroup.value) {
         router.push(getLocalizedPath(`/group/${selectedGroup.value}`));
-      } else {
-        router.push(getLocalizedPath(`/`));
       }
     });
     
