@@ -43,6 +43,10 @@ const lang = {
     sampleCodeMessage: "このアッセとのSVG画像を取得するサンプルコードです",
     fetchedImage: '取得した"SVG"のデータ',
   },
+  assetPanel: {
+    mint: "下に表示されている画像の一つをクリックし、下に表示されるミントボタンを押して下さい。",
+    thanks: "今回の発行分（{totalCount}個）に関しては、クラウドミントが完了いたししました。ご協力、ありがとうございます。さらにNFTを追加する予定なので、少々お待ちください。",
+  },
   languages,
 };
 

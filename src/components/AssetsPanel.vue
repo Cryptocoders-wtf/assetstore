@@ -4,26 +4,13 @@
       <p>{{ $t("message.loading") }}</p>
     </div>
     <div v-else-if="availableAssets.length == 0">
-      <p v-if="lang === 'ja'">
-        今回の発行分（{{
-          totalCount
-        }}個）に関しては、クラウドミントが完了いたししました。ご協力、ありがとうございます。
-        さらにNFTを追加する予定なので、少々お待ちください。
-      </p>
-      <p v-else>
-        Thanks to all the minters, the current release of
-        {{ totalCount }} NFTs were sold out. We are going to add more NTFs soon.
-        Please stay tuned!
+      <p>
+        {{ $tc('assetPanel.thanks', {totalCount: loadedAssets.length}) }}
       </p>
     </div>
     <div v-else>
-      <p v-if="lang === 'ja'" class="mb-2">
-        下に表示されている画像の一つをクリックし、
-        下に表示されるミントボタンを押して下さい。
-      </p>
-      <p v-else class="mb-2">
-        Please select one of images below and the follow the instruction
-        displayed further below.
+      <p class="mb-2">
+        {{ $t('assetPanel.mint') }}
       </p>
       <slot />
       <span v-for="asset in availableAssets" v-bind:key="asset.name">
@@ -37,20 +24,9 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed } from "vue";
-import { useI18n } from "vue-i18n";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   props: ["availableAssets", "loadedAssets"],
-  setup(props) {
-    const i18n = useI18n();
-    const lang = computed(() => {
-      return i18n.locale.value;
-    });
-    return {
-      totalCount: props.loadedAssets.length,
-      lang,
-    };
-  },
 });
 </script>
