@@ -17,7 +17,7 @@
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import { getContractAddresses } from "@/utils/networks";
-import MintView from "@/components/MintKamon.vue";
+import MintView from "@/components/MintView.vue";
 import KamonMessage from "@/components/KamonMessage.vue";
 import { loadedAssets } from "../resources/kamon";
 
