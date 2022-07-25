@@ -65,15 +65,15 @@ export default defineComponent({
     const store = useStore();
     const account = computed(() => store.state.account);
     const isSignedIn = computed(() => store.getters.isSignedIn);
-    const isBusy = ref("");
+    const isBusy = ref(false);
     const connect = async () => {
-      isBusy.value = "Connecting Metamask...";
+      isBusy.value = true
       try {
         await requestAccount(); // ethereum.on('accountsChanged') in App.vue will handle the result
       } catch (e) {
         console.log(e);
       }
-      isBusy.value = "";
+      isBusy.value = false;
       console.log("*****", store.state.account);
       // signIn();
     };
