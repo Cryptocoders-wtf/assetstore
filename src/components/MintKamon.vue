@@ -22,7 +22,7 @@
     <References
       :EtherscanStore="EtherscanStore"
       :EtherscanToken="EtherscanToken"
-      TokenName="KamonToken"
+      :TokenName="tokenName"
     />
   </div>
 </template>
@@ -165,6 +165,7 @@ export default defineComponent({
       tokensPerAsset,
       assetStoreRO,
       tokenAbi: props.contentsToken.wabi.abi,
+      tokenName: props.options.tokenName,
     };
   },
 });
