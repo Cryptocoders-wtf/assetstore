@@ -6,7 +6,7 @@
         @click="switchToValidNetwork"
         class="mb-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out"
       >
-        Switch Network
+        {{ $t("mint.switchNetworkButton") }}
       </button>
     </div>
     <div v-else-if="networkGate == 'noAccount'">
