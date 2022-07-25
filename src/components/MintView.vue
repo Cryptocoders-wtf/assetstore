@@ -185,7 +185,7 @@ export default defineComponent({
             return tokens.value[index]; // we already have it
           }
 
-          const result = await tokenRo.functions.assetIdOfToken(index * 4);
+          const result = await tokenRo.functions.assetIdOfToken(index * tokensPerAsset.value);
           const assetId = result[0].toNumber();
           const svgPart = await assetStoreRO.functions.generateSVGPart(
             assetId,
@@ -199,7 +199,7 @@ export default defineComponent({
           const image =
             "data:image/svg+xml;base64," +
             Buffer.from(svg[0]).toString("base64");
-          return { image, tokenId: index * 4 };
+          return { image, tokenId: index * tokensPerAsset.value };
         });
       tokens.value = await Promise.all(promises);
     };
