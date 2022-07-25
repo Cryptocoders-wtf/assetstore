@@ -208,7 +208,10 @@ export default defineComponent({
     const updateSelectedCategory = async () => {
       assets.value = [];
       selectedAsset.value = null;
-      if (selectedCategory.value === "" || selectedCategory.value === undefined) {
+      if (
+        selectedCategory.value === "" ||
+        selectedCategory.value === undefined
+      ) {
         return;
       }
 
@@ -339,12 +342,12 @@ export default defineComponent({
         router.push(getLocalizedPath(`/group/${selectedGroup.value}`));
       }
     });
-    
+
     const routeParams = computed(() => {
       return [route.params.group as string, route.params.category as string];
     });
     watch(routeParams, () => {
-      const [group, category] = routeParams.value
+      const [group, category] = routeParams.value;
       // console.log(group, selectedGroup.value, category, selectedCategory.value)
       if (group !== selectedGroup.value) {
         selectedGroup.value = group;

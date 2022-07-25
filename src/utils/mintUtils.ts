@@ -7,7 +7,10 @@ import {
 
 import { ethers } from "ethers";
 
-export const assetsReduce = (prev: { [key: string]: AssetData }, asset: AssetData) => {
+export const assetsReduce = (
+  prev: { [key: string]: AssetData },
+  asset: AssetData
+) => {
   prev[asset.name] = asset;
   return prev;
 };
@@ -35,11 +38,10 @@ export const useOnSelect = (initTokenPer: number, tokenRO: ethers.Contract) => {
       });
     const images = (await Promise.all(promises)).map((result) => {
       return (
-        "data:image/svg+xml;base64," +
-          Buffer.from(result[0]).toString("base64")
+        "data:image/svg+xml;base64," + Buffer.from(result[0]).toString("base64")
       );
     });
     selection.value = { images, asset };
   };
-  return { selection, onSelect, tokensPerAsset } ;
+  return { selection, onSelect, tokensPerAsset };
 };

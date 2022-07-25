@@ -31,9 +31,7 @@
 import { defineComponent, ref } from "vue";
 import { ethers } from "ethers";
 import { loadedAssets } from "../resources/kamon";
-import {
-  AssetData,
-} from "@/models/asset";
+import { AssetData } from "@/models/asset";
 import { Token } from "@/models/token";
 import References from "@/components/References.vue";
 import NFTList from "@/components/NFTList.vue";
@@ -62,12 +60,12 @@ export default defineComponent({
     const tokenOffset = -1;
     const svgStyle = 8;
     const initTokenPer = 0;
-    
-    const {
-      EtherscanStore,
-      EtherscanToken,
-      OpenSeaPath,
-    } = getAddresses(props.addresses.network, props.addresses.storeAddress, props.addresses.tokenAddress) 
+
+    const { EtherscanStore, EtherscanToken, OpenSeaPath } = getAddresses(
+      props.addresses.network,
+      props.addresses.storeAddress,
+      props.addresses.tokenAddress
+    );
     const assetIndex = loadedAssets.reduce(assetsReduce, {});
     const availableAssets = ref<AssetData[] | null>(null);
 
@@ -91,7 +89,10 @@ export default defineComponent({
       provider
     );
     const tokens = ref<Token[]>([]);
-    const {onSelect, selection, tokensPerAsset } = useOnSelect(initTokenPer, tokenRO);
+    const { onSelect, selection, tokensPerAsset } = useOnSelect(
+      initTokenPer,
+      tokenRO
+    );
 
     provider.once("block", () => {
       tokenRO.on(tokenRO.filters.Transfer(), async (from, to, tokenId) => {
@@ -142,9 +143,17 @@ export default defineComponent({
       await Promise.all(promises2);
       availableAssets.value = loadedAssets.filter(assetFilter);
 
-      fetchTokens(count, tokens.value, tokensPerAsset.value, svgStyle, assetStoreRO, tokenRO, (updateTokens) => {
-        tokens.value = updateTokens;
-      });
+      fetchTokens(
+        count,
+        tokens.value,
+        tokensPerAsset.value,
+        svgStyle,
+        assetStoreRO,
+        tokenRO,
+        (updateTokens) => {
+          tokens.value = updateTokens;
+        }
+      );
     };
     fetchPrimaryTokens();
 

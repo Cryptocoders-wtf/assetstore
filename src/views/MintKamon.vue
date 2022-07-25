@@ -1,6 +1,7 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
-    <mint-view :addresses="addresses" 
+    <mint-view
+      :addresses="addresses"
       title="Kamon Symbols by Hakko Daiodo"
       :priceRange="{ low: 0.04, high: 0.23 }"
       :contentsToken="contentsToken"
@@ -34,7 +35,8 @@ export default defineComponent({
     const addresses = getContractAddresses(network)!;
     addresses.tokenAddress = addresses.kamonAddress;
     return {
-      addresses, contentsToken,
+      addresses,
+      contentsToken,
     };
   },
 });
