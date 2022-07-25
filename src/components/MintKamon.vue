@@ -7,7 +7,7 @@
       :availableAssets="availableAssets"
       :loadedAssets="loadedAssets"
     >
-      <KamonMessage />
+      <slot />
     </AssetsPanel>
     <MintPanel
       :selection="selection"
@@ -40,7 +40,6 @@ import NFTList from "@/components/NFTList.vue";
 import KeyMessage from "@/components/KeyMessage.vue";
 import MintPanel from "@/components/MintPanel.vue";
 import AssetsPanel from "@/components/AssetsPanel.vue";
-import KamonMessage from "@/components/KamonMessage.vue";
 import { assetsReduce, useOnSelect, assetFilter } from "@/utils/mintUtils";
 import { fetchTokens } from "@/utils/fetchTokens";
 import { getAddresses } from "@/utils/const";
@@ -60,7 +59,6 @@ export default defineComponent({
     KeyMessage,
     MintPanel,
     AssetsPanel,
-    KamonMessage,
   },
   props: ["addresses", "title"],
   setup(props) {

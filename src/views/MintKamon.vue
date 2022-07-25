@@ -1,6 +1,8 @@
 <template>
   <div class="max-w-xl mx-auto text-left p-2">
-    <mint-view :addresses="addresses" title="Kamon Symbols by Hakko Daiodo" />
+    <mint-view :addresses="addresses" title="Kamon Symbols by Hakko Daiodo">
+      <KamonMessage />
+    </mint-view>
   </div>
 </template>
 
@@ -9,11 +11,13 @@ import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import { getContractAddresses } from "@/utils/networks";
 import MintView from "@/components/MintKamon.vue";
+import KamonMessage from "@/components/KamonMessage.vue";
 
 export default defineComponent({
   name: "HomePage",
   components: {
     MintView,
+    KamonMessage,
   },
   setup() {
     const route = useRoute();
