@@ -29,7 +29,7 @@ export const fetchTokens = async (count:number, tokens:Token[], tokensPerAsset: 
       return { image, tokenId: index * tokensPerAsset };
     });
 
-  // Sequencial version of callback(await Promise.all(promises));
+  // Sequential version of callback(await Promise.all(promises));
   const updateTokens:Token[] = [];
   let i;
   for (i=0; i<promises.length; i++) {
