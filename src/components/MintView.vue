@@ -139,12 +139,12 @@ export default defineComponent({
           tokenId.toNumber() >= tokens.value.length * tokensPerAsset.value
         ) {
           console.log("*** event.Transfer calling fetchToken");
-          fetchTokens();
+          fetchPrimaryTokens();
         }
       });
     });
 
-    const fetchTokens = async () => {
+    const fetchPrimaryTokens = async () => {
       const result = await tokenRo.functions.totalSupply();
       const count = result[0].toNumber() / tokensPerAsset.value;
       const promises2 = Array(count)
@@ -203,7 +203,7 @@ export default defineComponent({
         });
       tokens.value = await Promise.all(promises);
     };
-    fetchTokens();
+    fetchPrimaryTokens();
 
     return {
       lang,

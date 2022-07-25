@@ -53,6 +53,7 @@ import NFTList from "@/components/NFTList.vue";
 import KeyMessage from "@/components/KeyMessage.vue";
 import MintPanel from "@/components/MintPanel.vue";
 import AssetsPanel from "@/components/AssetsPanel.vue";
+import { fetchTokens } from "@/utils/fetchTokens";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -147,16 +148,16 @@ export default defineComponent({
     provider.once("block", () => {
       tokenRO.on(tokenRO.filters.Transfer(), async (from, to, tokenId) => {
         if (
-          tokenId.toNumber() % 4 == 0 &&
-          tokenId.toNumber() >= tokens.value.length * 4
+          tokenId.toNumber() % tokensPerAsset.value == 0 &&
+          tokenId.toNumber() >= tokens.value.length * tokensPerAsset.value
         ) {
           console.log("*** event.Transfer calling fetchToken");
-          fetchTokens();
+          fetchGoldenTokens();
         }
       });
     });
 
-    const fetchTokens = async () => {
+    const fetchGoldenTokens = async () => {
       if (tokensPerAsset.value == 0) {
         const result = await tokenRO.functions.tokensPerAsset();
         tokensPerAsset.value = result[0].toNumber();
@@ -197,34 +198,11 @@ export default defineComponent({
         }
       );
 
-      const promises = Array(count)
-        .fill({})
-        .map(async (_, index) => {
-          if (tokens.value[index]) {
-            return tokens.value[index]; // we already have it
-          }
-
-          const result = await tokenRO.functions.assetIdOfToken(
-            index * tokensPerAsset.value
-          );
-          const assetId = result[0].toNumber();
-          const svgPart = await assetStoreRO.functions.generateSVGPart(
-            assetId,
-            "item"
-          );
-          const svg = await tokenRO.functions.generateSVG(
-            svgPart[0],
-            8,
-            "item"
-          );
-          const image =
-            "data:image/svg+xml;base64," +
-            Buffer.from(svg[0]).toString("base64");
-          return { image, tokenId: index * tokensPerAsset.value };
-        });
-      tokens.value = await Promise.all(promises);
+      fetchTokens(count, tokens.value, tokensPerAsset.value, 8, assetStoreRO, tokenRO, (updateTokens) => {
+        tokens.value = updateTokens;
+      });
     };
-    fetchTokens();
+    fetchGoldenTokens();
 
     return {
       lang,
