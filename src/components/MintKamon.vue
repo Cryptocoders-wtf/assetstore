@@ -39,7 +39,6 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
-import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { ethers } from "ethers";
 import { loadedAssets } from "../resources/kamon";
@@ -77,7 +76,6 @@ export default defineComponent({
     const lang = computed(() => {
       return i18n.locale.value;
     });
-    const store = useStore();
 
     const EtherscanBase =
       props.addresses.network == "rinkeby"

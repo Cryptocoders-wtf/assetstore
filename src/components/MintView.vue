@@ -27,8 +27,6 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
-import { useStore } from "vuex";
-import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { ethers } from "ethers";
 import { actionAssets } from "../resources/materials";
@@ -66,11 +64,6 @@ export default defineComponent({
     const lang = computed(() => {
       return i18n.locale.value;
     });
-    const store = useStore();
-    const route = useRoute();
-    const affiliateId =
-      typeof route.query.ref == "string" ? parseInt(route.query.ref) || 0 : 0;
-    //console.log("***", affiliateId);
 
     const EtherscanBase =
       props.addresses.network == "rinkeby"
