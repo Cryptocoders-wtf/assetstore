@@ -74,7 +74,7 @@ export default defineComponent({
       EtherscanStore,
       EtherscanToken,
       OpenSeaPath,
-    } = getAddresses(props.addresses.network, props.addresses.storeAddress, props.addresses.kamonAddress) 
+    } = getAddresses(props.addresses.network, props.addresses.storeAddress, props.addresses.tokenAddress) 
     const assetIndex = loadedAssets.reduce(assetsReduce, {});
     const availableAssets = ref<AssetData[] | null>(null);
 
@@ -93,7 +93,7 @@ export default defineComponent({
       provider
     );
     const tokenRO = new ethers.Contract(
-      props.addresses.kamonAddress,
+      props.addresses.tokenAddress,
       contentsToken.wabi.abi,
       provider
     );

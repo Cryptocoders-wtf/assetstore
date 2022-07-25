@@ -7,7 +7,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
-import { getAddresses } from "@/utils/networks";
+import { getContractAddresses } from "@/utils/networks";
 import StoreView from "@/components/StoreView.vue";
 
 export default defineComponent({
@@ -19,7 +19,7 @@ export default defineComponent({
     const route = useRoute();
     const network =
       typeof route.query.network == "string" ? route.query.network : "mainnet";
-    const addresses = getAddresses(network);
+    const addresses = getContractAddresses(network);
     return {
       addresses,
     };

@@ -180,7 +180,7 @@ export default defineComponent({
         );
         const signer = provider.getSigner();
         const contract = new ethers.Contract(
-          props.addresses.kamonAddress,
+          props.addresses.tokenAddress,
           props.tokenAbi,
           signer
         );

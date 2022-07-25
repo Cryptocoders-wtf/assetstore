@@ -6,14 +6,15 @@ import { kamon_addresses as kamon_mainnet } from "../../generated/addresses_kamo
 import { kamon_addresses as kamon_localhost } from "../../../contract/cache/addresses_kamon_localhost";
 import { kamon_addresses as kamon_rinkeby } from "../../../contract/cache/addresses_kamon_rinkeby";
 
-export const getAddresses = (network: string) => {
+export const getContractAddresses = (network: string) => {
   if (network == "localhost") {
     return {
       network,
       chainId: ChainIds.Localhost,
       storeAddress: localhost.storeAddress,
-      tokenAddress: localhost.tokenAddress,
+      materialAddress: localhost.tokenAddress,
       kamonAddress: kamon_localhost.kamonAddress,
+      tokenAddress: "",
     };
   }
   if (network == "rinkeby") {
@@ -22,8 +23,9 @@ export const getAddresses = (network: string) => {
       EtherscanBase: "https://rinkeby.etherscan.io/address",
       chainId: ChainIds.RinkebyTestNet,
       storeAddress: rinkeby.storeAddress,
-      tokenAddress: rinkeby.tokenAddress,
+      materialAddress: rinkeby.tokenAddress,
       kamonAddress: kamon_rinkeby.kamonAddress,
+      tokenAddress: "",
     };
   }
   if (network == "mainnet") {
@@ -32,8 +34,9 @@ export const getAddresses = (network: string) => {
       EtherscanBase: "https://etherscan.io/address",
       chainId: ChainIds.Mainnet,
       storeAddress: mainnet.storeAddress,
-      tokenAddress: mainnet.tokenAddress,
+      materialAddress: mainnet.tokenAddress,
       kamonAddress: kamon_mainnet.kamonAddress,
+      tokenAddress: "",
     };
   }
   console.error("**** unexpected");
