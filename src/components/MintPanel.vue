@@ -85,7 +85,7 @@
               {{ $tc("mintPanel.mintMessage1", { low: priceRange.low, high: priceRange.high} ) }}
             </p>
             <p class="mb-2">
-              {{ $tc("mintPanel.mintMessage2", { tokensPerAsset: tokensPerAsset, bonousTokensPerAsset: tokensPerAsset - 2 } ) }}
+              {{ $tc("mintPanel.mintMessage2", { tokensPerAsset: tokensPerAsset - 1, bonousTokensPerAsset: tokensPerAsset - 2 } ) }}
             </p>
           </div>
         </NetworkGate>
