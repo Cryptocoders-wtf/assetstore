@@ -5,6 +5,7 @@ import { addresses as rinkeby } from "../../../contract/cache/addresses_rinkeby"
 import { kamon_addresses as kamon_mainnet } from "../../generated/addresses_kamon_mainnet";
 import { kamon_addresses as kamon_localhost } from "../../../contract/cache/addresses_kamon_localhost";
 import { kamon_addresses as kamon_rinkeby } from "../../../contract/cache/addresses_kamon_rinkeby";
+import { token_addresses as flag_mainnet } from "../../generated/addresses_flag_mainnet";
 import { token_addresses as flag_localhost } from "../../../contract/cache/addresses_flag_localhost";
 import { token_addresses as flag_rinkeby } from "../../../contract/cache/addresses_flag_rinkeby";
 
@@ -40,7 +41,7 @@ export const getContractAddresses = (network: string) => {
       storeAddress: mainnet.storeAddress,
       materialAddress: mainnet.tokenAddress,
       kamonAddress: kamon_mainnet.kamonAddress,
-      flagAddress: "",
+      flagAddress: flag_mainnet.emojiFlagAddress,
       tokenAddress: "",
     };
   }
