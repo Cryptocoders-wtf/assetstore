@@ -10,4 +10,4 @@ export const actions = {
   assets: assets,
 };
 
-export const actionAssets = loadAssets(actions);
+export const loadedAssets = loadAssets(actions);

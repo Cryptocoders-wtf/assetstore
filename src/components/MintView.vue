@@ -29,7 +29,7 @@
 import { defineComponent, computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { ethers } from "ethers";
-import { actionAssets } from "../resources/materials";
+import { loadedAssets } from "../resources/materials";
 import {
   AssetData,
   OriginalAssetData,
@@ -76,7 +76,7 @@ export default defineComponent({
     const EtherscanStore = `${EtherscanBase}/${props.addresses.storeAddress}`;
     const EtherscanToken = `${EtherscanBase}/${props.addresses.tokenAddress}`;
     const OpenSeaPath = `${OpenSeaBase}/${props.addresses.tokenAddress}`;
-    const assetIndex = actionAssets.reduce(
+    const assetIndex = loadedAssets.reduce(
       (prev: { [key: string]: AssetData }, asset: AssetData) => {
         prev[asset.name] = asset;
         return prev;
@@ -118,12 +118,12 @@ export default defineComponent({
         isLoading: true,
         asset,
       };
-      const promices = Array(tokensPerAsset.value - 1)
+      const promises = Array(tokensPerAsset.value - 1)
         .fill("")
         .map((_, index) => {
           return tokenRo.functions.generateSVG(asset.svgPart, index, "item");
         });
-      const images = (await Promise.all(promices)).map((result) => {
+      const images = (await Promise.all(promises)).map((result) => {
         return (
           "data:image/svg+xml;base64," +
           Buffer.from(result[0]).toString("base64")
@@ -172,7 +172,7 @@ export default defineComponent({
           return index;
         });
       await Promise.all(promises2);
-      availableAssets.value = actionAssets.filter(
+      availableAssets.value = loadedAssets.filter(
         (asset: OriginalAssetData) => {
           return !asset.registered;
         }
@@ -208,7 +208,7 @@ export default defineComponent({
     return {
       lang,
       availableAssets,
-      loadedAssets: actionAssets,
+      loadedAssets: loadedAssets,
       onSelect,
       selection,
       EtherscanStore,
