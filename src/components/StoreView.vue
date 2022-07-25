@@ -157,8 +157,8 @@ export default defineComponent({
     );
     const selectedAsset = ref<AssetData | null>(null);
 
-    const categoriesCache: { [key: string]: any } = {};
-    const assetsCache: { [key: string]: any } = {};
+    const categoriesCache: { [key: string]: {key: string, value: string}[] } = {};
+    const assetsCache: { [key: string]: { index: number, assetId: number, svg: string, image: string;}[] } = {};
 
     const sampleCode = ref("");
     const assetCount = ref(0);
