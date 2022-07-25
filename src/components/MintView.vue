@@ -135,8 +135,8 @@ export default defineComponent({
     provider.once("block", () => {
       tokenRo.on(tokenRo.filters.Transfer(), async (from, to, tokenId) => {
         if (
-          tokenId.toNumber() % 4 == 0 &&
-          tokenId.toNumber() >= tokens.value.length * 4
+          tokenId.toNumber() % tokensPerAsset.value == 0 &&
+          tokenId.toNumber() >= tokens.value.length * tokensPerAsset.value
         ) {
           console.log("*** event.Transfer calling fetchToken");
           fetchTokens();
@@ -146,7 +146,7 @@ export default defineComponent({
 
     const fetchTokens = async () => {
       const result = await tokenRo.functions.totalSupply();
-      const count = result[0].toNumber() / 4;
+      const count = result[0].toNumber() / tokensPerAsset.value;
       const promises2 = Array(count)
         .fill({})
         .map(async (_, index) => {
