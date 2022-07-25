@@ -3,26 +3,26 @@ import Layout from "../components/Layout.vue";
 import Blank from "../components/Blank.vue";
 import NotFound from "../components/NotFound.vue";
 
-import Home from "../views/Home.vue";
-import Mint from "../views/Mint.vue";
-import MintKamon from "../views/MintKamon.vue";
+import Assets from "../views/Assets.vue";
+import Materials from "../views/Materials.vue";
+import Kamons from "../views/Kamons.vue";
 
 const routeChildren: Array<RouteRecordRaw> = [
   {
     path: "",
-    component: Home,
+    component: Assets,
   },
   {
     path: "material",
-    component: Mint,
+    component: Materials,
   },
   {
     path: "kamon",
-    component: MintKamon,
+    component: Kamons,
   },
   {
     path: "group/:group?/:path(category)?/:category?",
-    component: Home,
+    component: Assets,
   },
 ];
 
