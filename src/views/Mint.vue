@@ -5,6 +5,7 @@
       title="Google Material Icons"
       :priceRange="{ low: 0.05, high: 0.15 }"
       :contentsToken="contentsToken"
+      :options="options"
     />
   </div>
 </template>
@@ -30,9 +31,15 @@ export default defineComponent({
       typeof route.query.network == "string" ? route.query.network : "mainnet";
     const addresses = getContractAddresses(network)!;
     addresses.tokenAddress = addresses.materialAddress;
+    const options = {
+      tokenOffset: addresses.network == "rinkeby" ? -1 : 580, 
+      svgStyle: 0, 
+      initTokenPer: 4
+    };
     return {
       addresses,
       contentsToken,
+      options
     };
   },
 });

@@ -55,12 +55,8 @@ export default defineComponent({
     MintPanel,
     AssetsPanel,
   },
-  props: ["addresses", "title", "priceRange", "contentsToken"],
+  props: ["addresses", "title", "priceRange", "contentsToken", "options"],
   setup(props) {
-    const tokenOffset = -1;
-    const svgStyle = 8;
-    const initTokenPer = 0;
-
     const { EtherscanStore, EtherscanToken, OpenSeaPath } = getAddresses(
       props.addresses.network,
       props.addresses.storeAddress,
@@ -90,7 +86,7 @@ export default defineComponent({
     );
     const tokens = ref<Token[]>([]);
     const { onSelect, selection, tokensPerAsset } = useOnSelect(
-      initTokenPer,
+      props.options.initTokenPer,
       tokenRO
     );
 
@@ -121,7 +117,7 @@ export default defineComponent({
             return index; // we already have it
           }
 
-          if (index > tokenOffset) {
+          if (index > props.options.tokenOffset) {
             const result = await tokenRO.functions.assetIdOfToken(
               index * tokensPerAsset.value
             );
@@ -147,7 +143,7 @@ export default defineComponent({
         count,
         tokens.value,
         tokensPerAsset.value,
-        svgStyle,
+        props.options.svgStyle,
         assetStoreRO,
         tokenRO,
         (updateTokens) => {
