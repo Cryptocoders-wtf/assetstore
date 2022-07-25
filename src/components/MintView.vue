@@ -27,13 +27,11 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
 import { ethers } from "ethers";
 import { loadedAssets } from "../resources/materials";
 import {
   AssetData,
   OriginalAssetData,
-  MintSelectionAsset,
 } from "@/models/asset";
 import { Token } from "@/models/token";
 import References from "@/components/References.vue";
@@ -41,7 +39,9 @@ import NFTList from "@/components/NFTList.vue";
 import KeyMessage from "@/components/KeyMessage.vue";
 import MintPanel from "@/components/MintPanel.vue";
 import AssetsPanel from "@/components/AssetsPanel.vue";
+import { assetsReduce, useOnSelect, assetFilter } from "@/utils/mintUtils";
 import { fetchTokens } from "@/utils/fetchTokens";
+import { getAddresses } from "@/utils/const";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -61,29 +61,14 @@ export default defineComponent({
   },
   props: ["addresses"],
   setup(props) {
-    const i18n = useI18n();
-    const lang = computed(() => {
-      return i18n.locale.value;
-    });
-
-    const EtherscanBase =
-      props.addresses.network == "rinkeby"
-        ? "https://rinkeby.etherscan.io/address"
-        : "https://etherscan.io/address";
-    const OpenSeaBase =
-      props.addresses.network == "rinkeby"
-        ? "https://testnets.opensea.io/assets/rinkeby"
-        : "https://opensea.io/assets/ethereum";
-    const EtherscanStore = `${EtherscanBase}/${props.addresses.storeAddress}`;
-    const EtherscanToken = `${EtherscanBase}/${props.addresses.tokenAddress}`;
-    const OpenSeaPath = `${OpenSeaBase}/${props.addresses.tokenAddress}`;
-    const assetIndex = loadedAssets.reduce(
-      (prev: { [key: string]: AssetData }, asset: AssetData) => {
-        prev[asset.name] = asset;
-        return prev;
-      },
-      {}
-    );
+    const {
+      EtherscanBase,
+      OpenSeaBase,
+      EtherscanStore,
+      EtherscanToken,
+      OpenSeaPath,
+    } = getAddresses(props.addresses.network, props.addresses.storeAddress, props.addresses.tokenAddress) 
+    const assetIndex = loadedAssets.reduce(assetsReduce, {});
     const availableAssets = ref<AssetData[] | null>(null);
 
     console.log("* network", props.addresses.chainId);
@@ -106,32 +91,7 @@ export default defineComponent({
       provider
     );
     const tokens = ref<Token[]>([]);
-    const tokensPerAsset = ref(4); // hard-coded only for MaterialToken
-
-    const selection = ref<MintSelectionAsset | null>(null);
-    const onSelect = async (asset: OriginalAssetData) => {
-      //console.log(asset);
-      if (selection.value && selection.value.asset.name == asset.name) {
-        selection.value = null;
-        return;
-      }
-      selection.value = {
-        isLoading: true,
-        asset,
-      };
-      const promises = Array(tokensPerAsset.value - 1)
-        .fill("")
-        .map((_, index) => {
-          return tokenRO.functions.generateSVG(asset.svgPart, index, "item");
-        });
-      const images = (await Promise.all(promises)).map((result) => {
-        return (
-          "data:image/svg+xml;base64," +
-          Buffer.from(result[0]).toString("base64")
-        );
-      });
-      selection.value = { images, asset };
-    };
+    const {onSelect, selection, tokensPerAsset } = useOnSelect(4, tokenRO);
 
     provider.once("block", () => {
       tokenRO.on(tokenRO.filters.Transfer(), async (from, to, tokenId) => {
@@ -173,11 +133,7 @@ export default defineComponent({
           return index;
         });
       await Promise.all(promises2);
-      availableAssets.value = loadedAssets.filter(
-        (asset: OriginalAssetData) => {
-          return !asset.registered;
-        }
-      );
+      availableAssets.value = loadedAssets.filter(assetFilter);
 
       fetchTokens(count, tokens.value, tokensPerAsset.value, 0, assetStoreRO, tokenRO, (updateTokens) => {
         tokens.value = updateTokens;
@@ -186,9 +142,8 @@ export default defineComponent({
     fetchPrimaryTokens();
 
     return {
-      lang,
       availableAssets,
-      loadedAssets: loadedAssets,
+      loadedAssets,
       onSelect,
       selection,
       EtherscanStore,
