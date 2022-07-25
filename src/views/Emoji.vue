@@ -8,7 +8,6 @@
       :loadedAssets="loadedAssets"
       :options="options"
     >
-      <KamonMessage />
     </mint-view>
   </div>
 </template>
@@ -18,30 +17,28 @@ import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import { getContractAddresses } from "@/utils/networks";
 import MintView from "@/components/MintView.vue";
-import KamonMessage from "@/components/KamonMessage.vue";
-import { loadedAssets } from "../resources/kamon";
+import { loadedAssets } from "../resources/emoji";
 
 const contentsToken = {
-  wabi: require("../abis/KamonToken.json"), // wrapped abi
+  wabi: require("../abis/EmojiFlagToken.json"), // wrapped abi (KamonToken has the idential API)
 };
 
 export default defineComponent({
   name: "HomePage",
   components: {
     MintView,
-    KamonMessage,
   },
   setup() {
     const route = useRoute();
     const network =
       typeof route.query.network == "string" ? route.query.network : "mainnet";
     const addresses = getContractAddresses(network)!;
-    addresses.tokenAddress = addresses.kamonAddress;
+    addresses.tokenAddress = addresses.flagAddress;
     const options = {
       tokenOffset: -1,
       svgStyle: 8,
       initTokenPer: 0,
-      tokenName: "KamonToken",
+      tokenName: "EmojiFlagToken",
     };
     return {
       addresses,
