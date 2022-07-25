@@ -2,57 +2,20 @@
   <div>
     <div class="mb-2 text-xl font-bold">Kamon Symbols by Hakko Daiodo</div>
     <KeyMessage />
-    <div>
-      <div v-if="availableAssets == null">
-        <p v-if="lang === 'ja'">読み込み中です...</p>
-        <p v-else>Loading...</p>
-      </div>
-      <div v-else-if="availableAssets.length == 0">
-        <p v-if="lang === 'ja'">
-          今回の発行分（{{
-            totalCount
-          }}個）に関しては、クラウドミントが完了いたししました。ご協力、ありがとうございます。
-          さらにNFTを追加する予定なので、少々お待ちください。
-        </p>
-        <p v-else>
-          Thanks to all the minters, the current release of
-          {{ totalCount }} NFTs were sold out. We are going to add more NTFs
-          soon. Please stay tuned!
-        </p>
-      </div>
-      <div v-else>
-        <p v-if="lang === 'ja'" class="mb-2">
-          下に表示されている画像の一つをクリックし、
-          下に表示されるミントボタンを押して下さい。
-        </p>
-        <p v-else class="mb-2">
-          Please select one of images below and the follow the
-          instruction displayed further below.
-        </p>
-        <p v-if="lang === 'ja'" class="mb-2">
-          * 家紋のベクトルデータは<a
-            class="underline"
-            href="http://hakko-daiodo.com"
-            >発行大王堂様</a
-          >よりご提供いただいています。
-        </p>
-        <p v-else class="mb-2">
-          *All Kamon vector data were provided by
-          <a class="underline" href="http://hakko-daiodo.com">Hakko Daiodo</a>.
-        </p>
-        <span v-for="asset in availableAssets" v-bind:key="asset.name">
-          <img
-            @click="
-              () => {
-                onSelect(asset);
-              }
-            "
-            :src="asset.image"
-            class="cursor-pointer w-16 inline-block rounded-xl"
-          />
-        </span>
-      </div>
-    </div>
+    <AssetsPanel @on-select="(asset) => onSelect(asset)"
+      :availableAssets="availableAssets" :loadedAssets="loadedAssets">
+      <p v-if="lang === 'ja'" class="mb-2">
+        * 家紋のベクトルデータは<a
+          class="underline"
+          href="http://hakko-daiodo.com"
+          >発行大王堂様</a
+        >よりご提供いただいています。
+      </p>
+      <p v-else class="mb-2">
+        *All Kamon vector data were provided by
+        <a class="underline" href="http://hakko-daiodo.com">Hakko Daiodo</a>.
+      </p>
+    </AssetsPanel>
     <MintPanel :selection="selection" :tokenAbi="tokenAbi" :addresses="addresses"
                 :tokensPerAsset="tokensPerAsset" :assetStoreRO="assetStoreRO"
                 :priceRange="{ low:0.04, high: 0.23 }"/>
@@ -82,6 +45,7 @@ import References from "@/components/References.vue";
 import NFTList from "@/components/NFTList.vue";
 import KeyMessage from "@/components/KeyMessage.vue";
 import MintPanel from "@/components/MintPanel.vue";
+import AssetsPanel from "@/components/AssetsPanel.vue";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -97,6 +61,7 @@ export default defineComponent({
     NFTList,
     KeyMessage,
     MintPanel,
+    AssetsPanel,
   },
   props: ["addresses"],
   setup(props) {
@@ -257,7 +222,7 @@ export default defineComponent({
 
     return {
       lang,
-      availableAssets,
+      availableAssets, loadedAssets,
       totalCount: loadedAssets.length,
       onSelect,
       selection,
