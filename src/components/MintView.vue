@@ -3,7 +3,7 @@
     <div class="mb-2 text-xl font-bold">Google Material Icons</div>
     <KeyMessage />
     <AssetsPanel
-      @on-select="(asset: OriginalAssetData) => onSelect(asset)"
+      @on-select="(asset) => onSelect(asset)"
       :availableAssets="availableAssets"
       :loadedAssets="loadedAssets"
     />
@@ -26,12 +26,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { ethers } from "ethers";
 import { loadedAssets } from "../resources/materials";
 import {
   AssetData,
-  OriginalAssetData,
 } from "@/models/asset";
 import { Token } from "@/models/token";
 import References from "@/components/References.vue";

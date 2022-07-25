@@ -28,13 +28,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { ethers } from "ethers";
 import { loadedAssets } from "../resources/kamon";
 import {
   AssetData,
-  OriginalAssetData,
-  MintSelectionAsset,
 } from "@/models/asset";
 import { Token } from "@/models/token";
 import References from "@/components/References.vue";
