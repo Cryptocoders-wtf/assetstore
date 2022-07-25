@@ -10,6 +10,7 @@ const lang = {
     home: "ホーム",
     material: "マテリアル",
     kamon: "家紋",
+    emoji: "絵文字",
   },
   keyMessage: {
     message1:

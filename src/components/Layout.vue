@@ -13,6 +13,10 @@
       <router-link :to="localizedUrl('/kamon')" class="text-md">{{
         $t("header.kamon")
       }}</router-link>
+      |
+      <router-link :to="localizedUrl('/emoji')" class="text-md">{{
+        $t("header.emoji")
+      }}</router-link>
       <Languages class="mt-4" />
     </div>
     <router-view />

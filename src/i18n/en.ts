@@ -10,6 +10,7 @@ const lang = {
     home: "Home",
     material: "Material",
     kamon: "Kamon",
+    emoji: "Emoji",
   },
   keyMessage: {
     message1:
