@@ -41,6 +41,7 @@ import NFTList from "@/components/NFTList.vue";
 import KeyMessage from "@/components/KeyMessage.vue";
 import MintPanel from "@/components/MintPanel.vue";
 import AssetsPanel from "@/components/AssetsPanel.vue";
+import { fetchTokens } from "@/utils/fetchTokens";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -99,7 +100,7 @@ export default defineComponent({
       AssetStore.wabi.abi,
       provider
     );
-    const tokenRo = new ethers.Contract(
+    const tokenRO = new ethers.Contract(
       props.addresses.tokenAddress,
       MaterialToken.wabi.abi,
       provider
@@ -121,7 +122,7 @@ export default defineComponent({
       const promises = Array(tokensPerAsset.value - 1)
         .fill("")
         .map((_, index) => {
-          return tokenRo.functions.generateSVG(asset.svgPart, index, "item");
+          return tokenRO.functions.generateSVG(asset.svgPart, index, "item");
         });
       const images = (await Promise.all(promises)).map((result) => {
         return (
@@ -133,7 +134,7 @@ export default defineComponent({
     };
 
     provider.once("block", () => {
-      tokenRo.on(tokenRo.filters.Transfer(), async (from, to, tokenId) => {
+      tokenRO.on(tokenRO.filters.Transfer(), async (from, to, tokenId) => {
         if (
           tokenId.toNumber() % tokensPerAsset.value == 0 &&
           tokenId.toNumber() >= tokens.value.length * tokensPerAsset.value
@@ -145,7 +146,7 @@ export default defineComponent({
     });
 
     const fetchPrimaryTokens = async () => {
-      const result = await tokenRo.functions.totalSupply();
+      const result = await tokenRO.functions.totalSupply();
       const count = result[0].toNumber() / tokensPerAsset.value;
       const promises2 = Array(count)
         .fill({})
@@ -155,7 +156,7 @@ export default defineComponent({
           }
 
           if (index > 580) {
-            const result = await tokenRo.functions.assetIdOfToken(index * 4);
+            const result = await tokenRO.functions.assetIdOfToken(index * 4);
             const assetId = result[0].toNumber();
             const attr = await assetStoreRO.functions.getAttributes(assetId);
             const name = attr[0][2];
@@ -178,30 +179,9 @@ export default defineComponent({
         }
       );
 
-      const promises = Array(count)
-        .fill({})
-        .map(async (_, index) => {
-          if (tokens.value[index]) {
-            return tokens.value[index]; // we already have it
-          }
-
-          const result = await tokenRo.functions.assetIdOfToken(index * tokensPerAsset.value);
-          const assetId = result[0].toNumber();
-          const svgPart = await assetStoreRO.functions.generateSVGPart(
-            assetId,
-            "item"
-          );
-          const svg = await tokenRo.functions.generateSVG(
-            svgPart[0],
-            0,
-            "item"
-          );
-          const image =
-            "data:image/svg+xml;base64," +
-            Buffer.from(svg[0]).toString("base64");
-          return { image, tokenId: index * tokensPerAsset.value };
-        });
-      tokens.value = await Promise.all(promises);
+      fetchTokens(count, tokens.value, tokensPerAsset.value, 0, assetStoreRO, tokenRO, (updateTokens) => {
+        tokens.value = updateTokens;
+      });
     };
     fetchPrimaryTokens();
 
