@@ -6,8 +6,9 @@
       @on-select="(asset) => onSelect(asset)"
       :availableAssets="availableAssets"
       :loadedAssets="loadedAssets"
-    />
+    >
       <slot />
+    </AssetsPanel>
     <MintPanel
       :selection="selection"
       :tokenAbi="tokenAbi"
@@ -108,6 +109,11 @@ export default defineComponent({
     });
 
     const fetchPrimaryTokens = async () => {
+      if (tokensPerAsset.value == 0) {
+        const result = await tokenRO.functions.tokensPerAsset();
+        tokensPerAsset.value = result[0].toNumber();
+      }
+
       const resultSupply = await tokenRO.functions.totalSupply();
       const count = resultSupply[0].toNumber() / tokensPerAsset.value;
       const promises2 = Array(count)

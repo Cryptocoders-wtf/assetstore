@@ -103,12 +103,12 @@ export default defineComponent({
           tokenId.toNumber() >= tokens.value.length * tokensPerAsset.value
         ) {
           console.log("*** event.Transfer calling fetchToken");
-          fetchGoldenTokens();
+          fetchPrimaryTokens();
         }
       });
     });
 
-    const fetchGoldenTokens = async () => {
+    const fetchPrimaryTokens = async () => {
       if (tokensPerAsset.value == 0) {
         const result = await tokenRO.functions.tokensPerAsset();
         tokensPerAsset.value = result[0].toNumber();
@@ -149,7 +149,7 @@ export default defineComponent({
         tokens.value = updateTokens;
       });
     };
-    fetchGoldenTokens();
+    fetchPrimaryTokens();
 
     return {
       availableAssets,
