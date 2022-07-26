@@ -6,11 +6,13 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useI18nParam } from "@/i18n/utils";
 import { initializeEthereum } from "./utils/MetaMask";
 
 export default defineComponent({
   setup() {
     initializeEthereum();
+    useI18nParam();
     return {};
   },
 });
