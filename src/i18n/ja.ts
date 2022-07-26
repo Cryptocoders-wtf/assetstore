@@ -26,11 +26,15 @@ const lang = {
   mintPanel: {
     writeName: "Asset Storeに刻み込む名前。",
     maxLength: "最大32バイト。",
-    mintMessage1: "フリーミントですが、ガス代が{ low }〜{ high } ETH程度かかります（画像の複雑さや混雑状況によって大きく変動）。",
-    mintMessage2: "クラウドミンティングにご協力していただいた方には、「プライマリーNFT」と呼ばれるあなたがクラウドミンティングに協力した証のNFT1つと、転売用の「ボーナスNFT」を{ bonousTokensPerAsset}つ、合計{ tokensPerAsset }つのNFTを発行します。",
-    placeHolder: 'お名前（オプション、Twitter名推奨）',
-    thanks: "クラウドミンティングにご協力ありがとうございます。ブロックチェーンへの反映には少し時間がかかります。順調に反映されれば、このメッセージは自動的に消滅します。",
-    sorry: "残念ながら、他のユーザーによりちょうどミントされたところです。別の画像を選択してください。",
+    mintMessage1:
+      "フリーミントですが、ガス代が{ low }〜{ high } ETH程度かかります（画像の複雑さや混雑状況によって大きく変動）。",
+    mintMessage2:
+      "クラウドミンティングにご協力していただいた方には、「プライマリーNFT」と呼ばれるあなたがクラウドミンティングに協力した証のNFT1つと、転売用の「ボーナスNFT」を{ bonousTokensPerAsset}つ、合計{ tokensPerAsset }つのNFTを発行します。",
+    placeHolder: "お名前（オプション、Twitter名推奨）",
+    thanks:
+      "クラウドミンティングにご協力ありがとうございます。ブロックチェーンへの反映には少し時間がかかります。順調に反映されれば、このメッセージは自動的に消滅します。",
+    sorry:
+      "残念ながら、他のユーザーによりちょうどミントされたところです。別の画像を選択してください。",
     mint: "ミント",
     preparing: "ミントの準備中...",
     preparing2: "Preparing to mint...",

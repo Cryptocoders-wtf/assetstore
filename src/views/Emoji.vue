@@ -2,7 +2,7 @@
   <div class="max-w-xl mx-auto text-left p-2">
     <mint-view
       :addresses="addresses"
-      title="Open Emoji National Flags"
+      title="OpenMoji National Flags"
       :priceRange="{ low: 0.08, high: 0.35 }"
       :contentsToken="contentsToken"
       :loadedAssets="loadedAssets"

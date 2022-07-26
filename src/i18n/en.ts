@@ -26,14 +26,18 @@ const lang = {
   mintPanel: {
     writeName: "Name to be permanently stored to the Asset Store.",
     maxLength: "Maximum 32 bytes.",
-    mintMessage1: "This is a free mint, but you need to pay the gas fee, which is typically { low }〜{ high } ETH (depending on the complexity of the image, assuming the Gas price is ~15 Gwei).",
-    mintMessage2: "If you participate in this crowd-minting effort, you will receive not only the primary NFT (which is the proof that you are one of minters), but also { bonousTokensPerAs } additional bonus NFTs.",
-    placeHolder: 'Name (such as Twitter Id, optional)',
-    thanks: "Thank you for participating in this crowd-minting effort. When the blockchain is updated, this message will dissapear automatically.",
-    sorry: "Another user has just minted this NFT. Please select another image.",
+    mintMessage1:
+      "This is a free mint, but you need to pay the gas fee, which is typically { low }〜{ high } ETH (depending on the complexity of the image, assuming the Gas price is ~15 Gwei).",
+    mintMessage2:
+      "If you participate in this crowd-minting effort, you will receive not only the primary NFT (which is the proof that you are one of minters), but also { bonousTokensPerAs } additional bonus NFTs.",
+    placeHolder: "Name (such as Twitter Id, optional)",
+    thanks:
+      "Thank you for participating in this crowd-minting effort. When the blockchain is updated, this message will dissapear automatically.",
+    sorry:
+      "Another user has just minted this NFT. Please select another image.",
     mint: "Mint",
     error1: "We have received the following error message.",
-    error2: "Please try again from the selection of an image."
+    error2: "Please try again from the selection of an image.",
   },
   message: {
     notFoundMessage: "Page not Found",

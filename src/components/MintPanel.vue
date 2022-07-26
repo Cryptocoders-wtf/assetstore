@@ -6,7 +6,7 @@
     <p class="mt-2">
       <b>{{ selection.asset.name }}, {{ selection.asset.category }}</b>
     </p>
-    
+
     <div v-if="selection.isLoading">
       <img
         :src="selection.asset.image"
@@ -47,20 +47,18 @@
       <span v-else>
         <NetworkGate :expectedNetwork="addresses.chainId">
           <div class="mb-4">
-            <label
-              class="block text-gray-700 text-sm mb-1"
-              for="username"
-            >
-              {{ $t("mintPanel.writeName")}}
-              <span :class="validName ? '' : 'text-red-600 font-bold'">{{ $t("mintPanel.maxLength")}}</span>
+            <label class="block text-gray-700 text-sm mb-1" for="username">
+              {{ $t("mintPanel.writeName") }}
+              <span :class="validName ? '' : 'text-red-600 font-bold'">{{
+                $t("mintPanel.maxLength")
+              }}</span>
             </label>
             <input
               v-model.trim="minterName"
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
-              :placeholder="$t('mintPanel.placeHolder')
-              "
+              :placeholder="$t('mintPanel.placeHolder')"
             />
             <span v-if="validName">
               <button
@@ -82,10 +80,20 @@
           </div>
           <div>
             <p class="mb-2">
-              {{ $tc("mintPanel.mintMessage1", { low: priceRange.low, high: priceRange.high} ) }}
+              {{
+                $tc("mintPanel.mintMessage1", {
+                  low: priceRange.low,
+                  high: priceRange.high,
+                })
+              }}
             </p>
             <p class="mb-2">
-              {{ $tc("mintPanel.mintMessage2", { tokensPerAsset: tokensPerAsset - 1, bonousTokensPerAsset: tokensPerAsset - 2 } ) }}
+              {{
+                $tc("mintPanel.mintMessage2", {
+                  tokensPerAsset: tokensPerAsset - 1,
+                  bonousTokensPerAsset: tokensPerAsset - 2,
+                })
+              }}
             </p>
           </div>
         </NetworkGate>
