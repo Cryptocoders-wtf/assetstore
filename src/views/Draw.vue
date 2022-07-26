@@ -69,8 +69,11 @@ export default defineComponent({
       evt.preventDefault();  
     }
     const svgImage:string = computed(()=>{
+      const path = 'm185 370 h427 v28 H85 Z';
       const svg = svgHead +
-        '<path d="m85 370 h427 v28 H85 Z" fill="#d22f27" />'
+        '<path d="' +
+        path +
+        '" />'
         + svgTail;
       console.log(svg);
       const image =
