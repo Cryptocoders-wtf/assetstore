@@ -37,13 +37,13 @@ export default defineComponent({
       { x:384, y:384, c:false },
       { x:384, y:128, c:false },
     ];
-    const dragStart = (e:any, index:number) => {
+    const dragStart = (evt:any, index:number) => {
       console.log("dragStart", index);
-      console.log("dragStart", e.dataTransfer);
-      e.dataTransfer.setData('index', index)
+      evt.dataTransfer.setData('index', index)
     };
-    const onDrop = (e:any) => {
-      console.log("onDrop", e.dataTransfer);      
+    const onDrop = (evt:any) => {
+      const index = evt.dataTransfer.getData('index')   
+      console.log("onDrop", index);   
     }
     return {
       cursors,
