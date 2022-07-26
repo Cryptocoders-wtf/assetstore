@@ -2,7 +2,6 @@
   <div>
     <div :style='`position:absolute; width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`' 
       class="border-2 border-solid border-blue-700" 
-      @drop="onDrop($event)"
       @dragover="dragOver"
       @dragenter.prevent
     >
@@ -45,7 +44,6 @@ export default defineComponent({
       { x:384, y:128, c:false },
     ];
     const dragStart = (evt:any, index:number) => {
-      console.log("dragStart", evt);
       //evt.dataTransfer.setData('index', index)
       offsetX.value = evt.offsetX;
       offsetY.value = evt.offsetY;
@@ -62,10 +60,7 @@ export default defineComponent({
         }
         return cursor;
       });   
-    }
-    const onDrop = (evt:any) => {
-      const index = evt.dataTransfer.getData('index')   
-      console.log("onDrop", index);   
+      evt.preventDefault();  
     }
     return {
       cursors,
@@ -74,7 +69,6 @@ export default defineComponent({
       curw, curh, offx, offy,
       dragStart,
       dragOver,
-      onDrop,
     };
   },
 });
