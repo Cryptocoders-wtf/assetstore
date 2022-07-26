@@ -3,10 +3,12 @@
     <div :style='`position:absolute; width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`' 
       class="border-2 border-solid border-blue-700">
     </div>
-    <div v-for="(cursor, index) in cursors" :key="index"
+    <div v-for="(cursor, index) in cursors" :key="index" :name="index"
       :style='`width:${curw}px; height:${curh}px; position:absolute; left:${cursor.x + offx - curw/2}px; top:${cursor.y + offy - curh/2}px`'
-      class="border-2 border-solid border-blue-700">
-    </div>
+      class="border-2 border-solid border-blue-700"
+      draggable
+      @dragstart="dragStart($event, index)"
+      />
   </div>
 </template>
 
@@ -31,6 +33,11 @@ export default defineComponent({
       { x:384, y:384, c:false },
       { x:384, y:128, c:false },
     ];
+    const dragStart = (e:any, index:number) => {
+      console.log("dragStart", index);
+      console.log("dragStart", e.dataTransfer);
+      e.dataTransfer.setData('index', index)
+    };
     return {
       cursors,
       canw: 512,
@@ -39,6 +46,7 @@ export default defineComponent({
       curh: 30, 
       offx: 40,
       offy: 80,
+      dragStart,
     };
   },
 });
