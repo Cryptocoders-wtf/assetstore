@@ -1,14 +1,18 @@
 <template>
   <div>
     <div :style='`position:absolute; width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`' 
-      class="border-2 border-solid border-blue-700">
+      class="border-2 border-solid border-blue-700" 
+      @drop="onDrop($event)"
+      @dragover.prevent
+      @dragenter.prevent
+    >
+      <div v-for="(cursor, index) in cursors" :key="index" :name="index"
+        :style='`width:${curw}px; height:${curh}px; position:absolute; left:${cursor.x - curw/2}px; top:${cursor.y - curh/2}px`'
+        class="border-2 border-solid border-blue-700"
+        draggable
+        @dragstart="dragStart($event, index)"
+        />
     </div>
-    <div v-for="(cursor, index) in cursors" :key="index" :name="index"
-      :style='`width:${curw}px; height:${curh}px; position:absolute; left:${cursor.x + offx - curw/2}px; top:${cursor.y + offy - curh/2}px`'
-      class="border-2 border-solid border-blue-700"
-      draggable
-      @dragstart="dragStart($event, index)"
-      />
   </div>
 </template>
 
@@ -38,6 +42,9 @@ export default defineComponent({
       console.log("dragStart", e.dataTransfer);
       e.dataTransfer.setData('index', index)
     };
+    const onDrop = (e:any) => {
+      console.log("onDrop", e.dataTransfer);      
+    }
     return {
       cursors,
       canw: 512,
@@ -47,6 +54,7 @@ export default defineComponent({
       offx: 40,
       offy: 80,
       dragStart,
+      onDrop,
     };
   },
 });
