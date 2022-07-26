@@ -74,10 +74,11 @@ export default defineComponent({
       const path = points.reduce((path, cursor, index) => {
         const prev = points[(index + length - 1) % length];
         const next = points[(index + 1) % length];
-        return path + `L ${(cursor.x + prev.x)/2},${(cursor.y + prev.y)/2},`
-                      + `Q ${cursor.x},${cursor.y},`
+        const head = (index == 0) ? `M${(cursor.x + prev.x)/2},${(cursor.y + prev.y)/2},` : "";
+        return path + head
+                      + `Q${cursor.x},${cursor.y},`
                       + `${(cursor.x + next.x)/2},${(cursor.y + next.y)/2}`;
-      }, "M0,0");
+      }, "");
       const svg = svgHead +
         '<path d="' +
         path +
