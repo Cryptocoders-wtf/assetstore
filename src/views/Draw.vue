@@ -19,7 +19,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
 
-const svgHead = '<svg viewBox="0 0 1024 1024"  xmlns="http://www.w3.org/2000/svg">'
+const svgHead = '<svg viewBox="0 0 512 512"  xmlns="http://www.w3.org/2000/svg">'
   +'<defs><g id="asset">';
 const svgTail = '</g></defs>'
   +'<use href="#asset" fill="black" /></svg>';
@@ -69,13 +69,14 @@ export default defineComponent({
       evt.preventDefault();  
     }
     const svgImage:string = computed(()=>{
-      const path = 'm185 370 h427 v28 H85 Z';
+      const path = cursors.value.reduce((path, cursor) => {
+        return path + ` ${cursor.x},${cursor.y}`;
+      }, "M");
       const svg = svgHead +
         '<path d="' +
         path +
         '" />'
         + svgTail;
-      console.log(svg);
       const image =
         "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
       return image;
