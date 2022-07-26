@@ -30,6 +30,8 @@ export default defineComponent({
   components: {
   },
   setup() {
+    const offx = 40;
+    const offy = 80;
     const cursors = ref<Point[]>([]);
     const dragged = ref<number>(0);
     cursors.value = [
@@ -45,7 +47,13 @@ export default defineComponent({
     };
     const dragOver = (evt:any) => {
       // const index = evt.dataTransfer.getData('index')   
-      console.log("dragOver", dragged.value);   
+      console.log("dragOver", dragged.value, evt.clientX, evt.clientY);
+      cursors.value = cursors.value.map((cursor, index) => {
+        if (index == dragged.value) {
+          return { x:evt.clientX - offx, y:evt.clientY - offy, c:cursor.c };
+        }
+        return cursor;
+      });   
     }
     const onDrop = (evt:any) => {
       const index = evt.dataTransfer.getData('index')   
@@ -57,8 +65,8 @@ export default defineComponent({
       canh: 512,
       curw: 30,
       curh: 30, 
-      offx: 40,
-      offy: 80,
+      offx,
+      offy,
       dragStart,
       dragOver,
       onDrop,
