@@ -3,7 +3,7 @@
     <div :style='`position:absolute; width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`' 
       class="border-2 border-solid border-blue-700" 
       @drop="onDrop($event)"
-      @dragover.prevent
+      @dragover="dragOver"
       @dragenter.prevent
     >
       <div v-for="(cursor, index) in cursors" :key="index" :name="index"
@@ -31,6 +31,7 @@ export default defineComponent({
   },
   setup() {
     const cursors = ref<Point[]>([]);
+    const dragged = ref<number>(0);
     cursors.value = [
       { x:128, y:128, c:false },
       { x:128, y:384, c:false },
@@ -39,8 +40,13 @@ export default defineComponent({
     ];
     const dragStart = (evt:any, index:number) => {
       console.log("dragStart", index);
-      evt.dataTransfer.setData('index', index)
+      //evt.dataTransfer.setData('index', index)
+      dragged.value = index;
     };
+    const dragOver = (evt:any) => {
+      // const index = evt.dataTransfer.getData('index')   
+      console.log("dragOver", dragged.value);   
+    }
     const onDrop = (evt:any) => {
       const index = evt.dataTransfer.getData('index')   
       console.log("onDrop", index);   
@@ -54,6 +60,7 @@ export default defineComponent({
       offx: 40,
       offy: 80,
       dragStart,
+      dragOver,
       onDrop,
     };
   },
