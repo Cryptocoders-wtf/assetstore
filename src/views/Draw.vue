@@ -45,7 +45,7 @@ export default defineComponent({
     const offsetY = ref<number>(0);
     cursors.value = [
       { x:128, y:128, c:false },
-      { x:128, y:384, c:false },
+      { x:128, y:384, c:true },
       { x:384, y:384, c:false },
       { x:384, y:128, c:false },
     ];
@@ -76,7 +76,8 @@ export default defineComponent({
         const next = points[(index + 1) % length];
         const head = (index == 0) ? `M${(cursor.x + prev.x)/2},${(cursor.y + prev.y)/2},` : "";
         return path + head
-                      + `Q${cursor.x},${cursor.y},`
+                      + (cursor.c ? 'L' : 'Q')
+                      + `${cursor.x},${cursor.y},`
                       + `${(cursor.x + next.x)/2},${(cursor.y + next.y)/2}`;
       }, "");
       const svg = svgHead +
