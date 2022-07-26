@@ -11,6 +11,7 @@ const lang = {
     material: "Material",
     kamon: "Kamon",
     emoji: "Emoji",
+    flags: "Flags",
   },
   keyMessage: {
     message1:

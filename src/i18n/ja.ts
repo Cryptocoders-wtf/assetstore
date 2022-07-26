@@ -11,6 +11,7 @@ const lang = {
     material: "マテリアル",
     kamon: "家紋",
     emoji: "絵文字",
+    flags: "国旗",
   },
   keyMessage: {
     message1:
