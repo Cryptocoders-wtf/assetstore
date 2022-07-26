@@ -1,10 +1,11 @@
 <template>
-  <div class="max-w-xl mx-auto text-left p-2">
-    <div style="width:512; height:512px" class="bg-slate-300">
-      <div v-for="(cursor, index) in cursors" :key="index"
-        style="width:40px; height:40px; position:relative" 
-        class="border-2 border-solid border-blue-700">
-      </div>
+  <div>
+    <div :style='`position:absolute; width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`' 
+      class="border-2 border-solid border-blue-700">
+    </div>
+    <div v-for="(cursor, index) in cursors" :key="index"
+      :style='`width:${curw}px; height:${curh}px; position:absolute; left:${cursor.x + offx - curw/2}px; top:${cursor.y + offy - curh/2}px`'
+      class="border-2 border-solid border-blue-700">
     </div>
   </div>
 </template>
@@ -29,9 +30,15 @@ export default defineComponent({
       { x:128, y:384, c:false },
       { x:384, y:384, c:false },
       { x:384, y:128, c:false },
-    ]
+    ];
     return {
-      cursors
+      cursors,
+      canw: 512,
+      canh: 512,
+      curw: 30,
+      curh: 30, 
+      offx: 40,
+      offy: 80,
     };
   },
 });
