@@ -69,9 +69,15 @@ export default defineComponent({
       evt.preventDefault();  
     }
     const svgImage:string = computed(()=>{
-      const path = cursors.value.reduce((path, cursor) => {
-        return path + ` ${cursor.x},${cursor.y}`;
-      }, "M");
+      const points = cursors.value;
+      const length = points.length;
+      const path = points.reduce((path, cursor, index) => {
+        const prev = points[(index + length - 1) % length];
+        const next = points[(index + 1) % length];
+        return path + `L ${(cursor.x + prev.x)/2},${(cursor.y + prev.y)/2},`
+                      + `Q ${cursor.x},${cursor.y},`
+                      + `${(cursor.x + next.x)/2},${(cursor.y + next.y)/2}`;
+      }, "M0,0");
       const svg = svgHead +
         '<path d="' +
         path +
