@@ -9,7 +9,7 @@
       <div v-for="(cursor, index) in cursors" :key="index" :name="index"
         :style='`width:${curw}px; height:${curh}px; position:absolute; left:${cursor.x - curw/2}px; top:${cursor.y - curh/2}px`'
         class="border-2 border-solid border-blue-700"
-        draggable
+        draggable="true"
         @dragstart="dragStart($event, index)"
         />
     </div>
