@@ -1,10 +1,11 @@
 <template>
   <div>
     <div :style='`position:absolute; width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`' 
-      class="border-2 border-solid border-blue-700" 
+      class="border-2 border-solid border-blue-700 bg-slate-300" 
       @dragover="dragOver"
       @dragenter.prevent
     >
+      <img :src="svgImage" :style='`width:${canw}px; height:${canh}px;`'/>
       <div v-for="(cursor, index) in cursors" :key="index" :name="index"
         :style='`width:${curw}px; height:${curh}px; position:absolute; left:${cursor.x - curw/2}px; top:${cursor.y - curh/2}px`'
         class="border-2 border-solid border-blue-700"
@@ -16,7 +17,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
+
+const svgHead = '<svg viewBox="0 0 1024 1024"  xmlns="http://www.w3.org/2000/svg">'
+  +'<defs><g id="asset">';
+const svgTail = '</g></defs>'
+  +'<use href="#asset" fill="black" /></svg>';
 
 interface Point {
   x: number;
@@ -62,6 +68,15 @@ export default defineComponent({
       });   
       evt.preventDefault();  
     }
+    const svgImage:string = computed(()=>{
+      const svg = svgHead +
+        '<path d="m85 370 h427 v28 H85 Z" fill="#d22f27" />'
+        + svgTail;
+      console.log(svg);
+      const image =
+        "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
+      return image;
+    });
     return {
       cursors,
       canw: 512,
@@ -69,6 +84,7 @@ export default defineComponent({
       curw, curh, offx, offy,
       dragStart,
       dragOver,
+      svgImage
     };
   },
 });
