@@ -6,7 +6,12 @@
       @dragover="dragOver"
       @dragenter.prevent
     >
-      <img v-for="(layer, index) in layers" :key="index" :src="layer.svgImage" :style="`position:absolute; width:${canw}px; height:${canh}px;`" />
+      <img
+        v-for="(layer, index) in layers"
+        :key="index"
+        :src="layer.svgImage"
+        :style="`position:absolute; width:${canw}px; height:${canh}px;`"
+      />
       <div
         v-for="(cursor, index) in cursors"
         :key="index"
@@ -90,15 +95,14 @@ const pathFromPoints = (points: Point[]) => {
     );
   }, "");
 };
-const svgImageFromPoints = (points: Point[], color:string) => {
+const svgImageFromPoints = (points: Point[], color: string) => {
   const path = pathFromPoints(points);
-  const svgTail =
-    "</g></defs>" + `<use href="#asset" fill="${color}" /></svg>`;
+  const svgTail = "</g></defs>" + `<use href="#asset" fill="${color}" /></svg>`;
   const svg = svgHead + '<path d="' + path + '" />' + svgTail;
   const image =
     "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
   return image;
-}
+};
 
 export default defineComponent({
   name: "HomePage",
@@ -110,11 +114,13 @@ export default defineComponent({
     const curh = 30;
     const cursors = ref<Point[]>(roundRect);
     const currentColor = ref<string>("#008000");
-    const layers = ref<Layer[]>([{
-      points: cursors.value,
-      color: currentColor.value,
-      svgImage: svgImageFromPoints(cursors.value, currentColor.value)
-    }]);
+    const layers = ref<Layer[]>([
+      {
+        points: cursors.value,
+        color: currentColor.value,
+        svgImage: svgImageFromPoints(cursors.value, currentColor.value),
+      },
+    ]);
     const layerIndex = ref<number>(0);
     const selected = ref<number>(0);
     const offsetX = ref<number>(0);
@@ -148,14 +154,14 @@ export default defineComponent({
       });
       evt.preventDefault();
     };
-    watch([cursors, currentColor], ([points, color])=> {
+    watch([cursors, currentColor], ([points, color]) => {
       layers.value = layers.value.map((layer, index) => {
         if (index == layerIndex.value) {
           return {
             points,
             color,
-            svgImage: svgImageFromPoints(points, color)
-          }
+            svgImage: svgImageFromPoints(points, color),
+          };
         }
         return layer;
       });
@@ -193,12 +199,12 @@ export default defineComponent({
         (selected.value + cursors.value.length - 1) % cursors.value.length;
     };
     const addLayer = () => {
-      const array = layers.value.map(layer => layer);
+      const array = layers.value.map((layer) => layer);
       const newLayer = {
         points: roundRect,
         color: currentColor.value,
-        svgImage: svgImageFromPoints(roundRect, currentColor.value)
-      }; 
+        svgImage: svgImageFromPoints(roundRect, currentColor.value),
+      };
       array.push(newLayer);
       layers.value = array;
       layerIndex.value += 1;
