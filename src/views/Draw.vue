@@ -13,6 +13,12 @@
         @dragstart="dragStart($event, index)"
         />
     </div>
+    <div :style='`position:absolute; width:200px; height:${canh}px; left:${offx + canw - 2}px; top:${offy}px`' 
+      class="border-2 border-solid border-blue-700">
+      <div @click="togglePoint">Toggle</div>
+      <div @click="deletePoint">Delete</div>
+      <div @click="duplicatePoint">Duplicate</div>
+    </div> 
   </div>
 </template>
 
@@ -89,6 +95,20 @@ export default defineComponent({
         "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
       return image;
     });
+    const togglePoint = () => {
+      cursors.value = cursors.value.map((cursor, index) => {
+        if (index == selected.value) {
+          return { x:cursor.x, y:cursor.y, c:!cursor.c };
+        }
+        return cursor;
+      });
+    };
+    const duplicatePoint = () => {
+      console.log("a");
+    };
+    const deletePoint = () => {
+      console.log("a");
+    };
     return {
       cursors,
       selected,
@@ -97,6 +117,7 @@ export default defineComponent({
       curw, curh, offx, offy,
       dragStart,
       dragOver,
+      togglePoint, duplicatePoint, deletePoint,
       svgImage
     };
   },
