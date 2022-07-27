@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <div
+    style="width: 100%"
+    @drop="drop($event)"
+    @dragenter.prevent
+    @dragover.prevent
+  >
     <div
       :style="`position:absolute; width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`"
       class="border-2 border-solid border-blue-700 bg-slate-300"
@@ -154,6 +159,10 @@ export default defineComponent({
       });
       evt.preventDefault();
     };
+    const drop = (evt: any) => {
+      console.log("drop");
+      evt.preventDefault();
+    };
     watch([cursors, currentColor], ([points, color]) => {
       layers.value = layers.value.map((layer, index) => {
         if (index == layerIndex.value) {
@@ -223,6 +232,7 @@ export default defineComponent({
       offy,
       dragStart,
       dragOver,
+      drop,
       togglePoint,
       splitSegment,
       deletePoint,
