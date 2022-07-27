@@ -41,6 +41,7 @@
         type="text"
         :placeholder="$t('mintPanel.placeHolder')"
       />
+      <div><button @click="addLayer">Add</button></div>
     </div>
   </div>
 </template>
@@ -106,10 +107,9 @@ export default defineComponent({
       });
       evt.preventDefault();
     };
-    const svgImage: string = computed(() => {
-      const points = cursors.value;
+    const pathFromPoints = (points: Point[]) => {
       const length = points.length;
-      const path = points.reduce((path, cursor, index) => {
+      return points.reduce((path, cursor, index) => {
         const prev = points[(index + length - 1) % length];
         const next = points[(index + 1) % length];
         const head =
@@ -124,6 +124,9 @@ export default defineComponent({
           `${(cursor.x + next.x) / 2},${(cursor.y + next.y) / 2}`
         );
       }, "");
+    };
+    const svgImage: string = computed(() => {
+      const path = pathFromPoints(cursors.value);
       const svgTail =
         "</g></defs>" + `<use href="#asset" fill="${color.value}" /></svg>`;
       const svg = svgHead + '<path d="' + path + '" />' + svgTail;
@@ -163,6 +166,14 @@ export default defineComponent({
       selected.value =
         (selected.value + cursors.value.length - 1) % cursors.value.length;
     };
+    const addLayer = () => {
+      cursors.value = [
+        { x: 128, y: 128, c: false },
+        { x: 384, y: 128, c: false },
+        { x: 384, y: 384, c: false },
+        { x: 128, y: 384, c: false },
+      ];
+    };
     return {
       cursors,
       selected,
@@ -179,6 +190,7 @@ export default defineComponent({
       splitSegment,
       deletePoint,
       onSelect,
+      addLayer,
       svgImage,
     };
   },
