@@ -61,7 +61,7 @@ const lang = {
     loadingCategories: "カテゴリー読込中...",
     loadingAssets: "アセット読込中...",
     selectAssets: "下からアセットを１つ選択してください",
-    sampleCodeMessage: "このアッセとのSVG画像を取得するサンプルコードです",
+    sampleCodeMessage: "このアセットのSVG画像を取得するサンプルコードです",
     fetchedImage: '取得した"SVG"のデータ',
   },
   assetPanel: {
