@@ -72,6 +72,34 @@ const roundRect: Point[] = [
   { x: 128, y: 384, c: false },
 ];
 
+const pathFromPoints = (points: Point[]) => {
+  const length = points.length;
+  return points.reduce((path, cursor, index) => {
+    const prev = points[(index + length - 1) % length];
+    const next = points[(index + 1) % length];
+    const head =
+      index == 0
+        ? `M${(cursor.x + prev.x) / 2},${(cursor.y + prev.y) / 2},`
+        : "";
+    return (
+      path +
+      head +
+      (cursor.c ? "L" : "Q") +
+      `${cursor.x},${cursor.y},` +
+      `${(cursor.x + next.x) / 2},${(cursor.y + next.y) / 2}`
+    );
+  }, "");
+};
+const svgImageFromPoints = (points: Point[], color:string) => {
+  const path = pathFromPoints(points);
+  const svgTail =
+    "</g></defs>" + `<use href="#asset" fill="${color}" /></svg>`;
+  const svg = svgHead + '<path d="' + path + '" />' + svgTail;
+  const image =
+    "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
+  return image;
+}
+
 export default defineComponent({
   name: "HomePage",
   components: {},
@@ -81,10 +109,15 @@ export default defineComponent({
     const curw = 30;
     const curh = 30;
     const cursors = ref<Point[]>(roundRect);
+    const currentColor = ref<string>("#008000");
+    const layers = ref<Layer[]>([{
+      points: cursors.value,
+      color: currentColor.value,
+      svgImage: svgImageFromPoints(cursors.value, currentColor.value)
+    }]);
     const selected = ref<number>(0);
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
-    const currentColor = ref<string>("#008000");
     const onSelect = (evt: any, index: number) => {
       selected.value = index;
     };
@@ -114,33 +147,6 @@ export default defineComponent({
       });
       evt.preventDefault();
     };
-    const pathFromPoints = (points: Point[]) => {
-      const length = points.length;
-      return points.reduce((path, cursor, index) => {
-        const prev = points[(index + length - 1) % length];
-        const next = points[(index + 1) % length];
-        const head =
-          index == 0
-            ? `M${(cursor.x + prev.x) / 2},${(cursor.y + prev.y) / 2},`
-            : "";
-        return (
-          path +
-          head +
-          (cursor.c ? "L" : "Q") +
-          `${cursor.x},${cursor.y},` +
-          `${(cursor.x + next.x) / 2},${(cursor.y + next.y) / 2}`
-        );
-      }, "");
-    };
-    const svgImageFromPoints = (points: Point[], color:string) => {
-      const path = pathFromPoints(points);
-      const svgTail =
-        "</g></defs>" + `<use href="#asset" fill="${color}" /></svg>`;
-      const svg = svgHead + '<path d="' + path + '" />' + svgTail;
-      const image =
-        "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
-      return image;
-    }
     const svgImage: string = computed(() => {
       return svgImageFromPoints(cursors.value, currentColor.value);
     });
