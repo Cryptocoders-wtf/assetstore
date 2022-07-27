@@ -16,6 +16,7 @@
         :key="index"
         :src="layer.svgImage"
         :style="`position:absolute; width:${canw}px; height:${canh}px;`"
+        :class='`opacity-${ (index > layerIndex) ? "50":"100"}`'
       />
       <div
         v-for="(cursor, index) in cursors"
