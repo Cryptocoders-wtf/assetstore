@@ -132,14 +132,17 @@ export default defineComponent({
         );
       }, "");
     };
-    const svgImage: string = computed(() => {
-      const path = pathFromPoints(cursors.value);
+    const svgFromPoints = (points: Point[]) => {
+      const path = pathFromPoints(points);
       const svgTail =
         "</g></defs>" + `<use href="#asset" fill="${color.value}" /></svg>`;
       const svg = svgHead + '<path d="' + path + '" />' + svgTail;
       const image =
         "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
       return image;
+    }
+    const svgImage: string = computed(() => {
+      return svgFromPoints(cursors.value);
     });
     const togglePoint = () => {
       cursors.value = cursors.value.map((cursor, index) => {
