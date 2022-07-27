@@ -56,6 +56,9 @@
         <div
           v-for="(layer, index) in layers"
           :key="index">
+          <div v-if="index == layerIndex">
+            <div><button @click="insertLayer(index)">Insert</button></div>
+          </div>
           <img @click="onSelectLayer($event, index)"
           :src="layer.svgImage"
           :style="`object-fit:fill;width:${sidew}px;height:${sidew / 2}px`"
@@ -64,7 +67,7 @@
           }`"
           />
           <div v-if="index == layerIndex">
-            <div><button @click="insertLayer">Insert</button></div>
+            <div><button @click="insertLayer(index + 1)">Insert</button></div>
           </div>
         </div>
       </div>
@@ -162,17 +165,19 @@ export default defineComponent({
       selected.value =
         (selected.value + cursors.value.length - 1) % cursors.value.length;
     };
-    const insertLayer = () => {
+    const insertLayer = (index: number) => {
       const array = layers.value.map((layer) => layer);
       const newLayer = {
         points: roundRect,
         color: currentColor.value,
         svgImage: svgImageFromPoints(roundRect, currentColor.value),
       };
-
-      array.splice(layerIndex.value + 1, 0, newLayer);
+      array.splice(index, 0, newLayer);
       layers.value = array;
-      layerIndex.value += 1;
+      layerIndex.value = index;
+      // We need to do this, because watch(layerIndex) may not catch this event
+      cursors.value = newLayer.points;
+      currentColor.value = newLayer.color;
     };
     const onSelectLayer = (evt: any, index: number) => {
       layerIndex.value = index;
