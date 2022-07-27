@@ -52,18 +52,21 @@
         type="text"
         :placeholder="$t('mintPanel.placeHolder')"
       />
-      <div><button @click="addLayer">Add</button></div>
       <div :style="`height:${canh / 2}px; overflow-y: scroll`">
-        <img
+        <div
           v-for="(layer, index) in layers"
-          @click="onSelectLayer($event, index)"
-          :key="index"
+          :key="index">
+          <img @click="onSelectLayer($event, index)"
           :src="layer.svgImage"
           :style="`object-fit:fill;width:${sidew}px;height:${sidew / 2}px`"
           :class="`border-2 border-solid ${
             index == layerIndex ? 'border-blue-400' : 'border-slate-200'
           }`"
-        />
+          />
+          <div v-if="index == layerIndex">
+            <div><button @click="insertLayer">Insert</button></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -159,7 +162,7 @@ export default defineComponent({
       selected.value =
         (selected.value + cursors.value.length - 1) % cursors.value.length;
     };
-    const addLayer = () => {
+    const insertLayer = () => {
       const array = layers.value.map((layer) => layer);
       const newLayer = {
         points: roundRect,
@@ -213,7 +216,7 @@ export default defineComponent({
       splitSegment,
       deletePoint,
       onSelect,
-      addLayer,
+      insertLayer,
       onSelectLayer,
       layerIndex,
       layers,
