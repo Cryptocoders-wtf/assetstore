@@ -14,8 +14,8 @@
         v-for="(layer, index) in layers"
         :key="index"
         :src="layer.svgImage"
-        :style="`position:absolute; width:${canw}px; height:${canh}px;`"
-        :class="`opacity-${index > layerIndex ? '50' : '100'}`"
+        :style='`position:absolute; width:${canw}px; height:${canh}px;` 
+              + `opacity:${(index > layerIndex) ? "0.5":"1.0"}`'
       />
       <div
         v-for="(cursor, index) in cursors"
@@ -50,7 +50,7 @@
       <div><button @click="togglePoint">Toggle</button></div>
       <div>
         <button :disabled="cursors.length <= 3" @click="deletePoint"
-          :class='`opacity-${(cursors.length > 3)?100:50}`'
+          :style='`opacity:${(cursors.length > 3)?"1.0":"0.5"}`'
         >
           Delete
         </button>
