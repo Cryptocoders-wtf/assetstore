@@ -59,7 +59,7 @@
           :key="index"
           :src="layer.svgImage"
           :style='`object-fit:fill;width:200px;height:80px`'
-          :class='(index == layerIndex) ? "border-2 border-solid border-blue-400" : ""'
+          :class='`border-2 border-solid ${(index == layerIndex) ? "border-blue-400" : "border-slate-200"}`'
         />
       </div>
     </div>
@@ -218,13 +218,14 @@ export default defineComponent({
         (selected.value + cursors.value.length - 1) % cursors.value.length;
     };
     const addLayer = () => {
-      const array = layers.value.map((layer) => layer);
+      const array = layers.value.map(layer => layer);
       const newLayer = {
         points: roundRect,
         color: currentColor.value,
         svgImage: svgImageFromPoints(roundRect, currentColor.value),
       };
-      array.push(newLayer);
+      
+      array.splice(layerIndex.value + 1, 0, newLayer);
       layers.value = array;
       layerIndex.value += 1;
       cursors.value = newLayer.points;
