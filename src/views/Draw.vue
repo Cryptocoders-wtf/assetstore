@@ -6,9 +6,9 @@
       @dragenter.prevent
     >
       <img :src="svgImage" :style='`width:${canw}px; height:${canh}px;`'/>
-      <div v-for="(cursor, index) in cursors" :key="index" :name="index"
+      <div v-for="(cursor, index) in cursors" :key="index"
         :style='`width:${curw}px; height:${curh}px; position:absolute; left:${cursor.x - curw/2}px; top:${cursor.y - curh/2}px`'
-        :class='`border-2 border-solid border-blue-700 ${ cursor.c ? "":"rounded-xl"}`'
+        :class='`border-2 border-solid ${ index==selected ? "border-blue-800" : "border-blue-400"} ${ cursor.c ? "":"rounded-xl"}`'
         draggable="true"
         @dragstart="dragStart($event, index)"
         />
@@ -40,7 +40,7 @@ export default defineComponent({
     const curw = 30;
     const curh = 30;
     const cursors = ref<Point[]>([]);
-    const dragged = ref<number>(0);
+    const selected = ref<number>(0);
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
     cursors.value = [
@@ -53,12 +53,12 @@ export default defineComponent({
       //evt.dataTransfer.setData('index', index)
       offsetX.value = evt.offsetX;
       offsetY.value = evt.offsetY;
-      dragged.value = index;
+      selected.value = index;
     };
     const dragOver = (evt:any) => {
       // const index = evt.dataTransfer.getData('index')   
       cursors.value = cursors.value.map((cursor, index) => {
-        if (index == dragged.value) {
+        if (index == selected.value) {
           return { 
             x: Math.max(0, Math.min(511, evt.clientX - offx - offsetX.value + curw/2 - 3)), 
             y: Math.max(0, Math.min(511, evt.clientY - offy - offsetY.value + curh/2 - 3)), 
@@ -91,6 +91,7 @@ export default defineComponent({
     });
     return {
       cursors,
+      selected,
       canw: 512,
       canh: 512,
       curw, curh, offx, offy,
