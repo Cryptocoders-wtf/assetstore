@@ -45,6 +45,7 @@
           :class='`ml-1 opacity-${isRedoable()?100:50}`'
         @click="redo" :disabled="!isRedoable()">Redo</button>
       </div>
+      <div><button @click="toggleGrid">Grid: {{grid}}</button></div>
       <div><button @click="togglePoint">Toggle</button></div>
       <div>
         <button :disabled="cursors.length <= 3" @click="deletePoint"
@@ -57,7 +58,7 @@
       <input
         v-model.trim="currentColor"
         v-on:focus="onColorFocus"
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        class="text-center shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="username"
         type="text"
         :placeholder="$t('mintPanel.placeHolder')"
@@ -127,6 +128,7 @@ export default defineComponent({
   name: "HomePage",
   components: {},
   setup() {
+    const grid = ref<number>(0);
     const undoStack = ref<State[]>([]);
     const undoIndex = ref<number>(0);
     const recordState = () => {
@@ -201,21 +203,24 @@ export default defineComponent({
       // const index = evt.dataTransfer.getData('index')
       cursors.value = cursors.value.map((cursor, index) => {
         if (index == pointIndex.value) {
-          return {
-            x: Math.max(
+          const g = grid.value;
+          const x = Math.max(
               0,
               Math.min(
-                canw - 1,
+                canw - g -1,
                 evt.clientX - offx - offsetX.value + curw / 2 - 3
               )
-            ),
-            y: Math.max(
+            );
+          const y = Math.max(
               0,
               Math.min(
-                canh - 1,
+                canh - g - 1,
                 evt.clientY - offy - offsetY.value + curh / 2 - 3
               )
-            ),
+            );
+          return {
+            x : (g==0) ? x : Math.round((x + g/2) / g) * g,
+            y : (g==0) ? y : Math.round((y + g/2) / g) * g,
             c: cursor.c,
           };
         }
@@ -289,6 +294,9 @@ export default defineComponent({
         return layer;
       });
     });
+    const toggleGrid = () => {
+      grid.value = (grid.value + 8) % 40;
+    };
     return {
       cursors,
       pointIndex,
@@ -317,6 +325,8 @@ export default defineComponent({
       isRedoable,
       layerIndex,
       layers,
+      grid,
+      toggleGrid,
     };
   },
 });
