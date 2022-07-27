@@ -68,7 +68,7 @@
           />
           <div v-if="index == layerIndex">
             <div><button @click="insertLayer(index + 1)">Insert</button></div>
-            <div><button @click="deleteLayer()">Delete</button></div>
+            <div v-if="layers.length > 1"><button @click="deleteLayer()">Delete</button></div>
           </div>
         </div>
       </div>
@@ -166,8 +166,9 @@ export default defineComponent({
       selected.value =
         (selected.value + cursors.value.length - 1) % cursors.value.length;
     };
-    const updateCursors = (index) => {
-      const layer = layers.value[index];
+    const updateLayerIndex = (index:number) => {
+      layerIndex.value = (index + layers.value.length) % layers.value.length;
+      const layer = layers.value[layerIndex.value];
       cursors.value = layer.points;
       currentColor.value = layer.color;
     };
@@ -180,28 +181,24 @@ export default defineComponent({
       };
       array.splice(index, 0, newLayer);
       layers.value = array;
-      layerIndex.value = index;
-      // We need to do this, because watch(layerIndex) may not catch this event
-      updateCursors(index);
+      updateLayerIndex(index);
     };
     const deleteLayer = () => {
+      if (layers.value.length == 1) {
+        return;
+      }
       layers.value = layers.value.filter((layer, index) => {
         return index != layerIndex.value;
       });
-      layerIndex.value = (layerIndex.value + layers.value.length - 1) % layers.value.length;
-      // We need to do this, because watch(layerIndex) may not catch this event
-      updateCursors(layerIndex.value);
+      updateLayerIndex(layerIndex.value - 1);
     };
     const onSelectLayer = (evt: any, index: number) => {
-      layerIndex.value = index;
+      updateLayerIndex(index);
     };
     const drop = (evt: any) => {
       console.log("drop");
       evt.preventDefault();
     };
-    watch(layerIndex, (index) => {
-      updateCursors(index);
-    });
     watch([cursors, currentColor], ([points, color]) => {
       layers.value = layers.value.map((layer, index) => {
         if (index == layerIndex.value) {
