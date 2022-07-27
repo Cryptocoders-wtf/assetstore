@@ -47,6 +47,7 @@
       <div><button @click="splitSegment">Split</button></div>
       <input
         v-model.trim="currentColor"
+        v-on:focus="onColorFocus"
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="username"
         type="text"
@@ -149,6 +150,9 @@ export default defineComponent({
       undoIndex.value -= 1;
       console.log("undo", undoIndex.value, layers.value.length);
     };
+    const onColorFocus = (evt:any) => {
+      recordState();
+    }
 
     const cursors = ref<Point[]>(roundRect);
     const currentColor = ref<string>("#008000");
@@ -286,6 +290,7 @@ export default defineComponent({
       insertLayer,
       deleteLayer,
       onSelectLayer,
+      onColorFocus,
       undo,
       isUndoable,
       layerIndex,
