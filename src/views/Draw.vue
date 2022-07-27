@@ -17,7 +17,7 @@
     <div :style='`position:absolute; width:200px; height:${canh}px; left:${offx + canw - 2}px; top:${offy}px`' 
       class="border-2 border-solid border-blue-700">
       <div><button @click="togglePoint">Toggle</button></div>
-      <div><button @click="deletePoint">Delete</button></div>
+      <div><button :disabled="cursors.length <= 3" @click="deletePoint">Delete</button></div>
       <div><button @click="duplicatePoint">Duplicate</button></div>
     </div> 
   </div>
