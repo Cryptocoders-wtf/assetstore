@@ -111,7 +111,13 @@ export default defineComponent({
       console.log("a");
     };
     const deletePoint = () => {
-      console.log("a");
+      if (cursors.value.length <= 3) {
+        return;
+      }
+      cursors.value = cursors.value.filter((cursor, index) => {
+        return index != selected.value;
+      }); 
+      selected.value = selected.value % cursors.value.length;
     };
     return {
       cursors,
