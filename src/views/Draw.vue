@@ -6,7 +6,7 @@
       @dragover="dragOver"
       @dragenter.prevent
     >
-      <img :src="svgImage" :style="`width:${canw}px; height:${canh}px;`" />
+      <img v-for="(layer, index) in layers" :key="index" :src="layer.svgImage" :style="`width:${canw}px; height:${canh}px;`" />
       <div
         v-for="(cursor, index) in cursors"
         :key="index"
@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, watch } from "vue";
 
 const svgHead =
   '<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">' +
@@ -147,8 +147,17 @@ export default defineComponent({
       });
       evt.preventDefault();
     };
-    const svgImage: string = computed(() => {
-      return svgImageFromPoints(cursors.value, currentColor.value);
+    watch([cursors, currentColor], ([points, color])=> {
+      layers.value = layers.value.map((layer, index) => {
+        if (index == 0) {
+          return {
+            points,
+            color,
+            svgImage: svgImageFromPoints(points, color)
+          }
+        }
+        return layer;
+      });
     });
     const togglePoint = () => {
       cursors.value = cursors.value.map((cursor, index) => {
@@ -202,7 +211,7 @@ export default defineComponent({
       deletePoint,
       onSelect,
       addLayer,
-      svgImage,
+      layers,
     };
   },
 });
