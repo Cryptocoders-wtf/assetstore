@@ -57,7 +57,7 @@
           v-for="(layer, index) in layers"
           :key="index"
           :src="layer.svgImage"
-          :style="`width:200px;height:100px`"
+          :style="`object-fit:fill;width:200px;height:80px`"
         />
       </div>
     </div>
