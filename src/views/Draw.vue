@@ -28,8 +28,6 @@ import { defineComponent, ref, computed } from "vue";
 
 const svgHead = '<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">'
   +'<defs><g id="asset">';
-const svgTail = '</g></defs>'
-  +'<use href="#asset" fill="green" /></svg>';
 
 interface Point {
   x: number;
@@ -50,6 +48,7 @@ export default defineComponent({
     const selected = ref<number>(0);
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
+    const color = ref<string>("#008000");
     cursors.value = [
       { x:128, y:128, c:false },
       { x:384, y:128, c:false },
@@ -90,6 +89,8 @@ export default defineComponent({
                       + `${cursor.x},${cursor.y},`
                       + `${(cursor.x + next.x)/2},${(cursor.y + next.y)/2}`;
       }, "");
+      const svgTail = '</g></defs>'
+        +`<use href="#asset" fill="${color.value}" /></svg>`;
       const svg = svgHead +
         '<path d="' +
         path +
