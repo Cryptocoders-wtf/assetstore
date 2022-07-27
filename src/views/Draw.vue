@@ -55,6 +55,7 @@
       <div style="height:250px; overflow-y: scroll">
         <img
           v-for="(layer, index) in layers"
+          @click = "onSelectLayer($event, index)"
           :key="index"
           :src="layer.svgImage"
           :style="`object-fit:fill;width:200px;height:80px`"
@@ -228,6 +229,12 @@ export default defineComponent({
       cursors.value = newLayer.points;
       currentColor.value = newLayer.color;
     };
+    const onSelectLayer = (evt:any, index: number) => {
+      layerIndex.value = index;
+      const layer = layers.value[index];
+      cursors.value = layer.points;
+      currentColor.value = layer.color;
+    };
     return {
       cursors,
       selected,
@@ -246,6 +253,7 @@ export default defineComponent({
       deletePoint,
       onSelect,
       addLayer,
+      onSelectLayer,
       layers,
     };
   },
