@@ -38,12 +38,18 @@
       class="border-2 border-solid border-blue-700"
     >
       <div>
-        <button @click="undo" :disabled="!isUndoable()">Undo</button>
-        <button class="ml-1" @click="redo" :disabled="!isRedoable()">Redo</button>
+        <button @click="undo" :disabled="!isUndoable()"
+          :class='`opacity-${isUndoable()?100:50}`'
+          >Undo</button>
+        <button 
+          :class='`ml-1 opacity-${isRedoable()?100:50}`'
+        @click="redo" :disabled="!isRedoable()">Redo</button>
       </div>
       <div><button @click="togglePoint">Toggle</button></div>
       <div>
-        <button :disabled="cursors.length <= 3" @click="deletePoint">
+        <button :disabled="cursors.length <= 3" @click="deletePoint"
+          :class='`opacity-${(cursors.length > 3)?100:50}`'
+        >
           Delete
         </button>
       </div>
