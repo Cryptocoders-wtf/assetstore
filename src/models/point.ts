@@ -3,7 +3,7 @@ export interface Point {
   y: number;
   c: boolean;
 }
-  
+
 export const pathFromPoints = (points: Point[]) => {
   const length = points.length;
   return points.reduce((path, cursor, index) => {
@@ -45,15 +45,15 @@ export const togglePoint = (points: Point[], index: number) => {
   });
 };
 
-export const splitPoint = (points:Point[], index:number) => {
+export const splitPoint = (points: Point[], index: number) => {
   const prev = points[index];
   const next = points[(index + 1) % points.length];
   const newItem = {
     x: (prev.x + next.x) / 2,
     y: (prev.y + next.y) / 2,
-    c: false
+    c: false,
   };
-  const array = points.map(point => point);
+  const array = points.map((point) => point);
   array.splice(index + 1, 0, newItem);
   return array;
-}; 
+};
