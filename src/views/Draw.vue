@@ -16,7 +16,7 @@
         :key="index"
         :src="layer.svgImage"
         :style="`position:absolute; width:${canw}px; height:${canh}px;`"
-        :class='`opacity-${ (index > layerIndex) ? "50":"100"}`'
+        :class="`opacity-${index > layerIndex ? '50' : '100'}`"
       />
       <div
         v-for="(cursor, index) in cursors"
@@ -33,7 +33,7 @@
       />
     </div>
     <div
-      :style="`position:absolute; width:200px; height:${canh}px; left:${
+      :style="`position:absolute; width:${sidew}px; height:${canh}px; left:${
         offx + canw - 2
       }px; top:${offy}px`"
       class="border-2 border-solid border-blue-700"
@@ -53,14 +53,16 @@
         :placeholder="$t('mintPanel.placeHolder')"
       />
       <div><button @click="addLayer">Add</button></div>
-      <div style="height:250px; overflow-y: scroll">
+      <div :style="`height:${canh / 2}px; overflow-y: scroll`">
         <img
           v-for="(layer, index) in layers"
-          @click = "onSelectLayer($event, index)"
+          @click="onSelectLayer($event, index)"
           :key="index"
           :src="layer.svgImage"
-          :style='`object-fit:fill;width:200px;height:80px`'
-          :class='`border-2 border-solid ${(index == layerIndex) ? "border-blue-400" : "border-slate-200"}`'
+          :style="`object-fit:fill;width:${sidew}px;height:${sidew / 2}px`"
+          :class="`border-2 border-solid ${
+            index == layerIndex ? 'border-blue-400' : 'border-slate-200'
+          }`"
         />
       </div>
     </div>
@@ -86,13 +88,15 @@ interface Layer {
   svgImage: string;
 }
 
-const [canw, canh, offx, offy, curw, curh] = [512, 512, 40, 40, 30, 30];
+const [canw, canh, offx, offy, curw, curh, sidew] = [
+  512, 512, 40, 40, 30, 30, 150,
+];
 
 const roundRect: Point[] = [
-  { x: 128, y: 128, c: false },
-  { x: 384, y: 128, c: false },
-  { x: 384, y: 384, c: false },
-  { x: 128, y: 384, c: false },
+  { x: canw / 4, y: canh / 4, c: false },
+  { x: canw - canw / 4, y: canh / 4, c: false },
+  { x: canw - canw / 4, y: canh - canh / 4, c: false },
+  { x: canw / 4, y: canh - canh / 4, c: false },
 ];
 
 const pathFromPoints = (points: Point[]) => {
@@ -155,11 +159,17 @@ export default defineComponent({
           return {
             x: Math.max(
               0,
-              Math.min(canw-1, evt.clientX - offx - offsetX.value + curw / 2 - 3)
+              Math.min(
+                canw - 1,
+                evt.clientX - offx - offsetX.value + curw / 2 - 3
+              )
             ),
             y: Math.max(
               0,
-              Math.min(canh-1, evt.clientY - offy - offsetY.value + curh / 2 - 3)
+              Math.min(
+                canh - 1,
+                evt.clientY - offy - offsetY.value + curh / 2 - 3
+              )
             ),
             c: cursor.c,
           };
@@ -217,20 +227,20 @@ export default defineComponent({
         (selected.value + cursors.value.length - 1) % cursors.value.length;
     };
     const addLayer = () => {
-      const array = layers.value.map(layer => layer);
+      const array = layers.value.map((layer) => layer);
       const newLayer = {
         points: roundRect,
         color: currentColor.value,
         svgImage: svgImageFromPoints(roundRect, currentColor.value),
       };
-      
+
       array.splice(layerIndex.value + 1, 0, newLayer);
       layers.value = array;
       layerIndex.value += 1;
       cursors.value = newLayer.points;
       currentColor.value = newLayer.color;
     };
-    const onSelectLayer = (evt:any, index: number) => {
+    const onSelectLayer = (evt: any, index: number) => {
       layerIndex.value = index;
       const layer = layers.value[index];
       cursors.value = layer.points;
@@ -246,6 +256,7 @@ export default defineComponent({
       curh,
       offx,
       offy,
+      sidew,
       dragStart,
       dragOver,
       drop,
