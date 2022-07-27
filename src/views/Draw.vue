@@ -138,11 +138,11 @@ export default defineComponent({
     const undo = () => {
       console.log("undo", isUndoable());
       if (!isUndoable()) { return; }
-      console.log("undoing");
       const state = undoStack.value[undoIndex.value - 1];
-      layers.value = state.layers.map(layer => layer);
+      layers.value = state.layers;
       updateLayerIndex(state.layerIndex);
       undoIndex.value -= 1;
+      console.log("undo", undoIndex.value, layers.value.length);
     };
 
     const cursors = ref<Point[]>(roundRect);
@@ -194,24 +194,24 @@ export default defineComponent({
       evt.preventDefault();
     };
     const togglePoint = () => {
-      cursors.value = togglePointType(cursors.value, selected.value);
       registerChange();
+      cursors.value = togglePointType(cursors.value, selected.value);
     };
     const splitSegment = () => {
+      registerChange();
       cursors.value = splitPoint(cursors.value, selected.value);
       selected.value = selected.value + 1;
-      registerChange();
     };
     const deletePoint = () => {
       if (cursors.value.length <= 3) {
         return;
       }
+      registerChange();
       cursors.value = cursors.value.filter((cursor, index) => {
         return index != selected.value;
       });
       selected.value =
         (selected.value + cursors.value.length - 1) % cursors.value.length;
-      registerChange();
     };
     const updateLayerIndex = (index: number) => {
       layerIndex.value = (index + layers.value.length) % layers.value.length;
@@ -220,6 +220,7 @@ export default defineComponent({
       currentColor.value = layer.color;
     };
     const insertLayer = (index: number) => {
+      registerChange();
       const array = layers.value.map((layer) => layer);
       const newLayer = {
         points: roundRect,
@@ -229,28 +230,23 @@ export default defineComponent({
       array.splice(index, 0, newLayer);
       layers.value = array;
       updateLayerIndex(index);
-      registerChange();
     };
     const deleteLayer = () => {
       if (layers.value.length == 1) {
         return;
       }
+      registerChange();
       layers.value = layers.value.filter((layer, index) => {
         return index != layerIndex.value;
       });
       updateLayerIndex(layerIndex.value - 1);
-      registerChange();
     };
     const onSelectLayer = (evt: any, index: number) => {
       updateLayerIndex(index);
     };
     const drop = (evt: any) => {
       evt.preventDefault();
-      registerChange();
     };
-    watch(currentColor, color => {
-      registerChange();
-    });
     watch([cursors, currentColor], ([points, color]) => {
       layers.value = layers.value.map((layer, index) => {
         if (index == layerIndex.value) {
