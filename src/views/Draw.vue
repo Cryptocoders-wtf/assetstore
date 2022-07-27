@@ -71,16 +71,11 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from "vue";
+import { Point } from "@/models/point";
 
 const svgHead =
   '<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">' +
   '<defs><g id="asset">';
-
-interface Point {
-  x: number;
-  y: number;
-  c: boolean;
-}
 
 interface Layer {
   points: Point[];
