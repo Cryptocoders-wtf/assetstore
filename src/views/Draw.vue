@@ -60,8 +60,8 @@ export default defineComponent({
       cursors.value = cursors.value.map((cursor, index) => {
         if (index == dragged.value) {
           return { 
-            x:evt.clientX - offx - offsetX.value + curw/2 - 3, 
-            y:evt.clientY - offy - offsetY.value + curh/2 - 3, 
+            x: Math.max(0, Math.min(511, evt.clientX - offx - offsetX.value + curw/2 - 3)), 
+            y: Math.max(0, Math.min(511, evt.clientY - offy - offsetY.value + curh/2 - 3)), 
             c:cursor.c };
         }
         return cursor;
