@@ -26,11 +26,11 @@
         :style="`width:${curw}px; height:${curh}px; left:${
           cursor.x - curw / 2
         }px; top:${cursor.y - curh / 2}px`"
-        :class="`border-2 border-solid ${
+        :class="`${
           index == pointIndex ? 'border-blue-800' : 'border-blue-400'
         } ${cursor.c ? '' : 'rounded-xl'}`"
         draggable="true"
-        class="absolute"
+        class="absolute border-2 border-solid"
         @dragstart="dragStart($event, index)"
         @click="onSelect($event, index)"
       />
@@ -88,8 +88,9 @@
           <img
             @click="onSelectLayer($event, index)"
             :src="layer.svgImage"
-            :style="`object-fit:fill;width:${sidew}px;height:${sidew / 2}px`"
-            :class="`border-2 border-solid ${
+            :style="`width:${sidew}px;height:${sidew / 2}px`"
+            class="object-fill border-2 border-solid"
+            :class="`${
               index == layerIndex ? 'border-blue-400' : 'border-slate-200'
             }`"
           />
