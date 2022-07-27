@@ -9,7 +9,6 @@
       :style="`position:absolute; width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`"
       class="border-2 border-solid border-blue-700 bg-slate-300"
       @dragover="dragOver"
-      @dragenter.prevent
     >
       <img
         v-for="(layer, index) in layers"
@@ -97,11 +96,6 @@ interface Layer {
   svgImage: string;
 }
 
-interface State {
-  layers: Layer[];
-  layerIndex: number;
-}
-
 const [canw, canh, offx, offy, curw, curh, sidew] = [
   512, 512, 40, 80, 30, 30, 150,
 ];
@@ -113,23 +107,45 @@ const roundRect: Point[] = [
   { x: canw / 4, y: canh - canh / 4, c: false },
 ];
 
+interface State {
+  type: string | null;
+  layers: Layer[];
+  layerIndex: number;
+  pointIndex: number;
+}
+
 export default defineComponent({
   name: "HomePage",
   components: {},
   setup() {
     const undoStack = ref<State[]>([]);
     const undoIndex = ref<number>(0);
-    const registerChange = () => {
+    const registerChange = (type: string|null) => {
+      if (type == "drag" && isUndoable() && !isRedoable()) {
+        const state = undoStack.value[undoIndex.value - 1];
+        if (state.type == "drag" 
+            && state.layerIndex == layerIndex.value
+            && state.pointIndex == selected.value) {
+            console.log("skip registration");
+        }
+        console.log("not skipping", state.type, state.layerIndex, state.pointIndex);
+      }
       const array = undoStack.value.filter((state, index) => {
         return index < undoIndex.value;
       });
       array.push({
+        type,
         layers: layers.value,
-        layerIndex: layerIndex.value
+        layerIndex: layerIndex.value,
+        pointIndex: selected.value
       });
       undoStack.value = array;
       undoIndex.value = undoStack.value.length;
       console.log("registerChange", undoIndex.value);
+    };
+
+    const isRedoable = () => {
+      return undoIndex.value < undoStack.value.length;
     };
 
     const isUndoable = () => {
@@ -166,6 +182,7 @@ export default defineComponent({
       offsetX.value = evt.offsetX;
       offsetY.value = evt.offsetY;
       selected.value = index;
+      registerChange("drag");
     };
     const dragOver = (evt: any) => {
       // const index = evt.dataTransfer.getData('index')
