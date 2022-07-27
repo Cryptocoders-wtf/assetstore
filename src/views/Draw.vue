@@ -52,9 +52,9 @@ export default defineComponent({
     const offsetY = ref<number>(0);
     cursors.value = [
       { x:128, y:128, c:false },
-      { x:128, y:384, c:true },
-      { x:384, y:384, c:false },
       { x:384, y:128, c:false },
+      { x:384, y:384, c:false },
+      { x:128, y:384, c:false },
     ];
     const onSelect = (evt:any, index:number) => {
       selected.value = index;
@@ -109,6 +109,14 @@ export default defineComponent({
     };
     const duplicatePoint = () => {
       console.log("a");
+      const array = cursors.value.map(cursor => cursor);
+      const cursor = cursors.value[selected.value];
+      const next = cursors.value[(selected.value + 1) % array.length];
+      const newItem = {
+        x: (cursor.x + next.x)/2, y:(cursor.y + next.y)/2, c:cursor.c
+      };
+      array.splice(selected.value + 1, 0, newItem);
+      cursors.value = array;
     };
     const deletePoint = () => {
       if (cursors.value.length <= 3) {
