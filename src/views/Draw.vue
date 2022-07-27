@@ -18,7 +18,7 @@
       class="border-2 border-solid border-blue-700">
       <div><button @click="togglePoint">Toggle</button></div>
       <div><button :disabled="cursors.length <= 3" @click="deletePoint">Delete</button></div>
-      <div><button @click="duplicatePoint">Duplicate</button></div>
+      <div><button @click="splitSegment">Split</button></div>
     </div> 
   </div>
 </template>
@@ -108,7 +108,7 @@ export default defineComponent({
         return cursor;
       });
     };
-    const duplicatePoint = () => {
+    const splitSegment = () => {
       console.log("a");
       const array = cursors.value.map(cursor => cursor);
       const cursor = cursors.value[selected.value];
@@ -137,7 +137,7 @@ export default defineComponent({
       curw, curh, offx, offy,
       dragStart,
       dragOver,
-      togglePoint, duplicatePoint, deletePoint, onSelect,
+      togglePoint, splitSegment, deletePoint, onSelect,
       svgImage
     };
   },
