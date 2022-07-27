@@ -19,10 +19,10 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
 
-const svgHead = '<svg viewBox="0 0 512 512"  xmlns="http://www.w3.org/2000/svg">'
+const svgHead = '<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">'
   +'<defs><g id="asset">';
 const svgTail = '</g></defs>'
-  +'<use href="#asset" fill="black" /></svg>';
+  +'<use href="#asset" fill="green" /></svg>';
 
 interface Point {
   x: number;
