@@ -126,6 +126,29 @@ const svgImageFromPoints = (points: Point[], color: string) => {
   return image;
 };
 
+const toggle = (points: Point[], index: number) => {
+  return points.map((point, _index) => {
+    if (_index == index) {
+      return { x: point.x, y: point.y, c: !point.c };
+    }
+    return point;
+  });
+};
+
+const split = (points:Point[], index:number) => {
+  const prev = points[index];
+  const next = points[(index + 1) % points.length];
+  const newItem = {
+    x: (prev.x + next.x) / 2,
+    y: (prev.y + next.y) / 2,
+    c: false
+  };
+  const array = points.map(point => point);
+  array.splice(index + 1, 0, newItem);
+  return array;
+}; 
+
+
 export default defineComponent({
   name: "HomePage",
   components: {},
@@ -178,42 +201,11 @@ export default defineComponent({
       });
       evt.preventDefault();
     };
-    const drop = (evt: any) => {
-      console.log("drop");
-      evt.preventDefault();
-    };
-    watch([cursors, currentColor], ([points, color]) => {
-      layers.value = layers.value.map((layer, index) => {
-        if (index == layerIndex.value) {
-          return {
-            points,
-            color,
-            svgImage: svgImageFromPoints(points, color),
-          };
-        }
-        return layer;
-      });
-    });
     const togglePoint = () => {
-      cursors.value = cursors.value.map((cursor, index) => {
-        if (index == selected.value) {
-          return { x: cursor.x, y: cursor.y, c: !cursor.c };
-        }
-        return cursor;
-      });
+      cursors.value = toggle(cursors.value, selected.value);
     };
     const splitSegment = () => {
-      console.log("a");
-      const array = cursors.value.map((cursor) => cursor);
-      const cursor = cursors.value[selected.value];
-      const next = cursors.value[(selected.value + 1) % array.length];
-      const newItem = {
-        x: (cursor.x + next.x) / 2,
-        y: (cursor.y + next.y) / 2,
-        c: cursor.c,
-      };
-      array.splice(selected.value + 1, 0, newItem);
-      cursors.value = array;
+      cursors.value = split(cursors.value, selected.value);
       selected.value = selected.value + 1;
     };
     const deletePoint = () => {
@@ -246,6 +238,22 @@ export default defineComponent({
       cursors.value = layer.points;
       currentColor.value = layer.color;
     };
+    const drop = (evt: any) => {
+      console.log("drop");
+      evt.preventDefault();
+    };
+    watch([cursors, currentColor], ([points, color]) => {
+      layers.value = layers.value.map((layer, index) => {
+        if (index == layerIndex.value) {
+          return {
+            points,
+            color,
+            svgImage: svgImageFromPoints(points, color),
+          };
+        }
+        return layer;
+      });
+    });
     return {
       cursors,
       selected,
