@@ -6,38 +6,40 @@
     @dragover.prevent
   >
     <div
-      :style="`position:absolute; width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`"
-      class="border-2 border-solid border-blue-700 bg-slate-300"
+      :style="`width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`"
+      class="absolute border-2 border-solid border-blue-700 bg-slate-300"
       @dragover="dragOver"
     >
       <img
         v-for="(layer, index) in layers"
         :key="index"
         :src="layer.svgImage"
+        class="absolute"
         :style="
-          `position:absolute; width:${canw}px; height:${canh}px;` +
+          `width:${canw}px; height:${canh}px;` +
           `opacity:${index > layerIndex ? '0.5' : '1.0'}`
         "
       />
       <div
         v-for="(cursor, index) in cursors"
         :key="index"
-        :style="`width:${curw}px; height:${curh}px; position:absolute; left:${
+        :style="`width:${curw}px; height:${curh}px; left:${
           cursor.x - curw / 2
         }px; top:${cursor.y - curh / 2}px`"
         :class="`border-2 border-solid ${
           index == pointIndex ? 'border-blue-800' : 'border-blue-400'
         } ${cursor.c ? '' : 'rounded-xl'}`"
         draggable="true"
+        class="absolute"
         @dragstart="dragStart($event, index)"
         @click="onSelect($event, index)"
       />
     </div>
     <div
-      :style="`position:absolute; width:${sidew}px; height:${canh}px; left:${
+      :style="`width:${sidew}px; height:${canh}px; left:${
         offx + canw - 2
       }px; top:${offy}px`"
-      class="border-2 border-solid border-blue-700"
+      class="absolute border-2 border-solid border-blue-700"
     >
       <div>
         <button
