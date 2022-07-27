@@ -68,6 +68,7 @@
           />
           <div v-if="index == layerIndex">
             <div><button @click="insertLayer(index + 1)">Insert</button></div>
+            <div><button @click="deleteLayer()">Delete</button></div>
           </div>
         </div>
       </div>
@@ -165,6 +166,11 @@ export default defineComponent({
       selected.value =
         (selected.value + cursors.value.length - 1) % cursors.value.length;
     };
+    const updateCursors = (index) => {
+      const layer = layers.value[index];
+      cursors.value = layer.points;
+      currentColor.value = layer.color;
+    };
     const insertLayer = (index: number) => {
       const array = layers.value.map((layer) => layer);
       const newLayer = {
@@ -176,8 +182,15 @@ export default defineComponent({
       layers.value = array;
       layerIndex.value = index;
       // We need to do this, because watch(layerIndex) may not catch this event
-      cursors.value = newLayer.points;
-      currentColor.value = newLayer.color;
+      updateCursors(index);
+    };
+    const deleteLayer = () => {
+      layers.value = layers.value.filter((layer, index) => {
+        return index != layerIndex.value;
+      });
+      layerIndex.value = (layerIndex.value + layers.value.length - 1) % layers.value.length;
+      // We need to do this, because watch(layerIndex) may not catch this event
+      updateCursors(layerIndex.value);
     };
     const onSelectLayer = (evt: any, index: number) => {
       layerIndex.value = index;
@@ -187,9 +200,7 @@ export default defineComponent({
       evt.preventDefault();
     };
     watch(layerIndex, (index) => {
-      const layer = layers.value[index];
-      cursors.value = layer.points;
-      currentColor.value = layer.color;
+      updateCursors(index);
     });
     watch([cursors, currentColor], ([points, color]) => {
       layers.value = layers.value.map((layer, index) => {
@@ -222,6 +233,7 @@ export default defineComponent({
       deletePoint,
       onSelect,
       insertLayer,
+      deleteLayer,
       onSelectLayer,
       layerIndex,
       layers,
