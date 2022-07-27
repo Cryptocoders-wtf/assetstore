@@ -6,7 +6,7 @@
       @dragover="dragOver"
       @dragenter.prevent
     >
-      <img v-for="(layer, index) in layers" :key="index" :src="layer.svgImage" :style="`width:${canw}px; height:${canh}px;`" />
+      <img v-for="(layer, index) in layers" :key="index" :src="layer.svgImage" :style="`position:absolute; width:${canw}px; height:${canh}px;`" />
       <div
         v-for="(cursor, index) in cursors"
         :key="index"
@@ -115,6 +115,7 @@ export default defineComponent({
       color: currentColor.value,
       svgImage: svgImageFromPoints(cursors.value, currentColor.value)
     }]);
+    const layerIndex = ref<number>(0);
     const selected = ref<number>(0);
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
@@ -149,7 +150,7 @@ export default defineComponent({
     };
     watch([cursors, currentColor], ([points, color])=> {
       layers.value = layers.value.map((layer, index) => {
-        if (index == 0) {
+        if (index == layerIndex.value) {
           return {
             points,
             color,
@@ -192,7 +193,17 @@ export default defineComponent({
         (selected.value + cursors.value.length - 1) % cursors.value.length;
     };
     const addLayer = () => {
-      cursors.value = roundRect;
+      const array = layers.value.map(layer => layer);
+      const newLayer = {
+        points: roundRect,
+        color: currentColor.value,
+        svgImage: svgImageFromPoints(roundRect, currentColor.value)
+      }; 
+      array.push(newLayer);
+      layers.value = array;
+      layerIndex.value += 1;
+      cursors.value = newLayer.points;
+      currentColor.value = newLayer.color;
     };
     return {
       cursors,
