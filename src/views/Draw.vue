@@ -38,6 +38,7 @@
       }px; top:${offy}px`"
       class="border-2 border-solid border-blue-700"
     >
+      <div><button @click="undo">Undo</button></div>
       <div><button @click="togglePoint">Toggle</button></div>
       <div>
         <button :disabled="cursors.length <= 3" @click="deletePoint">
@@ -96,6 +97,11 @@ interface Layer {
   svgImage: string;
 }
 
+interface State {
+  layers: Layer[];
+  layerIndex: number;
+}
+
 const [canw, canh, offx, offy, curw, curh, sidew] = [
   512, 512, 40, 80, 30, 30, 150,
 ];
@@ -111,6 +117,34 @@ export default defineComponent({
   name: "HomePage",
   components: {},
   setup() {
+    const undoStack = ref<State[]>([]);
+    const undoIndex = ref<number>(0);
+    const registerChange = () => {
+      const array = undoStack.value.filter((state, index) => {
+        return index < undoIndex.value;
+      });
+      array.push({
+        layers: layers.value,
+        layerIndex: layerIndex.value
+      });
+      undoStack.value = array;
+      undoIndex.value = undoStack.value.length;
+      console.log("registerChange", undoIndex.value);
+    };
+
+    const isUndoable = () => {
+      return undoIndex.value > 0;
+    };
+    const undo = () => {
+      console.log("undo", isUndoable());
+      if (!isUndoable()) { return; }
+      console.log("undoing");
+      const state = undoStack.value[undoIndex.value - 1];
+      layers.value = state.layers.map(layer => layer);
+      updateLayerIndex(state.layerIndex);
+      undoIndex.value -= 1;
+    };
+
     const cursors = ref<Point[]>(roundRect);
     const currentColor = ref<string>("#008000");
     const layers = ref<Layer[]>([
@@ -161,10 +195,12 @@ export default defineComponent({
     };
     const togglePoint = () => {
       cursors.value = togglePointType(cursors.value, selected.value);
+      registerChange();
     };
     const splitSegment = () => {
       cursors.value = splitPoint(cursors.value, selected.value);
       selected.value = selected.value + 1;
+      registerChange();
     };
     const deletePoint = () => {
       if (cursors.value.length <= 3) {
@@ -175,6 +211,7 @@ export default defineComponent({
       });
       selected.value =
         (selected.value + cursors.value.length - 1) % cursors.value.length;
+      registerChange();
     };
     const updateLayerIndex = (index: number) => {
       layerIndex.value = (index + layers.value.length) % layers.value.length;
@@ -192,6 +229,7 @@ export default defineComponent({
       array.splice(index, 0, newLayer);
       layers.value = array;
       updateLayerIndex(index);
+      registerChange();
     };
     const deleteLayer = () => {
       if (layers.value.length == 1) {
@@ -201,14 +239,18 @@ export default defineComponent({
         return index != layerIndex.value;
       });
       updateLayerIndex(layerIndex.value - 1);
+      registerChange();
     };
     const onSelectLayer = (evt: any, index: number) => {
       updateLayerIndex(index);
     };
     const drop = (evt: any) => {
-      console.log("drop");
       evt.preventDefault();
+      registerChange();
     };
+    watch(currentColor, color => {
+      registerChange();
+    });
     watch([cursors, currentColor], ([points, color]) => {
       layers.value = layers.value.map((layer, index) => {
         if (index == layerIndex.value) {
@@ -242,6 +284,8 @@ export default defineComponent({
       insertLayer,
       deleteLayer,
       onSelectLayer,
+      undo,
+      isUndoable,
       layerIndex,
       layers,
     };
