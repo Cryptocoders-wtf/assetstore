@@ -19,6 +19,13 @@
       <div><button @click="togglePoint">Toggle</button></div>
       <div><button :disabled="cursors.length <= 3" @click="deletePoint">Delete</button></div>
       <div><button @click="splitSegment">Split</button></div>
+      <input
+        v-model.trim="color"
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        id="username"
+        type="text"
+        :placeholder="$t('mintPanel.placeHolder')"
+      />
     </div> 
   </div>
 </template>
@@ -132,6 +139,7 @@ export default defineComponent({
     return {
       cursors,
       selected,
+      color,
       canw: 512,
       canh: 512,
       curw, curh, offx, offy,
