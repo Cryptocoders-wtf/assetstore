@@ -11,6 +11,7 @@
         :class='`border-2 border-solid ${ index==selected ? "border-blue-800" : "border-blue-400"} ${ cursor.c ? "":"rounded-xl"}`'
         draggable="true"
         @dragstart="dragStart($event, index)"
+        @click="onSelect($event, index)"
         />
     </div>
     <div :style='`position:absolute; width:200px; height:${canh}px; left:${offx + canw - 2}px; top:${offy}px`' 
@@ -55,6 +56,9 @@ export default defineComponent({
       { x:384, y:384, c:false },
       { x:384, y:128, c:false },
     ];
+    const onSelect = (evt:any, index:number) => {
+      selected.value = index;
+    };
     const dragStart = (evt:any, index:number) => {
       //evt.dataTransfer.setData('index', index)
       offsetX.value = evt.offsetX;
@@ -117,7 +121,7 @@ export default defineComponent({
       curw, curh, offx, offy,
       dragStart,
       dragOver,
-      togglePoint, duplicatePoint, deletePoint,
+      togglePoint, duplicatePoint, deletePoint, onSelect,
       svgImage
     };
   },
