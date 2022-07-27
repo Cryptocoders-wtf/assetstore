@@ -59,6 +59,19 @@ interface Point {
   c: boolean;
 }
 
+interface Layer {
+  cursors: Point[];
+  color: string;
+  svg: string;
+}
+
+const roundRect: Point[] = [
+  { x: 128, y: 128, c: false },
+  { x: 384, y: 128, c: false },
+  { x: 384, y: 384, c: false },
+  { x: 128, y: 384, c: false },
+];
+
 export default defineComponent({
   name: "HomePage",
   components: {},
@@ -72,12 +85,7 @@ export default defineComponent({
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
     const color = ref<string>("#008000");
-    cursors.value = [
-      { x: 128, y: 128, c: false },
-      { x: 384, y: 128, c: false },
-      { x: 384, y: 384, c: false },
-      { x: 128, y: 384, c: false },
-    ];
+    cursors.value = roundRect;
     const onSelect = (evt: any, index: number) => {
       selected.value = index;
     };
@@ -167,12 +175,7 @@ export default defineComponent({
         (selected.value + cursors.value.length - 1) % cursors.value.length;
     };
     const addLayer = () => {
-      cursors.value = [
-        { x: 128, y: 128, c: false },
-        { x: 384, y: 128, c: false },
-        { x: 384, y: 384, c: false },
-        { x: 128, y: 384, c: false },
-      ];
+      cursors.value = roundRect;
     };
     return {
       cursors,
