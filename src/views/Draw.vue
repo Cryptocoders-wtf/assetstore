@@ -170,19 +170,19 @@ export default defineComponent({
       array.splice(layerIndex.value + 1, 0, newLayer);
       layers.value = array;
       layerIndex.value += 1;
-      cursors.value = newLayer.points;
-      currentColor.value = newLayer.color;
     };
     const onSelectLayer = (evt: any, index: number) => {
       layerIndex.value = index;
-      const layer = layers.value[index];
-      cursors.value = layer.points;
-      currentColor.value = layer.color;
     };
     const drop = (evt: any) => {
       console.log("drop");
       evt.preventDefault();
     };
+    watch(layerIndex, (index) => {
+      const layer = layers.value[index];
+      cursors.value = layer.points;
+      currentColor.value = layer.color;
+    });
     watch([cursors, currentColor], ([points, color]) => {
       layers.value = layers.value.map((layer, index) => {
         if (index == layerIndex.value) {
