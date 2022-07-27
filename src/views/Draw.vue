@@ -39,10 +39,11 @@
     >
       <div>
         <button @click="undo" :disabled="!isUndoable()"
-          :class='`opacity-${isUndoable()?100:50}`'
+          :style='`opacity:${isUndoable()?"1.0":"0.5"}`'
           >Undo</button>
         <button 
-          :class='`ml-1 opacity-${isRedoable()?100:50}`'
+          :style='`opacity:${isRedoable()?"1.0":"0.5"}`'
+          class="ml-1"
         @click="redo" :disabled="!isRedoable()">Redo</button>
       </div>
       <div><button @click="toggleGrid">Grid: {{grid}}</button></div>
