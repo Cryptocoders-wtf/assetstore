@@ -52,6 +52,14 @@
         :placeholder="$t('mintPanel.placeHolder')"
       />
       <div><button @click="addLayer">Add</button></div>
+      <div style="height:250px; overflow-y: scroll">
+        <img
+          v-for="(layer, index) in layers"
+          :key="index"
+          :src="layer.svgImage"
+          :style="`width:200px;height:100px`"
+        />
+      </div>
     </div>
   </div>
 </template>
