@@ -37,7 +37,10 @@
       }px; top:${offy}px`"
       class="border-2 border-solid border-blue-700"
     >
-      <div><button @click="undo">Undo</button></div>
+      <div>
+        <button @click="undo" :disabled="!isUndoable()">Undo</button>
+        <button class="ml-1" @click="redo" :disabled="!isRedoable()">Redo</button>
+      </div>
       <div><button @click="togglePoint">Toggle</button></div>
       <div>
         <button :disabled="cursors.length <= 3" @click="deletePoint">
@@ -134,7 +137,7 @@ export default defineComponent({
     };
 
     const isRedoable = () => {
-      return undoIndex.value < undoStack.value.length;
+      return undoIndex.value + 1 < undoStack.value.length;
     };
 
     const isUndoable = () => {
@@ -143,12 +146,23 @@ export default defineComponent({
     const undo = () => {
       console.log("undo", isUndoable());
       if (!isUndoable()) { return; }
+      if (!isRedoable()) {
+        recordState();
+        undoIndex.value -= 1;        
+      }
       const state = undoStack.value[undoIndex.value - 1];
       layers.value = state.layers;
       updateLayerIndex(state.layerIndex);
       pointIndex.value = state.pointIndex;
       undoIndex.value -= 1;
-      console.log("undo", undoIndex.value, layers.value.length);
+    };
+    const redo = () => {
+      if (!isRedoable()) { return; }
+      const state = undoStack.value[undoIndex.value + 1];
+      layers.value = state.layers;
+      updateLayerIndex(state.layerIndex);
+      pointIndex.value = state.pointIndex;
+      undoIndex.value += 1;
     };
     const onColorFocus = (evt:any) => {
       recordState();
@@ -292,7 +306,9 @@ export default defineComponent({
       onSelectLayer,
       onColorFocus,
       undo,
+      redo,
       isUndoable,
+      isRedoable,
       layerIndex,
       layers,
     };
