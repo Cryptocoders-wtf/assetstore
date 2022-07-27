@@ -14,8 +14,10 @@
         v-for="(layer, index) in layers"
         :key="index"
         :src="layer.svgImage"
-        :style='`position:absolute; width:${canw}px; height:${canh}px;` 
-              + `opacity:${(index > layerIndex) ? "0.5":"1.0"}`'
+        :style="
+          `position:absolute; width:${canw}px; height:${canh}px;` +
+          `opacity:${index > layerIndex ? '0.5' : '1.0'}`
+        "
       />
       <div
         v-for="(cursor, index) in cursors"
@@ -38,19 +40,31 @@
       class="border-2 border-solid border-blue-700"
     >
       <div>
-        <button @click="undo" :disabled="!isUndoable()"
-          :style='`opacity:${isUndoable()?"1.0":"0.5"}`'
-          >Undo</button>
-        <button 
-          :style='`opacity:${isRedoable()?"1.0":"0.5"}`'
+        <button
+          @click="undo"
+          :disabled="!isUndoable()"
+          :style="`opacity:${isUndoable() ? '1.0' : '0.5'}`"
+        >
+          Undo
+        </button>
+        <button
+          :style="`opacity:${isRedoable() ? '1.0' : '0.5'}`"
           class="ml-1"
-        @click="redo" :disabled="!isRedoable()">Redo</button>
+          @click="redo"
+          :disabled="!isRedoable()"
+        >
+          Redo
+        </button>
       </div>
-      <div><button @click="toggleGrid">Grid: {{grid}}</button></div>
+      <div>
+        <button @click="toggleGrid">Grid: {{ grid }}</button>
+      </div>
       <div><button @click="togglePoint">Toggle</button></div>
       <div>
-        <button :disabled="cursors.length <= 3" @click="deletePoint"
-          :style='`opacity:${(cursors.length > 3)?"1.0":"0.5"}`'
+        <button
+          :disabled="cursors.length <= 3"
+          @click="deletePoint"
+          :style="`opacity:${cursors.length > 3 ? '1.0' : '0.5'}`"
         >
           Delete
         </button>
@@ -139,7 +153,7 @@ export default defineComponent({
       array.push({
         layers: layers.value,
         layerIndex: layerIndex.value,
-        pointIndex: pointIndex.value
+        pointIndex: pointIndex.value,
       });
       undoStack.value = array;
       undoIndex.value = undoStack.value.length;
@@ -154,10 +168,12 @@ export default defineComponent({
     };
     const undo = () => {
       console.log("undo", isUndoable());
-      if (!isUndoable()) { return; }
+      if (!isUndoable()) {
+        return;
+      }
       if (!isRedoable()) {
         recordState();
-        undoIndex.value -= 1;        
+        undoIndex.value -= 1;
       }
       const state = undoStack.value[undoIndex.value - 1];
       layers.value = state.layers;
@@ -166,16 +182,18 @@ export default defineComponent({
       undoIndex.value -= 1;
     };
     const redo = () => {
-      if (!isRedoable()) { return; }
+      if (!isRedoable()) {
+        return;
+      }
       const state = undoStack.value[undoIndex.value + 1];
       layers.value = state.layers;
       updateLayerIndex(state.layerIndex);
       pointIndex.value = state.pointIndex;
       undoIndex.value += 1;
     };
-    const onColorFocus = (evt:any) => {
+    const onColorFocus = (evt: any) => {
       recordState();
-    }
+    };
 
     const cursors = ref<Point[]>(roundRect);
     const currentColor = ref<string>("#008000");
@@ -206,22 +224,22 @@ export default defineComponent({
         if (index == pointIndex.value) {
           const g = grid.value;
           const x = Math.max(
-              0,
-              Math.min(
-                canw - g -1,
-                evt.clientX - offx - offsetX.value + curw / 2 - 3
-              )
-            );
+            0,
+            Math.min(
+              canw - g - 1,
+              evt.clientX - offx - offsetX.value + curw / 2 - 3
+            )
+          );
           const y = Math.max(
-              0,
-              Math.min(
-                canh - g - 1,
-                evt.clientY - offy - offsetY.value + curh / 2 - 3
-              )
-            );
+            0,
+            Math.min(
+              canh - g - 1,
+              evt.clientY - offy - offsetY.value + curh / 2 - 3
+            )
+          );
           return {
-            x : (g==0) ? x : Math.round((x + g/2) / g) * g,
-            y : (g==0) ? y : Math.round((y + g/2) / g) * g,
+            x: g == 0 ? x : Math.round((x + g / 2) / g) * g,
+            y: g == 0 ? y : Math.round((y + g / 2) / g) * g,
             c: cursor.c,
           };
         }
