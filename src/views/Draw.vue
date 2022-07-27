@@ -119,7 +119,7 @@ export default defineComponent({
   setup() {
     const undoStack = ref<State[]>([]);
     const undoIndex = ref<number>(0);
-    const registerChange = () => {
+    const recordState = () => {
       const array = undoStack.value.filter((state, index) => {
         return index < undoIndex.value;
       });
@@ -130,7 +130,6 @@ export default defineComponent({
       });
       undoStack.value = array;
       undoIndex.value = undoStack.value.length;
-      console.log("registerChange", undoIndex.value);
     };
 
     const isRedoable = () => {
@@ -171,7 +170,7 @@ export default defineComponent({
       offsetX.value = evt.offsetX;
       offsetY.value = evt.offsetY;
       selected.value = index;
-      registerChange();
+      recordState();
     };
     const dragOver = (evt: any) => {
       // const index = evt.dataTransfer.getData('index')
@@ -200,11 +199,11 @@ export default defineComponent({
       evt.preventDefault();
     };
     const togglePoint = () => {
-      registerChange();
+      recordState();
       cursors.value = togglePointType(cursors.value, selected.value);
     };
     const splitSegment = () => {
-      registerChange();
+      recordState();
       cursors.value = splitPoint(cursors.value, selected.value);
       selected.value = selected.value + 1;
     };
@@ -212,7 +211,7 @@ export default defineComponent({
       if (cursors.value.length <= 3) {
         return;
       }
-      registerChange();
+      recordState();
       cursors.value = cursors.value.filter((cursor, index) => {
         return index != selected.value;
       });
@@ -226,7 +225,7 @@ export default defineComponent({
       currentColor.value = layer.color;
     };
     const insertLayer = (index: number) => {
-      registerChange();
+      recordState();
       const array = layers.value.map((layer) => layer);
       const newLayer = {
         points: roundRect,
@@ -241,7 +240,7 @@ export default defineComponent({
       if (layers.value.length == 1) {
         return;
       }
-      registerChange();
+      recordState();
       layers.value = layers.value.filter((layer, index) => {
         return index != layerIndex.value;
       });
