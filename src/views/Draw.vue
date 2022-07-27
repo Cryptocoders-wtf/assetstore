@@ -80,12 +80,11 @@ export default defineComponent({
     const offy = 80;
     const curw = 30;
     const curh = 30;
-    const cursors = ref<Point[]>([]);
+    const cursors = ref<Point[]>(roundRect);
     const selected = ref<number>(0);
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
     const color = ref<string>("#008000");
-    cursors.value = roundRect;
     const onSelect = (evt: any, index: number) => {
       selected.value = index;
     };
