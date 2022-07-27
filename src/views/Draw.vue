@@ -58,7 +58,8 @@
           @click = "onSelectLayer($event, index)"
           :key="index"
           :src="layer.svgImage"
-          :style="`object-fit:fill;width:200px;height:80px`"
+          :style='`object-fit:fill;width:200px;height:80px`'
+          :class='(index == layerIndex) ? "border-2 border-solid border-blue-400" : ""'
         />
       </div>
     </div>
@@ -254,6 +255,7 @@ export default defineComponent({
       onSelect,
       addLayer,
       onSelectLayer,
+      layerIndex,
       layers,
     };
   },
