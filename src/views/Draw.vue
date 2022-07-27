@@ -24,7 +24,7 @@
           cursor.x - curw / 2
         }px; top:${cursor.y - curh / 2}px`"
         :class="`border-2 border-solid ${
-          index == selected ? 'border-blue-800' : 'border-blue-400'
+          index == pointIndex ? 'border-blue-800' : 'border-blue-400'
         } ${cursor.c ? '' : 'rounded-xl'}`"
         draggable="true"
         @dragstart="dragStart($event, index)"
@@ -126,7 +126,7 @@ export default defineComponent({
       array.push({
         layers: layers.value,
         layerIndex: layerIndex.value,
-        pointIndex: selected.value
+        pointIndex: pointIndex.value
       });
       undoStack.value = array;
       undoIndex.value = undoStack.value.length;
@@ -145,6 +145,7 @@ export default defineComponent({
       const state = undoStack.value[undoIndex.value - 1];
       layers.value = state.layers;
       updateLayerIndex(state.layerIndex);
+      pointIndex.value = state.pointIndex;
       undoIndex.value -= 1;
       console.log("undo", undoIndex.value, layers.value.length);
     };
@@ -159,23 +160,23 @@ export default defineComponent({
       },
     ]);
     const layerIndex = ref<number>(0);
-    const selected = ref<number>(0);
+    const pointIndex = ref<number>(0);
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
     const onSelect = (evt: any, index: number) => {
-      selected.value = index;
+      pointIndex.value = index;
     };
     const dragStart = (evt: any, index: number) => {
       //evt.dataTransfer.setData('index', index)
       offsetX.value = evt.offsetX;
       offsetY.value = evt.offsetY;
-      selected.value = index;
+      pointIndex.value = index;
       recordState();
     };
     const dragOver = (evt: any) => {
       // const index = evt.dataTransfer.getData('index')
       cursors.value = cursors.value.map((cursor, index) => {
-        if (index == selected.value) {
+        if (index == pointIndex.value) {
           return {
             x: Math.max(
               0,
@@ -200,12 +201,12 @@ export default defineComponent({
     };
     const togglePoint = () => {
       recordState();
-      cursors.value = togglePointType(cursors.value, selected.value);
+      cursors.value = togglePointType(cursors.value, pointIndex.value);
     };
     const splitSegment = () => {
       recordState();
-      cursors.value = splitPoint(cursors.value, selected.value);
-      selected.value = selected.value + 1;
+      cursors.value = splitPoint(cursors.value, pointIndex.value);
+      pointIndex.value = pointIndex.value + 1;
     };
     const deletePoint = () => {
       if (cursors.value.length <= 3) {
@@ -213,10 +214,10 @@ export default defineComponent({
       }
       recordState();
       cursors.value = cursors.value.filter((cursor, index) => {
-        return index != selected.value;
+        return index != pointIndex.value;
       });
-      selected.value =
-        (selected.value + cursors.value.length - 1) % cursors.value.length;
+      pointIndex.value =
+        (pointIndex.value + cursors.value.length - 1) % cursors.value.length;
     };
     const updateLayerIndex = (index: number) => {
       layerIndex.value = (index + layers.value.length) % layers.value.length;
@@ -266,7 +267,7 @@ export default defineComponent({
     });
     return {
       cursors,
-      selected,
+      pointIndex,
       currentColor,
       canw,
       canh,
