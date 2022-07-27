@@ -86,6 +86,8 @@ interface Layer {
   svgImage: string;
 }
 
+const [canw, canh, offx, offy, curw, curh] = [512, 512, 40, 40, 30, 30];
+
 const roundRect: Point[] = [
   { x: 128, y: 128, c: false },
   { x: 384, y: 128, c: false },
@@ -124,10 +126,6 @@ export default defineComponent({
   name: "HomePage",
   components: {},
   setup() {
-    const offx = 40;
-    const offy = 80;
-    const curw = 30;
-    const curh = 30;
     const cursors = ref<Point[]>(roundRect);
     const currentColor = ref<string>("#008000");
     const layers = ref<Layer[]>([
@@ -157,11 +155,11 @@ export default defineComponent({
           return {
             x: Math.max(
               0,
-              Math.min(511, evt.clientX - offx - offsetX.value + curw / 2 - 3)
+              Math.min(canw-1, evt.clientX - offx - offsetX.value + curw / 2 - 3)
             ),
             y: Math.max(
               0,
-              Math.min(511, evt.clientY - offy - offsetY.value + curh / 2 - 3)
+              Math.min(canh-1, evt.clientY - offy - offsetY.value + curh / 2 - 3)
             ),
             c: cursor.c,
           };
@@ -242,8 +240,8 @@ export default defineComponent({
       cursors,
       selected,
       currentColor,
-      canw: 512,
-      canh: 512,
+      canw,
+      canh,
       curw,
       curh,
       offx,
