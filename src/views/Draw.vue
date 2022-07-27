@@ -108,7 +108,6 @@ const roundRect: Point[] = [
 ];
 
 interface State {
-  type: string | null;
   layers: Layer[];
   layerIndex: number;
   pointIndex: number;
@@ -120,21 +119,11 @@ export default defineComponent({
   setup() {
     const undoStack = ref<State[]>([]);
     const undoIndex = ref<number>(0);
-    const registerChange = (type: string|null) => {
-      if (type == "drag" && isUndoable() && !isRedoable()) {
-        const state = undoStack.value[undoIndex.value - 1];
-        if (state.type == "drag" 
-            && state.layerIndex == layerIndex.value
-            && state.pointIndex == selected.value) {
-            console.log("skip registration");
-        }
-        console.log("not skipping", state.type, state.layerIndex, state.pointIndex);
-      }
+    const registerChange = () => {
       const array = undoStack.value.filter((state, index) => {
         return index < undoIndex.value;
       });
       array.push({
-        type,
         layers: layers.value,
         layerIndex: layerIndex.value,
         pointIndex: selected.value
@@ -182,7 +171,7 @@ export default defineComponent({
       offsetX.value = evt.offsetX;
       offsetY.value = evt.offsetY;
       selected.value = index;
-      registerChange("drag");
+      registerChange();
     };
     const dragOver = (evt: any) => {
       // const index = evt.dataTransfer.getData('index')
