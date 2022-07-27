@@ -16,9 +16,9 @@
     </div>
     <div :style='`position:absolute; width:200px; height:${canh}px; left:${offx + canw - 2}px; top:${offy}px`' 
       class="border-2 border-solid border-blue-700">
-      <div @click="togglePoint">Toggle</div>
-      <div @click="deletePoint">Delete</div>
-      <div @click="duplicatePoint">Duplicate</div>
+      <div><button @click="togglePoint">Toggle</button></div>
+      <div><button @click="deletePoint">Delete</button></div>
+      <div><button @click="duplicatePoint">Duplicate</button></div>
     </div> 
   </div>
 </template>
@@ -117,6 +117,7 @@ export default defineComponent({
       };
       array.splice(selected.value + 1, 0, newItem);
       cursors.value = array;
+      selected.value = selected.value + 1;
     };
     const deletePoint = () => {
       if (cursors.value.length <= 3) {
@@ -125,7 +126,7 @@ export default defineComponent({
       cursors.value = cursors.value.filter((cursor, index) => {
         return index != selected.value;
       }); 
-      selected.value = selected.value % cursors.value.length;
+      selected.value = (selected.value + cursors.value.length - 1) % cursors.value.length;
     };
     return {
       cursors,
