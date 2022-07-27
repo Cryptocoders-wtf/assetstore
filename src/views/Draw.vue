@@ -53,25 +53,24 @@
         :placeholder="$t('mintPanel.placeHolder')"
       />
       <div :style="`height:${canh / 2}px; overflow-y: scroll`">
-        <div v-for="(layer, index) in layers" :key="index">
+        <div
+          v-for="(layer, index) in layers"
+          :key="index">
           <div v-if="index == layerIndex">
-            <div><button @click="insertLayer(index)">Insert</button></div>
+            <button @click="insertLayer(index)">Insert</button>
           </div>
-          <img
-            @click="onSelectLayer($event, index)"
-            :src="layer.svgImage"
-            :style="`object-fit:fill;width:${sidew}px;height:${sidew / 2}px`"
-            :class="`border-2 border-solid ${
-              index == layerIndex ? 'border-blue-400' : 'border-slate-200'
-            }`"
+          <img @click="onSelectLayer($event, index)"
+          :src="layer.svgImage"
+          :style="`object-fit:fill;width:${sidew}px;height:${sidew / 2}px`"
+          :class="`border-2 border-solid ${
+            index == layerIndex ? 'border-blue-400' : 'border-slate-200'
+          }`"
           />
           <div v-if="index == layerIndex">
-            <div>
-              <button @click="insertLayer(index + 1)">Insert</button>
-              <button v-if="layers.length > 1" @click="deleteLayer()">
-                Delete
-              </button>
-            </div>
+            <button @click="insertLayer(index + 1)">Insert</button>
+            <button v-if="layers.length > 1"
+              class="ml-2"
+              @click="deleteLayer()">Delete</button>
           </div>
         </div>
       </div>
@@ -81,12 +80,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from "vue";
-import {
-  Point,
-  svgImageFromPoints,
-  splitPoint,
-  togglePoint,
-} from "@/models/point";
+import { Point, svgImageFromPoints, splitPoint, togglePoint } from "@/models/point";
 
 interface Layer {
   points: Point[];
@@ -174,7 +168,7 @@ export default defineComponent({
       selected.value =
         (selected.value + cursors.value.length - 1) % cursors.value.length;
     };
-    const updateLayerIndex = (index: number) => {
+    const updateLayerIndex = (index:number) => {
       layerIndex.value = (index + layers.value.length) % layers.value.length;
       const layer = layers.value[layerIndex.value];
       cursors.value = layer.points;
