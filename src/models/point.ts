@@ -36,7 +36,7 @@ export const svgImageFromPoints = (points: Point[], color: string) => {
   return image;
 };
 
-export const togglePoint = (points: Point[], index: number) => {
+export const togglePointType = (points: Point[], index: number) => {
   return points.map((point, _index) => {
     if (_index == index) {
       return { x: point.x, y: point.y, c: !point.c };

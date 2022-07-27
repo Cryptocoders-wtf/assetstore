@@ -82,12 +82,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import {
   Point,
   svgImageFromPoints,
   splitPoint,
-  togglePoint,
+  togglePointType,
 } from "@/models/point";
 
 interface Layer {
@@ -97,7 +97,7 @@ interface Layer {
 }
 
 const [canw, canh, offx, offy, curw, curh, sidew] = [
-  512, 512, 40, 40, 30, 30, 150,
+  512, 512, 40, 80, 30, 30, 150,
 ];
 
 const roundRect: Point[] = [
@@ -160,7 +160,7 @@ export default defineComponent({
       evt.preventDefault();
     };
     const togglePoint = () => {
-      cursors.value = togglePoint(cursors.value, selected.value);
+      cursors.value = togglePointType(cursors.value, selected.value);
     };
     const splitSegment = () => {
       cursors.value = splitPoint(cursors.value, selected.value);
