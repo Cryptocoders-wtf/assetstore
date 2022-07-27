@@ -35,7 +35,7 @@
       </div>
       <div><button @click="splitSegment">Split</button></div>
       <input
-        v-model.trim="color"
+        v-model.trim="currentColor"
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="username"
         type="text"
@@ -60,9 +60,9 @@ interface Point {
 }
 
 interface Layer {
-  cursors: Point[];
+  points: Point[];
   color: string;
-  svg: string;
+  svgImage: string;
 }
 
 const roundRect: Point[] = [
@@ -84,7 +84,7 @@ export default defineComponent({
     const selected = ref<number>(0);
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
-    const color = ref<string>("#008000");
+    const currentColor = ref<string>("#008000");
     const onSelect = (evt: any, index: number) => {
       selected.value = index;
     };
@@ -132,17 +132,17 @@ export default defineComponent({
         );
       }, "");
     };
-    const svgFromPoints = (points: Point[]) => {
+    const svgImageFromPoints = (points: Point[], color:string) => {
       const path = pathFromPoints(points);
       const svgTail =
-        "</g></defs>" + `<use href="#asset" fill="${color.value}" /></svg>`;
+        "</g></defs>" + `<use href="#asset" fill="${color}" /></svg>`;
       const svg = svgHead + '<path d="' + path + '" />' + svgTail;
       const image =
         "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
       return image;
     }
     const svgImage: string = computed(() => {
-      return svgFromPoints(cursors.value);
+      return svgImageFromPoints(cursors.value, currentColor.value);
     });
     const togglePoint = () => {
       cursors.value = cursors.value.map((cursor, index) => {
@@ -182,7 +182,7 @@ export default defineComponent({
     return {
       cursors,
       selected,
-      color,
+      currentColor,
       canw: 512,
       canh: 512,
       curw,
