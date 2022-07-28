@@ -17,7 +17,7 @@
         <img
           @click="$emit('onSelect', asset)"
           :src="asset.image"
-          class="cursor-pointer w-16 inline-block rounded-xl"
+          class="inline-block w-16 cursor-pointer rounded-xl"
         />
       </span>
     </div>

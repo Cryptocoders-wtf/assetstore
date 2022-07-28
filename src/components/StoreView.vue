@@ -9,7 +9,7 @@
       {{ $t("storyView.totalAssetCount") }} : {{ assetCount }}
     </div>
     <select
-      class="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded"
+      class="form-select block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700"
       v-model="selectedGroup"
     >
       <option v-if="groups.length === 0" selected disabled value="">
@@ -28,7 +28,7 @@
 
     <select
       v-if="categories.length > 0"
-      class="form-select block mt-2 w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded"
+      class="form-select mt-2 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700"
       v-model="selectedCategory"
     >
       <template v-for="category in categories" :key="category">
@@ -54,17 +54,17 @@
             }
           "
           :src="asset.image"
-          class="cursor-pointer w-12 inline-block rounded-xl"
+          class="inline-block w-12 cursor-pointer rounded-xl"
         />
         <div
           v-if="asset.assetId == selectedAsset?.assetId"
-          class="mt-2 mb-2 border shadow-md rounded-xs p-2"
+          class="rounded-xs mt-2 mb-2 border p-2 shadow-md"
         >
           <div v-if="selectedAsset.name">
             <p>
               {{ $t("storyView.sampleCodeMessage") }}
               <button
-                class="border rounded-md shadow-md pl-2 pr-2"
+                class="rounded-md border pl-2 pr-2 shadow-md"
                 @click="copySample"
               >
                 {{ $t("message.copy") }}
@@ -76,7 +76,7 @@
             <p class="mt-2">
               {{ $t("storyView.fetchedImage") }}
               <button
-                class="border rounded-md shadow-md pl-2 pr-2"
+                class="rounded-md border pl-2 pr-2 shadow-md"
                 @click="copySVG"
               >
                 {{ $t("message.copy") }}
@@ -88,7 +88,7 @@
             <div>
               <img
                 :src="asset.image"
-                class="cursor-pointer w-64 inline-block rounded-xl"
+                class="inline-block w-64 cursor-pointer rounded-xl"
               />
             </div>
           </div>

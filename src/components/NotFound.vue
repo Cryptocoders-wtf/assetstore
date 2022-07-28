@@ -1,7 +1,7 @@
 <template>
-  <div class="lg:flex mt-10">
-    <div class="flex flex-1 flex-col lg:w-1/2 w-full pb-4 px-4">
-      <div class="mt-4 font-londrina text-4xl">
+  <div class="mt-10 lg:flex">
+    <div class="flex w-full flex-1 flex-col px-4 pb-4 lg:w-1/2">
+      <div class="font-londrina mt-4 text-4xl">
         {{ $t("message.notFoundMessage") }}
       </div>
     </div>

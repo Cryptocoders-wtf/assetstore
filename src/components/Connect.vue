@@ -1,15 +1,15 @@
 <template>
-  <span class="ml-16 font-londrina font-yusei">
+  <span class="font-londrina font-yusei ml-16">
     <span v-if="hasMetaMask">
       <span v-if="account">
         <button
           type="button"
           v-if="isBusy"
-          class="inline-block px-6 py-2.5 text-gray-500 leading-tight rounded shadow-md"
+          class="inline-block rounded px-6 py-2.5 leading-tight text-gray-500 shadow-md"
           disabled
         >
           <img
-            class="animate-spin h-3 w-8 absolute"
+            class="absolute h-3 w-8 animate-spin"
             src="@/assets/red160px.png"
           />
           <span class="ml-10">{{ $t("message.processing") }}</span>
@@ -17,7 +17,7 @@
         <button
           v-else
           @click="signIn"
-          class="inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out"
+          class="inline-block rounded bg-green-600 px-6 py-2.5 leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg"
         >
           {{ $t("menu.connected") }}
         </button>
@@ -26,11 +26,11 @@
         <button
           type="button"
           v-if="isBusy"
-          class="inline-block px-6 py-2.5 text-gray-500 leading-tight rounded shadow-md"
+          class="inline-block rounded px-6 py-2.5 leading-tight text-gray-500 shadow-md"
           disabled
         >
           <img
-            class="animate-spin h-3 w-8 absolute"
+            class="absolute h-3 w-8 animate-spin"
             src="@/assets/red160px.png"
           />
           <span class="ml-10">{{ $t("message.processing") }}</span>
@@ -38,7 +38,7 @@
         <button
           v-else
           @click="connect"
-          class="inline-block px-6 py-2.5 bg-green-500 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out"
+          class="inline-block rounded bg-green-500 px-6 py-2.5 leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg"
         >
           {{ $t("menu.connect") }}
         </button>
@@ -47,7 +47,7 @@
     <span v-else>
       <button
         disabled
-        class="inline-block px-6 py-2.5 bg-gray-400 text-white leading-tight rounded shadow-md"
+        class="inline-block rounded bg-gray-400 px-6 py-2.5 leading-tight text-white shadow-md"
       >
         {{ $t("menu.nometamask") }}
       </button>

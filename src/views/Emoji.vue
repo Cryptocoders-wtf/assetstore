@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-xl mx-auto text-left p-2">
+  <div class="mx-auto max-w-xl p-2 text-left">
     <mint-view
       :addresses="addresses"
       title="OpenMoji National Flags"

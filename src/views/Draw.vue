@@ -2,7 +2,7 @@
   <div>
     <Canvas v-if="showCanvas" @close="onClose" :drawing="selectedDrawing" />
 
-    <div class="max-w-xl mx-auto text-left p-2">
+    <div class="mx-auto max-w-xl p-2 text-left">
       <div class="mb-2 text-xl font-bold">{{ "Draw Your Own Token" }}</div>
       <div class="flex flex-wrap">
         <div
@@ -14,15 +14,20 @@
           }`"
         >
           <img :src="svgImageFromDrawing(body)" class="w-32" />
-          <div v-if="index == selectedIndex" class="flex justify-between ml-2 mr-2">
+          <div
+            v-if="index == selectedIndex"
+            class="ml-2 mr-2 flex justify-between"
+          >
             <button @click="onOpen">
-            <span class="material-icons">edit</span>
+              <span class="material-icons">edit</span>
             </button>
           </div>
         </div>
-        <div><button @click="onCreate">
+        <div>
+          <button @click="onCreate">
             <span class="material-icons text-9xl">add</span>
-        </button></div>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -62,7 +67,7 @@ const baseInfo: Info = {
 
 const keyInfo = "manifest";
 const keyDrawing = "drawing";
-const priceRange={ low: 0.04, high: 0.23 };
+const priceRange = { low: 0.04, high: 0.23 };
 
 export default defineComponent({
   components: {
@@ -91,10 +96,7 @@ export default defineComponent({
       provider
     );
     //const tokens = ref<Token[]>([]);
-    const { onSelect, selection, tokensPerAsset } = useOnSelect(
-      0,
-      tokenRO
-    );
+    const { onSelect, selection, tokensPerAsset } = useOnSelect(0, tokenRO);
 
     const drawings = ref<Drawing[]>([]);
     const resultInfo = localStorage.getItem(keyInfo);
@@ -121,7 +123,7 @@ export default defineComponent({
       const keys = info.value.keys;
       // Prepare to open
       selectedIndex.value = keys.length;
-      selectedDrawing.value = {layers:[], assetId:0};
+      selectedDrawing.value = { layers: [], assetId: 0 };
 
       // Update the info and save it
       const array: Drawing[] = drawings.value.map((body) => body);

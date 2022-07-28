@@ -42,35 +42,35 @@
       }px; top:${offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-300"
     >
-      <div class="flex justify-between ml-2 mr-2">
+      <div class="ml-2 mr-2 flex justify-between">
         <div>
-        <button
-          @click="undo"
-          :disabled="!isUndoable()"
-          :style="`opacity:${isUndoable() ? '1.0' : '0.5'}`"
-        >
-          <span class="material-icons">undo</span>
-        </button>
-        <button
-          :style="`opacity:${isRedoable() ? '1.0' : '0.5'}`"
-          class="ml-1"
-          @click="redo"
-          :disabled="!isRedoable()"
-        >
-          <span class="material-icons">redo</span>
-        </button>
+          <button
+            @click="undo"
+            :disabled="!isUndoable()"
+            :style="`opacity:${isUndoable() ? '1.0' : '0.5'}`"
+          >
+            <span class="material-icons">undo</span>
+          </button>
+          <button
+            :style="`opacity:${isRedoable() ? '1.0' : '0.5'}`"
+            class="ml-1"
+            @click="redo"
+            :disabled="!isRedoable()"
+          >
+            <span class="material-icons">redo</span>
+          </button>
         </div>
         <button @click="onClose">
           <span class="material-icons">close</span>
         </button>
       </div>
       <div>
-        <button @click="toggleGrid" class="flex ml-2">
+        <button @click="toggleGrid" class="ml-2 flex">
           <span class="material-icons">view_module</span>
           <span>{{ grid }}</span>
         </button>
       </div>
-      <div class="flex justify-between ml-2 mr-2">
+      <div class="ml-2 mr-2 flex justify-between">
         <button @click="togglePoint">
           <span v-if="isSharpCorner()" class="material-icons"
             >check_box_outline_blank</span
@@ -91,10 +91,10 @@
       <input
         v-model.trim="currentColor"
         v-on:focus="onColorFocus"
-        class="text-center shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        class="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 text-center leading-tight text-gray-700 shadow focus:outline-none"
         id="username"
         type="text"
-        :placeholder='"#RRGGBB(AA)"'
+        :placeholder="'#RRGGBB(AA)'"
       />
       <div :style="`height:${canh / 2}px; overflow-y: scroll`">
         <div v-for="(layer, index) in layers" :key="index">
@@ -107,12 +107,15 @@
             @click="onSelectLayer($event, index)"
             :src="layer.svgImage"
             :style="`width:${sidew}px;height:${sidew / 2}px`"
-            class="object-fill border-2 border-solid"
+            class="border-2 border-solid object-fill"
             :class="`${
               index == layerIndex ? 'border-blue-400' : 'border-slate-200'
             }`"
           />
-          <div v-if="index == layerIndex" class="flex justify-between ml-2 mr-2">
+          <div
+            v-if="index == layerIndex"
+            class="ml-2 mr-2 flex justify-between"
+          >
             <button @click="insertLayer(index + 1)">
               <span class="material-icons">add</span>
             </button>
@@ -355,7 +358,7 @@ export default defineComponent({
     const onClose = () => {
       const drawing: Drawing = {
         layers: layers.value,
-        assetId: 0
+        assetId: 0,
       };
       context.emit("close", drawing);
     };

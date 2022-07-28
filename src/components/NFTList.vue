@@ -12,7 +12,7 @@
         >
           <img
             :src="token.image"
-            class="w-14 inline-block rounded-xl mr-1 mb-1"
+            class="mr-1 mb-1 inline-block w-14 rounded-xl"
           />
         </a>
       </span>

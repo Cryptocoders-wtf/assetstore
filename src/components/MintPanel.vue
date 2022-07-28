@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="selection && !selection.asset.registered"
-    class="border shadow-md mt-2 rounded-xl pl-2 pr-2"
+    class="mt-2 rounded-xl border pl-2 pr-2 shadow-md"
   >
     <p class="mt-2">
       <b>{{ selection.asset.name }}, {{ selection.asset.category }}</b>
@@ -10,7 +10,7 @@
     <div v-if="selection.isLoading">
       <img
         :src="selection.asset.image"
-        class="w-16 inline-block rounded-xl m-2"
+        class="m-2 inline-block w-16 rounded-xl"
       />
       <p class="mb-40">{{ $t("mintPanel.preparing") }}</p>
     </div>
@@ -19,7 +19,7 @@
         v-for="image in selection.images"
         :key="image"
         :src="image"
-        class="w-16 inline-block rounded-xl m-2"
+        class="m-2 inline-block w-16 rounded-xl"
       />
       <div v-if="messageRef" class="mb-2">
         <div v-if="messageRef == 'message.minting'">
@@ -47,15 +47,15 @@
       <span v-else>
         <NetworkGate :expectedNetwork="addresses.chainId">
           <div class="mb-4">
-            <label class="block text-gray-700 text-sm mb-1" for="username">
+            <label class="mb-1 block text-sm text-gray-700" for="username">
               {{ $t("mintPanel.writeName") }}
-              <span :class="validName ? '' : 'text-red-600 font-bold'">{{
+              <span :class="validName ? '' : 'font-bold text-red-600'">{{
                 $t("mintPanel.maxLength")
               }}</span>
             </label>
             <input
               v-model.trim="minterName"
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              class="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
               id="username"
               type="text"
               :placeholder="$t('mintPanel.placeHolder')"
@@ -63,7 +63,7 @@
             <span v-if="validName">
               <button
                 @click="mint"
-                class="mt-2 inline-block px-6 py-2.5 bg-green-600 text-white leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out"
+                class="mt-2 inline-block rounded bg-green-600 px-6 py-2.5 leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg"
               >
                 {{ $t("mintPanel.mint") }}
               </button>
@@ -72,7 +72,7 @@
               <button
                 @click="mint"
                 disabled
-                class="mt-2 inline-block px-6 py-2.5 bg-gray-400 text-gray-200 leading-tight rounded shadow-md"
+                class="mt-2 inline-block rounded bg-gray-400 px-6 py-2.5 leading-tight text-gray-200 shadow-md"
               >
                 {{ $t("mintPanel.mint") }}
               </button>
