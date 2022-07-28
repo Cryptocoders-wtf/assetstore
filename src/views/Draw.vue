@@ -62,6 +62,7 @@ const baseInfo: Info = {
 
 const keyInfo = "manifest";
 const keyDrawing = "drawing";
+const priceRange={ low: 0.04, high: 0.23 };
 
 export default defineComponent({
   components: {
@@ -158,6 +159,11 @@ export default defineComponent({
       selectedDrawing,
       svgImageFromDrawing,
       selectedIndex,
+      priceRange,
+      tokensPerAsset,
+      assetStoreRO,
+      tokenAbi: contentsToken.wabi.abi,
+      tokenName: "Foo Bar",
     };
   },
 });
