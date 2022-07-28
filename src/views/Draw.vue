@@ -36,6 +36,7 @@
         :tokensPerAsset="tokensPerAsset"
         :assetStoreRO="assetStoreRO"
         :priceRange="priceRange"
+        :backgroundId="true"
       />
       <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
       <References
@@ -72,7 +73,7 @@ const AssetStore = {
 };
 
 const contentsToken = {
-  wabi: require("../abis/EmojiFlagToken.json"), // wrapped abi
+  wabi: require("../abis/CustomToken.json"), // wrapped abi
 };
 
 /*
