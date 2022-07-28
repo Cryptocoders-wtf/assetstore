@@ -1,19 +1,19 @@
 <template>
   <div>
-    <Canvas v-if="showCanvas" @close="onClose" :initialLayers="selectedBody" />
+    <Canvas v-if="showCanvas" @close="onClose" :drawing="selectedDrawing" />
 
     <div class="max-w-xl mx-auto text-left p-2">
       <div class="mb-2 text-xl font-bold">{{ "Create Your Own Token" }}</div>
       <div class="flex flex-wrap">
         <div
-          v-for="(body, index) in bodies"
+          v-for="(body, index) in drawings"
           :key="index"
           @click="onSelect(index)"
           :class="`border-2 ${
             index == selectedIndex ? 'border-blue-700' : 'border-white'
           }`"
         >
-          <img :src="svgImageFromLayers(body)" class="w-32" />
+          <img :src="svgImageFromDrawing(body)" class="w-32" />
           <div v-if="index == selectedIndex" class="flex justify-between ml-2 mr-2">
             <button @click="onOpen">
             <span class="material-icons">edit</span>
@@ -30,7 +30,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import Canvas from "@/components/Canvas.vue";
-import { Layer, svgImageFromLayers } from "@/models/point";
+import { Layer, Drawing, svgImageFromDrawing } from "@/models/point";
 
 /*
 interface Dictionary<T> {
@@ -40,68 +40,70 @@ interface Dictionary<T> {
 interface Info {
   nextIndex: number;
   keys: string[];
-  //bodies: Dictionary<Layer[]>;
+  //drawings: Dictionary<Layer[]>;
 }
 const baseInfo: Info = {
   nextIndex: 0,
   keys: [],
 };
+
+const keyInfo = "manifest";
+const keyDrawing = "drawing";
+
 export default defineComponent({
   components: {
     Canvas,
   },
   setup() {
-    const bodies = ref<Layer[][]>([]);
-    const resultInfo = localStorage.getItem("info");
+    const drawings = ref<Drawing[]>([]);
+    const resultInfo = localStorage.getItem(keyInfo);
     const info = ref<Info>(
       resultInfo ? JSON.parse(resultInfo) || baseInfo : baseInfo
     );
-    bodies.value = info.value.keys.map((key) => {
+    drawings.value = info.value.keys.map((key) => {
       const result = localStorage.getItem(key);
-      const layers: Layer[] = result ? JSON.parse(result) || [] : [];
-      console.log("body", key, layers);
-      return layers;
+      const drawing: Drawing = result ? JSON.parse(result) || [] : [];
+      return drawing;
     });
 
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(0);
-    const selectedBody = ref<Layer[]>([]);
+    const selectedDrawing = ref<Drawing>({});
     const onSelect = (index: number) => {
       selectedIndex.value = index;
     };
     const onOpen = () => {
-      selectedBody.value = bodies.value[selectedIndex.value];
+      selectedDrawing.value = drawings.value[selectedIndex.value];
       showCanvas.value = true;
     };
     const onCreate = () => {
       const keys = info.value.keys;
       // Prepare to open
       selectedIndex.value = keys.length;
-      selectedBody.value = [];
+      selectedDrawing.value = {layers:[], assetId:0};
 
       // Update the info and save it
-      const array: Layer[][] = bodies.value.map((body) => body);
-      array.push(selectedBody.value);
-      bodies.value = array;
-      keys.push(`image${info.value.nextIndex}`);
+      const array: Drawing[] = drawings.value.map((body) => body);
+      array.push(selectedDrawing.value);
+      drawings.value = array;
+      keys.push(`${keyDrawing}${info.value.nextIndex}`);
       info.value = {
         nextIndex: info.value.nextIndex + 1,
         keys,
       };
-      localStorage.setItem("info", JSON.stringify(info.value));
+      localStorage.setItem(keyInfo, JSON.stringify(info.value));
 
       showCanvas.value = true;
     };
-    const onClose = (output: Layer[]) => {
-      console.log("Draw:onClose", output.length);
-      bodies.value = bodies.value.map((layers, index) => {
+    const onClose = (output: Drawing) => {
+      drawings.value = drawings.value.map((drawing, index) => {
         if (index == selectedIndex.value) {
           return output;
         }
-        return layers;
+        return drawing;
       });
       localStorage.setItem(
-        `image${selectedIndex.value}`,
+        `${keyDrawing}${selectedIndex.value}`,
         JSON.stringify(output)
       );
       showCanvas.value = false;
@@ -112,9 +114,9 @@ export default defineComponent({
       onCreate,
       onClose,
       onSelect,
-      bodies,
-      selectedBody,
-      svgImageFromLayers,
+      drawings,
+      selectedDrawing,
+      svgImageFromDrawing,
       selectedIndex,
     };
   },

@@ -11,6 +11,11 @@ export interface Layer {
   svgImage: string;
 }
 
+export interface Drawing {
+  layers: Layer[];
+  assetId: number; // optional background asset (0 = no asset)
+}
+
 export const pathFromPoints = (points: Point[]) => {
   const length = points.length;
   return points.reduce((path, cursor, index) => {
@@ -42,8 +47,8 @@ export const svgImageFromPath = (path: string, color: string) => {
   return image;
 };
 
-export const svgImageFromLayers = (layers: Layer[]) => {
-  const paths = layers.map((layer) => {
+export const svgImageFromDrawing = (drawing: Drawing) => {
+  const paths = drawing.layers.map((layer) => {
     return `<path d="${layer.path}" fill="${layer.color}" />`;
   });
   const svg = svgHead + "<g>\n" + paths.join("\n") + "</g>\n</svg>\n";

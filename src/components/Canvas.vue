@@ -135,6 +135,7 @@ import { defineComponent, ref, watch } from "vue";
 import {
   Point,
   Layer,
+  Drawing,
   svgImageFromPath,
   pathFromPoints,
   splitPoint,
@@ -161,7 +162,7 @@ interface State {
 export default defineComponent({
   name: "HomePage",
   components: {},
-  props: ["initialLayers"],
+  props: ["drawing"],
   setup(props, context) {
     const grid = ref<number>(0);
     const undoStack = ref<State[]>([]);
@@ -217,10 +218,10 @@ export default defineComponent({
 
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
-    console.log("initialLayers", props.initialLayers ? "A" : "B");
+    //console.log("initialLayers", props.initialLayers ? "A" : "B");
     const layers = ref<Layer[]>(
-      props.initialLayers.length > 0
-        ? props.initialLayers
+      props.drawing.layers?.length > 0
+        ? props.drawing.layers
         : [
             {
               points: roundRect,
@@ -352,8 +353,11 @@ export default defineComponent({
       grid.value = (grid.value + 8) % 40;
     };
     const onClose = () => {
-      console.log("close", layers.value);
-      context.emit("close", layers.value);
+      const drawing: Drawing = {
+        layers: layers.value,
+        assetId: 0
+      };
+      context.emit("close", drawing);
     };
     return {
       cursors,
