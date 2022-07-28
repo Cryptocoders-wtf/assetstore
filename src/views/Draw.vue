@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Canvas v-if="showCanvas" @close="onClose" />
+    <Canvas v-if="showCanvas" @close="onClose" :initialLayers="layers" />
     <div class="max-w-xl mx-auto text-left p-2">
       <div class="mb-2 text-xl font-bold">{{ "Create Your Own Token" }}</div>
       <div><button @click="onCreate">Create</button></div>
@@ -25,18 +25,21 @@ export default defineComponent({
     Canvas,
   },
   setup() {
+    const layers = ref<Layer[] | null>(null);
     const showCanvas = ref<boolean>(false);
     const onCreate = () => {
       showCanvas.value = true;
     }
-    const onClose = (layers:Layer[]) => {
-      console.log("Draw:onClose", layers.length);
+    const onClose = (output:Layer[]) => {
+      console.log("Draw:onClose", output.length);
+      layers.value = output.map(layer => layer);
       showCanvas.value = false;
     },
     return {
       showCanvas,
       onCreate,
       onClose,
+      layers,
     }    
   }
 });

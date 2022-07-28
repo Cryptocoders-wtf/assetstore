@@ -202,6 +202,7 @@ export default defineComponent({
 
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
+    console.log(props.initialLayers);
     const layers = ref<Layer[]>(props.initialLayers || [
       {
         points: roundRect,
