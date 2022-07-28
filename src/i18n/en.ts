@@ -37,6 +37,7 @@ const lang = {
     sorry:
       "Another user has just minted this NFT. Please select another image.",
     mint: "Mint",
+    preparing: "Preparing to mint...",
     error1: "We have received the following error message.",
     error2: "Please try again from the selection of an image.",
   },

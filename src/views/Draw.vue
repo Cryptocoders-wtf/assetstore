@@ -147,7 +147,6 @@ export default defineComponent({
           return { body: layer.path, color: layer.color};
         })
       };
-      console.log("asset=", asset);
       const actions:OriginalAssetDataSet = {
         group: "OpenMoji (CC BY-SA 4.0)",
         category: "Drawing",
@@ -156,7 +155,6 @@ export default defineComponent({
         assets: [asset],
       };
       const loadedAssets:AssetData[] = loadAssets(actions);
-      console.log(loadedAssets[0]);
       onSelect(loadedAssets[0]);
     };
     const onOpen = () => {
@@ -194,6 +192,8 @@ export default defineComponent({
         JSON.stringify(output)
       );
       showCanvas.value = false;
+      selection.value = null; // force redraw
+      onDrawingSelect(selectedIndex.value);
     };
     return {
       showCanvas,
