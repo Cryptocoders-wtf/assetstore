@@ -30,17 +30,23 @@ export const pathFromPoints = (points: Point[]) => {
   }, "");
 };
 
-const svgHead =
-  '<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">' +
-  '<defs><g id="asset">';
+const svgHead = '<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">\n';
 
 export const svgImageFromPath = (path: string, color: string) => {
   const svgTail = "</g></defs>" + `<use href="#asset" fill="${color}" /></svg>`;
-  const svg = svgHead + '<path d="' + path + '" />' + svgTail;
+  const svg = svgHead + '<defs><g id="asset"><path d="' + path + '" />' + svgTail;
   const image =
     "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
   return image;
 };
+
+export const svgImageFromLayers = (layers: Layer[]) => {
+  const paths = layers.map(layer => {
+    return `<path d="${layer.path}" fill="${layer.color}" />`;
+  });
+  const svg = svgHead + '<g>\n' + paths.join('\n') + '</g>\n</svg>\n';
+  return "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
+}
 
 export const togglePointType = (points: Point[], index: number) => {
   return points.map((point, _index) => {

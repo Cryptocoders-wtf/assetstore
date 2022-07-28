@@ -3,8 +3,12 @@
     <Canvas v-if="showCanvas" @close="onClose" :initialLayers="selectedBody" />
     <div class="max-w-xl mx-auto text-left p-2">
       <div class="mb-2 text-xl font-bold">{{ "Create Your Own Token" }}</div>
-      <div v-for="(body, index) in bodies" :key="index" @click="onOpen(index)">Body</div>
-      <div><button @click="onCreate">Create</button></div>
+      <div class="flex">
+      <div v-for="(body, index) in bodies" :key="index" @click="onOpen(index)">
+        <img :src="svgImageFromLayers(body)" class="w-48" />
+      </div>
+      <div><button @click="onCreate">Create New</button></div>
+      </div>
     </div>
   </div>
 </template>
@@ -12,12 +16,8 @@
 import { defineComponent, ref } from "vue";
 import Canvas from "@/components/Canvas.vue";
 import {
-  Point,
   Layer,
-  svgImageFromPath,
-  pathFromPoints,
-  splitPoint,
-  togglePointType,
+  svgImageFromLayers,
 } from "@/models/point";
 
 /*
@@ -59,17 +59,21 @@ export default defineComponent({
     };
     const onCreate = () => {
       const keys = info.value.keys;
-      keys.push(`image${info.value.nextIndex}`);
+      // Prepare to open
+      selectedIndex.value = keys.length;
       selectedBody.value = [];
+
+      // Update the info and save it
       const array:Layer[][] = bodies.value.map(body => body);
       array.push(selectedBody.value);
       bodies.value = array;
-      selectedIndex.value = info.value.nextIndex;
+      keys.push(`image${info.value.nextIndex}`);
       info.value = {
         nextIndex: info.value.nextIndex + 1,
         keys
       };
       localStorage.setItem("info", JSON.stringify(info.value));
+
       showCanvas.value = true;
     };
     const onClose = (output: Layer[]) => {
@@ -90,6 +94,7 @@ export default defineComponent({
       onClose,
       bodies,
       selectedBody,
+      svgImageFromLayers,
     };
   },
 });
