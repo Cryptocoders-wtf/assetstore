@@ -133,14 +133,14 @@ export default defineComponent({
     });
 
     const showCanvas = ref<boolean>(false);
-    const selectedIndex = ref<number>(0);
+    const selectedIndex = ref<number>(9999);
     const selectedDrawing = ref<Drawing>({layers:[], assetId:0});
     const onDrawingSelect = (index: number) => {
       selectedIndex.value = index;
       const drawing = drawings.value[index];
 
       const asset:OriginalAssetData = {
-        name: "foo",
+        name: `foo${selectedIndex.value}`,
         parts: drawing.layers.map(layer => {
           return { body: layer.path, color: layer.color};
         })
@@ -148,7 +148,7 @@ export default defineComponent({
       console.log("asset=", asset);
       const actions:OriginalAssetDataSet = {
         group: "OpenMoji (CC BY-SA 4.0)",
-        category: "Flags",
+        category: "Drawing",
         width: 512,
         height: 512,
         assets: [asset],
