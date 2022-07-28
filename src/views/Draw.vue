@@ -4,10 +4,10 @@
     <div class="max-w-xl mx-auto text-left p-2">
       <div class="mb-2 text-xl font-bold">{{ "Create Your Own Token" }}</div>
       <div class="flex">
-      <div v-for="(body, index) in bodies" :key="index" @click="onOpen(index)">
-        <img :src="svgImageFromLayers(body)" class="w-48" />
-      </div>
-      <div><button @click="onCreate">Create New</button></div>
+        <div v-for="(body, index) in bodies" :key="index" @click="onOpen(index)">
+          <img :src="svgImageFromLayers(body)" class="w-48" />
+        </div>
+        <div><button @click="onCreate">Create New</button></div>
       </div>
     </div>
   </div>
