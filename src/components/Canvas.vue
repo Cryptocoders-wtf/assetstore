@@ -193,17 +193,37 @@ export default defineComponent({
       recordState();
     };
 
-    const cursors = ref<Point[]>(roundRect);
-    const currentColor = ref<string>("#008000");
-    const layers = ref<Layer[]>([
-      {
-        points: cursors.value,
-        color: currentColor.value,
-        svgImage: svgImageFromPoints(cursors.value, currentColor.value),
-      },
-    ]);
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
+    const layers = ref<Layer[]>([
+      {
+        points: roundRect,
+        color: "#008000",
+        svgImage: "",
+      },
+    ]);
+    const cursors = ref<Point[]>([]);
+    const currentColor = ref<string>("");
+    watch([cursors, currentColor], ([points, color]) => {
+      layers.value = layers.value.map((layer, index) => {
+        if (index == layerIndex.value) {
+          return {
+            points,
+            color,
+            svgImage: svgImageFromPoints(points, color),
+          };
+        }
+        return layer;
+      });
+    });
+    const updateLayerIndex = (index: number) => {
+      layerIndex.value = (index + layers.value.length) % layers.value.length;
+      const layer = layers.value[layerIndex.value];
+      cursors.value = layer.points;
+      currentColor.value = layer.color;
+    };
+    updateLayerIndex(0);
+
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
     const onSelect = (evt: any, index: number) => {
@@ -265,12 +285,6 @@ export default defineComponent({
       pointIndex.value =
         (pointIndex.value + cursors.value.length - 1) % cursors.value.length;
     };
-    const updateLayerIndex = (index: number) => {
-      layerIndex.value = (index + layers.value.length) % layers.value.length;
-      const layer = layers.value[layerIndex.value];
-      cursors.value = layer.points;
-      currentColor.value = layer.color;
-    };
     const insertLayer = (index: number) => {
       recordState();
       const array = layers.value.map((layer) => layer);
@@ -299,18 +313,6 @@ export default defineComponent({
     const drop = (evt: any) => {
       evt.preventDefault();
     };
-    watch([cursors, currentColor], ([points, color]) => {
-      layers.value = layers.value.map((layer, index) => {
-        if (index == layerIndex.value) {
-          return {
-            points,
-            color,
-            svgImage: svgImageFromPoints(points, color),
-          };
-        }
-        return layer;
-      });
-    });
     const toggleGrid = () => {
       grid.value = (grid.value + 8) % 40;
     };
