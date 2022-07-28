@@ -65,9 +65,9 @@
         </button>
       </div>
       <div>
-        <button @click="toggleGrid">
+        <button @click="toggleGrid" class="flex ml-2">
           <span class="material-icons">view_module</span>
-          {{ grid }}
+          <span>{{ grid }}</span>
         </button>
       </div>
       <div class="flex justify-between ml-2 mr-2">
@@ -94,7 +94,7 @@
         class="text-center shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="username"
         type="text"
-        :placeholder="$t('mintPanel.placeHolder')"
+        :placeholder='"#RRGGBB(AA)"'
       />
       <div :style="`height:${canh / 2}px; overflow-y: scroll`">
         <div v-for="(layer, index) in layers" :key="index">
@@ -224,7 +224,7 @@ export default defineComponent({
         : [
             {
               points: roundRect,
-              color: "#008000",
+              color: "",
               path: "",
               svgImage: "",
             },
