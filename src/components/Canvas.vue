@@ -60,9 +60,14 @@
         </button>
       </div>
       <div>
-        <button @click="toggleGrid">Grid: {{ grid }}</button>
+        <button @click="toggleGrid">
+        <span class="material-icons">view_module</span>
+        {{ grid }}</button>
       </div>
-      <div><button @click="togglePoint">Toggle</button></div>
+      <div><button @click="togglePoint">
+        <span v-if="isSharpCorner()" class="material-icons">check_box_outline_blank</span>
+        <span v-else class="material-icons">radio_button_unchecked</span>
+      </button></div>
       <div>
         <button
           :disabled="cursors.length <= 3"
@@ -72,7 +77,9 @@
           <span class="material-icons">delete</span>
         </button>
       </div>
-      <div><button @click="splitSegment">Split</button></div>
+      <div><button @click="splitSegment">
+        <span class="material-icons">add_circle</span>
+      </button></div>
       <input
         v-model.trim="currentColor"
         v-on:focus="onColorFocus"
@@ -285,6 +292,9 @@ export default defineComponent({
       recordState();
       cursors.value = togglePointType(cursors.value, pointIndex.value);
     };
+    const isSharpCorner = () => {
+      return cursors.value[pointIndex.value].c;
+    };
     const splitSegment = () => {
       recordState();
       cursors.value = splitPoint(cursors.value, pointIndex.value);
@@ -353,6 +363,7 @@ export default defineComponent({
       dragOver,
       drop,
       togglePoint,
+      isSharpCorner,
       splitSegment,
       deletePoint,
       onSelect,
