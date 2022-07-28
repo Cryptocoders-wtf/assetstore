@@ -45,6 +45,11 @@ import MintPanel from "@/components/MintPanel.vue";
 import { getContractAddresses } from "@/utils/networks";
 import { assetsReduce, useOnSelect, assetFilter } from "@/utils/mintUtils";
 import { loadAssets } from "../utils/createAsset";
+import {
+  OriginalAssetData,
+  OriginalAssetDataSet,
+  OriginalAssetPart,
+} from "@/models/asset";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -124,13 +129,14 @@ export default defineComponent({
       selectedIndex.value = index;
       const drawing = drawings.value[index];
 
-      const asset = {
+      const asset:OriginalAssetData = {
         name: "foo",
         parts: drawing.layers.map(layer => {
           return { body: layer.path, color: layer.color};
         })
       };
-      const actions = {
+      console.log("asset=", asset);
+      const actions:OriginalAssetDataSet = {
         group: "OpenMoji (CC BY-SA 4.0)",
         category: "Flags",
         width: 512,
