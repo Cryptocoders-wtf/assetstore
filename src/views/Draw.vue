@@ -24,6 +24,14 @@
             <span class="material-icons text-9xl">add</span>
         </button></div>
       </div>
+      <MintPanel
+        :selection="selection"
+        :tokenAbi="tokenAbi"
+        :addresses="addresses"
+        :tokensPerAsset="tokensPerAsset"
+        :assetStoreRO="assetStoreRO"
+        :priceRange="priceRange"
+      />
     </div>
   </div>
 </template>
@@ -36,6 +44,7 @@ import { Drawing, svgImageFromDrawing } from "@/models/point";
 import MintPanel from "@/components/MintPanel.vue";
 import { getContractAddresses } from "@/utils/networks";
 import { assetsReduce, useOnSelect, assetFilter } from "@/utils/mintUtils";
+import { loadAssets } from "../utils/createAsset";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -67,6 +76,7 @@ const priceRange={ low: 0.04, high: 0.23 };
 export default defineComponent({
   components: {
     Canvas,
+    MintPanel,
   },
   setup() {
     const route = useRoute();
@@ -109,9 +119,27 @@ export default defineComponent({
 
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(0);
-    const selectedDrawing = ref<Drawing>({});
+    const selectedDrawing = ref<Drawing>({layers:[], assetId:0});
     const onDrawingSelect = (index: number) => {
       selectedIndex.value = index;
+      const drawing = drawings.value[index];
+
+      const asset = {
+        name: "foo",
+        parts: drawing.layers.map(layer => {
+          return { body: layer.path, color: layer.color};
+        })
+      };
+      const actions = {
+        group: "OpenMoji (CC BY-SA 4.0)",
+        category: "Flags",
+        width: 512,
+        height: 512,
+        assets: [asset],
+      };
+      const loadedAssets = loadAssets(actions);
+      console.log(loadedAssets[0]);
+      onSelect(loadedAssets[0]);
     };
     const onOpen = () => {
       selectedDrawing.value = drawings.value[selectedIndex.value];
@@ -164,6 +192,8 @@ export default defineComponent({
       assetStoreRO,
       tokenAbi: contentsToken.wabi.abi,
       tokenName: "Foo Bar",
+      selection,
+      addresses
     };
   },
 });
