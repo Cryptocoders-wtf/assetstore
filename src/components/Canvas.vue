@@ -15,6 +15,7 @@
         :key="index"
         :src="layer.svgImage"
         class="absolute"
+        draggable="false"
         :style="
           `width:${canw}px; height:${canh}px;` +
           `opacity:${index > layerIndex ? '0.5' : '1.0'}`
