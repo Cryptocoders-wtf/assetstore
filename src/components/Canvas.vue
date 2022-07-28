@@ -144,7 +144,10 @@ interface State {
 export default defineComponent({
   name: "HomePage",
   components: {},
-  setup(prop, context) {
+  props: [
+    "initialLayers",
+  ],
+  setup(props, context) {
     const grid = ref<number>(0);
     const undoStack = ref<State[]>([]);
     const undoIndex = ref<number>(0);
@@ -199,7 +202,7 @@ export default defineComponent({
 
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
-    const layers = ref<Layer[]>([
+    const layers = ref<Layer[]>(props.initialLayers || [
       {
         points: roundRect,
         color: "#008000",
