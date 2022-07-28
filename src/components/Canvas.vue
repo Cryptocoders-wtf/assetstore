@@ -201,9 +201,9 @@ export default defineComponent({
 
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
-    console.log(props.initialLayers);
+    console.log("initialLayers", props.initialLayers ? "A":"B");
     const layers = ref<Layer[]>(
-      props.initialLayers || [
+      props.initialLayers.length > 0 ? props.initialLayers : [
         {
           points: roundRect,
           color: "#008000",
