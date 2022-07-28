@@ -7,7 +7,7 @@
   >
     <div
       :style="`width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`"
-      class="absolute border-2 border-solid border-blue-700 bg-slate-300"
+      class="absolute border-2 border-solid border-blue-700 bg-slate-100"
       @dragover="dragOver"
     >
       <img
@@ -40,7 +40,7 @@
       :style="`width:${sidew}px; height:${canh}px; left:${
         offx + canw - 2
       }px; top:${offy}px`"
-      class="absolute border-2 border-solid border-blue-700"
+      class="absolute border-2 border-solid border-blue-700 bg-slate-300"
     >
       <div>
         <button

@@ -4,8 +4,10 @@
     <div class="max-w-xl mx-auto text-left p-2">
       <div class="mb-2 text-xl font-bold">{{ "Create Your Own Token" }}</div>
       <div class="flex">
-        <div v-for="(body, index) in bodies" :key="index" @click="onOpen(index)">
+        <div v-for="(body, index) in bodies" :key="index" @click="onSelect(index)"
+          :class='`border-2 ${(index == selectedIndex) ? "border-blue-700":"border-white"}`'>
           <img :src="svgImageFromLayers(body)" class="w-48" />
+          <div v-if="index == selectedIndex"><button @click="onOpen">Edit</button></div>
         </div>
         <div><button @click="onCreate">Create New</button></div>
       </div>
@@ -52,9 +54,11 @@ export default defineComponent({
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(0);
     const selectedBody = ref<Layer[]>([]);
-    const onOpen = (index:number) => {
+    const onSelect = (index:number) => {
       selectedIndex.value = index;
-      selectedBody.value = bodies.value[index];
+    };
+    const onOpen = () => {
+      selectedBody.value = bodies.value[selectedIndex.value];
       showCanvas.value = true;
     };
     const onCreate = () => {
@@ -92,9 +96,11 @@ export default defineComponent({
       onOpen,
       onCreate,
       onClose,
+      onSelect,
       bodies,
       selectedBody,
       svgImageFromLayers,
+      selectedIndex,
     };
   },
 });
