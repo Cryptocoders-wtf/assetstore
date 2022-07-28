@@ -4,7 +4,7 @@
 
     <div class="max-w-xl mx-auto text-left p-2">
       <div class="mb-2 text-xl font-bold">{{ "Create Your Own Token" }}</div>
-      <div class="flex">
+      <div class="flex flex-wrap">
         <div
           v-for="(body, index) in bodies"
           :key="index"
@@ -13,12 +13,16 @@
             index == selectedIndex ? 'border-blue-700' : 'border-white'
           }`"
         >
-          <img :src="svgImageFromLayers(body)" class="w-48" />
-          <div v-if="index == selectedIndex">
-            <button @click="onOpen">Edit</button>
+          <img :src="svgImageFromLayers(body)" class="w-32" />
+          <div v-if="index == selectedIndex" class="flex justify-between ml-2 mr-2">
+            <button @click="onOpen">
+            <span class="material-icons">edit</span>
+            </button>
           </div>
         </div>
-        <div><button @click="onCreate">Create New</button></div>
+        <div><button @click="onCreate">
+            <span class="material-icons text-9xl">add</span>
+        </button></div>
       </div>
     </div>
   </div>

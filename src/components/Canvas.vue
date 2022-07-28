@@ -112,7 +112,7 @@
               index == layerIndex ? 'border-blue-400' : 'border-slate-200'
             }`"
           />
-          <div v-if="index == layerIndex"  class="flex justify-between ml-2 mr-2">
+          <div v-if="index == layerIndex" class="flex justify-between ml-2 mr-2">
             <button @click="insertLayer(index + 1)">
               <span class="material-icons">add</span>
             </button>
