@@ -29,6 +29,14 @@
           </button>
         </div>
       </div>
+      <MintPanel
+        :selection="selection"
+        :tokenAbi="tokenAbi"
+        :addresses="addresses"
+        :tokensPerAsset="tokensPerAsset"
+        :assetStoreRO="assetStoreRO"
+        :priceRange="priceRange"
+      />
     </div>
   </div>
 </template>
@@ -41,13 +49,20 @@ import { Drawing, svgImageFromDrawing } from "@/models/point";
 import MintPanel from "@/components/MintPanel.vue";
 import { getContractAddresses } from "@/utils/networks";
 import { assetsReduce, useOnSelect, assetFilter } from "@/utils/mintUtils";
+import { loadAssets } from "../utils/createAsset";
+import {
+  OriginalAssetData,
+  OriginalAssetDataSet,
+  OriginalAssetPart,
+  AssetData,
+} from "@/models/asset";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
 };
 
 const contentsToken = {
-  wabi: require("../abis/KamonToken.json"), // wrapped abi
+  wabi: require("../abis/EmojiFlagToken.json"), // wrapped abi
 };
 
 /*
@@ -72,13 +87,14 @@ const priceRange = { low: 0.04, high: 0.23 };
 export default defineComponent({
   components: {
     Canvas,
+    MintPanel,
   },
   setup() {
     const route = useRoute();
     const network =
       typeof route.query.network == "string" ? route.query.network : "mainnet";
     const addresses = getContractAddresses(network)!;
-    addresses.tokenAddress = addresses.kamonAddress;
+    addresses.tokenAddress = addresses.flagAddress;
 
     const provider =
       addresses.network == "localhost"
@@ -98,6 +114,15 @@ export default defineComponent({
     //const tokens = ref<Token[]>([]);
     const { onSelect, selection, tokensPerAsset } = useOnSelect(0, tokenRO);
 
+    const fetchPrimaryTokens = async () => {
+      if (tokensPerAsset.value == 0) {
+        const result = await tokenRO.functions.tokensPerAsset();
+        tokensPerAsset.value = result[0].toNumber();
+      }
+      // ... removed
+    };
+    fetchPrimaryTokens();
+
     const drawings = ref<Drawing[]>([]);
     const resultInfo = localStorage.getItem(keyInfo);
     const info = ref<Info>(
@@ -110,10 +135,29 @@ export default defineComponent({
     });
 
     const showCanvas = ref<boolean>(false);
-    const selectedIndex = ref<number>(0);
-    const selectedDrawing = ref<Drawing>({});
+    const selectedIndex = ref<number>(9999);
+    const selectedDrawing = ref<Drawing>({layers:[], assetId:0});
     const onDrawingSelect = (index: number) => {
       selectedIndex.value = index;
+      const drawing = drawings.value[index];
+
+      const asset:OriginalAssetData = {
+        name: `foo${selectedIndex.value}`,
+        parts: drawing.layers.map(layer => {
+          return { body: layer.path, color: layer.color};
+        })
+      };
+      console.log("asset=", asset);
+      const actions:OriginalAssetDataSet = {
+        group: "OpenMoji (CC BY-SA 4.0)",
+        category: "Drawing",
+        width: 512,
+        height: 512,
+        assets: [asset],
+      };
+      const loadedAssets:AssetData[] = loadAssets(actions);
+      console.log(loadedAssets[0]);
+      onSelect(loadedAssets[0]);
     };
     const onOpen = () => {
       selectedDrawing.value = drawings.value[selectedIndex.value];
@@ -166,6 +210,8 @@ export default defineComponent({
       assetStoreRO,
       tokenAbi: contentsToken.wabi.abi,
       tokenName: "Foo Bar",
+      selection,
+      addresses
     };
   },
 });
