@@ -115,7 +115,8 @@ import { defineComponent, ref, watch } from "vue";
 import {
   Point,
   Layer,
-  svgImageFromPoints,
+  svgImageFromPath,
+  pathFromPoints,
   splitPoint,
   togglePointType,
 } from "@/models/point";
@@ -199,6 +200,7 @@ export default defineComponent({
       {
         points: roundRect,
         color: "#008000",
+        path: "",
         svgImage: "",
       },
     ]);
@@ -207,10 +209,12 @@ export default defineComponent({
     watch([cursors, currentColor], ([points, color]) => {
       layers.value = layers.value.map((layer, index) => {
         if (index == layerIndex.value) {
+          const path = pathFromPoints(points);
           return {
             points,
             color,
-            svgImage: svgImageFromPoints(points, color),
+            path,
+            svgImage: svgImageFromPath(path, color),
           };
         }
         return layer;
@@ -288,10 +292,12 @@ export default defineComponent({
     const insertLayer = (index: number) => {
       recordState();
       const array = layers.value.map((layer) => layer);
+      const path = pathFromPoints(roundRect);
       const newLayer = {
         points: roundRect,
         color: currentColor.value,
-        svgImage: svgImageFromPoints(roundRect, currentColor.value),
+        path,
+        svgImage: svgImageFromPath(path, currentColor.value),
       };
       array.splice(index, 0, newLayer);
       layers.value = array;

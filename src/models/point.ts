@@ -7,6 +7,7 @@ export interface Point {
 export interface Layer {
   points: Point[];
   color: string;
+  path: string;
   svgImage: string;
 }
 
@@ -33,8 +34,7 @@ const svgHead =
   '<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">' +
   '<defs><g id="asset">';
 
-export const svgImageFromPoints = (points: Point[], color: string) => {
-  const path = pathFromPoints(points);
+export const svgImageFromPath = (path: string, color:string) => {
   const svgTail = "</g></defs>" + `<use href="#asset" fill="${color}" /></svg>`;
   const svg = svgHead + '<path d="' + path + '" />' + svgTail;
   const image =
