@@ -106,6 +106,9 @@
           </div>
         </div>
       </div>
+      <div>
+        <button @click="onClose">Close</button>
+      </div>
     </div>
   </div>
 </template>
@@ -141,7 +144,7 @@ interface State {
 export default defineComponent({
   name: "HomePage",
   components: {},
-  setup() {
+  setup(prop, context) {
     const grid = ref<number>(0);
     const undoStack = ref<State[]>([]);
     const undoIndex = ref<number>(0);
@@ -322,6 +325,9 @@ export default defineComponent({
     const toggleGrid = () => {
       grid.value = (grid.value + 8) % 40;
     };
+    const onClose = () => {
+      context.emit("close", layers.value);
+    };
     return {
       cursors,
       pointIndex,
@@ -344,6 +350,7 @@ export default defineComponent({
       deleteLayer,
       onSelectLayer,
       onColorFocus,
+      onClose,
       undo,
       redo,
       isUndoable,
