@@ -252,7 +252,7 @@ export default defineComponent({
       tokensPerAsset,
       assetStoreRO,
       tokenAbi: contentsToken.wabi.abi,
-      tokenName: "Foo Bar",
+      tokenName: "DrawYourOwnToken",
       selection,
       addresses,
       tokens,
