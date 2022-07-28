@@ -145,9 +145,7 @@ interface State {
 export default defineComponent({
   name: "HomePage",
   components: {},
-  props: [
-    "initialLayers",
-  ],
+  props: ["initialLayers"],
   setup(props, context) {
     const grid = ref<number>(0);
     const undoStack = ref<State[]>([]);
@@ -204,14 +202,16 @@ export default defineComponent({
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     console.log(props.initialLayers);
-    const layers = ref<Layer[]>(props.initialLayers || [
-      {
-        points: roundRect,
-        color: "#008000",
-        path: "",
-        svgImage: "",
-      },
-    ]);
+    const layers = ref<Layer[]>(
+      props.initialLayers || [
+        {
+          points: roundRect,
+          color: "#008000",
+          path: "",
+          svgImage: "",
+        },
+      ]
+    );
     const cursors = ref<Point[]>([]);
     const currentColor = ref<string>("");
     watch([cursors, currentColor], ([points, color]) => {

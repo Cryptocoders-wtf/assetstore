@@ -19,7 +19,6 @@ import {
   togglePointType,
 } from "@/models/point";
 
-
 export default defineComponent({
   components: {
     Canvas,
@@ -27,23 +26,23 @@ export default defineComponent({
   setup() {
     const loadedLayers = localStorage.getItem("image0");
     console.log("loadeLayers", loadedLayers);
-    const layers = ref<Layer[] | null>(JSON.parse(loadedLayers));
+    const layers = ref<Layer[] | null>(loadedLayers? JSON.parse(loadedLayers) : null);
     const showCanvas = ref<boolean>(false);
     const onCreate = () => {
       showCanvas.value = true;
-    }
-    const onClose = (output:Layer[]) => {
+    };
+    const onClose = (output: Layer[]) => {
       console.log("Draw:onClose", output.length);
-      layers.value = output.map(layer => layer);
+      layers.value = output.map((layer) => layer);
       localStorage.setItem("image0", JSON.stringify(layers.value));
       showCanvas.value = false;
-    },
+    };
     return {
       showCanvas,
       onCreate,
       onClose,
       layers,
-    }    
-  }
+    };
+  },
 });
 </script>
