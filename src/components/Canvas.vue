@@ -42,7 +42,8 @@
       }px; top:${offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-300"
     >
-      <div>
+      <div class="flex justify-between ml-2 mr-2">
+        <div>
         <button
           @click="undo"
           :disabled="!isUndoable()"
@@ -58,17 +59,24 @@
         >
           <span class="material-icons">redo</span>
         </button>
+        </div>
+        <button @click="onClose">
+          <span class="material-icons">close</span>
+        </button>
       </div>
       <div>
         <button @click="toggleGrid">
-        <span class="material-icons">view_module</span>
-        {{ grid }}</button>
+          <span class="material-icons">view_module</span>
+          {{ grid }}
+        </button>
       </div>
-      <div><button @click="togglePoint">
-        <span v-if="isSharpCorner()" class="material-icons">check_box_outline_blank</span>
-        <span v-else class="material-icons">radio_button_unchecked</span>
-      </button></div>
-      <div>
+      <div class="flex justify-between ml-2 mr-2">
+        <button @click="togglePoint">
+          <span v-if="isSharpCorner()" class="material-icons"
+            >check_box_outline_blank</span
+          >
+          <span v-else class="material-icons">radio_button_unchecked</span>
+        </button>
         <button
           :disabled="cursors.length <= 3"
           @click="deletePoint"
@@ -76,10 +84,10 @@
         >
           <span class="material-icons">delete</span>
         </button>
+        <button @click="splitSegment">
+          <span class="material-icons">add_circle</span>
+        </button>
       </div>
-      <div><button @click="splitSegment">
-        <span class="material-icons">add_circle</span>
-      </button></div>
       <input
         v-model.trim="currentColor"
         v-on:focus="onColorFocus"
@@ -92,7 +100,7 @@
         <div v-for="(layer, index) in layers" :key="index">
           <div v-if="index == layerIndex">
             <button @click="insertLayer(index)">
-            <span class="material-icons">add</span>
+              <span class="material-icons">add</span>
             </button>
           </div>
           <img
@@ -104,9 +112,9 @@
               index == layerIndex ? 'border-blue-400' : 'border-slate-200'
             }`"
           />
-          <div v-if="index == layerIndex">
+          <div v-if="index == layerIndex"  class="flex justify-between ml-2 mr-2">
             <button @click="insertLayer(index + 1)">
-            <span class="material-icons">add</span>
+              <span class="material-icons">add</span>
             </button>
             <button
               v-if="layers.length > 1"
@@ -117,9 +125,6 @@
             </button>
           </div>
         </div>
-      </div>
-      <div>
-        <button @click="onClose">Close</button>
       </div>
     </div>
   </div>
@@ -212,16 +217,18 @@ export default defineComponent({
 
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
-    console.log("initialLayers", props.initialLayers ? "A":"B");
+    console.log("initialLayers", props.initialLayers ? "A" : "B");
     const layers = ref<Layer[]>(
-      props.initialLayers.length > 0 ? props.initialLayers : [
-        {
-          points: roundRect,
-          color: "#008000",
-          path: "",
-          svgImage: "",
-        },
-      ]
+      props.initialLayers.length > 0
+        ? props.initialLayers
+        : [
+            {
+              points: roundRect,
+              color: "#008000",
+              path: "",
+              svgImage: "",
+            },
+          ]
     );
     const cursors = ref<Point[]>([]);
     const currentColor = ref<string>("");
