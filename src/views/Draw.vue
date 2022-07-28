@@ -3,7 +3,7 @@
     <Canvas v-if="showCanvas" @close="onClose" :drawing="selectedDrawing" />
 
     <div class="max-w-xl mx-auto text-left p-2">
-      <div class="mb-2 text-xl font-bold">{{ "Create Your Own Token" }}</div>
+      <div class="mb-2 text-xl font-bold">{{ "Draw Your Own Token" }}</div>
       <div class="flex flex-wrap">
         <div
           v-for="(body, index) in drawings"
