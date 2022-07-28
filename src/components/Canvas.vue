@@ -326,6 +326,7 @@ export default defineComponent({
       grid.value = (grid.value + 8) % 40;
     };
     const onClose = () => {
+      console.log("close", layers.value);
       context.emit("close", layers.value);
     };
     return {

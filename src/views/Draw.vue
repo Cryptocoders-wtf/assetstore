@@ -10,6 +10,15 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import Canvas from "@/components/Canvas.vue";
+import {
+  Point,
+  Layer,
+  svgImageFromPath,
+  pathFromPoints,
+  splitPoint,
+  togglePointType,
+} from "@/models/point";
+
 
 export default defineComponent({
   components: {
@@ -20,8 +29,8 @@ export default defineComponent({
     const onCreate = () => {
       showCanvas.value = true;
     }
-    const onClose = (foo:any, bar:any) => {
-      console.log("Draw:onClose", foo, bar);
+    const onClose = (layers:Layer[]) => {
+      console.log("Draw:onClose", layers.length);
       showCanvas.value = false;
     },
     return {
