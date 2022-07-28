@@ -108,9 +108,18 @@ export default defineComponent({
     );
     //const tokens = ref<Token[]>([]);
     const { onSelect, selection, tokensPerAsset } = useOnSelect(
-      4,
+      0,
       tokenRO
     );
+
+    const fetchPrimaryTokens = async () => {
+      if (tokensPerAsset.value == 0) {
+        const result = await tokenRO.functions.tokensPerAsset();
+        tokensPerAsset.value = result[0].toNumber();
+      }
+      // ... removed
+    };
+    fetchPrimaryTokens();
 
     const drawings = ref<Drawing[]>([]);
     const resultInfo = localStorage.getItem(keyInfo);
