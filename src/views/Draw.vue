@@ -49,6 +49,7 @@ import {
   OriginalAssetData,
   OriginalAssetDataSet,
   OriginalAssetPart,
+  AssetData,
 } from "@/models/asset";
 
 const AssetStore = {
@@ -107,7 +108,7 @@ export default defineComponent({
     );
     //const tokens = ref<Token[]>([]);
     const { onSelect, selection, tokensPerAsset } = useOnSelect(
-      0,
+      4,
       tokenRO
     );
 
@@ -143,7 +144,7 @@ export default defineComponent({
         height: 512,
         assets: [asset],
       };
-      const loadedAssets = loadAssets(actions);
+      const loadedAssets:AssetData[] = loadAssets(actions);
       console.log(loadedAssets[0]);
       onSelect(loadedAssets[0]);
     };
