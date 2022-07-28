@@ -1,6 +1,7 @@
 <template>
   <div>
     <Canvas v-if="showCanvas" @close="onClose" :initialLayers="selectedBody" />
+    
     <div class="max-w-xl mx-auto text-left p-2">
       <div class="mb-2 text-xl font-bold">{{ "Create Your Own Token" }}</div>
       <div class="flex">

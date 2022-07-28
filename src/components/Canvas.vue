@@ -48,7 +48,7 @@
           :disabled="!isUndoable()"
           :style="`opacity:${isUndoable() ? '1.0' : '0.5'}`"
         >
-          Undo
+          <span class="material-icons">undo</span>
         </button>
         <button
           :style="`opacity:${isRedoable() ? '1.0' : '0.5'}`"
@@ -56,7 +56,7 @@
           @click="redo"
           :disabled="!isRedoable()"
         >
-          Redo
+          <span class="material-icons">redo</span>
         </button>
       </div>
       <div>
@@ -69,7 +69,7 @@
           @click="deletePoint"
           :style="`opacity:${cursors.length > 3 ? '1.0' : '0.5'}`"
         >
-          Delete
+          <span class="material-icons">delete</span>
         </button>
       </div>
       <div><button @click="splitSegment">Split</button></div>
@@ -84,7 +84,9 @@
       <div :style="`height:${canh / 2}px; overflow-y: scroll`">
         <div v-for="(layer, index) in layers" :key="index">
           <div v-if="index == layerIndex">
-            <button @click="insertLayer(index)">Insert</button>
+            <button @click="insertLayer(index)">
+            <span class="material-icons">add</span>
+            </button>
           </div>
           <img
             @click="onSelectLayer($event, index)"
@@ -96,13 +98,15 @@
             }`"
           />
           <div v-if="index == layerIndex">
-            <button @click="insertLayer(index + 1)">Insert</button>
+            <button @click="insertLayer(index + 1)">
+            <span class="material-icons">add</span>
+            </button>
             <button
               v-if="layers.length > 1"
               class="ml-2"
               @click="deleteLayer()"
             >
-              Delete
+              <span class="material-icons">delete</span>
             </button>
           </div>
         </div>
