@@ -57,7 +57,7 @@ const AssetStore = {
 };
 
 const contentsToken = {
-  wabi: require("../abis/KamonToken.json"), // wrapped abi
+  wabi: require("../abis/EmojiFlagToken.json"), // wrapped abi
 };
 
 /*
@@ -89,7 +89,7 @@ export default defineComponent({
     const network =
       typeof route.query.network == "string" ? route.query.network : "mainnet";
     const addresses = getContractAddresses(network)!;
-    addresses.tokenAddress = addresses.kamonAddress;
+    addresses.tokenAddress = addresses.flagAddress;
 
     const provider =
       addresses.network == "localhost"
