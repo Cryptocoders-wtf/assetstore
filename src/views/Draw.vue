@@ -25,7 +25,9 @@ export default defineComponent({
     Canvas,
   },
   setup() {
-    const layers = ref<Layer[] | null>(null);
+    const loadedLayers = localStorage.getItem("image0");
+    console.log("loadeLayers", loadedLayers);
+    const layers = ref<Layer[] | null>(JSON.parse(loadedLayers));
     const showCanvas = ref<boolean>(false);
     const onCreate = () => {
       showCanvas.value = true;
@@ -33,6 +35,7 @@ export default defineComponent({
     const onClose = (output:Layer[]) => {
       console.log("Draw:onClose", output.length);
       layers.value = output.map(layer => layer);
+      localStorage.setItem("image0", JSON.stringify(layers.value));
       showCanvas.value = false;
     },
     return {
