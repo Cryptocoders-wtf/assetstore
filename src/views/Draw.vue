@@ -48,12 +48,11 @@ import Canvas from "@/components/Canvas.vue";
 import { Drawing, svgImageFromDrawing } from "@/models/point";
 import MintPanel from "@/components/MintPanel.vue";
 import { getContractAddresses } from "@/utils/networks";
-import { assetsReduce, useOnSelect, assetFilter } from "@/utils/mintUtils";
+import { useOnSelect } from "@/utils/mintUtils";
 import { loadAssets } from "../utils/createAsset";
 import {
   OriginalAssetData,
   OriginalAssetDataSet,
-  OriginalAssetPart,
   AssetData,
 } from "@/models/asset";
 
@@ -94,7 +93,7 @@ export default defineComponent({
     const network =
       typeof route.query.network == "string" ? route.query.network : "mainnet";
     const addresses = getContractAddresses(network)!;
-    addresses.tokenAddress = addresses.flagAddress;
+    addresses.tokenAddress = addresses.customAddress;
 
     const provider =
       addresses.network == "localhost"
@@ -148,7 +147,7 @@ export default defineComponent({
         })
       };
       const actions:OriginalAssetDataSet = {
-        group: "OpenMoji (CC BY-SA 4.0)",
+        group: "",
         category: "Drawing",
         width: 512,
         height: 512,
