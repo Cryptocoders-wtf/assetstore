@@ -37,6 +37,12 @@
         :assetStoreRO="assetStoreRO"
         :priceRange="priceRange"
       />
+      <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
+      <References
+        :EtherscanStore="EtherscanStore"
+        :EtherscanToken="EtherscanToken"
+        :TokenName="tokenName"
+      />
     </div>
   </div>
 </template>
@@ -50,6 +56,11 @@ import MintPanel from "@/components/MintPanel.vue";
 import { getContractAddresses } from "@/utils/networks";
 import { useOnSelect } from "@/utils/mintUtils";
 import { loadAssets } from "../utils/createAsset";
+import { Token } from "@/models/token";
+import { fetchTokens } from "@/utils/fetchTokens";
+import { getAddresses } from "@/utils/const";
+import References from "@/components/References.vue";
+import NFTList from "@/components/NFTList.vue";
 import {
   OriginalAssetData,
   OriginalAssetDataSet,
@@ -86,7 +97,7 @@ const priceRange = { low: 0.04, high: 0.23 };
 export default defineComponent({
   components: {
     Canvas,
-    MintPanel,
+    MintPanel, References, NFTList
   },
   setup() {
     const route = useRoute();
@@ -94,6 +105,12 @@ export default defineComponent({
       typeof route.query.network == "string" ? route.query.network : "mainnet";
     const addresses = getContractAddresses(network)!;
     addresses.tokenAddress = addresses.customAddress;
+
+    const { EtherscanStore, EtherscanToken, OpenSeaPath } = getAddresses(
+      addresses.network,
+      addresses.storeAddress,
+      addresses.tokenAddress
+    );
 
     const provider =
       addresses.network == "localhost"
@@ -110,15 +127,41 @@ export default defineComponent({
       contentsToken.wabi.abi,
       provider
     );
-    //const tokens = ref<Token[]>([]);
+    const tokens = ref<Token[]>([]);
     const { onSelect, selection, tokensPerAsset } = useOnSelect(0, tokenRO);
+
+    provider.once("block", () => {
+      tokenRO.on(tokenRO.filters.Transfer(), async (from, to, tokenId) => {
+        if (
+          tokenId.toNumber() % tokensPerAsset.value == 0 &&
+          tokenId.toNumber() >= tokens.value.length * tokensPerAsset.value
+        ) {
+          console.log("*** event.Transfer calling fetchToken");
+          fetchPrimaryTokens();
+        }
+      });
+    });
 
     const fetchPrimaryTokens = async () => {
       if (tokensPerAsset.value == 0) {
         const result = await tokenRO.functions.tokensPerAsset();
         tokensPerAsset.value = result[0].toNumber();
       }
-      // ... removed
+
+      const resultSupply = await tokenRO.functions.totalSupply();
+      const count = resultSupply[0].toNumber() / tokensPerAsset.value;
+
+      fetchTokens(
+        count,
+        tokens.value,
+        tokensPerAsset.value,
+        0,
+        assetStoreRO,
+        tokenRO,
+        (updateTokens) => {
+          tokens.value = updateTokens;
+        }
+      );
     };
     fetchPrimaryTokens();
 
@@ -210,7 +253,9 @@ export default defineComponent({
       tokenAbi: contentsToken.wabi.abi,
       tokenName: "Foo Bar",
       selection,
-      addresses
+      addresses,
+      tokens,
+      EtherscanStore, EtherscanToken, OpenSeaPath
     };
   },
 });
