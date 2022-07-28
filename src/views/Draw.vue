@@ -8,7 +8,7 @@
         <div
           v-for="(body, index) in drawings"
           :key="index"
-          @click="onSelect(index)"
+          @click="onDrawingSelect(index)"
           :class="`border-2 ${
             index == selectedIndex ? 'border-blue-700' : 'border-white'
           }`"
@@ -29,8 +29,21 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import { ethers } from "ethers";
+import { useRoute } from "vue-router";
 import Canvas from "@/components/Canvas.vue";
-import { Layer, Drawing, svgImageFromDrawing } from "@/models/point";
+import { Drawing, svgImageFromDrawing } from "@/models/point";
+import MintPanel from "@/components/MintPanel.vue";
+import { getContractAddresses } from "@/utils/networks";
+import { assetsReduce, useOnSelect, assetFilter } from "@/utils/mintUtils";
+
+const AssetStore = {
+  wabi: require("../abis/AssetStore.json"), // wrapped abi
+};
+
+const contentsToken = {
+  wabi: require("../abis/KamonToken.json"), // wrapped abi
+};
 
 /*
 interface Dictionary<T> {
@@ -55,6 +68,33 @@ export default defineComponent({
     Canvas,
   },
   setup() {
+    const route = useRoute();
+    const network =
+      typeof route.query.network == "string" ? route.query.network : "mainnet";
+    const addresses = getContractAddresses(network)!;
+    addresses.tokenAddress = addresses.kamonAddress;
+
+    const provider =
+      addresses.network == "localhost"
+        ? new ethers.providers.JsonRpcProvider()
+        : new ethers.providers.AlchemyProvider(addresses.network);
+
+    const assetStoreRO = new ethers.Contract(
+      addresses.storeAddress,
+      AssetStore.wabi.abi,
+      provider
+    );
+    const tokenRO = new ethers.Contract(
+      addresses.tokenAddress,
+      contentsToken.wabi.abi,
+      provider
+    );
+    //const tokens = ref<Token[]>([]);
+    const { onSelect, selection, tokensPerAsset } = useOnSelect(
+      0,
+      tokenRO
+    );
+
     const drawings = ref<Drawing[]>([]);
     const resultInfo = localStorage.getItem(keyInfo);
     const info = ref<Info>(
@@ -69,7 +109,7 @@ export default defineComponent({
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(0);
     const selectedDrawing = ref<Drawing>({});
-    const onSelect = (index: number) => {
+    const onDrawingSelect = (index: number) => {
       selectedIndex.value = index;
     };
     const onOpen = () => {
@@ -113,7 +153,7 @@ export default defineComponent({
       onOpen,
       onCreate,
       onClose,
-      onSelect,
+      onDrawingSelect,
       drawings,
       selectedDrawing,
       svgImageFromDrawing,
