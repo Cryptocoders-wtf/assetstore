@@ -114,16 +114,11 @@
 import { defineComponent, ref, watch } from "vue";
 import {
   Point,
+  Layer,
   svgImageFromPoints,
   splitPoint,
   togglePointType,
 } from "@/models/point";
-
-interface Layer {
-  points: Point[];
-  color: string;
-  svgImage: string;
-}
 
 const [canw, canh, offx, offy, curw, curh, sidew] = [
   512, 512, 40, 80, 30, 30, 150,

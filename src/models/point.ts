@@ -4,6 +4,12 @@ export interface Point {
   c: boolean;
 }
 
+export interface Layer {
+  points: Point[];
+  color: string;
+  svgImage: string;
+}
+
 export const pathFromPoints = (points: Point[]) => {
   const length = points.length;
   return points.reduce((path, cursor, index) => {
