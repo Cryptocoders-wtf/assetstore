@@ -62,6 +62,7 @@ import { fetchTokens } from "@/utils/fetchTokens";
 import { getAddresses } from "@/utils/const";
 import References from "@/components/References.vue";
 import NFTList from "@/components/NFTList.vue";
+import { v4 as uuidv4 } from "uuid";
 import {
   OriginalAssetData,
   OriginalAssetDataSet,
@@ -183,9 +184,9 @@ export default defineComponent({
     const onDrawingSelect = (index: number) => {
       selectedIndex.value = index;
       const drawing = drawings.value[index];
-
+      const uuid = uuidv4();
       const asset:OriginalAssetData = {
-        name: `item${selectedIndex.value}`,
+        name: uuid,
         parts: drawing.layers.map(layer => {
           return { body: layer.path, color: layer.color};
         })
