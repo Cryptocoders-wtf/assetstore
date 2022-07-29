@@ -99,7 +99,9 @@ const priceRange = { low: 0.04, high: 0.23 };
 export default defineComponent({
   components: {
     Canvas,
-    MintPanel, References, NFTList
+    MintPanel,
+    References,
+    NFTList,
   },
   setup() {
     const route = useRoute();
@@ -180,25 +182,25 @@ export default defineComponent({
 
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(9999);
-    const selectedDrawing = ref<Drawing>({layers:[], assetId:0});
+    const selectedDrawing = ref<Drawing>({ layers: [], assetId: 0 });
     const onDrawingSelect = (index: number) => {
       selectedIndex.value = index;
       const drawing = drawings.value[index];
       const uuid = uuidv4();
-      const asset:OriginalAssetData = {
+      const asset: OriginalAssetData = {
         name: uuid,
-        parts: drawing.layers.map(layer => {
-          return { body: layer.path, color: layer.color};
-        })
+        parts: drawing.layers.map((layer) => {
+          return { body: layer.path, color: layer.color };
+        }),
       };
-      const actions:OriginalAssetDataSet = {
+      const actions: OriginalAssetDataSet = {
         group: "",
         category: "Drawing",
         width: 512,
         height: 512,
         assets: [asset],
       };
-      const loadedAssets:AssetData[] = loadAssets(actions);
+      const loadedAssets: AssetData[] = loadAssets(actions);
       onSelect(loadedAssets[0]);
     };
     const onOpen = () => {
@@ -257,7 +259,9 @@ export default defineComponent({
       selection,
       addresses,
       tokens,
-      EtherscanStore, EtherscanToken, OpenSeaPath
+      EtherscanStore,
+      EtherscanToken,
+      OpenSeaPath,
     };
   },
 });

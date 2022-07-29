@@ -117,7 +117,7 @@ export default defineComponent({
     "tokenAbi",
     "assetStoreRO",
     "priceRange",
-    "backgroundId"
+    "backgroundId",
   ],
   components: {
     NetworkGate,
@@ -195,15 +195,16 @@ export default defineComponent({
         asset.minter = minterName.value;
         asset.group = ""; // gas saving
         console.log("*** minting", asset);
-        const tx = props.backgroundId ?   
-          await networkContext.value.contract.mintWithAsset(
-            asset,
-            0, // backgroundId
-            affiliateId
-          )  : await networkContext.value.contract.mintWithAsset(
-            asset,
-            affiliateId
-          );
+        const tx = props.backgroundId
+          ? await networkContext.value.contract.mintWithAsset(
+              asset,
+              0, // backgroundId
+              affiliateId
+            )
+          : await networkContext.value.contract.mintWithAsset(
+              asset,
+              affiliateId
+            );
         const result = await tx.wait();
         console.log("mint:gasUsed", result.gasUsed.toNumber());
         messageRef.value = "message.minted";
