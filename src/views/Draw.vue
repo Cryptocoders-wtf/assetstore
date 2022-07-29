@@ -73,7 +73,7 @@ const AssetStore = {
 };
 
 const contentsToken = {
-  wabi: require("../abis/CustomToken.json"), // wrapped abi
+  wabi: require("../abis/DrawYourOwn.json"), // wrapped abi
 };
 
 /*
@@ -105,7 +105,7 @@ export default defineComponent({
     const network =
       typeof route.query.network == "string" ? route.query.network : "mainnet";
     const addresses = getContractAddresses(network)!;
-    addresses.tokenAddress = addresses.customAddress;
+    addresses.tokenAddress = addresses.drawAddress;
 
     const { EtherscanStore, EtherscanToken, OpenSeaPath } = getAddresses(
       addresses.network,
@@ -185,7 +185,7 @@ export default defineComponent({
       const drawing = drawings.value[index];
 
       const asset:OriginalAssetData = {
-        name: `foo${selectedIndex.value}`,
+        name: `item${selectedIndex.value}`,
         parts: drawing.layers.map(layer => {
           return { body: layer.path, color: layer.color};
         })

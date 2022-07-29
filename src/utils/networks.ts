@@ -8,8 +8,8 @@ import { kamon_addresses as kamon_rinkeby } from "../../../contract/cache/addres
 import { token_addresses as flag_mainnet } from "../../generated/addresses_flag_mainnet";
 import { token_addresses as flag_localhost } from "../../../contract/cache/addresses_flag_localhost";
 import { token_addresses as flag_rinkeby } from "../../../contract/cache/addresses_flag_rinkeby";
-import { token_addresses as custom_localhost } from "../../../contract/cache/addresses_custom_localhost";
-import { token_addresses as custom_rinkeby } from "../../../contract/cache/addresses_custom_rinkeby";
+import { token_addresses as draw_localhost } from "../../../contract/cache/addresses_draw_localhost";
+import { token_addresses as draw_rinkeby } from "../../../contract/cache/addresses_draw_rinkeby";
 
 export const getContractAddresses = (network: string) => {
   if (network == "localhost") {
@@ -20,7 +20,7 @@ export const getContractAddresses = (network: string) => {
       materialAddress: localhost.tokenAddress,
       kamonAddress: kamon_localhost.kamonAddress,
       flagAddress: flag_localhost.emojiFlagAddress,
-      customAddress: custom_localhost.customTokenAddress,
+      drawAddress: draw_localhost.customTokenAddress,
       tokenAddress: "",
     };
   }
@@ -33,7 +33,7 @@ export const getContractAddresses = (network: string) => {
       materialAddress: rinkeby.tokenAddress,
       kamonAddress: kamon_rinkeby.kamonAddress,
       flagAddress: flag_rinkeby.emojiFlagAddress,
-      customAddress: custom_rinkeby.customTokenAddress,
+      drawAddress: draw_rinkeby.customTokenAddress,
       tokenAddress: "",
     };
   }
@@ -46,7 +46,7 @@ export const getContractAddresses = (network: string) => {
       materialAddress: mainnet.tokenAddress,
       kamonAddress: kamon_mainnet.kamonAddress,
       flagAddress: flag_mainnet.emojiFlagAddress,
-      customAddress: "to be determined",
+      drawAddress: "to be determined",
       tokenAddress: "",
     };
   }
