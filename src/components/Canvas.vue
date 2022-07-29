@@ -215,7 +215,7 @@ export default defineComponent({
       pointIndex.value = state.pointIndex;
       undoIndex.value += 1;
     };
-    const onColorFocus = (evt: any) => {
+    const onColorFocus = (evt: Event) => {
       recordState();
     };
 
@@ -260,17 +260,17 @@ export default defineComponent({
 
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
-    const onSelect = (evt: any, index: number) => {
+    const onSelect = (evt: Event, index: number) => {
       pointIndex.value = index;
     };
-    const dragStart = (evt: any, index: number) => {
+    const dragStart = (evt: MouseEvent, index: number) => {
       //evt.dataTransfer.setData('index', index)
       offsetX.value = evt.offsetX;
       offsetY.value = evt.offsetY;
       pointIndex.value = index;
       recordState();
     };
-    const dragOver = (evt: any) => {
+    const dragOver = (evt: MouseEvent) => {
       // const index = evt.dataTransfer.getData('index')
       cursors.value = cursors.value.map((cursor, index) => {
         if (index == pointIndex.value) {
@@ -346,10 +346,10 @@ export default defineComponent({
       });
       updateLayerIndex(layerIndex.value - 1);
     };
-    const onSelectLayer = (evt: any, index: number) => {
+    const onSelectLayer = (evt: Event, index: number) => {
       updateLayerIndex(index);
     };
-    const drop = (evt: any) => {
+    const drop = (evt: MouseEvent) => {
       evt.preventDefault();
     };
     const toggleGrid = () => {
