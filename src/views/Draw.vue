@@ -171,14 +171,19 @@ export default defineComponent({
 
     const drawings = ref<Drawing[]>([]);
     const resultInfo = localStorage.getItem(keyInfo);
+    //console.log("resultInfo", resultInfo);
     const info = ref<Info>(
       resultInfo ? JSON.parse(resultInfo) || baseInfo : baseInfo
     );
-    drawings.value = info.value.keys.map((key) => {
+    //console.log("info", info.value);
+    drawings.value = info.value.keys.map((key, index) => {
       const result = localStorage.getItem(key);
-      const drawing: Drawing = result ? JSON.parse(result) || [] : [];
+      //console.log("result", key, index, result);
+      const drawing: Drawing = result ? JSON.parse(result) || {layers:[]} : {layers:[]};
+      //console.log("drawing", drawing);
       return drawing;
     });
+    //console.log("drawings", drawings.value);
 
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(9999);
@@ -200,7 +205,7 @@ export default defineComponent({
         height: 512,
         assets: [asset],
       };
-      const loadedAssets: AssetData[] = loadAssets(actions);
+      const loadedAssets: any = loadAssets(actions);
       onSelect(loadedAssets[0]);
     };
     const onOpen = () => {
