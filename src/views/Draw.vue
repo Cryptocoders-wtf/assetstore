@@ -205,7 +205,7 @@ export default defineComponent({
         height: 512,
         assets: [asset],
       };
-      const loadedAssets: any = loadAssets(actions);
+      const loadedAssets = loadAssets(actions);
       onSelect(loadedAssets[0]);
     };
     const onOpen = () => {
