@@ -4,6 +4,7 @@ export const assetBase: AssetBase = {
   width: 24,
   height: 24,
   minter: "",
+  name: "",
 };
 
 const regexNum = /[+-]?(\d*\.\d*|\d+)/;

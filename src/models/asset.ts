@@ -16,7 +16,7 @@ export interface AssetBase {
   width: number;
   height: number;
   minter: string;
-  name?: string;
+  name: string;
   group?: string;
   category?: string;
   svgPart?: string;
