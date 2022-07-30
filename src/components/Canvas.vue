@@ -84,6 +84,7 @@
         >
           <span class="material-icons">delete</span>
         </button>
+        
         <button @click="splitSegment">
           <span class="material-icons">add_circle</span>
         </button>
@@ -118,6 +119,9 @@
           >
             <button @click="insertLayer(index + 1)">
               <span class="material-icons">add</span>
+            </button>
+            <button @click="copyLayer(index)">
+              <span class="material-icons">content_copy</span>
             </button>
             <button
               v-if="layers.length > 1"
@@ -346,6 +350,14 @@ export default defineComponent({
       });
       updateLayerIndex(layerIndex.value - 1);
     };
+    const copyLayer = (index: number) => {
+      recordState();
+      const array = layers.value.map((layer) => layer);
+      const newLayer = {...layers.value[index]};
+      array.splice(index, 0, newLayer);
+      layers.value = array;
+      updateLayerIndex(index);
+    };
     const onSelectLayer = (evt: Event, index: number) => {
       updateLayerIndex(index);
     };
@@ -383,6 +395,7 @@ export default defineComponent({
       onSelect,
       insertLayer,
       deleteLayer,
+      copyLayer,
       onSelectLayer,
       onColorFocus,
       onClose,
