@@ -14,18 +14,18 @@
       </span>
     </p>
     <p>
-      Github:
+      GitHub:
       <a
         href="https://github.com/Cryptocoders-wtf/assetstore-contract"
         class="underline"
         target="_blank"
-        >Github (Contract)</a
+        >GitHub (Contract)</a
       >,
       <a
         href="https://github.com/Cryptocoders-wtf/assetstore"
         class="underline"
         target="_blank"
-        >Github (Web UI)</a
+        >GitHub (Web UI)</a
       >
     </p>
     <p>
