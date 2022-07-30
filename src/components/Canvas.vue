@@ -123,6 +123,12 @@
             <button @click="copyLayer(index)">
               <span class="material-icons">content_copy</span>
             </button>
+            <button @click="pivotLayer(index + 1)" v-if="index < layers.length - 1">
+              <span class="material-icons">arrow_drop_down</span>
+            </button>
+            <button @click="pivotLayer(index)" v-if="index > 0" >
+              <span class="material-icons">arrow_drop_up</span>
+            </button>
             <button
               v-if="layers.length > 1"
               class="ml-2"
@@ -358,6 +364,15 @@ export default defineComponent({
       layers.value = array;
       updateLayerIndex(index);
     };
+    const pivotLayer = (index: number) => {
+      recordState();
+      const array = layers.value.map((layer) => layer);
+      const tmp = array[index];
+      array[index] = array[index - 1];
+      array[index - 1] = tmp;
+      layers.value = array;
+      updateLayerIndex(index);
+    };
     const onSelectLayer = (evt: Event, index: number) => {
       updateLayerIndex(index);
     };
@@ -396,6 +411,7 @@ export default defineComponent({
       insertLayer,
       deleteLayer,
       copyLayer,
+      pivotLayer,
       onSelectLayer,
       onColorFocus,
       onClose,
