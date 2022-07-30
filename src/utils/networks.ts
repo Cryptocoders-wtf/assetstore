@@ -1,15 +1,15 @@
 import { ChainIds } from "../utils/MetaMask";
 import { addresses as mainnet } from "../../generated/addresses_mainnet";
-import { addresses as localhost } from "../../../contract/cache/addresses_localhost";
-import { addresses as rinkeby } from "../../../contract/cache/addresses_rinkeby";
+import { addresses as localhost } from "../../generated/addresses_localhost";
+import { addresses as rinkeby } from "../../generated/addresses_rinkeby";
 import { kamon_addresses as kamon_mainnet } from "../../generated/addresses_kamon_mainnet";
-import { kamon_addresses as kamon_localhost } from "../../../contract/cache/addresses_kamon_localhost";
-import { kamon_addresses as kamon_rinkeby } from "../../../contract/cache/addresses_kamon_rinkeby";
+import { kamon_addresses as kamon_localhost } from "../../generated/addresses_kamon_localhost";
+import { kamon_addresses as kamon_rinkeby } from "../../generated/addresses_kamon_rinkeby";
 import { token_addresses as flag_mainnet } from "../../generated/addresses_flag_mainnet";
-import { token_addresses as flag_localhost } from "../../../contract/cache/addresses_flag_localhost";
-import { token_addresses as flag_rinkeby } from "../../../contract/cache/addresses_flag_rinkeby";
-import { token_addresses as draw_localhost } from "../../../contract/cache/addresses_draw_localhost";
-import { token_addresses as draw_rinkeby } from "../../../contract/cache/addresses_draw_rinkeby";
+import { token_addresses as flag_localhost } from "../../generated/addresses_flag_localhost";
+import { token_addresses as flag_rinkeby } from "../../generated/addresses_flag_rinkeby";
+import { token_addresses as draw_localhost } from "../../generated/addresses_draw_localhost";
+import { token_addresses as draw_rinkeby } from "../../generated/addresses_draw_rinkeby";
 
 export const getContractAddresses = (network: string) => {
   if (network == "localhost") {
