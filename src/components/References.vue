@@ -19,13 +19,13 @@
         href="https://github.com/Cryptocoders-wtf/assetstore-contract"
         class="underline"
         target="_blank"
-        >GitHub (Contract)</a
+        >Contract</a
       >,
       <a
         href="https://github.com/Cryptocoders-wtf/assetstore"
         class="underline"
         target="_blank"
-        >GitHub (Web UI)</a
+        >Web UI</a
       >
     </p>
     <p>
