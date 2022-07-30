@@ -37,7 +37,8 @@
       />
       <div
         class="absolute border-2 border-solid border-red-800"
-        :style="`width:${curw}px; height:${curh}px;${getMoveToolPos()}`"
+        :style="`width:${curw}px; height:${curh}px;
+            left: ${moveToolPos.x}px; top: ${moveToolPos.y}px;`"
         draggable="true"
         @dragstart="dragLayerImgStart($event)"
         @click="onSelectLayerImg()"
@@ -163,6 +164,7 @@ import {
   splitPoint,
   togglePointType,
 } from "@/models/point";
+import { computed } from "@vue/reactivity";
 
 const [canw, canh, offx, offy, curw, curh, sidew] = [
   512, 512, 40, 80, 30, 30, 150,
@@ -266,6 +268,18 @@ export default defineComponent({
     );
     const cursors = ref<Point[]>([]);
     const currentColor = ref<string>("");
+    const moveToolPos = computed(() => {
+      const { x, y } = cursors.value.reduce(
+        ({ x, y }: Pos, cursor): Pos => {
+          return {
+            x: x + cursor.x / cursors.value.length,
+            y: y + cursor.y / cursors.value.length,
+          };
+        },
+        { x: 0, y: 0 }
+      );
+      return { x: x - curw / 2, y: y - curw / 2 };
+    });
     watch([cursors, currentColor], ([points, color]) => {
       layers.value = layers.value.map((layer, index) => {
         if (index == layerIndex.value) {
@@ -280,16 +294,6 @@ export default defineComponent({
         return layer;
       });
     });
-    const getMoveToolPos = () => {
-      const {x, y} = cursors.value.reduce(({x,y}:Point, cursor):Point => {
-        return {
-          x: x + (cursor.x / (cursors.value.length)), 
-          y: y + (cursor.y / (cursors.value.length)), 
-          c:false 
-        }
-      },{x:0,y:0,c:false});
-      return `left:${x - curw / 2}px; top:${y - curw / 2}px;`
-    };
     const updateLayerIndex = (index: number) => {
       layerIndex.value = (index + layers.value.length) % layers.value.length;
       const layer = layers.value[layerIndex.value];
@@ -469,7 +473,7 @@ export default defineComponent({
       offx,
       offy,
       sidew,
-      getMoveToolPos,
+      moveToolPos,
       dragLayerImgStart,
       onSelectLayerImg,
       dragStart,
