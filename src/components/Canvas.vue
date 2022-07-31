@@ -180,6 +180,8 @@ const roundRect: Point[] = [
 enum Tools {
   CURSOR,
   MOVE,
+  ZOOM,
+  ROTATE,
 }
 
 interface State {
@@ -311,10 +313,10 @@ export default defineComponent({
     };
     const dragLayerImgStart = (evt: MouseEvent) => {
       currentTool.value = Tools.MOVE;
-      offsetX.value = evt.offsetX;
-      offsetY.value = evt.offsetY;
-      startPoint.value.x = evt.clientX;
-      startPoint.value.y = evt.clientY;
+      offsetX.value = curw / 2;
+      offsetY.value = curh / 2;
+      startPoint.value.x = evt.pageX;
+      startPoint.value.y = evt.pageY;
       initialCursors.value = cursors.value;
       recordState();
     };
@@ -338,25 +340,26 @@ export default defineComponent({
         };
       };
       const limiter = (pos: Pos): Pos => {
-        const f = (can: number, n: number, offset: Ref, cur: number) =>
-          Math.max(0, Math.min(can - g - 1, n - offset.value + cur / 2 - 3));
+        const f = (can: number, n: number, offset: number, cur: number) =>
+          Math.max(0, Math.min(can - g - 1, n - offset + cur / 2 - 3));
         return {
-          x: f(canw, pos.x, offsetX, curw),
-          y: f(canh, pos.y, offsetY, curh),
+          x: f(canw, pos.x, offsetX.value, curw),
+          y: f(canh, pos.y, offsetY.value, curh),
         };
       };
       cursors.value = cursors.value.map((cursor, index) => {
         switch (currentTool.value) {
           case Tools.MOVE:
+            console.log(`${evt.pageX}, ${evt.pageY}}`);
             return {
               ...gridder(
                 limiter({
                   x:
                     initialCursors.value[index].x -
-                    (startPoint.value.x - evt.clientX),
+                    (startPoint.value.x - evt.pageX),
                   y:
                     initialCursors.value[index].y -
-                    (startPoint.value.y - evt.clientY),
+                    (startPoint.value.y - evt.pageY),
                 })
               ),
               c: cursor.c,
@@ -366,7 +369,7 @@ export default defineComponent({
             if (index == pointIndex.value) {
               return {
                 ...gridder(
-                  limiter({ x: evt.clientX - offx, y: evt.clientY - offy })
+                  limiter({ x: evt.pageX - offx, y: evt.pageY - offy })
                 ),
                 c: cursor.c,
               };
