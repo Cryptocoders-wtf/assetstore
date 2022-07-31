@@ -37,7 +37,7 @@
         :assetStoreRO="assetStoreRO"
         :priceRange="priceRange"
         :isRemix="true"
-        :remixId="0"
+        :remixId="remixId"
       />
       <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
       <References
@@ -110,6 +110,10 @@ export default defineComponent({
       typeof route.query.network == "string" ? route.query.network : "mainnet";
     const addresses = getContractAddresses(network)!;
     addresses.tokenAddress = addresses.drawAddress;
+
+    // Temporary code
+    const remixId = parseInt(route.query.remixId) || 0;
+    console.log("remixId", remixId, typeof remixId); 
 
     const { EtherscanStore, EtherscanToken, OpenSeaPath } = getAddresses(
       addresses.network,
@@ -270,6 +274,7 @@ export default defineComponent({
       EtherscanStore,
       EtherscanToken,
       OpenSeaPath,
+      remixId,
     };
   },
 });

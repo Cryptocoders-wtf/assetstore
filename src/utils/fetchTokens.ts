@@ -67,13 +67,13 @@ export const fetchTokensRemix = async (
 
       const tokenId = index * tokensPerAsset;
       const svgPart = await tokenRO.functions.generateSVGPart(tokenId);
-      console.log(svgPart[1]);
+      //console.log(svgPart[1]);
       const svg = await tokenRO.functions.generateSVG(
         svgPart[0],
         style,
         svgPart[1]
       );
-      console.log(svg[0]);
+      //console.log(svg[0]);
       const image =
         "data:image/svg+xml;base64," + Buffer.from(svg[0]).toString("base64");
       return { image, tokenId: index * tokensPerAsset };
