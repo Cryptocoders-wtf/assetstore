@@ -35,6 +35,14 @@
         @dragstart="dragStart($event, index)"
         @click="onSelect($event, index)"
       />
+      <div
+        class="absolute border-2 border-solid border-red-800"
+        :style="`width:${curw}px; height:${curh}px;
+            left: ${moveToolPos.x}px; top: ${moveToolPos.y}px;`"
+        draggable="true"
+        @dragstart="dragLayerImgStart($event)"
+        @click="onSelectLayerImg()"
+      />
     </div>
     <div
       :style="`width:${sidew}px; height:${canh}px; left:${
@@ -84,7 +92,6 @@
         >
           <span class="material-icons">delete</span>
         </button>
-        
         <button @click="splitSegment">
           <span class="material-icons">add_circle</span>
         </button>
@@ -123,10 +130,13 @@
             <button @click="copyLayer(index)">
               <span class="material-icons">content_copy</span>
             </button>
-            <button @click="pivotLayer(index + 1)" v-if="index < layers.length - 1">
+            <button
+              @click="pivotLayer(index + 1)"
+              v-if="index < layers.length - 1"
+            >
               <span class="material-icons">arrow_drop_down</span>
             </button>
-            <button @click="pivotLayer(index)" v-if="index > 0" >
+            <button @click="pivotLayer(index)" v-if="index > 0">
               <span class="material-icons">arrow_drop_up</span>
             </button>
             <button
@@ -144,7 +154,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, Ref, ref, watch } from "vue";
 import {
   Point,
   Layer,
@@ -154,6 +164,7 @@ import {
   splitPoint,
   togglePointType,
 } from "@/models/point";
+import { computed } from "@vue/reactivity";
 
 const [canw, canh, offx, offy, curw, curh, sidew] = [
   512, 512, 40, 80, 30, 30, 150,
@@ -166,10 +177,20 @@ const roundRect: Point[] = [
   { x: canw / 4, y: canh - canh / 4, c: false },
 ];
 
+enum Tools {
+  CURSOR,
+  MOVE,
+}
+
 interface State {
   layers: Layer[];
   layerIndex: number;
   pointIndex: number;
+}
+
+interface Pos {
+  x: number;
+  y: number;
 }
 
 export default defineComponent({
@@ -180,6 +201,7 @@ export default defineComponent({
     const grid = ref<number>(0);
     const undoStack = ref<State[]>([]);
     const undoIndex = ref<number>(0);
+    const currentTool = ref<Tools>(0);
     const recordState = () => {
       const array = undoStack.value.filter((state, index) => {
         return index < undoIndex.value;
@@ -246,6 +268,18 @@ export default defineComponent({
     );
     const cursors = ref<Point[]>([]);
     const currentColor = ref<string>("");
+    const moveToolPos = computed(() => {
+      const { x, y } = cursors.value.reduce(
+        ({ x, y }: Pos, cursor): Pos => {
+          return {
+            x: x + cursor.x / cursors.value.length,
+            y: y + cursor.y / cursors.value.length,
+          };
+        },
+        { x: 0, y: 0 }
+      );
+      return { x: x - curw / 2, y: y - curw / 2 };
+    });
     watch([cursors, currentColor], ([points, color]) => {
       layers.value = layers.value.map((layer, index) => {
         if (index == layerIndex.value) {
@@ -270,40 +304,73 @@ export default defineComponent({
 
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
+    const startPoint = ref<Pos>({ x: 0, y: 0 });
+    const initialCursors = ref<Point[]>([]);
     const onSelect = (evt: Event, index: number) => {
       pointIndex.value = index;
     };
-    const dragStart = (evt: MouseEvent, index: number) => {
-      //evt.dataTransfer.setData('index', index)
+    const dragLayerImgStart = (evt: MouseEvent) => {
+      currentTool.value = Tools.MOVE;
+      offsetX.value = evt.offsetX;
+      offsetY.value = evt.offsetY;
+      startPoint.value.x = evt.clientX;
+      startPoint.value.y = evt.clientY;
+      initialCursors.value = cursors.value;
+      recordState();
+    };
+    const onSelectLayerImg = () => {
+      currentTool.value = Tools.MOVE;
+    };
+    const dragStart = (evt: DragEvent, index: number) => {
+      currentTool.value = Tools.CURSOR;
       offsetX.value = evt.offsetX;
       offsetY.value = evt.offsetY;
       pointIndex.value = index;
       recordState();
     };
-    const dragOver = (evt: MouseEvent) => {
-      // const index = evt.dataTransfer.getData('index')
+    const dragOver = (evt: DragEvent) => {
+      const g = grid.value;
+      const gridder = (pos: Pos): Pos => {
+        const f = (n: number) => (g == 0 ? n : Math.round((n + g / 2) / g) * g);
+        return {
+          x: f(pos.x),
+          y: f(pos.y),
+        };
+      };
+      const limiter = (pos: Pos): Pos => {
+        const f = (can: number, n: number, offset: Ref, cur: number) =>
+          Math.max(0, Math.min(can - g - 1, n - offset.value + cur / 2 - 3));
+        return {
+          x: f(canw, pos.x, offsetX, curw),
+          y: f(canh, pos.y, offsetY, curh),
+        };
+      };
       cursors.value = cursors.value.map((cursor, index) => {
-        if (index == pointIndex.value) {
-          const g = grid.value;
-          const x = Math.max(
-            0,
-            Math.min(
-              canw - g - 1,
-              evt.clientX - offx - offsetX.value + curw / 2 - 3
-            )
-          );
-          const y = Math.max(
-            0,
-            Math.min(
-              canh - g - 1,
-              evt.clientY - offy - offsetY.value + curh / 2 - 3
-            )
-          );
-          return {
-            x: g == 0 ? x : Math.round((x + g / 2) / g) * g,
-            y: g == 0 ? y : Math.round((y + g / 2) / g) * g,
-            c: cursor.c,
-          };
+        switch (currentTool.value) {
+          case Tools.MOVE:
+            return {
+              ...gridder(
+                limiter({
+                  x:
+                    initialCursors.value[index].x -
+                    (startPoint.value.x - evt.clientX),
+                  y:
+                    initialCursors.value[index].y -
+                    (startPoint.value.y - evt.clientY),
+                })
+              ),
+              c: cursor.c,
+            };
+          case Tools.CURSOR:
+          default:
+            if (index == pointIndex.value) {
+              return {
+                ...gridder(
+                  limiter({ x: evt.clientX - offx, y: evt.clientY - offy })
+                ),
+                c: cursor.c,
+              };
+            }
         }
         return cursor;
       });
@@ -359,7 +426,7 @@ export default defineComponent({
     const copyLayer = (index: number) => {
       recordState();
       const array = layers.value.map((layer) => layer);
-      const newLayer = {...layers.value[index]};
+      const newLayer = { ...layers.value[index] };
       array.splice(index, 0, newLayer);
       layers.value = array;
       updateLayerIndex(index);
@@ -400,6 +467,9 @@ export default defineComponent({
       offx,
       offy,
       sidew,
+      moveToolPos,
+      dragLayerImgStart,
+      onSelectLayerImg,
       dragStart,
       dragOver,
       drop,
@@ -422,6 +492,7 @@ export default defineComponent({
       layerIndex,
       layers,
       grid,
+      currentTool,
       toggleGrid,
     };
   },
