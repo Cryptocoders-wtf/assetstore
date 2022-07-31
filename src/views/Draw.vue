@@ -179,7 +179,9 @@ export default defineComponent({
     drawings.value = info.value.keys.map((key, index) => {
       const result = localStorage.getItem(key);
       //console.log("result", key, index, result);
-      const drawing: Drawing = result ? JSON.parse(result) || {layers:[]} : {layers:[]};
+      const drawing: Drawing = result
+        ? JSON.parse(result) || { layers: [] }
+        : { layers: [] };
       //console.log("drawing", drawing);
       return drawing;
     });
