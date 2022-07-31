@@ -198,7 +198,8 @@ export default defineComponent({
         const tx = props.backgroundId
           ? await networkContext.value.contract.mintWithAsset(
               asset,
-              0, // backgroundId
+              props.backgroundId, // backgroundId
+              "", // color
               affiliateId
             )
           : await networkContext.value.contract.mintWithAsset(

@@ -36,7 +36,7 @@
         :tokensPerAsset="tokensPerAsset"
         :assetStoreRO="assetStoreRO"
         :priceRange="priceRange"
-        :backgroundId="true"
+        :backgroundId="779"
       />
       <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
       <References
