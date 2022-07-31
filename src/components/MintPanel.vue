@@ -117,7 +117,8 @@ export default defineComponent({
     "tokenAbi",
     "assetStoreRO",
     "priceRange",
-    "backgroundId",
+    "isRemix",
+    "remixId",
   ],
   components: {
     NetworkGate,
@@ -195,10 +196,10 @@ export default defineComponent({
         asset.minter = minterName.value;
         asset.group = ""; // gas saving
         console.log("*** minting", asset);
-        const tx = props.backgroundId
+        const tx = props.isRemix
           ? await networkContext.value.contract.mintWithAsset(
               asset,
-              props.backgroundId, // backgroundId
+              props.remixId, // remixId
               "", // color
               affiliateId
             )

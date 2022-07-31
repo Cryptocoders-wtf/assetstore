@@ -36,7 +36,8 @@
         :tokensPerAsset="tokensPerAsset"
         :assetStoreRO="assetStoreRO"
         :priceRange="priceRange"
-        :backgroundId="779"
+        :isRemix="true"
+        :remixId="0"
       />
       <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
       <References
@@ -58,7 +59,7 @@ import { getContractAddresses } from "@/utils/networks";
 import { useOnSelect } from "@/utils/mintUtils";
 import { loadAssets } from "../utils/createAsset";
 import { Token } from "@/models/token";
-import { fetchTokens } from "@/utils/fetchTokens";
+import { fetchTokensRemix } from "@/utils/fetchTokens";
 import { getAddresses } from "@/utils/const";
 import References from "@/components/References.vue";
 import NFTList from "@/components/NFTList.vue";
@@ -155,7 +156,7 @@ export default defineComponent({
       const resultSupply = await tokenRO.functions.totalSupply();
       const count = resultSupply[0].toNumber() / tokensPerAsset.value;
 
-      fetchTokens(
+      fetchTokensRemix(
         count,
         tokens.value,
         tokensPerAsset.value,
