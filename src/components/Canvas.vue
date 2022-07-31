@@ -338,42 +338,36 @@ export default defineComponent({
         };
       };
       const limiter = (pos: Pos): Pos => {
-        const f = (
-          can: number,
-          n: number,
-          off: number,
-          offset: Ref,
-          cur: number
-        ) =>
-          Math.max(
-            0,
-            Math.min(can - g - 1, n - off - offset.value + cur / 2 - 3)
-          );
+        const f = (can: number, n: number, offset: Ref, cur: number) =>
+          Math.max(0, Math.min(can - g - 1, n - offset.value + cur / 2 - 3));
         return {
-          x: f(canw, pos.x, offx, offsetX, curw),
-          y: f(canh, pos.y, offy, offsetY, curh),
+          x: f(canw, pos.x, offsetX, curw),
+          y: f(canh, pos.y, offsetY, curh),
         };
       };
       cursors.value = cursors.value.map((cursor, index) => {
         switch (currentTool.value) {
           case Tools.MOVE:
-            // ここにもlimiterを入れたい。
             return {
-              ...gridder({
-                x:
-                  initialCursors.value[index].x -
-                  (startPoint.value.x - evt.clientX),
-                y:
-                  initialCursors.value[index].y -
-                  (startPoint.value.y - evt.clientY),
-              }),
+              ...gridder(
+                limiter({
+                  x:
+                    initialCursors.value[index].x -
+                    (startPoint.value.x - evt.clientX),
+                  y:
+                    initialCursors.value[index].y -
+                    (startPoint.value.y - evt.clientY),
+                })
+              ),
               c: cursor.c,
             };
           case Tools.CURSOR:
           default:
             if (index == pointIndex.value) {
               return {
-                ...gridder(limiter({ x: evt.clientX, y: evt.clientY })),
+                ...gridder(
+                  limiter({ x: evt.clientX - offx, y: evt.clientY - offy })
+                ),
                 c: cursor.c,
               };
             }
