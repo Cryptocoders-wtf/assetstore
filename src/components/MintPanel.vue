@@ -6,7 +6,8 @@
     <p class="mt-2">
       <b>
         <span v-if="!isRemix">{{ selection.asset.name }}, </span>
-        {{ selection.asset.category }}</b>
+        {{ selection.asset.category }}</b
+      >
     </p>
 
     <div v-if="selection.isLoading">
@@ -81,7 +82,7 @@
             </span>
           </div>
           <div>
-            <slot/>
+            <slot />
             <p class="mb-2">
               {{
                 $tc("mintPanel.mintMessage1", {
