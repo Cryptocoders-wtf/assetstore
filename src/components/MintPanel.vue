@@ -108,6 +108,7 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { ethers } from "ethers";
 import NetworkGate from "@/components/NetworkGate.vue";
+import { emit } from "process";
 
 export default defineComponent({
   props: [
@@ -123,7 +124,7 @@ export default defineComponent({
   components: {
     NetworkGate,
   },
-  setup(props) {
+  setup(props, context) {
     const route = useRoute();
     const store = useStore();
 
@@ -210,6 +211,7 @@ export default defineComponent({
         const result = await tx.wait();
         console.log("mint:gasUsed", result.gasUsed.toNumber());
         messageRef.value = "message.minted";
+        context.emit("minted");
       } catch (e: any) {
         console.log(e);
         messageRef.value = e.message;

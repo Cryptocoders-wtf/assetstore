@@ -38,6 +38,7 @@
         :priceRange="priceRange"
         :isRemix="true"
         :remixId="remixId"
+        @minted="minted"
       />
       <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
       <References
@@ -238,6 +239,11 @@ export default defineComponent({
 
       showCanvas.value = true;
     };
+    const minted = () => {
+      console.log("minted");
+      selection.value = null;
+      selectedIndex.value = 9999;
+    };
     const onClose = (output: Drawing) => {
       drawings.value = drawings.value.map((drawing, index) => {
         if (index == selectedIndex.value) {
@@ -275,6 +281,7 @@ export default defineComponent({
       EtherscanToken,
       OpenSeaPath,
       remixId,
+      minted
     };
   },
 });
