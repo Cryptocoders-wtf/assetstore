@@ -201,8 +201,7 @@ export default defineComponent({
           ? await networkContext.value.contract.mintWithAsset(
               asset,
               props.remixId, // remixId
-              "", // color
-              affiliateId
+              "" // color
             )
           : await networkContext.value.contract.mintWithAsset(
               asset,
