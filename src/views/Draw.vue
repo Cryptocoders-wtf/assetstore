@@ -39,7 +39,11 @@
         :isRemix="true"
         :remixId="remixId"
         @minted="minted"
-      />
+      >
+        <p class="mb-2">
+          {{ $tc("mintPanel.cc0Message") }}
+        </p>
+      </MintPanel>
       <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
       <References
         :EtherscanStore="EtherscanStore"

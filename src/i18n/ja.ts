@@ -27,6 +27,7 @@ const lang = {
   mintPanel: {
     writeName: "Asset Storeに刻み込む名前。",
     maxLength: "最大32バイト。",
+    cc0Message: "ここで投稿した画像は、cc0（パブリックドメイン）として他の方に自由に再利用・加工していただくことが可能になりますので、そこに同意した上でミントして下さい。",
     mintMessage1:
       "フリーミントですが、ガス代が{ low }〜{ high } ETH程度かかります（画像の複雑さや混雑状況によって大きく変動）。",
     mintMessage2:

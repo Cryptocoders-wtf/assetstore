@@ -27,6 +27,7 @@ const lang = {
   mintPanel: {
     writeName: "Name to be permanently stored to the Asset Store.",
     maxLength: "Maximum 32 bytes.",
+    cc0Message: "Images you mint here will be available for other people to reuse and remix as cc0 (public domain).",
     mintMessage1:
       "This is a free mint, but you need to pay the gas fee, which is typically { low }〜{ high } ETH (depending on the complexity of the image, assuming the Gas price is ~15 Gwei).",
     mintMessage2:

@@ -79,6 +79,7 @@
             </span>
           </div>
           <div>
+            <slot/>
             <p class="mb-2">
               {{
                 $tc("mintPanel.mintMessage1", {
