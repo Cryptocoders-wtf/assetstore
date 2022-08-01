@@ -4,7 +4,9 @@
     class="mt-2 rounded-xl border pl-2 pr-2 shadow-md"
   >
     <p class="mt-2">
-      <b>{{ selection.asset.name }}, {{ selection.asset.category }}</b>
+      <b>
+        <span v-if="!isRemix">{{ selection.asset.name }}, </span>
+        {{ selection.asset.category }}</b>
     </p>
 
     <div v-if="selection.isLoading">
