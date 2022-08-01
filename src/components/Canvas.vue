@@ -350,7 +350,7 @@ export default defineComponent({
       cursors.value = cursors.value.map((cursor, index) => {
         switch (currentTool.value) {
           case Tools.MOVE:
-            console.log(`${evt.pageX}, ${evt.pageY}}`);
+            // console.log(`${evt.pageX}, ${evt.pageY}}`);
             return {
               ...gridder(
                 limiter({

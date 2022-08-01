@@ -113,7 +113,10 @@ export default defineComponent({
     addresses.tokenAddress = addresses.drawAddress;
 
     // Temporary code
-    const remixId = typeof route.query.remixId == "string" ? parseInt(route.query.remixId) : 0 || 0;
+    const remixId =
+      typeof route.query.remixId == "string"
+        ? parseInt(route.query.remixId)
+        : 0 || 0;
     console.log("remixId", remixId, typeof remixId);
 
     const { EtherscanStore, EtherscanToken, OpenSeaPath } = getAddresses(
