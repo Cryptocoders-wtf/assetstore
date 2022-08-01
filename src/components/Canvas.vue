@@ -452,7 +452,7 @@ export default defineComponent({
     const onClose = () => {
       const drawing: Drawing = {
         layers: layers.value,
-        assetId: 0,
+        tokenId: 0,
       };
       context.emit("close", drawing);
     };
