@@ -37,11 +37,26 @@
       />
       <div
         class="absolute border-2 border-solid border-red-800"
-        :style="`width:${curw}px; height:${curh}px;
-            left: ${moveToolPos.x}px; top: ${moveToolPos.y}px;`"
+        :style="
+          `width:${curw}px; height:${curh}px; ` +
+          `left: ${moveToolPos.x - curw / 2}px; ` +
+          `top: ${moveToolPos.y - curh / 2}px; `
+        "
         draggable="true"
         @dragstart="dragLayerImgStart($event)"
         @click="onSelectLayerImg()"
+      />
+      <div
+        v-for="({ type, x, y }, index) in toolHandles"
+        :key="index"
+        class="absolute border-2 border-solid"
+        :class="
+          type === Tools.ROTATE ? 'border-green-800' : 'border-yellow-800'
+        "
+        :style="`width:${curw}px; height:${curh}px;
+            left: ${x - curw / 2}px; top: ${y - curh / 2}px;`"
+        draggable="true"
+        @dragstart="dragToolHandleStart($event, type)"
       />
     </div>
     <div
@@ -166,8 +181,8 @@ import {
 } from "@/models/point";
 import { computed } from "@vue/reactivity";
 
-const [canw, canh, offx, offy, curw, curh, sidew] = [
-  512, 512, 40, 80, 30, 30, 150,
+const [canw, canh, offx, offy, curw, curh, sidew, toold] = [
+  512, 512, 40, 80, 30, 30, 150, 60,
 ];
 
 const roundRect: Point[] = [
@@ -193,6 +208,12 @@ interface State {
 interface Pos {
   x: number;
   y: number;
+}
+
+interface RotationInfo {
+  radian: number;
+  cos: number;
+  sin: number;
 }
 
 export default defineComponent({
@@ -270,17 +291,46 @@ export default defineComponent({
     );
     const cursors = ref<Point[]>([]);
     const currentColor = ref<string>("");
+    const pivotPos = ref<Pos>({ x: 0, y: 0 });
     const moveToolPos = computed(() => {
       const { x, y } = cursors.value.reduce(
         ({ x, y }: Pos, cursor): Pos => {
           return {
-            x: x + cursor.x / cursors.value.length,
-            y: y + cursor.y / cursors.value.length,
+            x: Math.round(x + cursor.x / cursors.value.length),
+            y: Math.round(y + cursor.y / cursors.value.length),
           };
         },
         { x: 0, y: 0 }
       );
-      return { x: x - curw / 2, y: y - curw / 2 };
+      return { x, y };
+    });
+    const showToolHandles = computed(() => {
+      return true;
+    });
+    const toolHandles = computed(() => {
+      const d = toold;
+      return [
+        {
+          type: Tools.ROTATE,
+          x: moveToolPos.value.x + d,
+          y: moveToolPos.value.y,
+        },
+        {
+          type: Tools.ROTATE,
+          x: moveToolPos.value.x - d,
+          y: moveToolPos.value.y,
+        },
+        {
+          type: Tools.ZOOM,
+          x: moveToolPos.value.x,
+          y: moveToolPos.value.y + d,
+        },
+        {
+          type: Tools.ZOOM,
+          x: moveToolPos.value.x,
+          y: moveToolPos.value.y - d,
+        },
+      ];
     });
     watch([cursors, currentColor], ([points, color]) => {
       layers.value = layers.value.map((layer, index) => {
@@ -311,6 +361,16 @@ export default defineComponent({
     const onSelect = (evt: Event, index: number) => {
       pointIndex.value = index;
     };
+    const dragToolHandleStart = (evt: DragEvent, tool: Tools) => {
+      currentTool.value = tool;
+      offsetX.value = curw / 2;
+      offsetY.value = curh / 2;
+      startPoint.value.x = evt.pageX;
+      startPoint.value.y = evt.pageY;
+      pivotPos.value = moveToolPos.value;
+      initialCursors.value = cursors.value;
+      recordState();
+    };
     const dragLayerImgStart = (evt: MouseEvent) => {
       currentTool.value = Tools.MOVE;
       offsetX.value = curw / 2;
@@ -335,22 +395,80 @@ export default defineComponent({
       const gridder = (pos: Pos): Pos => {
         const f = (n: number) => (g == 0 ? n : Math.round((n + g / 2) / g) * g);
         return {
-          x: f(pos.x),
-          y: f(pos.y),
+          x: Math.round(f(pos.x)),
+          y: Math.round(f(pos.y)),
         };
       };
       const limiter = (pos: Pos): Pos => {
         const f = (can: number, n: number, offset: number, cur: number) =>
-          Math.max(0, Math.min(can - g - 1, n - offset + cur / 2 - 3));
+          Math.max(0, Math.min(can - g - 1, n - offset + cur / 2));
         return {
           x: f(canw, pos.x, offsetX.value, curw),
           y: f(canh, pos.y, offsetY.value, curh),
         };
       };
+      const magnification =
+        currentTool.value === Tools.ZOOM
+          ? Math.abs(pivotPos.value.y + offy - evt.pageY) /
+          Math.abs(pivotPos.value.y + offy - startPoint.value.y)
+          : 0;
+      const rad =
+        currentTool.value === Tools.ROTATE
+          ? pivotPos.value.x + offx - startPoint.value.x > 1
+            ? Math.atan2(
+              pivotPos.value.y + offy - evt.pageY,
+              pivotPos.value.x + offx - evt.pageX
+            )
+            : ((Math.atan2(
+              pivotPos.value.y + offy - evt.pageY,
+              pivotPos.value.x + offx - evt.pageX)  + Math.PI) % (2 * Math.PI)
+            )
+          : 0;
+      const RotationInfo: RotationInfo =
+        currentTool.value === Tools.ROTATE
+          ? {
+              radian: rad,
+              sin: Math.sin(rad),
+              cos: Math.cos(rad),
+            }
+          : { radian: 0, sin: 0, cos: 0 };
       cursors.value = cursors.value.map((cursor, index) => {
         switch (currentTool.value) {
+          case Tools.ZOOM:
+            return {
+              ...gridder(
+                limiter({
+                  x:
+                    initialCursors.value[index].x * magnification +
+                    (pivotPos.value.x - pivotPos.value.x * magnification),
+                  y:
+                    initialCursors.value[index].y * magnification +
+                    (pivotPos.value.y - pivotPos.value.y * magnification),
+                })
+              ),
+              c: cursor.c,
+            };
+          case Tools.ROTATE:
+            return {
+              ...gridder(
+                limiter({
+                  x:
+                    (initialCursors.value[index].x - pivotPos.value.x) *
+                      RotationInfo.cos -
+                    (initialCursors.value[index].y - pivotPos.value.y) *
+                      RotationInfo.sin +
+                    pivotPos.value.x,
+                  y:
+                    (initialCursors.value[index].x - pivotPos.value.x) *
+                      RotationInfo.sin +
+                    (initialCursors.value[index].y - pivotPos.value.y) *
+                      RotationInfo.cos +
+                    pivotPos.value.y,
+                })
+              ),
+              c: cursor.c,
+            };
           case Tools.MOVE:
-            // console.log(`${evt.pageX}, ${evt.pageY}}`);
             return {
               ...gridder(
                 limiter({
@@ -369,7 +487,7 @@ export default defineComponent({
             if (index == pointIndex.value) {
               return {
                 ...gridder(
-                  limiter({ x: evt.pageX - offx, y: evt.pageY - offy })
+                  limiter({ x: evt.pageX - offx - 3, y: evt.pageY - offy - 3 })
                 ),
                 c: cursor.c,
               };
@@ -460,6 +578,7 @@ export default defineComponent({
       context.emit("close", drawing);
     };
     return {
+      Tools,
       cursors,
       pointIndex,
       currentColor,
@@ -471,8 +590,11 @@ export default defineComponent({
       offy,
       sidew,
       moveToolPos,
+      showToolHandles,
+      toolHandles,
       dragLayerImgStart,
       onSelectLayerImg,
+      dragToolHandleStart,
       dragStart,
       dragOver,
       drop,
