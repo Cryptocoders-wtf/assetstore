@@ -125,6 +125,9 @@
             <button @click="insertLayer(index)">
               <span class="material-icons">add</span>
             </button>
+            <button @click="pivotLayer(index)" v-if="index > 0">
+              <span class="material-icons">arrow_drop_up</span>
+            </button>
           </div>
           <img
             @click="onSelectLayer($event, index)"
@@ -150,9 +153,6 @@
               v-if="index < layers.length - 1"
             >
               <span class="material-icons">arrow_drop_down</span>
-            </button>
-            <button @click="pivotLayer(index)" v-if="index > 0">
-              <span class="material-icons">arrow_drop_up</span>
             </button>
             <button
               v-if="layers.length > 1"
