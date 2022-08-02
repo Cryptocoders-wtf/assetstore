@@ -399,10 +399,10 @@ export default defineComponent({
     const dragOver = (evt: DragEvent) => {
       const g = grid.value;
       const gridder = (pos: Pos): Pos => {
-        const f = (n: number) => (g == 0 ? n : Math.round((n + g / 2) / g) * g);
+        const f = (n: number) => (g == 0 ? n : Math.round((n) / g) * g);
         return {
-          x: Math.round(f(pos.x)),
-          y: Math.round(f(pos.y)),
+          x: f(pos.x),
+          y: f(pos.y),
         };
       };
       const limiter = (pos: Pos): Pos => {
