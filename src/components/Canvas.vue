@@ -39,8 +39,8 @@
         class="absolute border-2 border-solid border-red-800"
         :style="
           `width:${curw}px; height:${curh}px; ` +
-          `left: ${moveToolPos.x - curw / 2}px; ` +
-          `top: ${moveToolPos.y - curh / 2}px; `
+          `left: ${moveToolPos.left}px; ` +
+          `top: ${moveToolPos.top}px; `
         "
         draggable="true"
         @dragstart="dragLayerImgStart($event)"
@@ -54,7 +54,7 @@
           type === Tools.ROTATE ? 'border-green-800' : 'border-yellow-800'
         "
         :style="`width:${curw}px; height:${curh}px;
-            left: ${x - curw / 2}px; top: ${y - curh / 2}px;`"
+            left: ${x}px; top: ${y}px;`"
         draggable="true"
         @dragstart="dragToolHandleStart($event, type)"
       />
@@ -210,6 +210,13 @@ interface Pos {
   y: number;
 }
 
+interface UIPos {
+  x: number;
+  y: number;
+  top: number;
+  left: number;
+}
+
 interface RotationInfo {
   radian: number;
   cos: number;
@@ -293,42 +300,41 @@ export default defineComponent({
     const currentColor = ref<string>("");
     const pivotPos = ref<Pos>({ x: 0, y: 0 });
     const moveToolPos = computed(() => {
-      const { x, y } = cursors.value.reduce(
-        ({ x, y }: Pos, cursor): Pos => {
+      const { x, y, top, left} = cursors.value.reduce(
+        ({ x, y }: Pos, cursor): UIPos => {
           return {
             x: Math.round(x + cursor.x / cursors.value.length),
             y: Math.round(y + cursor.y / cursors.value.length),
+            left: Math.round(x + cursor.x / cursors.value.length) - curh /2,
+            top: Math.round(y + cursor.y / cursors.value.length) - curw /2,
           };
         },
-        { x: 0, y: 0 }
+        { x: 0, y: 0, top: 0, left: 0 }
       );
-      return { x, y };
-    });
-    const showToolHandles = computed(() => {
-      return true;
+      return { x, y, top, left };
     });
     const toolHandles = computed(() => {
       const d = toold;
       return [
         {
           type: Tools.ROTATE,
-          x: moveToolPos.value.x + d,
-          y: moveToolPos.value.y,
+          x: moveToolPos.value.left + d,
+          y: moveToolPos.value.top,
         },
         {
           type: Tools.ROTATE,
-          x: moveToolPos.value.x - d,
-          y: moveToolPos.value.y,
+          x: moveToolPos.value.left - d,
+          y: moveToolPos.value.top,
         },
         {
           type: Tools.ZOOM,
-          x: moveToolPos.value.x,
-          y: moveToolPos.value.y + d,
+          x: moveToolPos.value.left,
+          y: moveToolPos.value.top + d,
         },
         {
           type: Tools.ZOOM,
-          x: moveToolPos.value.x,
-          y: moveToolPos.value.y - d,
+          x: moveToolPos.value.left,
+          y: moveToolPos.value.top - d,
         },
       ];
     });
@@ -408,7 +414,8 @@ export default defineComponent({
         };
       };
       const magnification =
-        currentTool.value === Tools.ZOOM
+        currentTool.value === Tools.ZOOM && 
+        Math.abs(pivotPos.value.y + offy - startPoint.value.y) !== 0
           ? Math.abs(pivotPos.value.y + offy - evt.pageY) /
           Math.abs(pivotPos.value.y + offy - startPoint.value.y)
           : 0;
@@ -590,7 +597,6 @@ export default defineComponent({
       offy,
       sidew,
       moveToolPos,
-      showToolHandles,
       toolHandles,
       dragLayerImgStart,
       onSelectLayerImg,
