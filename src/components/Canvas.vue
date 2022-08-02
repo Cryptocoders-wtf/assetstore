@@ -111,14 +111,12 @@
           <span class="material-icons">add_circle</span>
         </button>
       </div>
-      <input
-        v-model.trim="currentColor"
-        v-on:focus="onColorFocus"
-        class="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 text-center leading-tight text-gray-700 shadow focus:outline-none"
-        id="username"
-        type="text"
-        :placeholder="'#RRGGBB(AA)'"
-      />
+      <div>
+        <color-picker 
+          style="`margin: 10px; width: 100%;" 
+          v-model:pureColor="currentColor"
+        />
+      </div>
       <div :style="`height:${canh / 2}px; overflow-y: scroll`">
         <div v-for="(layer, index) in layers" :key="index">
           <div v-if="index == layerIndex">
@@ -180,6 +178,8 @@ import {
   togglePointType,
 } from "@/models/point";
 import { computed } from "@vue/reactivity";
+import { ColorPicker } from "vue3-colorpicker";
+import "vue3-colorpicker/style.css";
 
 const [canw, canh, offx, offy, curw, curh, sidew, toold] = [
   512, 512, 40, 80, 30, 30, 150, 60,
@@ -225,7 +225,7 @@ interface RotationInfo {
 
 export default defineComponent({
   name: "HomePage",
-  components: {},
+  components: { ColorPicker },
   props: ["drawing"],
   setup(props, context) {
     const grid = ref<number>(0);
