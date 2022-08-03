@@ -592,15 +592,18 @@ export default defineComponent({
       context.emit("close", drawing);
     };
     const onClickToCheckLayer = (evt: MouseEvent) => {
+      const results: number[] = [];
       layers.value.forEach((layer:Layer, index: number) => {
         if ( evt.pageX - offx > Math.min.apply(null, layer.points.map((p) => p.x))
           && evt.pageX - offx < Math.max.apply(null, layer.points.map((p) => p.x))
           && evt.pageY - offy > Math.min.apply(null, layer.points.map((p) => p.y))
           && evt.pageY - offy < Math.max.apply(null, layer.points.map((p) => p.y))
-        ) {
-          updateLayerIndex(index);
-        }
+        ) results.push(index);
       });
+      updateLayerIndex(
+        results.indexOf(layerIndex.value) !== -1
+          ? [...results, ...results][results.indexOf(layerIndex.value) + 1]
+          : results[0])
     };    
     return {
       Tools,
