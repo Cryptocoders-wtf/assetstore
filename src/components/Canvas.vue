@@ -45,7 +45,7 @@
         "
         draggable="true"
         @dragstart="dragLayerImgStart($event)"
-        @click="onSelectLayerImg()"
+        @click="onClickToolHandle()"
       />
       <div
         v-for="({ type, x, y }, index) in toolHandles"
@@ -308,6 +308,7 @@ export default defineComponent({
       );
       return { x, y, top, left };
     });
+    const toolHadleMode = ref<boolean>(false);
     const toolHandles = computed(() => {
       const {
         toold,
@@ -384,8 +385,8 @@ export default defineComponent({
       initialCursors.value = cursors.value;
       recordState();
     };
-    const onSelectLayerImg = () => {
-      currentTool.value = Tools.MOVE;
+    const onClickToolHandle = () => {
+      toolHadleMode.value = !toolHadleMode.value;
     };
     const dragStart = (evt: DragEvent, index: number) => {
       currentTool.value = Tools.CURSOR;
@@ -617,7 +618,7 @@ export default defineComponent({
       moveToolPos,
       toolHandles,
       dragLayerImgStart,
-      onSelectLayerImg,
+      onClickToolHandle,
       dragToolHandleStart,
       dragStart,
       dragOver,
