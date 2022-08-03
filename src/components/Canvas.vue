@@ -113,6 +113,13 @@
         </button>
       </div>
       <div>
+        <img v-for="(asset, k) in presetAssets"
+             :key="k"
+             :src="presetAssetsSVG[k]" class="w-2/4 inline border-2 border-solid"
+             @click="insertLayer(0, asset)"
+             >
+      </div>
+      <div>
         <color-picker 
           style="`margin: 10px; width: 100%;" 
           v-model:pureColor="currentColor"
@@ -121,7 +128,7 @@
       <div :style="`height:${canh / 2}px; overflow-y: scroll`">
         <div v-for="(layer, index) in layers" :key="index">
           <div v-if="index == layerIndex">
-            <button @click="insertLayer(index)">
+            <button @click="insertLayer(index, presetAssets[0])">
               <span class="material-icons">add</span>
             </button>
             <button @click="pivotLayer(index)" v-if="index > 0">
@@ -141,7 +148,7 @@
             v-if="index == layerIndex"
             class="ml-2 mr-2 flex justify-between"
           >
-            <button @click="insertLayer(index + 1)">
+            <button @click="insertLayer(index + 1, presetAssets[0])">
               <span class="material-icons">add</span>
             </button>
             <button @click="copyLayer(index)">
@@ -182,7 +189,7 @@ import { computed } from "@vue/reactivity";
 import { ColorPicker } from "vue3-colorpicker";
 import "vue3-colorpicker/style.css";
 
-import { canvasParams, roundRect } from "@/utils/canvasUtil";
+import { canvasParams, presetAssets } from "@/utils/canvasUtil";
 
 const {
   curw,
@@ -284,7 +291,7 @@ export default defineComponent({
         ? props.drawing.layers
         : [
             {
-              points: roundRect,
+              points: presetAssets[0],
               color: "",
               path: "",
               svgImage: "",
@@ -532,12 +539,12 @@ export default defineComponent({
       pointIndex.value =
         (pointIndex.value + cursors.value.length - 1) % cursors.value.length;
     };
-    const insertLayer = (index: number) => {
+    const insertLayer = (index: number, shape: Point[]) => {
       recordState();
       const array = layers.value.map((layer) => layer);
-      const path = pathFromPoints(roundRect);
+      const path = pathFromPoints(shape);
       const newLayer = {
-        points: roundRect,
+        points: shape,
         color: currentColor.value,
         path,
         svgImage: svgImageFromPath(path, currentColor.value),
@@ -643,6 +650,9 @@ export default defineComponent({
       currentTool,
       toggleGrid,
       onClickToPickLayer,
+
+      presetAssets,
+      presetAssetsSVG: presetAssets.map(asset => svgImageFromPath(pathFromPoints(asset), "")),
     };
   },
 });

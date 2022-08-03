@@ -23,3 +23,17 @@ export const roundRect: Point[] = [
   { x: canw - canw / 4, y: canh - canh / 4, c: false },
   { x: canw / 4, y: canh - canh / 4, c: false },
 ];
+
+export const roundRect2: Point[] = [
+  { x: canw / 4, y: canh / 4, c: false },
+  { x: canw - canw / 4, y: canh - canh / 4, c: false },
+  { x: canw / 4, y: canh - canh / 4, c: false },
+];
+
+export const roundRect3: Point[] = [
+  { x: canw / 4, y: canh / 4, c: false },
+  { x: canw - canw / 4, y: canh / 4, c: false },
+  { x: canw / 4, y: canh - canh / 4, c: false },
+];
+
+export const presetAssets = [roundRect, roundRect2, roundRect3];
