@@ -241,7 +241,6 @@ export default defineComponent({
       drawings.value = drawings.value.filter((_, index) => {
         return index !== selectedIndex.value;
       });
-      selectedIndex.value = selectedIndex.value - 1;
       if (info.value.keys.length === selectedIndex.value) {
         selectedIndex.value = selectedIndex.value - 1;
       }
