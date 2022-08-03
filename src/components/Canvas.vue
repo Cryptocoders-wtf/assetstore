@@ -168,7 +168,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref, watch } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import {
   Point,
   Layer,
@@ -207,9 +207,7 @@ interface Pos {
   y: number;
 }
 
-interface UIPos {
-  x: number;
-  y: number;
+interface UIPos extends Pos{
   top: number;
   left: number;
 }
@@ -274,7 +272,7 @@ export default defineComponent({
       pointIndex.value = state.pointIndex;
       undoIndex.value += 1;
     };
-    const onColorFocus = (evt: Event) => {
+    const onColorFocus = () => {
       recordState();
     };
 
