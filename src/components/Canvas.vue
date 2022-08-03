@@ -20,7 +20,7 @@
           `width:${canw}px; height:${canh}px;` +
           `opacity:${index > layerIndex ? '0.5' : '1.0'}`
         "
-        @click="onClickToCheckLayer($event)"
+        @click="onClickToPickLayer($event)"
       />
       <div
         v-for="(cursor, index) in cursors"
@@ -585,7 +585,7 @@ export default defineComponent({
       };
       context.emit("close", drawing);
     };
-    const onClickToCheckLayer = (evt: MouseEvent) => {
+    const onClickToPickLayer = (evt: MouseEvent) => {
       const results: number[] = [];
       layers.value.forEach((layer:Layer, index: number) => {
         if ( evt.pageX - offx > Math.min.apply(null, layer.points.map((p) => p.x))
@@ -640,7 +640,7 @@ export default defineComponent({
       grid,
       currentTool,
       toggleGrid,
-      onClickToCheckLayer,
+      onClickToPickLayer,
     };
   },
 });
