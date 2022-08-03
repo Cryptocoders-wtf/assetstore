@@ -181,16 +181,12 @@ import {
 } from "@/models/point";
 import { computed } from "@vue/reactivity";
 
-const [canw, canh, offx, offy, curw, curh, sidew, toold] = [
-  512, 512, 40, 80, 30, 30, 150, 60,
-];
+import { canvasParams, roundRect } from "@/utils/canvasUtil";
 
-const roundRect: Point[] = [
-  { x: canw / 4, y: canh / 4, c: false },
-  { x: canw - canw / 4, y: canh / 4, c: false },
-  { x: canw - canw / 4, y: canh - canh / 4, c: false },
-  { x: canw / 4, y: canh - canh / 4, c: false },
-];
+const {
+  curw,
+  curh,
+} = canvasParams;
 
 enum Tools {
   CURSOR,
@@ -314,27 +310,29 @@ export default defineComponent({
       return { x, y, top, left };
     });
     const toolHandles = computed(() => {
-      const d = toold;
+      const {
+        toold,
+      } = canvasParams;
       return [
         {
           type: Tools.ROTATE,
-          x: moveToolPos.value.left + d,
+          x: moveToolPos.value.left + toold,
           y: moveToolPos.value.top,
         },
         {
           type: Tools.ROTATE,
-          x: moveToolPos.value.left - d,
+          x: moveToolPos.value.left - toold,
           y: moveToolPos.value.top,
         },
         {
           type: Tools.ZOOM,
           x: moveToolPos.value.left,
-          y: moveToolPos.value.top + d,
+          y: moveToolPos.value.top + toold,
         },
         {
           type: Tools.ZOOM,
           x: moveToolPos.value.left,
-          y: moveToolPos.value.top - d,
+          y: moveToolPos.value.top - toold,
         },
       ];
     });
@@ -397,6 +395,10 @@ export default defineComponent({
       recordState();
     };
     const dragOver = (evt: DragEvent) => {
+      const {
+        offx,
+        offy,
+      } = canvasParams;
       const g = grid.value;
       const gridder = (pos: Pos): Pos => {
         const f = (n: number) => (g == 0 ? n : Math.round((n) / g) * g);
@@ -406,6 +408,10 @@ export default defineComponent({
         };
       };
       const limiter = (pos: Pos): Pos => {
+        const {
+          canw,
+          canh,
+        } = canvasParams;
         const f = (can: number, n: number, offset: number, cur: number) =>
           Math.max(0, Math.min(can - g - 1, n - offset + cur / 2));
         return {
@@ -589,13 +595,7 @@ export default defineComponent({
       cursors,
       pointIndex,
       currentColor,
-      canw,
-      canh,
-      curw,
-      curh,
-      offx,
-      offy,
-      sidew,
+      ...canvasParams,
       moveToolPos,
       toolHandles,
       dragLayerImgStart,
