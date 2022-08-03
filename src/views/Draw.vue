@@ -22,7 +22,7 @@
               <span class="material-icons">edit</span>
             </button>
             <div>
-              <button @click="onDelete">
+              <button @click.stop="onDelete">
                 <span class="material-icons">delete</span>
               </button>
             </div>
@@ -241,6 +241,10 @@ export default defineComponent({
       drawings.value = drawings.value.filter((_, index) => {
         return index !== selectedIndex.value;
       });
+      if (info.value.keys.length === selectedIndex.value) {
+        selectedIndex.value = selectedIndex.value - 1;
+      }
+      onDrawingSelect(selectedIndex.value);
       localStorage.setItem(keyInfo, JSON.stringify(info.value));
     };
     const onCreate = () => {
