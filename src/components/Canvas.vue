@@ -20,6 +20,7 @@
           `width:${canw}px; height:${canh}px;` +
           `opacity:${index > layerIndex ? '0.5' : '1.0'}`
         "
+        @click="onClickToPickLayer($event)"
       />
       <div
         v-for="(cursor, index) in cursors"
@@ -167,7 +168,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref, watch } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import {
   Point,
   Layer,
@@ -206,9 +207,7 @@ interface Pos {
   y: number;
 }
 
-interface UIPos {
-  x: number;
-  y: number;
+interface UIPos extends Pos{
   top: number;
   left: number;
 }
@@ -273,7 +272,7 @@ export default defineComponent({
       pointIndex.value = state.pointIndex;
       undoIndex.value += 1;
     };
-    const onColorFocus = (evt: Event) => {
+    const onColorFocus = () => {
       recordState();
     };
 
@@ -590,6 +589,24 @@ export default defineComponent({
       };
       context.emit("close", drawing);
     };
+    const onClickToPickLayer = (evt: MouseEvent) => {
+      const {
+        offx,
+        offy,
+      } = canvasParams;
+      const results: number[] = [];
+      layers.value.forEach((layer:Layer, index: number) => {
+        if ( evt.pageX - offx > Math.min.apply(null, layer.points.map((p) => p.x))
+          && evt.pageX - offx < Math.max.apply(null, layer.points.map((p) => p.x))
+          && evt.pageY - offy > Math.min.apply(null, layer.points.map((p) => p.y))
+          && evt.pageY - offy < Math.max.apply(null, layer.points.map((p) => p.y))
+        ) results.push(index);
+      });
+      updateLayerIndex(
+        results.indexOf(layerIndex.value) !== -1
+          ? [...results, ...results][results.indexOf(layerIndex.value) + 1]
+          : results[0])
+    };    
     return {
       Tools,
       cursors,
@@ -625,6 +642,7 @@ export default defineComponent({
       grid,
       currentTool,
       toggleGrid,
+      onClickToPickLayer,
     };
   },
 });
