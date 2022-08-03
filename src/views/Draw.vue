@@ -21,6 +21,11 @@
             <button @click="onOpen">
               <span class="material-icons">edit</span>
             </button>
+            <div>
+              <button @click="onDelete">
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
           </div>
         </div>
         <div>
@@ -145,7 +150,7 @@ export default defineComponent({
       provider
     );
     const tokens = ref<Token[]>([]);
-    const { onSelect, selection, tokensPerAsset } = useOnSelect(0, tokenRO);
+    const { onSelect, selection, tokensPerAsset } = useOnSelect(4, tokenRO);
 
     provider.once("block", () => {
       tokenRO.on(tokenRO.filters.Transfer(), async (from, to, tokenId) => {
@@ -184,7 +189,6 @@ export default defineComponent({
 
     const drawings = ref<Drawing[]>([]);
     const resultInfo = localStorage.getItem(keyInfo);
-    //console.log("resultInfo", resultInfo);
     const info = ref<Info>(
       resultInfo ? JSON.parse(resultInfo) || baseInfo : baseInfo
     );
@@ -226,6 +230,18 @@ export default defineComponent({
     const onOpen = () => {
       selectedDrawing.value = drawings.value[selectedIndex.value];
       showCanvas.value = true;
+    };
+    const onDelete = () => {
+      info.value = {
+        keys: info.value.keys.filter((_, index) => {
+          return index !== selectedIndex.value
+        }),
+        nextIndex: info.value.nextIndex -1 
+      }
+      drawings.value = drawings.value.filter((_, index) => {
+        return index !== selectedIndex.value;
+      });
+      localStorage.setItem(keyInfo, JSON.stringify(info.value));
     };
     const onCreate = () => {
       const keys = info.value.keys;
@@ -269,6 +285,7 @@ export default defineComponent({
     return {
       showCanvas,
       onOpen,
+      onDelete,
       onCreate,
       onClose,
       onDrawingSelect,
