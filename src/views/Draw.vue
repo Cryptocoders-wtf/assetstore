@@ -150,7 +150,7 @@ export default defineComponent({
       provider
     );
     const tokens = ref<Token[]>([]);
-    const { onSelect, selection, tokensPerAsset } = useOnSelect(0, tokenRO);
+    const { onSelect, selection, tokensPerAsset } = useOnSelect(4, tokenRO);
 
     provider.once("block", () => {
       tokenRO.on(tokenRO.filters.Transfer(), async (from, to, tokenId) => {
