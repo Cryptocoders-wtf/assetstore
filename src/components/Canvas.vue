@@ -354,6 +354,7 @@ export default defineComponent({
       const layer = layers.value[layerIndex.value];
       cursors.value = layer.points;
       currentColor.value = layer.color;
+      pointIndex.value = 0;
     };
     updateLayerIndex(0);
 
