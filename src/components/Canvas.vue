@@ -17,6 +17,9 @@
         :style="`width:${canw}px; height:${canh}px`"
       />
       <img
+      @touchmove="dragOver"
+    >
+      <img
         v-for="(layer, index) in layers"
         :key="index"
         :src="layer.svgImage"
@@ -41,6 +44,7 @@
           draggable="true"
           class="absolute border-2 border-solid"
           @dragstart="dragStart($event, index)"
+          @touchstart="dragStart($event, index)"
           @click="onSelect($event, index)"
         />
       </div>
@@ -53,6 +57,7 @@
         "
         draggable="true"
         @dragstart="dragLayerImgStart($event)"
+        @touchstart="dragLayerImgStart($event)"
         @click="onClickToolHandle()"
       />
       <div v-if="toolHadleMode">
@@ -67,6 +72,7 @@
           left: ${x}px; top: ${y}px;`"
           draggable="true"
           @dragstart="dragToolHandleStart($event, type)"
+          @touchstart="dragToolHandleStart($event, type)"
         />
       </div>
     </div>
@@ -208,7 +214,14 @@ import TokenPicker from "@/components/TokenPicker.vue";
 import { Token } from "@/models/token";
 import "vue3-colorpicker/style.css";
 
-import { canvasParams, roundRect } from "@/utils/canvasUtil";
+import {
+  canvasParams,
+  roundRect,
+  getPageX,
+  getPageY,
+  getOffsetX,
+  getOffsetY,
+} from "@/utils/canvasUtil";
 
 const { curw, curh } = canvasParams;
 
@@ -412,36 +425,36 @@ export default defineComponent({
     const onSelect = (evt: Event, index: number) => {
       pointIndex.value = index;
     };
-    const dragToolHandleStart = (evt: DragEvent, tool: Tools) => {
+    const dragToolHandleStart = (evt: DragEvent | TouchEvent, tool: Tools) => {
       currentTool.value = tool;
       offsetX.value = curw / 2;
       offsetY.value = curh / 2;
-      startPoint.value.x = evt.pageX;
-      startPoint.value.y = evt.pageY;
+      startPoint.value.x = getPageX(evt);
+      startPoint.value.y = getPageY(evt);
       pivotPos.value = moveToolPos.value;
       initialCursors.value = cursors.value;
       recordState();
     };
-    const dragLayerImgStart = (evt: MouseEvent) => {
+    const dragLayerImgStart = (evt: MouseEvent | TouchEvent) => {
       currentTool.value = Tools.MOVE;
       offsetX.value = curw / 2;
       offsetY.value = curh / 2;
-      startPoint.value.x = evt.pageX;
-      startPoint.value.y = evt.pageY;
+      startPoint.value.x = getPageX(evt);
+      startPoint.value.y = getPageY(evt);
       initialCursors.value = cursors.value;
       recordState();
     };
     const onClickToolHandle = () => {
       toolHadleMode.value = !toolHadleMode.value;
     };
-    const dragStart = (evt: DragEvent, index: number) => {
+    const dragStart = (evt: DragEvent | TouchEvent, index: number) => {
       currentTool.value = Tools.CURSOR;
-      offsetX.value = evt.offsetX;
-      offsetY.value = evt.offsetY;
+      offsetX.value = getOffsetX(evt);
+      offsetY.value = getOffsetY(evt);
       pointIndex.value = index;
       recordState();
     };
-    const dragOver = (evt: DragEvent) => {
+    const dragOver = (evt: DragEvent | TouchEvent) => {
       const { offx, offy } = canvasParams;
       const g = grid.value;
       const gridder = (pos: Pos): Pos => {
@@ -463,19 +476,19 @@ export default defineComponent({
       const magnification =
         currentTool.value === Tools.ZOOM &&
         Math.abs(pivotPos.value.y + offy - startPoint.value.y) !== 0
-          ? Math.abs(pivotPos.value.y + offy - evt.pageY) /
+          ? Math.abs(pivotPos.value.y + offy - getPageY(evt)) /
             Math.abs(pivotPos.value.y + offy - startPoint.value.y)
           : 0;
       const rad =
         currentTool.value === Tools.ROTATE
           ? pivotPos.value.x + offx - startPoint.value.x > 1
             ? Math.atan2(
-                pivotPos.value.y + offy - evt.pageY,
-                pivotPos.value.x + offx - evt.pageX
+                pivotPos.value.y + offy - getPageY(evt),
+                pivotPos.value.x + offx - getPageX(evt)
               )
             : (Math.atan2(
-                pivotPos.value.y + offy - evt.pageY,
-                pivotPos.value.x + offx - evt.pageX
+                pivotPos.value.y + offy - getPageY(evt),
+                pivotPos.value.x + offx - getPageX(evt)
               ) +
                 Math.PI) %
               (2 * Math.PI)
@@ -530,10 +543,10 @@ export default defineComponent({
                 limiter({
                   x:
                     initialCursors.value[index].x -
-                    (startPoint.value.x - evt.pageX),
+                    (startPoint.value.x - getPageX(evt)),
                   y:
                     initialCursors.value[index].y -
-                    (startPoint.value.y - evt.pageY),
+                    (startPoint.value.y - getPageY(evt)),
                 })
               ),
               c: cursor.c,
@@ -543,7 +556,7 @@ export default defineComponent({
             if (index == pointIndex.value) {
               return {
                 ...gridder(
-                  limiter({ x: evt.pageX - offx - 3, y: evt.pageY - offy - 3 })
+                  limiter({ x: getPageX(evt) - offx - 3, y: getPageY(evt) - offy - 3 })
                 ),
                 c: cursor.c,
               };
