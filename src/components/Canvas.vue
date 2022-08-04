@@ -67,7 +67,7 @@
         <color-picker style="`margin: 10px; width: 100%" v-model:pureColor="currentColor" />
       </div>
       <div>
-        <token-picker :tokens="tokens" />
+        <token-picker :tokens="tokens" v-model:selectedToken="currentToken" />
       </div>
       <div :style="`height:${canh / 2}px; overflow-y: scroll`">
         <div v-for="(layer, index) in layers" :key="index">
@@ -117,6 +117,7 @@ import {
 import { computed } from "@vue/reactivity";
 import { ColorPicker } from "vue3-colorpicker";
 import TokenPicker from "@/components/TokenPicker.vue";
+import { Token } from "@/models/token";
 import "vue3-colorpicker/style.css";
 
 import { canvasParams, roundRect } from "@/utils/canvasUtil";
@@ -209,6 +210,8 @@ export default defineComponent({
     const onColorFocus = () => {
       recordState();
     };
+
+    const currentToken = ref<Token | null>(null);
 
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
@@ -592,6 +595,7 @@ export default defineComponent({
       currentTool,
       toggleGrid,
       onClickToPickLayer,
+      currentToken,
     };
   },
 });

@@ -2,6 +2,9 @@
   <div>
     <button @click="onOpen">
       <span class="material-icons">image</span>
+      <span v-if="selectedToken">
+        {{ selectedToken.tokenId }}
+      </span>
     </button>
     <div v-if="showTokens" 
       style="width:400px;height:400px; left:-350px"
@@ -21,8 +24,8 @@ import { defineComponent, ref } from "vue";
 import { Token } from "@/models/token";
 
 export default defineComponent({
-  props: ["tokens"],
-  setup(props) {
+  props: ["tokens", "selectedToken"],
+  setup(props, context) {
     const showTokens = ref<boolean>(false);
     const onOpen = () => {
       console.log("onOpen");
@@ -30,6 +33,7 @@ export default defineComponent({
     }
     const onSelect = (token:Token) => {
       console.log("onSelect", token.tokenId);
+      context.emit("update:selectedToken", token);
     }
     return {
       onOpen,
