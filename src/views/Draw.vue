@@ -280,6 +280,7 @@ export default defineComponent({
         }
         return drawing;
       });
+      console.log("*onClose2", drawings.value.map(drawing=>drawing.remixId));
       localStorage.setItem(
         `${keyDrawing}${selectedIndex.value}`,
         JSON.stringify(output)

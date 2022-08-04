@@ -16,9 +16,11 @@ export default defineComponent({
 
   setup(props) {
     const token = computed(() => {
-      const index = Math.floor(props.drawing.remixId / 4);
-      if (index < props.tokens.length) {
-        return props.tokens[index];
+      if (props.drawing.remixId > 0) {
+        const index = Math.floor(props.drawing.remixId / 4);
+        if (index < props.tokens.length) {
+          return props.tokens[index];
+        }
       }
       return null;
     });
