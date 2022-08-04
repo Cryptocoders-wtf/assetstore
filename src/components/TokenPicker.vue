@@ -1,13 +1,13 @@
 <template>
   <div>
-    <button @click="onOpen">
+    <button @click="onOpen" class="ml-2 flex">
       <span class="material-icons">image</span>
       <span v-if="selectedToken">
         {{ selectedToken.tokenId }}
       </span>
     </button>
     <div v-if="showTokens" 
-      style="width:400px;height:400px; left:-350px"
+      style="width:400px;height:200px; left:-350px"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100">
       <span v-for="token in tokens" :key="token.tokenId">
         <img
@@ -34,6 +34,8 @@ export default defineComponent({
     const onSelect = (token:Token) => {
       console.log("onSelect", token.tokenId);
       context.emit("update:selectedToken", token);
+      context.emit("tokenSelected", token);
+      showTokens.value = false;
     }
     return {
       onOpen,
