@@ -232,7 +232,7 @@ export default defineComponent({
       //console.log(loadedAssets[0].svgPart);
       if (drawing.remixId) {
         const result = await tokenRO.functions.generateSVGPart(drawing.remixId);
-        console.log("** mix-in", result[0], result[1]);
+        //console.log("** mix-in", result[0], result[1]);
         loadedAssets[0].svgPart =
           result[0] +
           loadedAssets[0].svgPart +
