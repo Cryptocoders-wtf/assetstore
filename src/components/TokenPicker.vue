@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="ml-2 mr-2 flex justify-between"> 
+    <div class="ml-2 mr-2 flex justify-between">
       <button @click="onOpen" class="">
         <span class="material-icons">image</span>
         <span v-if="selectedToken">
@@ -11,9 +11,11 @@
         <span class="material-icons">image_not_supported</span>
       </button>
     </div>
-    <div v-if="showTokens" 
-      style="width:400px;height:200px; left:-350px"
-      class="absolute border-2 border-solid border-blue-700 bg-slate-100">
+    <div
+      v-if="showTokens"
+      style="width: 400px; height: 200px; left: -350px"
+      class="absolute border-2 border-solid border-blue-700 bg-slate-100"
+    >
       <span v-for="token in tokens" :key="token.tokenId">
         <img
           @click="onSelect(token)"
@@ -36,7 +38,7 @@ export default defineComponent({
       console.log("onOpen");
       showTokens.value = !showTokens.value;
     };
-    const onSelect = (token:Token) => {
+    const onSelect = (token: Token) => {
       console.log("onSelect", token.tokenId);
       //context.emit("update:selectedToken", token);
       context.emit("tokenSelected", token);
@@ -50,8 +52,8 @@ export default defineComponent({
       onOpen,
       showTokens,
       onSelect,
-      onRemove
+      onRemove,
     };
-  }
+  },
 });
 </script>

@@ -1,10 +1,7 @@
 <template>
   <div>
-    <img v-if="token" 
-      class="absolute w-32 -z-10" 
-      :src="token.image" />
-    <img :src="svgImageFromDrawing(drawing)" 
-      class="w-32" />
+    <img v-if="token" class="absolute -z-10 w-32" :src="token.image" />
+    <img :src="svgImageFromDrawing(drawing)" class="w-32" />
   </div>
 </template>
 <script lang="ts">
@@ -26,8 +23,8 @@ export default defineComponent({
     });
     return {
       svgImageFromDrawing,
-      token
+      token,
     };
-  }
+  },
 });
 </script>

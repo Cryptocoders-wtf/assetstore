@@ -1,47 +1,96 @@
 <template>
-  <div style="width: 100%" @drop="drop($event)" @dragenter.prevent @dragover.prevent>
-    <div :style="`width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`"
-      class="absolute border-2 border-solid border-blue-700 bg-slate-100" @dragover="dragOver">
-      <img v-if="currentToken"
-        class="absolute" 
+  <div
+    style="width: 100%"
+    @drop="drop($event)"
+    @dragenter.prevent
+    @dragover.prevent
+  >
+    <div
+      :style="`width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`"
+      class="absolute border-2 border-solid border-blue-700 bg-slate-100"
+      @dragover="dragOver"
+    >
+      <img
+        v-if="currentToken"
+        class="absolute"
         :src="currentToken.image"
         :style="`width:${canw}px; height:${canh}px`"
       />
-      <img v-for="(layer, index) in layers" :key="index" :src="layer.svgImage" class="absolute" draggable="false"
+      <img
+        v-for="(layer, index) in layers"
+        :key="index"
+        :src="layer.svgImage"
+        class="absolute"
+        draggable="false"
         :style="
           `width:${canw}px; height:${canh}px;` +
           `opacity:${index > layerIndex ? '0.5' : '1.0'}`
-        " @click="onClickToPickLayer($event)" />
+        "
+        @click="onClickToPickLayer($event)"
+      />
       <div v-if="!toolHadleMode">
-        <div v-for="(cursor, index) in cursors" :key="index" :style="`width:${curw}px; height:${curh}px; left:${
-          cursor.x - curw / 2
-        }px; top:${cursor.y - curh / 2}px`" :class="`${
-          index == pointIndex ? 'border-blue-800' : 'border-blue-400'
-        } ${cursor.c ? '' : 'rounded-xl'}`" draggable="true" class="absolute border-2 border-solid"
-          @dragstart="dragStart($event, index)" @click="onSelect($event, index)" />
+        <div
+          v-for="(cursor, index) in cursors"
+          :key="index"
+          :style="`width:${curw}px; height:${curh}px; left:${
+            cursor.x - curw / 2
+          }px; top:${cursor.y - curh / 2}px`"
+          :class="`${
+            index == pointIndex ? 'border-blue-800' : 'border-blue-400'
+          } ${cursor.c ? '' : 'rounded-xl'}`"
+          draggable="true"
+          class="absolute border-2 border-solid"
+          @dragstart="dragStart($event, index)"
+          @click="onSelect($event, index)"
+        />
       </div>
-      <div class="absolute border-2 border-solid border-red-800" :style="
-        `width:${curw}px; height:${curh}px; ` +
-        `left: ${moveToolPos.left}px; ` +
-        `top: ${moveToolPos.top}px; `
-      " draggable="true" @dragstart="dragLayerImgStart($event)" @click="onClickToolHandle()" />
+      <div
+        class="absolute border-2 border-solid border-red-800"
+        :style="
+          `width:${curw}px; height:${curh}px; ` +
+          `left: ${moveToolPos.left}px; ` +
+          `top: ${moveToolPos.top}px; `
+        "
+        draggable="true"
+        @dragstart="dragLayerImgStart($event)"
+        @click="onClickToolHandle()"
+      />
       <div v-if="toolHadleMode">
-        <div v-for="({ type, x, y }, index) in toolHandles" :key="index" class="absolute border-2 border-solid" :class="
-          type === Tools.ROTATE ? 'border-green-800' : 'border-yellow-800'
-        " :style="`width:${curw}px; height:${curh}px;
-          left: ${x}px; top: ${y}px;`" draggable="true" @dragstart="dragToolHandleStart($event, type)" />
+        <div
+          v-for="({ type, x, y }, index) in toolHandles"
+          :key="index"
+          class="absolute border-2 border-solid"
+          :class="
+            type === Tools.ROTATE ? 'border-green-800' : 'border-yellow-800'
+          "
+          :style="`width:${curw}px; height:${curh}px;
+          left: ${x}px; top: ${y}px;`"
+          draggable="true"
+          @dragstart="dragToolHandleStart($event, type)"
+        />
       </div>
     </div>
-    <div :style="`width:${sidew}px; height:${canh}px; left:${
-      offx + canw - 2
-    }px; top:${offy}px`" class="absolute border-2 border-solid border-blue-700 bg-slate-300">
+    <div
+      :style="`width:${sidew}px; height:${canh}px; left:${
+        offx + canw - 2
+      }px; top:${offy}px`"
+      class="absolute border-2 border-solid border-blue-700 bg-slate-300"
+    >
       <div class="ml-2 mr-2 flex justify-between">
         <div>
-          <button @click="undo" :disabled="!isUndoable()" :style="`opacity:${isUndoable() ? '1.0' : '0.5'}`">
+          <button
+            @click="undo"
+            :disabled="!isUndoable()"
+            :style="`opacity:${isUndoable() ? '1.0' : '0.5'}`"
+          >
             <span class="material-icons">undo</span>
           </button>
-          <button :style="`opacity:${isRedoable() ? '1.0' : '0.5'}`" class="ml-1" @click="redo"
-            :disabled="!isRedoable()">
+          <button
+            :style="`opacity:${isRedoable() ? '1.0' : '0.5'}`"
+            class="ml-1"
+            @click="redo"
+            :disabled="!isRedoable()"
+          >
             <span class="material-icons">redo</span>
           </button>
         </div>
@@ -50,7 +99,11 @@
         </button>
       </div>
       <div>
-        <token-picker :tokens="tokens" @tokenSelected="tokenSelected" :selectedToken="currentToken" />
+        <token-picker
+          :tokens="tokens"
+          @tokenSelected="tokenSelected"
+          :selectedToken="currentToken"
+        />
       </div>
       <div>
         <button @click="toggleGrid" class="ml-2 flex">
@@ -60,11 +113,16 @@
       </div>
       <div class="ml-2 mr-2 flex justify-between">
         <button @click="togglePoint">
-          <span v-if="isSharpCorner()" class="material-icons">check_box_outline_blank</span>
+          <span v-if="isSharpCorner()" class="material-icons"
+            >check_box_outline_blank</span
+          >
           <span v-else class="material-icons">radio_button_unchecked</span>
         </button>
-        <button :disabled="cursors.length <= 3" @click="deletePoint"
-          :style="`opacity:${cursors.length > 3 ? '1.0' : '0.5'}`">
+        <button
+          :disabled="cursors.length <= 3"
+          @click="deletePoint"
+          :style="`opacity:${cursors.length > 3 ? '1.0' : '0.5'}`"
+        >
           <span class="material-icons">delete</span>
         </button>
         <button @click="splitSegment">
@@ -72,7 +130,10 @@
         </button>
       </div>
       <div>
-        <color-picker style="`margin: 10px; width: 100%" v-model:pureColor="currentColor" />
+        <color-picker
+          style="`margin: 10px; width: 100%"
+          v-model:pureColor="currentColor"
+        />
       </div>
       <div :style="`height:${canh / 2}px; overflow-y: scroll`">
         <div v-for="(layer, index) in layers" :key="index">
@@ -84,21 +145,36 @@
               <span class="material-icons">swap_vert</span>
             </button>
           </div>
-          <img @click="onSelectLayer($event, index)" :src="layer.svgImage"
-            :style="`width:${sidew}px;height:${sidew / 2}px`" class="border-2 border-solid object-fill" :class="`${
+          <img
+            @click="onSelectLayer($event, index)"
+            :src="layer.svgImage"
+            :style="`width:${sidew}px;height:${sidew / 2}px`"
+            class="border-2 border-solid object-fill"
+            :class="`${
               index == layerIndex ? 'border-blue-400' : 'border-slate-200'
-            }`" />
-          <div v-if="index == layerIndex" class="ml-2 mr-2 flex justify-between">
+            }`"
+          />
+          <div
+            v-if="index == layerIndex"
+            class="ml-2 mr-2 flex justify-between"
+          >
             <button @click="insertLayer(index + 1)">
               <span class="material-icons">add</span>
             </button>
             <button @click="copyLayer(index)">
               <span class="material-icons">content_copy</span>
             </button>
-            <button @click="pivotLayer(index + 1)" v-if="index < layers.length - 1">
+            <button
+              @click="pivotLayer(index + 1)"
+              v-if="index < layers.length - 1"
+            >
               <span class="material-icons">swap_vert</span>
             </button>
-            <button v-if="layers.length > 1" class="ml-2" @click="deleteLayer()">
+            <button
+              v-if="layers.length > 1"
+              class="ml-2"
+              @click="deleteLayer()"
+            >
               <span class="material-icons">delete</span>
             </button>
           </div>
@@ -224,7 +300,7 @@ export default defineComponent({
     const tokenSelected = (token: Token) => {
       recordState();
       currentToken.value = token;
-    }
+    };
 
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
@@ -247,10 +323,14 @@ export default defineComponent({
         const index = Math.floor(props.drawing.remixId / 4);
         if (index < props.tokens.length) {
           currentToken.value = props.tokens[index];
-          console.log("*** fetchToken2", props.drawing.remixId, currentToken.value);
+          console.log(
+            "*** fetchToken2",
+            props.drawing.remixId,
+            currentToken.value
+          );
         }
       }
-    }
+    };
     fetchToken();
     const cursors = ref<Point[]>([]);
     const currentColor = ref<string>("");

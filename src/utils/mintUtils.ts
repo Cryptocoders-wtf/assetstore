@@ -34,7 +34,11 @@ export const useOnSelect = (initTokenPer: number, tokenRO: ethers.Contract) => {
     const promises = Array(tokensPerAsset.value - 1)
       .fill("")
       .map((_, index) => {
-        return tokenRO.functions.generateSVG(asset.svgPart, index, tag || "item");
+        return tokenRO.functions.generateSVG(
+          asset.svgPart,
+          index,
+          tag || "item"
+        );
       });
     const images = (await Promise.all(promises)).map((result) => {
       return (

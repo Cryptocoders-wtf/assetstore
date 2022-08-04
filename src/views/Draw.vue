@@ -1,8 +1,11 @@
 <template>
   <div>
-    <Canvas v-if="showCanvas" @close="onClose" 
+    <Canvas
+      v-if="showCanvas"
+      @close="onClose"
       :drawing="selectedDrawing"
-      :tokens= "tokens" />
+      :tokens="tokens"
+    />
 
     <div class="mx-auto max-w-xl p-2 text-left">
       <div class="mb-2 text-xl font-bold">{{ "Draw Your Own Token" }}</div>
@@ -15,7 +18,7 @@
             index == selectedIndex ? 'border-blue-700' : 'border-white'
           }`"
         >
-          <drawing-item :drawing="body" :tokens= "tokens" />
+          <drawing-item :drawing="body" :tokens="tokens" />
           <div
             v-if="index == selectedIndex"
             class="ml-2 mr-2 flex justify-between"
@@ -230,12 +233,13 @@ export default defineComponent({
       if (drawing.remixId) {
         const result = await tokenRO.functions.generateSVGPart(drawing.remixId);
         console.log("** mix-in", result[0], result[1]);
-        loadedAssets[0].svgPart = result[0] 
-          + loadedAssets[0].svgPart
-          + `<g id="mixed">\n`
-          + ` <use href="#${result[1]}" />\n`
-          + ` <use href="#item" />\n`
-          + `</g>\n`;
+        loadedAssets[0].svgPart =
+          result[0] +
+          loadedAssets[0].svgPart +
+          `<g id="mixed">\n` +
+          ` <use href="#${result[1]}" />\n` +
+          ` <use href="#item" />\n` +
+          `</g>\n`;
         tag = "mixed";
       }
       onSelect(loadedAssets[0], tag);
@@ -248,10 +252,10 @@ export default defineComponent({
     const onDelete = () => {
       info.value = {
         keys: info.value.keys.filter((_, index) => {
-          return index !== selectedIndex.value
+          return index !== selectedIndex.value;
         }),
-        nextIndex: info.value.nextIndex -1 
-      }
+        nextIndex: info.value.nextIndex - 1,
+      };
       drawings.value = drawings.value.filter((_, index) => {
         return index !== selectedIndex.value;
       });
