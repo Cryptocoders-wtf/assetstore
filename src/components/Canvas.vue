@@ -140,6 +140,7 @@ interface State {
   layers: Layer[];
   layerIndex: number;
   pointIndex: number;
+  token: Token | null;
 }
 
 interface Pos {
@@ -175,6 +176,7 @@ export default defineComponent({
         layers: layers.value,
         layerIndex: layerIndex.value,
         pointIndex: pointIndex.value,
+        token: currentToken.value,
       });
       undoStack.value = array;
       undoIndex.value = undoStack.value.length;
@@ -200,6 +202,7 @@ export default defineComponent({
       layers.value = state.layers;
       updateLayerIndex(state.layerIndex);
       pointIndex.value = state.pointIndex;
+      currentToken.value = state.token;
       undoIndex.value -= 1;
     };
     const redo = () => {
@@ -210,6 +213,7 @@ export default defineComponent({
       layers.value = state.layers;
       updateLayerIndex(state.layerIndex);
       pointIndex.value = state.pointIndex;
+      currentToken.value = state.token;
       undoIndex.value += 1;
     };
     const onColorFocus = () => {
@@ -218,6 +222,7 @@ export default defineComponent({
 
     const currentToken = ref<Token | null>(null);
     const tokenSelected = (token: Token) => {
+      recordState();
       currentToken.value = token;
     }
 
