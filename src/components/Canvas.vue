@@ -241,6 +241,17 @@ export default defineComponent({
             },
           ]
     );
+    const fetchToken = async () => {
+      console.log("*** fetchToken", props.drawing.remixId, props.tokens.length);
+      if (props.drawing.remixId > 0) {
+        const index = Math.floor(props.drawing.remixId / 4);
+        if (index < props.tokens.length) {
+          currentToken.value = props.tokens[index];
+          console.log("*** fetchToken2", props.drawing.remixId, currentToken.value);
+        }
+      }
+    }
+    fetchToken();
     const cursors = ref<Point[]>([]);
     const currentColor = ref<string>("");
     const pivotPos = ref<Pos>({ x: 0, y: 0 });
