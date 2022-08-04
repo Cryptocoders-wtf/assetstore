@@ -1,6 +1,8 @@
 <template>
   <div>
-    <Canvas v-if="showCanvas" @close="onClose" :drawing="selectedDrawing" />
+    <Canvas v-if="showCanvas" @close="onClose" 
+      :drawing="selectedDrawing"
+      :tokens= "tokens" />
 
     <div class="mx-auto max-w-xl p-2 text-left">
       <div class="mb-2 text-xl font-bold">{{ "Draw Your Own Token" }}</div>

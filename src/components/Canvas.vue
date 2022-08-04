@@ -67,7 +67,7 @@
         <color-picker style="`margin: 10px; width: 100%" v-model:pureColor="currentColor" />
       </div>
       <div>
-        <token-picker />
+        <token-picker :tokens="tokens" />
       </div>
       <div :style="`height:${canh / 2}px; overflow-y: scroll`">
         <div v-for="(layer, index) in layers" :key="index">
@@ -155,7 +155,7 @@ interface RotationInfo {
 export default defineComponent({
   name: "HomePage",
   components: { ColorPicker, TokenPicker },
-  props: ["drawing"],
+  props: ["drawing", "tokens"],
   setup(props, context) {
     const grid = ref<number>(0);
     const undoStack = ref<State[]>([]);
