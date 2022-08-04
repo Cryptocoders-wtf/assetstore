@@ -2,6 +2,11 @@
   <div style="width: 100%" @drop="drop($event)" @dragenter.prevent @dragover.prevent>
     <div :style="`width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100" @dragover="dragOver">
+      <img v-if="currentToken"
+        class="absolute" 
+        :src="currentToken.image"
+        :style="`width:${canw}px; height:${canh}px`"
+      />
       <img v-for="(layer, index) in layers" :key="index" :src="layer.svgImage" class="absolute" draggable="false"
         :style="
           `width:${canw}px; height:${canh}px;` +
