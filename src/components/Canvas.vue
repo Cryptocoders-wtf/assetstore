@@ -543,11 +543,13 @@ export default defineComponent({
         )
           results.push(index);
       });
-      updateLayerIndex(
-        results.indexOf(layerIndex.value) !== -1
-          ? [...results, ...results][results.indexOf(layerIndex.value) + 1]
-          : results[0]
-      );
+      if (results.length > 0) {
+        updateLayerIndex(
+          results.indexOf(layerIndex.value) !== -1
+            ? [...results, ...results][results.indexOf(layerIndex.value) + 1]
+            : results[0]
+        );
+      }
     };
     return {
       toolHadleMode,
