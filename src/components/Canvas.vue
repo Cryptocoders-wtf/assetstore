@@ -529,9 +529,10 @@ export default defineComponent({
       grid.value = (grid.value + 8) % 40;
     };
     const onClose = () => {
+      const token = currentToken.value;
       const drawing: Drawing = {
         layers: layers.value,
-        tokenId: 0,
+        remixId: token ? token.tokenId + 1 : 0,
       };
       context.emit("close", drawing);
     };

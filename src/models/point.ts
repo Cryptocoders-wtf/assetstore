@@ -13,7 +13,7 @@ export interface Layer {
 
 export interface Drawing {
   layers: Layer[];
-  tokenId: number; // optional remix tokenId (0 = no remix)
+  remixId: number; // optional remix tokenId (0 = no remix)
 }
 
 export const pathFromPoints = (points: Point[]) => {

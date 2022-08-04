@@ -124,11 +124,7 @@ export default defineComponent({
     addresses.tokenAddress = addresses.drawAddress;
 
     // Temporary code
-    const remixId =
-      typeof route.query.remixId == "string"
-        ? parseInt(route.query.remixId)
-        : 0 || 0;
-    console.log("remixId", remixId, typeof remixId);
+    const remixId = ref<number>(0);
 
     const { EtherscanStore, EtherscanToken, OpenSeaPath } = getAddresses(
       addresses.network,
@@ -208,7 +204,7 @@ export default defineComponent({
 
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(9999);
-    const selectedDrawing = ref<Drawing>({ layers: [], tokenId: 0 });
+    const selectedDrawing = ref<Drawing>({ layers: [], remixId: 0 });
     const onDrawingSelect = (index: number) => {
       selectedIndex.value = index;
       const drawing = drawings.value[index];
@@ -228,6 +224,7 @@ export default defineComponent({
       };
       const loadedAssets = loadAssets(actions);
       onSelect(loadedAssets[0]);
+      remixId.value = drawing.remixId;
     };
     const onOpen = () => {
       selectedDrawing.value = drawings.value[selectedIndex.value];
@@ -253,7 +250,7 @@ export default defineComponent({
       const keys = info.value.keys;
       // Prepare to open
       selectedIndex.value = keys.length;
-      selectedDrawing.value = { layers: [], tokenId: 0 };
+      selectedDrawing.value = { layers: [], remixId: 0 };
 
       // Update the info and save it
       const array: Drawing[] = drawings.value.map((body) => body);
