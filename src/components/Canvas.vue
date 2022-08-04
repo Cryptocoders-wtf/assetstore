@@ -66,6 +66,9 @@
       <div>
         <color-picker style="`margin: 10px; width: 100%" v-model:pureColor="currentColor" />
       </div>
+      <div>
+        <token-picker />
+      </div>
       <div :style="`height:${canh / 2}px; overflow-y: scroll`">
         <div v-for="(layer, index) in layers" :key="index">
           <div v-if="index == layerIndex">
@@ -113,6 +116,7 @@ import {
 } from "@/models/point";
 import { computed } from "@vue/reactivity";
 import { ColorPicker } from "vue3-colorpicker";
+import TokenPicker from "@/components/TokenPicker.vue";
 import "vue3-colorpicker/style.css";
 
 import { canvasParams, roundRect } from "@/utils/canvasUtil";
@@ -150,7 +154,7 @@ interface RotationInfo {
 
 export default defineComponent({
   name: "HomePage",
-  components: { ColorPicker },
+  components: { ColorPicker, TokenPicker },
   props: ["drawing"],
   setup(props, context) {
     const grid = ref<number>(0);
