@@ -50,6 +50,9 @@
         </button>
       </div>
       <div>
+        <token-picker :tokens="tokens" @tokenSelected="tokenSelected" :selectedToken="currentToken" />
+      </div>
+      <div>
         <button @click="toggleGrid" class="ml-2 flex">
           <span class="material-icons">view_module</span>
           <span>{{ grid }}</span>
@@ -70,9 +73,6 @@
       </div>
       <div>
         <color-picker style="`margin: 10px; width: 100%" v-model:pureColor="currentColor" />
-      </div>
-      <div>
-        <token-picker :tokens="tokens" @tokenSelected="tokenSelected" :selectedToken="currentToken" />
       </div>
       <div :style="`height:${canh / 2}px; overflow-y: scroll`">
         <div v-for="(layer, index) in layers" :key="index">
