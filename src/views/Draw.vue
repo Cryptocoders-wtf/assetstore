@@ -275,6 +275,7 @@ export default defineComponent({
     const onClose = (output: Drawing) => {
       drawings.value = drawings.value.map((drawing, index) => {
         if (index == selectedIndex.value) {
+          console.log("*onClose", output.remixId);
           return output;
         }
         return drawing;

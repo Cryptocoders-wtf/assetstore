@@ -541,6 +541,7 @@ export default defineComponent({
     };
     const onClose = () => {
       const token = currentToken.value;
+      console.log("***onClose", token);
       const drawing: Drawing = {
         layers: layers.value,
         remixId: token ? token.tokenId + 1 : 0,
