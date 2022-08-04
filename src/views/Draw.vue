@@ -15,7 +15,7 @@
             index == selectedIndex ? 'border-blue-700' : 'border-white'
           }`"
         >
-          <img :src="svgImageFromDrawing(body)" class="w-32" />
+          <drawing-item :drawing="body" :tokens= "tokens" />
           <div
             v-if="index == selectedIndex"
             class="ml-2 mr-2 flex justify-between"
@@ -65,7 +65,8 @@ import { defineComponent, ref } from "vue";
 import { ethers } from "ethers";
 import { useRoute } from "vue-router";
 import Canvas from "@/components/Canvas.vue";
-import { Drawing, svgImageFromDrawing } from "@/models/point";
+import { Drawing } from "@/models/point";
+import DrawingItem from "@/components/DrawingItem.vue";
 import MintPanel from "@/components/MintPanel.vue";
 import { getContractAddresses } from "@/utils/networks";
 import { useOnSelect } from "@/utils/mintUtils";
@@ -115,6 +116,7 @@ export default defineComponent({
     MintPanel,
     References,
     NFTList,
+    DrawingItem,
   },
   setup() {
     const route = useRoute();
@@ -294,7 +296,6 @@ export default defineComponent({
       onDrawingSelect,
       drawings,
       selectedDrawing,
-      svgImageFromDrawing,
       selectedIndex,
       priceRange,
       tokensPerAsset,
