@@ -207,7 +207,7 @@ export default defineComponent({
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(9999);
     const selectedDrawing = ref<Drawing>({ layers: [], remixId: 0 });
-    const onDrawingSelect = (index: number) => {
+    const onDrawingSelect = async (index: number) => {
       selectedIndex.value = index;
       const drawing = drawings.value[index];
       const uuid = uuidv4();
@@ -225,7 +225,20 @@ export default defineComponent({
         assets: [asset],
       };
       const loadedAssets = loadAssets(actions);
-      onSelect(loadedAssets[0]);
+      let tag = "item";
+      //console.log(loadedAssets[0].svgPart);
+      if (drawing.remixId) {
+        const result = await tokenRO.functions.generateSVGPart(drawing.remixId);
+        console.log("** mix-in", result[0], result[1]);
+        loadedAssets[0].svgPart = result[0] 
+          + loadedAssets[0].svgPart
+          + `<g id="mixed">\n`
+          + ` <use href="#${result[1]}" />\n`
+          + ` <use href="#item" />\n`
+          + `</g>\n`;
+        tag = "mixed";
+      }
+      onSelect(loadedAssets[0], tag);
       remixId.value = drawing.remixId;
     };
     const onOpen = () => {
@@ -275,12 +288,10 @@ export default defineComponent({
     const onClose = (output: Drawing) => {
       drawings.value = drawings.value.map((drawing, index) => {
         if (index == selectedIndex.value) {
-          console.log("*onClose", output.remixId);
           return output;
         }
         return drawing;
       });
-      console.log("*onClose2", drawings.value.map(drawing=>drawing.remixId));
       localStorage.setItem(
         `${keyDrawing}${selectedIndex.value}`,
         JSON.stringify(output)

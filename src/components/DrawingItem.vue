@@ -9,7 +9,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, computed } from "vue";
-import { Drawing, svgImageFromDrawing } from "@/models/point";
+import { svgImageFromDrawing } from "@/models/point";
 
 export default defineComponent({
   props: ["drawing", "tokens"],

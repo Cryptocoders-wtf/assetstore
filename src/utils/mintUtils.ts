@@ -22,7 +22,7 @@ export const assetFilter = (asset: OriginalAssetData) => {
 export const useOnSelect = (initTokenPer: number, tokenRO: ethers.Contract) => {
   const tokensPerAsset = ref(initTokenPer); // hard-coded only for MaterialToken
   const selection = ref<MintSelectionAsset | null>(null);
-  const onSelect = async (asset: OriginalAssetData) => {
+  const onSelect = async (asset: OriginalAssetData, tag: string | null) => {
     if (selection.value && selection.value.asset.name == asset.name) {
       selection.value = null;
       return;
@@ -34,7 +34,7 @@ export const useOnSelect = (initTokenPer: number, tokenRO: ethers.Contract) => {
     const promises = Array(tokensPerAsset.value - 1)
       .fill("")
       .map((_, index) => {
-        return tokenRO.functions.generateSVG(asset.svgPart, index, "item");
+        return tokenRO.functions.generateSVG(asset.svgPart, index, tag || "item");
       });
     const images = (await Promise.all(promises)).map((result) => {
       return (
