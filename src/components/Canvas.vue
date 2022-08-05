@@ -135,7 +135,14 @@
           v-model:pureColor="currentColor"
         />
       </div>
-      <div :style="`height:${canh / 2}px; overflow-y: scroll`">
+    </div>
+    <div
+      :style="`width:${sidew}px; height:${canh}px; left:${
+              offx + canw - 2 + sidew
+              }px; top:${offy}px`"
+      class="absolute border-2 border-solid border-blue-700 bg-slate-300"
+      >
+      <div :style="`height:${canh - 4}px; overflow-y: scroll`">
         <div v-for="(layer, index) in layers" :key="index">
           <div v-if="index == layerIndex">
             <button @click="insertLayer(index)">
