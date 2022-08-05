@@ -23,11 +23,11 @@ export const roundRect: Point[] = [
 export const getPageX = (evt: DragEvent | MouseEvent | TouchEvent): number =>
   evt instanceof TouchEvent ? evt.targetTouches[0].pageX : evt.pageX;
 
-export const getPageY = (evt:  DragEvent | MouseEvent | TouchEvent): number =>
+export const getPageY = (evt: DragEvent | MouseEvent | TouchEvent): number =>
   evt instanceof TouchEvent ? evt.targetTouches[0].pageY : evt.pageY;
 
-export const getOffsetX = (evt:  DragEvent | MouseEvent | TouchEvent): number =>
+export const getOffsetX = (evt: DragEvent | MouseEvent | TouchEvent): number =>
   evt instanceof TouchEvent ? 0 : evt.offsetX;
 
-export const getOffsetY = (evt:  DragEvent | MouseEvent | TouchEvent): number =>
+export const getOffsetY = (evt: DragEvent | MouseEvent | TouchEvent): number =>
   evt instanceof TouchEvent ? 0 : evt.offsetY;

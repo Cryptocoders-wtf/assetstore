@@ -16,9 +16,7 @@
         :src="currentToken.image"
         :style="`width:${canw}px; height:${canh}px`"
       />
-      <img
-      @touchmove="dragOver"
-    >
+      <img @touchmove="dragOver" />
       <img
         v-for="(layer, index) in layers"
         :key="index"
@@ -489,7 +487,10 @@ export default defineComponent({
             if (index == pointIndex.value) {
               return {
                 ...gridder(
-                  limiter({ x: getPageX(evt) - offx - 3, y: getPageY(evt) - offy - 3 })
+                  limiter({
+                    x: getPageX(evt) - offx - 3,
+                    y: getPageY(evt) - offy - 3,
+                  })
                 ),
                 c: cursor.c,
               };
