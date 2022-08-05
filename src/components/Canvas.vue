@@ -157,7 +157,6 @@
         @onSelectLayer="onSelectLayer($event)"
         @deleteLayer="deleteLayer()"
       />
->>>>>>> 2e15cf3af592dfacf8f18dc3580558abdb999231
     </div>
   </div>
 </template>
