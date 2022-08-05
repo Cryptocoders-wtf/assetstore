@@ -19,3 +19,15 @@ export const roundRect: Point[] = [
   { x: canw - canw / 4, y: canh - canh / 4, c: false },
   { x: canw / 4, y: canh - canh / 4, c: false },
 ];
+
+export const getPageX = (evt: DragEvent | MouseEvent | TouchEvent): number =>
+  evt instanceof TouchEvent ? evt.targetTouches[0].pageX : evt.pageX;
+
+export const getPageY = (evt:  DragEvent | MouseEvent | TouchEvent): number =>
+  evt instanceof TouchEvent ? evt.targetTouches[0].pageY : evt.pageY;
+
+export const getOffsetX = (evt:  DragEvent | MouseEvent | TouchEvent): number =>
+  evt instanceof TouchEvent ? 0 : evt.offsetX;
+
+export const getOffsetY = (evt:  DragEvent | MouseEvent | TouchEvent): number =>
+  evt instanceof TouchEvent ? 0 : evt.offsetY;

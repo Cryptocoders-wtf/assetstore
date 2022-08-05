@@ -17,6 +17,9 @@
         :style="`width:${canw}px; height:${canh}px`"
       />
       <img
+      @touchmove="dragOver"
+    >
+      <img
         v-for="(layer, index) in layers"
         :key="index"
         :src="layer.svgImage"
@@ -41,6 +44,7 @@
           draggable="true"
           class="absolute border-2 border-solid"
           @dragstart="dragStart($event, index)"
+          @touchstart="dragStart($event, index)"
           @click="onSelect($event, index)"
         />
       </div>
@@ -53,6 +57,7 @@
         "
         draggable="true"
         @dragstart="dragLayerImgStart($event)"
+        @touchstart="dragLayerImgStart($event)"
         @click="onClickToolHandle()"
       />
       <div v-if="toolHadleMode">
@@ -67,6 +72,7 @@
           left: ${x}px; top: ${y}px;`"
           draggable="true"
           @dragstart="dragToolHandleStart($event, type)"
+          @touchstart="dragToolHandleStart($event, type)"
         />
       </div>
     </div>
@@ -142,51 +148,16 @@
       }px; top:${offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-300"
     >
-      <div :style="`height:${canh - 4}px; overflow-y: scroll`">
-        <div v-for="(layer, index) in layers" :key="index">
-          <div v-if="index == layerIndex">
-            <button @click="insertLayer(index)">
-              <span class="material-icons">add</span>
-            </button>
-            <button @click="pivotLayer(index)" v-if="index > 0">
-              <span class="material-icons">swap_vert</span>
-            </button>
-          </div>
-          <img
-            @click="onSelectLayer($event, index)"
-            :src="layer.svgImage"
-            :style="`width:${sidew}px;height:${sidew / 2}px`"
-            class="border-2 border-solid object-fill"
-            :class="`${
-              index == layerIndex ? 'border-blue-400' : 'border-slate-200'
-            }`"
-          />
-          <div
-            v-if="index == layerIndex"
-            class="ml-2 mr-2 flex justify-between"
-          >
-            <button @click="insertLayer(index + 1)">
-              <span class="material-icons">add</span>
-            </button>
-            <button @click="copyLayer(index)">
-              <span class="material-icons">content_copy</span>
-            </button>
-            <button
-              @click="pivotLayer(index + 1)"
-              v-if="index < layers.length - 1"
-            >
-              <span class="material-icons">swap_vert</span>
-            </button>
-            <button
-              v-if="layers.length > 1"
-              class="ml-2"
-              @click="deleteLayer()"
-            >
-              <span class="material-icons">delete</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <Layers
+        :layers="layers"
+        :layerIndex="layerIndex"
+        @insertLayer="insertLayer($event)"
+        @pivotLayer="pivotLayer($event)"
+        @copyLayer="copyLayer($event)"
+        @onSelectLayer="onSelectLayer($event)"
+        @deleteLayer="deleteLayer()"
+      />
+>>>>>>> 2e15cf3af592dfacf8f18dc3580558abdb999231
     </div>
   </div>
 </template>
@@ -204,11 +175,21 @@ import {
 } from "@/models/point";
 import { computed } from "@vue/reactivity";
 import { ColorPicker } from "vue3-colorpicker";
+
 import TokenPicker from "@/components/TokenPicker.vue";
+import Layers from "@/components/Canvas/Layers.vue";
+
 import { Token } from "@/models/token";
 import "vue3-colorpicker/style.css";
 
-import { canvasParams, roundRect } from "@/utils/canvasUtil";
+import {
+  canvasParams,
+  roundRect,
+  getPageX,
+  getPageY,
+  getOffsetX,
+  getOffsetY,
+} from "@/utils/canvasUtil";
 
 import { useUndoStack } from "@/utils/undo";
 
@@ -239,7 +220,7 @@ interface RotationInfo {
 
 export default defineComponent({
   name: "HomePage",
-  components: { ColorPicker, TokenPicker },
+  components: { ColorPicker, TokenPicker, Layers },
   props: ["drawing", "tokens"],
   setup(props, context) {
     const grid = ref<number>(0);
@@ -378,36 +359,36 @@ export default defineComponent({
     const onSelect = (evt: Event, index: number) => {
       pointIndex.value = index;
     };
-    const dragToolHandleStart = (evt: DragEvent, tool: Tools) => {
+    const dragToolHandleStart = (evt: DragEvent | TouchEvent, tool: Tools) => {
       currentTool.value = tool;
       offsetX.value = curw / 2;
       offsetY.value = curh / 2;
-      startPoint.value.x = evt.pageX;
-      startPoint.value.y = evt.pageY;
+      startPoint.value.x = getPageX(evt);
+      startPoint.value.y = getPageY(evt);
       pivotPos.value = moveToolPos.value;
       initialCursors.value = cursors.value;
       recordState();
     };
-    const dragLayerImgStart = (evt: MouseEvent) => {
+    const dragLayerImgStart = (evt: MouseEvent | TouchEvent) => {
       currentTool.value = Tools.MOVE;
       offsetX.value = curw / 2;
       offsetY.value = curh / 2;
-      startPoint.value.x = evt.pageX;
-      startPoint.value.y = evt.pageY;
+      startPoint.value.x = getPageX(evt);
+      startPoint.value.y = getPageY(evt);
       initialCursors.value = cursors.value;
       recordState();
     };
     const onClickToolHandle = () => {
       toolHadleMode.value = !toolHadleMode.value;
     };
-    const dragStart = (evt: DragEvent, index: number) => {
+    const dragStart = (evt: DragEvent | TouchEvent, index: number) => {
       currentTool.value = Tools.CURSOR;
-      offsetX.value = evt.offsetX;
-      offsetY.value = evt.offsetY;
+      offsetX.value = getOffsetX(evt);
+      offsetY.value = getOffsetY(evt);
       pointIndex.value = index;
       recordState();
     };
-    const dragOver = (evt: DragEvent) => {
+    const dragOver = (evt: DragEvent | TouchEvent) => {
       const { offx, offy } = canvasParams;
       const g = grid.value;
       const gridder = (pos: Pos): Pos => {
@@ -429,19 +410,19 @@ export default defineComponent({
       const magnification =
         currentTool.value === Tools.ZOOM &&
         Math.abs(pivotPos.value.y + offy - startPoint.value.y) !== 0
-          ? Math.abs(pivotPos.value.y + offy - evt.pageY) /
+          ? Math.abs(pivotPos.value.y + offy - getPageY(evt)) /
             Math.abs(pivotPos.value.y + offy - startPoint.value.y)
           : 0;
       const rad =
         currentTool.value === Tools.ROTATE
           ? pivotPos.value.x + offx - startPoint.value.x > 1
             ? Math.atan2(
-                pivotPos.value.y + offy - evt.pageY,
-                pivotPos.value.x + offx - evt.pageX
+                pivotPos.value.y + offy - getPageY(evt),
+                pivotPos.value.x + offx - getPageX(evt)
               )
             : (Math.atan2(
-                pivotPos.value.y + offy - evt.pageY,
-                pivotPos.value.x + offx - evt.pageX
+                pivotPos.value.y + offy - getPageY(evt),
+                pivotPos.value.x + offx - getPageX(evt)
               ) +
                 Math.PI) %
               (2 * Math.PI)
@@ -496,10 +477,10 @@ export default defineComponent({
                 limiter({
                   x:
                     initialCursors.value[index].x -
-                    (startPoint.value.x - evt.pageX),
+                    (startPoint.value.x - getPageX(evt)),
                   y:
                     initialCursors.value[index].y -
-                    (startPoint.value.y - evt.pageY),
+                    (startPoint.value.y - getPageY(evt)),
                 })
               ),
               c: cursor.c,
@@ -509,7 +490,7 @@ export default defineComponent({
             if (index == pointIndex.value) {
               return {
                 ...gridder(
-                  limiter({ x: evt.pageX - offx - 3, y: evt.pageY - offy - 3 })
+                  limiter({ x: getPageX(evt) - offx - 3, y: getPageY(evt) - offy - 3 })
                 ),
                 c: cursor.c,
               };
@@ -583,7 +564,7 @@ export default defineComponent({
       layers.value = array;
       updateLayerIndex(index);
     };
-    const onSelectLayer = (evt: Event, index: number) => {
+    const onSelectLayer = (index: number) => {
       updateLayerIndex(index);
     };
     const drop = (evt: MouseEvent) => {
