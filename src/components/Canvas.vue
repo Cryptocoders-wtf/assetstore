@@ -138,55 +138,19 @@
     </div>
     <div
       :style="`width:${sidew}px; height:${canh}px; left:${
-              offx + canw - 2 + sidew
-              }px; top:${offy}px`"
+        offx + canw - 2 + sidew
+      }px; top:${offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-300"
-      >
-      <div :style="`height:${canh - 4}px; overflow-y: scroll`">
-        <div v-for="(layer, index) in layers" :key="index">
-          <div v-if="index == layerIndex">
-            <button @click="insertLayer(index)">
-              <span class="material-icons">add</span>
-            </button>
-            <button @click="pivotLayer(index)" v-if="index > 0">
-              <span class="material-icons">swap_vert</span>
-            </button>
-          </div>
-          <img
-            @click="onSelectLayer($event, index)"
-            :src="layer.svgImage"
-            :style="`width:${sidew}px;height:${sidew / 2}px`"
-            class="border-2 border-solid object-fill"
-            :class="`${
-              index == layerIndex ? 'border-blue-400' : 'border-slate-200'
-            }`"
-          />
-          <div
-            v-if="index == layerIndex"
-            class="ml-2 mr-2 flex justify-between"
-          >
-            <button @click="insertLayer(index + 1)">
-              <span class="material-icons">add</span>
-            </button>
-            <button @click="copyLayer(index)">
-              <span class="material-icons">content_copy</span>
-            </button>
-            <button
-              @click="pivotLayer(index + 1)"
-              v-if="index < layers.length - 1"
-            >
-              <span class="material-icons">swap_vert</span>
-            </button>
-            <button
-              v-if="layers.length > 1"
-              class="ml-2"
-              @click="deleteLayer()"
-            >
-              <span class="material-icons">delete</span>
-            </button>
-          </div>
-        </div>
-      </div>
+    >
+      <Layers
+        :layers="layers"
+        :layerIndex="layerIndex"
+        @insertLayer="insertLayer($event)"
+        @pivotLayer="pivotLayer($event)"
+        @copyLayer="copyLayer($event)"
+        @onSelectLayer="onSelectLayer($event)"
+        @deleteLayer="deleteLayer()"
+      />
     </div>
   </div>
 </template>
@@ -204,7 +168,10 @@ import {
 } from "@/models/point";
 import { computed } from "@vue/reactivity";
 import { ColorPicker } from "vue3-colorpicker";
+
 import TokenPicker from "@/components/TokenPicker.vue";
+import Layers from "@/components/Canvas/Layers.vue";
+
 import { Token } from "@/models/token";
 import "vue3-colorpicker/style.css";
 
@@ -244,7 +211,7 @@ interface RotationInfo {
 
 export default defineComponent({
   name: "HomePage",
-  components: { ColorPicker, TokenPicker },
+  components: { ColorPicker, TokenPicker, Layers },
   props: ["drawing", "tokens"],
   setup(props, context) {
     const grid = ref<number>(0);
@@ -617,7 +584,7 @@ export default defineComponent({
       layers.value = array;
       updateLayerIndex(index);
     };
-    const onSelectLayer = (evt: Event, index: number) => {
+    const onSelectLayer = (index: number) => {
       updateLayerIndex(index);
     };
     const drop = (evt: MouseEvent) => {
