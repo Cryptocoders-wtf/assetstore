@@ -138,10 +138,10 @@
     </div>
     <div
       :style="`width:${sidew}px; height:${canh}px; left:${
-              offx + canw - 2 + sidew
-              }px; top:${offy}px`"
+        offx + canw - 2 + sidew
+      }px; top:${offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-300"
-      >
+    >
       <div :style="`height:${canh - 4}px; overflow-y: scroll`">
         <div v-for="(layer, index) in layers" :key="index">
           <div v-if="index == layerIndex">
@@ -210,6 +210,8 @@ import "vue3-colorpicker/style.css";
 
 import { canvasParams, roundRect } from "@/utils/canvasUtil";
 
+import { useUndoStack } from "@/utils/undo";
+
 const { curw, curh } = canvasParams;
 
 enum Tools {
@@ -217,13 +219,6 @@ enum Tools {
   MOVE,
   ZOOM,
   ROTATE,
-}
-
-interface State {
-  layers: Layer[];
-  layerIndex: number;
-  pointIndex: number;
-  token: Token | null;
 }
 
 interface Pos {
@@ -248,67 +243,8 @@ export default defineComponent({
   props: ["drawing", "tokens"],
   setup(props, context) {
     const grid = ref<number>(0);
-    const undoStack = ref<State[]>([]);
-    const undoIndex = ref<number>(0);
     const currentTool = ref<Tools>(0);
-    const recordState = () => {
-      const array = undoStack.value.filter((state, index) => {
-        return index < undoIndex.value;
-      });
-      array.push({
-        layers: layers.value,
-        layerIndex: layerIndex.value,
-        pointIndex: pointIndex.value,
-        token: currentToken.value,
-      });
-      undoStack.value = array;
-      undoIndex.value = undoStack.value.length;
-    };
-
-    const isRedoable = computed(() => {
-      return undoIndex.value + 1 < undoStack.value.length;
-    });
-
-    const isUndoable = computed(() => {
-      return undoIndex.value > 0;
-    });
-    const undo = () => {
-      console.log("undo", isUndoable.value);
-      if (!isUndoable.value) {
-        return;
-      }
-      if (!isRedoable.value) {
-        recordState();
-        undoIndex.value -= 1;
-      }
-      const state = undoStack.value[undoIndex.value - 1];
-      layers.value = state.layers;
-      updateLayerIndex(state.layerIndex);
-      pointIndex.value = state.pointIndex;
-      currentToken.value = state.token;
-      undoIndex.value -= 1;
-    };
-    const redo = () => {
-      if (!isRedoable.value) {
-        return;
-      }
-      const state = undoStack.value[undoIndex.value + 1];
-      layers.value = state.layers;
-      updateLayerIndex(state.layerIndex);
-      pointIndex.value = state.pointIndex;
-      currentToken.value = state.token;
-      undoIndex.value += 1;
-    };
-    const onColorFocus = () => {
-      recordState();
-    };
-
     const currentToken = ref<Token | null>(null);
-    const tokenSelected = (token: Token) => {
-      recordState();
-      currentToken.value = token;
-    };
-
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     //console.log("initialLayers", props.initialLayers ? "A" : "B");
@@ -324,6 +260,26 @@ export default defineComponent({
             },
           ]
     );
+    const cursors = ref<Point[]>([]);
+    const currentColor = ref<string>("");
+    const pivotPos = ref<Pos>({ x: 0, y: 0 });
+
+    const { recordState, isRedoable, isUndoable, _undo, _redo } = useUndoStack(
+      layers,
+      layerIndex,
+      pointIndex,
+      currentToken
+    );
+
+    const onColorFocus = () => {
+      recordState();
+    };
+
+    const tokenSelected = (token: Token) => {
+      recordState();
+      currentToken.value = token;
+    };
+
     const fetchToken = async () => {
       console.log("*** fetchToken", props.drawing.remixId, props.tokens.length);
       if (props.drawing.remixId > 0) {
@@ -339,9 +295,7 @@ export default defineComponent({
       }
     };
     fetchToken();
-    const cursors = ref<Point[]>([]);
-    const currentColor = ref<string>("");
-    const pivotPos = ref<Pos>({ x: 0, y: 0 });
+
     const moveToolPos = computed(() => {
       const { x, y, top, left } = cursors.value.reduce(
         ({ x, y }: Pos, cursor): UIPos => {
@@ -404,6 +358,18 @@ export default defineComponent({
       pointIndex.value = 0;
     };
     updateLayerIndex(0);
+    const undo = () => {
+      const index = _undo();
+      if (index !== null) {
+        updateLayerIndex(index);
+      }
+    };
+    const redo = () => {
+      const index = _redo();
+      if (index !== null) {
+        updateLayerIndex(index);
+      }
+    };
 
     const offsetX = ref<number>(0);
     const offsetY = ref<number>(0);
