@@ -80,16 +80,16 @@
         <div>
           <button
             @click="undo"
-            :disabled="!isUndoable()"
-            :style="`opacity:${isUndoable() ? '1.0' : '0.5'}`"
+            :disabled="!isUndoable"
+            :style="`opacity:${isUndoable ? '1.0' : '0.5'}`"
           >
             <span class="material-icons">undo</span>
           </button>
           <button
-            :style="`opacity:${isRedoable() ? '1.0' : '0.5'}`"
+            :style="`opacity:${isRedoable ? '1.0' : '0.5'}`"
             class="ml-1"
             @click="redo"
-            :disabled="!isRedoable()"
+            :disabled="!isRedoable"
           >
             <span class="material-icons">redo</span>
           </button>
@@ -265,19 +265,19 @@ export default defineComponent({
       undoIndex.value = undoStack.value.length;
     };
 
-    const isRedoable = () => {
+    const isRedoable = computed(() => {
       return undoIndex.value + 1 < undoStack.value.length;
-    };
+    });
 
-    const isUndoable = () => {
+    const isUndoable = computed(() => {
       return undoIndex.value > 0;
-    };
+    });
     const undo = () => {
-      console.log("undo", isUndoable());
-      if (!isUndoable()) {
+      console.log("undo", isUndoable.value);
+      if (!isUndoable.value) {
         return;
       }
-      if (!isRedoable()) {
+      if (!isRedoable.value) {
         recordState();
         undoIndex.value -= 1;
       }
@@ -289,7 +289,7 @@ export default defineComponent({
       undoIndex.value -= 1;
     };
     const redo = () => {
-      if (!isRedoable()) {
+      if (!isRedoable.value) {
         return;
       }
       const state = undoStack.value[undoIndex.value + 1];
