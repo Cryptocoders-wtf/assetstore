@@ -29,7 +29,7 @@
         "
         @click="onClickToPickLayer($event)"
       />
-      <div v-if="!toolHadleMode">
+      <div v-if="!toolHandleMode">
         <div
           v-for="(cursor, index) in cursors"
           :key="index"
@@ -58,7 +58,7 @@
         @touchstart="dragLayerImgStart($event)"
         @click="onClickToolHandle()"
       />
-      <div v-if="toolHadleMode">
+      <div v-if="toolHandleMode">
         <div
           v-for="({ type, x, y }, index) in toolHandles"
           :key="index"
@@ -186,34 +186,16 @@ import {
   getPageY,
   getOffsetX,
   getOffsetY,
+  Tools,
+  useToolHandleMode,
+  Pos,
+  UIPos,
+  RotationInfo,
 } from "@/utils/canvasUtil";
 
 import { useUndoStack } from "@/utils/undo";
 
 const { curw, curh } = canvasParams;
-
-enum Tools {
-  CURSOR,
-  MOVE,
-  ZOOM,
-  ROTATE,
-}
-
-interface Pos {
-  x: number;
-  y: number;
-}
-
-interface UIPos extends Pos {
-  top: number;
-  left: number;
-}
-
-interface RotationInfo {
-  radian: number;
-  cos: number;
-  sin: number;
-}
 
 export default defineComponent({
   name: "HomePage",
@@ -238,7 +220,6 @@ export default defineComponent({
             },
           ]
     );
-    const cursors = ref<Point[]>([]);
     const currentColor = ref<string>("");
     const pivotPos = ref<Pos>({ x: 0, y: 0 });
 
@@ -248,6 +229,14 @@ export default defineComponent({
       pointIndex,
       currentToken
     );
+
+    const {
+      toolHandleMode,
+      toolHandles,
+      onClickToolHandle,
+      moveToolPos,
+      cursors,
+    } = useToolHandleMode();
 
     const onColorFocus = () => {
       recordState();
@@ -274,46 +263,6 @@ export default defineComponent({
     };
     fetchToken();
 
-    const moveToolPos = computed(() => {
-      const { x, y, top, left } = cursors.value.reduce(
-        ({ x, y }: Pos, cursor): UIPos => {
-          return {
-            x: Math.round(x + cursor.x / cursors.value.length),
-            y: Math.round(y + cursor.y / cursors.value.length),
-            left: Math.round(x + cursor.x / cursors.value.length) - curh / 2,
-            top: Math.round(y + cursor.y / cursors.value.length) - curw / 2,
-          };
-        },
-        { x: 0, y: 0, top: 0, left: 0 }
-      );
-      return { x, y, top, left };
-    });
-    const toolHadleMode = ref<boolean>(false);
-    const toolHandles = computed(() => {
-      const { toold } = canvasParams;
-      return [
-        {
-          type: Tools.ROTATE,
-          x: moveToolPos.value.left + toold,
-          y: moveToolPos.value.top,
-        },
-        {
-          type: Tools.ROTATE,
-          x: moveToolPos.value.left - toold,
-          y: moveToolPos.value.top,
-        },
-        {
-          type: Tools.ZOOM,
-          x: moveToolPos.value.left,
-          y: moveToolPos.value.top + toold,
-        },
-        {
-          type: Tools.ZOOM,
-          x: moveToolPos.value.left,
-          y: moveToolPos.value.top - toold,
-        },
-      ];
-    });
     watch([cursors, currentColor], ([points, color]) => {
       layers.value = layers.value.map((layer, index) => {
         if (index == layerIndex.value) {
@@ -374,9 +323,6 @@ export default defineComponent({
       startPoint.value.y = getPageY(evt);
       initialCursors.value = cursors.value;
       recordState();
-    };
-    const onClickToolHandle = () => {
-      toolHadleMode.value = !toolHadleMode.value;
     };
     const dragStart = (evt: DragEvent | TouchEvent, index: number) => {
       currentTool.value = Tools.CURSOR;
@@ -618,7 +564,7 @@ export default defineComponent({
       }
     };
     return {
-      toolHadleMode,
+      toolHandleMode,
       Tools,
       cursors,
       pointIndex,
