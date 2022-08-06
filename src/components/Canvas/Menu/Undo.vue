@@ -18,7 +18,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent } from "vue";
 export default defineComponent({
   props: ["isUndoable", "isRedoable"],
   emits: ["undo", "redo"],

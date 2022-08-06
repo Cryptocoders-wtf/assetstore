@@ -81,26 +81,13 @@
       class="absolute border-2 border-solid border-blue-700 bg-slate-300"
     >
       <div class="ml-2 mr-2 flex justify-between">
-        <div>
-          <button
-            @click="undo"
-            :disabled="!isUndoable"
-            :style="`opacity:${isUndoable ? '1.0' : '0.5'}`"
-          >
-            <span class="material-icons">undo</span>
-          </button>
-          <button
-            :style="`opacity:${isRedoable ? '1.0' : '0.5'}`"
-            class="ml-1"
-            @click="redo"
-            :disabled="!isRedoable"
-          >
-            <span class="material-icons">redo</span>
-          </button>
-        </div>
-        <button @click="onClose">
-          <span class="material-icons">close</span>
-        </button>
+        <Undo
+          :isUndoable="isUndoable"
+          :isRedoable="isRedoable"
+          @undo="undo"
+          @redo="redo"
+        />
+        <Close @onClose="onClose" />
       </div>
       <div>
         <token-picker
@@ -117,7 +104,7 @@
       </div>
       <div class="ml-2 mr-2 flex justify-between">
         <button @click="togglePoint">
-          <span v-if="isSharpCorner()" class="material-icons"
+          <span v-if="isSharpCorner" class="material-icons"
             >check_box_outline_blank</span
           >
           <span v-else class="material-icons">radio_button_unchecked</span>
@@ -175,6 +162,8 @@ import { ColorPicker } from "vue3-colorpicker";
 
 import TokenPicker from "@/components/TokenPicker.vue";
 import Layers from "@/components/Canvas/Layers.vue";
+import Undo from "@/components/Canvas/Menu/Undo.vue";
+import Close from "@/components/Canvas/Menu/Close.vue";
 
 import { Token } from "@/models/token";
 import "vue3-colorpicker/style.css";
@@ -199,7 +188,7 @@ const { curw, curh } = canvasParams;
 
 export default defineComponent({
   name: "HomePage",
-  components: { ColorPicker, TokenPicker, Layers },
+  components: { ColorPicker, TokenPicker, Layers, Undo, Close },
   props: ["drawing", "tokens"],
   setup(props, context) {
     const grid = ref<number>(0);
@@ -450,9 +439,9 @@ export default defineComponent({
       recordState();
       cursors.value = togglePointType(cursors.value, pointIndex.value);
     };
-    const isSharpCorner = () => {
+    const isSharpCorner = computed(() => {
       return cursors.value[pointIndex.value].c;
-    };
+    });
     const splitSegment = () => {
       recordState();
       cursors.value = splitPoint(cursors.value, pointIndex.value);
