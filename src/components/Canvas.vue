@@ -97,28 +97,12 @@
         />
       </div>
       <div>
-        <button @click="toggleGrid" class="ml-2 flex">
-          <span class="material-icons">view_module</span>
-          <span>{{ grid }}</span>
-        </button>
+        <ToggleGrid @toggleGrid="toggleGrid" :grid="grid" />
       </div>
       <div class="ml-2 mr-2 flex justify-between">
-        <button @click="togglePoint">
-          <span v-if="isSharpCorner" class="material-icons"
-            >check_box_outline_blank</span
-          >
-          <span v-else class="material-icons">radio_button_unchecked</span>
-        </button>
-        <button
-          :disabled="cursors.length <= 3"
-          @click="deletePoint"
-          :style="`opacity:${cursors.length > 3 ? '1.0' : '0.5'}`"
-        >
-          <span class="material-icons">delete</span>
-        </button>
-        <button @click="splitSegment">
-          <span class="material-icons">add_circle</span>
-        </button>
+        <TogglePoint @togglePoint="togglePoint" isSharpCorner="isSharpCorner" />
+        <DeletePoint @deletePoint="deletePoint" :cursors="cursors" />
+        <SplitSegment @splitSegment="splitSegment" />
       </div>
       <div>
         <color-picker
@@ -164,6 +148,10 @@ import TokenPicker from "@/components/TokenPicker.vue";
 import Layers from "@/components/Canvas/Layers.vue";
 import Undo from "@/components/Canvas/Menu/Undo.vue";
 import Close from "@/components/Canvas/Menu/Close.vue";
+import ToggleGrid from "@/components/Canvas/Menu/ToggleGrid.vue";
+import TogglePoint from "@/components/Canvas/Menu/TogglePoint.vue";
+import DeletePoint from "@/components/Canvas/Menu/DeletePoint.vue";
+import SplitSegment from "@/components/Canvas/Menu/SplitSegment.vue";
 
 import { Token } from "@/models/token";
 import "vue3-colorpicker/style.css";
@@ -188,7 +176,17 @@ const { curw, curh } = canvasParams;
 
 export default defineComponent({
   name: "HomePage",
-  components: { ColorPicker, TokenPicker, Layers, Undo, Close },
+  components: {
+    ColorPicker,
+    TokenPicker,
+    Layers,
+    Undo,
+    Close,
+    ToggleGrid,
+    TogglePoint,
+    DeletePoint,
+    SplitSegment,
+  },
   props: ["drawing", "tokens"],
   setup(props, context) {
     const grid = ref<number>(0);

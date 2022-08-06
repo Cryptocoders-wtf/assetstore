@@ -2,7 +2,6 @@ import { ref, computed, Ref } from "vue";
 
 import { Point } from "@/models/point";
 
-
 export enum Tools {
   CURSOR,
   MOVE,
