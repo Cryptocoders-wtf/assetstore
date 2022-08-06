@@ -149,11 +149,11 @@
       <Layers
         :layers="layers"
         :layerIndex="layerIndex"
-        @insertLayer="insertLayer($event)"
-        @pivotLayer="pivotLayer($event)"
-        @copyLayer="copyLayer($event)"
-        @onSelectLayer="onSelectLayer($event)"
-        @deleteLayer="deleteLayer()"
+        @insertLayer="insertLayer"
+        @pivotLayer="pivotLayer"
+        @copyLayer="copyLayer"
+        @onSelectLayer="onSelectLayer"
+        @deleteLayer="deleteLayer"
       />
     </div>
   </div>
@@ -162,7 +162,6 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 import {
-  Point,
   Layer,
   Drawing,
   svgImageFromPath,
@@ -170,7 +169,6 @@ import {
   splitPoint,
   togglePointType,
 } from "@/models/point";
-import { computed } from "@vue/reactivity";
 import { ColorPicker } from "vue3-colorpicker";
 
 import TokenPicker from "@/components/TokenPicker.vue";
@@ -182,28 +180,18 @@ import "vue3-colorpicker/style.css";
 import {
   canvasParams,
   roundRect,
-  getPageX,
-  getPageY,
-  getOffsetX,
-  getOffsetY,
   Tools,
   useToolHandleMode,
-  Pos,
-  UIPos,
-  RotationInfo,
 } from "@/utils/canvasUtil";
 
 import { useUndoStack } from "@/utils/undo";
-
-const { curw, curh } = canvasParams;
+import { useDrag } from "@/utils/Drag";
 
 export default defineComponent({
   name: "HomePage",
   components: { ColorPicker, TokenPicker, Layers },
   props: ["drawing", "tokens"],
   setup(props, context) {
-    const grid = ref<number>(0);
-    const currentTool = ref<Tools>(0);
     const currentToken = ref<Token | null>(null);
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
@@ -221,7 +209,6 @@ export default defineComponent({
           ]
     );
     const currentColor = ref<string>("");
-    const pivotPos = ref<Pos>({ x: 0, y: 0 });
 
     const { recordState, isRedoable, isUndoable, _undo, _redo } = useUndoStack(
       layers,
@@ -298,154 +285,19 @@ export default defineComponent({
       }
     };
 
-    const offsetX = ref<number>(0);
-    const offsetY = ref<number>(0);
-    const startPoint = ref<Pos>({ x: 0, y: 0 });
-    const initialCursors = ref<Point[]>([]);
     const onSelect = (evt: Event, index: number) => {
       pointIndex.value = index;
     };
-    const dragToolHandleStart = (evt: DragEvent | TouchEvent, tool: Tools) => {
-      currentTool.value = tool;
-      offsetX.value = curw / 2;
-      offsetY.value = curh / 2;
-      startPoint.value.x = getPageX(evt);
-      startPoint.value.y = getPageY(evt);
-      pivotPos.value = moveToolPos.value;
-      initialCursors.value = cursors.value;
-      recordState();
-    };
-    const dragLayerImgStart = (evt: MouseEvent | TouchEvent) => {
-      currentTool.value = Tools.MOVE;
-      offsetX.value = curw / 2;
-      offsetY.value = curh / 2;
-      startPoint.value.x = getPageX(evt);
-      startPoint.value.y = getPageY(evt);
-      initialCursors.value = cursors.value;
-      recordState();
-    };
-    const dragStart = (evt: DragEvent | TouchEvent, index: number) => {
-      currentTool.value = Tools.CURSOR;
-      offsetX.value = getOffsetX(evt);
-      offsetY.value = getOffsetY(evt);
-      pointIndex.value = index;
-      recordState();
-    };
-    const dragOver = (evt: DragEvent | TouchEvent) => {
-      const { offx, offy } = canvasParams;
-      const g = grid.value;
-      const gridder = (pos: Pos): Pos => {
-        const f = (n: number) => (g == 0 ? n : Math.round(n / g) * g);
-        return {
-          x: f(pos.x),
-          y: f(pos.y),
-        };
-      };
-      const limiter = (pos: Pos): Pos => {
-        const { canw, canh } = canvasParams;
-        const f = (can: number, n: number, offset: number, cur: number) =>
-          Math.max(0, Math.min(can - g - 1, n - offset + cur / 2));
-        return {
-          x: f(canw, pos.x, offsetX.value, curw),
-          y: f(canh, pos.y, offsetY.value, curh),
-        };
-      };
-      const magnification =
-        currentTool.value === Tools.ZOOM &&
-        Math.abs(pivotPos.value.y + offy - startPoint.value.y) !== 0
-          ? Math.abs(pivotPos.value.y + offy - getPageY(evt)) /
-            Math.abs(pivotPos.value.y + offy - startPoint.value.y)
-          : 0;
-      const rad =
-        currentTool.value === Tools.ROTATE
-          ? pivotPos.value.x + offx - startPoint.value.x > 1
-            ? Math.atan2(
-                pivotPos.value.y + offy - getPageY(evt),
-                pivotPos.value.x + offx - getPageX(evt)
-              )
-            : (Math.atan2(
-                pivotPos.value.y + offy - getPageY(evt),
-                pivotPos.value.x + offx - getPageX(evt)
-              ) +
-                Math.PI) %
-              (2 * Math.PI)
-          : 0;
-      const RotationInfo: RotationInfo =
-        currentTool.value === Tools.ROTATE
-          ? {
-              radian: rad,
-              sin: Math.sin(rad),
-              cos: Math.cos(rad),
-            }
-          : { radian: 0, sin: 0, cos: 0 };
-      cursors.value = cursors.value.map((cursor, index) => {
-        switch (currentTool.value) {
-          case Tools.ZOOM:
-            return {
-              ...gridder(
-                limiter({
-                  x:
-                    initialCursors.value[index].x * magnification +
-                    (pivotPos.value.x - pivotPos.value.x * magnification),
-                  y:
-                    initialCursors.value[index].y * magnification +
-                    (pivotPos.value.y - pivotPos.value.y * magnification),
-                })
-              ),
-              c: cursor.c,
-            };
-          case Tools.ROTATE:
-            return {
-              ...gridder(
-                limiter({
-                  x:
-                    (initialCursors.value[index].x - pivotPos.value.x) *
-                      RotationInfo.cos -
-                    (initialCursors.value[index].y - pivotPos.value.y) *
-                      RotationInfo.sin +
-                    pivotPos.value.x,
-                  y:
-                    (initialCursors.value[index].x - pivotPos.value.x) *
-                      RotationInfo.sin +
-                    (initialCursors.value[index].y - pivotPos.value.y) *
-                      RotationInfo.cos +
-                    pivotPos.value.y,
-                })
-              ),
-              c: cursor.c,
-            };
-          case Tools.MOVE:
-            return {
-              ...gridder(
-                limiter({
-                  x:
-                    initialCursors.value[index].x -
-                    (startPoint.value.x - getPageX(evt)),
-                  y:
-                    initialCursors.value[index].y -
-                    (startPoint.value.y - getPageY(evt)),
-                })
-              ),
-              c: cursor.c,
-            };
-          case Tools.CURSOR:
-          default:
-            if (index == pointIndex.value) {
-              return {
-                ...gridder(
-                  limiter({
-                    x: getPageX(evt) - offx - 3,
-                    y: getPageY(evt) - offy - 3,
-                  })
-                ),
-                c: cursor.c,
-              };
-            }
-        }
-        return cursor;
-      });
-      evt.preventDefault();
-    };
+    const {
+      dragLayerImgStart,
+      dragToolHandleStart,
+      dragStart,
+      dragOver,
+      currentTool,
+      toggleGrid,
+      grid,
+    } = useDrag(pointIndex, moveToolPos, cursors, recordState);
+
     const togglePoint = () => {
       recordState();
       cursors.value = togglePointType(cursors.value, pointIndex.value);
@@ -515,9 +367,6 @@ export default defineComponent({
     };
     const drop = (evt: MouseEvent) => {
       evt.preventDefault();
-    };
-    const toggleGrid = () => {
-      grid.value = (grid.value + 8) % 40;
     };
     const onClose = () => {
       const token = currentToken.value;

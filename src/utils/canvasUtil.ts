@@ -2,7 +2,6 @@ import { ref, computed, Ref } from "vue";
 
 import { Point } from "@/models/point";
 
-
 export enum Tools {
   CURSOR,
   MOVE,
@@ -107,7 +106,7 @@ export const useToolHandleMode = () => {
   const onClickToolHandle = () => {
     toolHandleMode.value = !toolHandleMode.value;
   };
-  const moveToolPos = computed(() => {
+  const moveToolPos = computed<UIPos>(() => {
     const { x, y, top, left } = cursors.value.reduce(
       ({ x, y }: Pos, cursor): UIPos => {
         const vx = assetXtoCanvasX(cursor.x);
