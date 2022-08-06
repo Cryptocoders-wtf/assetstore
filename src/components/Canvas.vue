@@ -162,7 +162,6 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 import {
-  Point,
   Layer,
   Drawing,
   svgImageFromPath,
@@ -170,7 +169,6 @@ import {
   splitPoint,
   togglePointType,
 } from "@/models/point";
-import { computed } from "@vue/reactivity";
 import { ColorPicker } from "vue3-colorpicker";
 
 import TokenPicker from "@/components/TokenPicker.vue";
@@ -184,14 +182,10 @@ import {
   roundRect,
   Tools,
   useToolHandleMode,
-  Pos,
-  UIPos,
-  RotationInfo,
 } from "@/utils/canvasUtil";
 
 import { useUndoStack } from "@/utils/undo";
 import { useDrag } from "@/utils/Drag";
-const { curw, curh } = canvasParams;
 
 export default defineComponent({
   name: "HomePage",
