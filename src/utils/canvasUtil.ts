@@ -26,16 +26,16 @@ export interface RotationInfo {
   sin: number;
 }
 
-const canvasSize = 1024;
+const canvasSize = {w: 1024, h: 1024};
 export const canvasParams = {
-  canw: canvasSize,
-  canh: canvasSize,
+  canw: canvasSize.w,
+  canh: canvasSize.h,
   offx: 40, // fix
   offy: 80, // fix
-  curw: canvasSize * 30 / 512,
-  curh: canvasSize * 30 / 512,
+  curw: canvasSize.w * 30 / 512,
+  curh: canvasSize.h  * 30 / 512,
   sidew: 150,  //fix
-  toold: canvasSize * 60 / 512,
+  toold: canvasSize.w * 60 / 512,
 };
 
 const { canw, canh } = canvasParams;
