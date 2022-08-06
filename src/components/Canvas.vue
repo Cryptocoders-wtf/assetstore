@@ -33,9 +33,9 @@
         <div
           v-for="(cursor, index) in cursors"
           :key="index"
-          :style="`width:${curw}px; height:${curh}px; left:${
+          :style="`width:${curw}px; height:${curh}px; left:${assetXtoCanvasX(
             cursor.x - curw / 2
-          }px; top:${cursor.y - curh / 2}px`"
+          )}px; top:${assetYtoCanvasY(cursor.y - curh / 2)}px`"
           :class="`${
             index == pointIndex ? 'border-blue-800' : 'border-blue-400'
           } ${cursor.c ? '' : 'rounded-xl'}`"
@@ -182,6 +182,8 @@ import {
   roundRect,
   Tools,
   useToolHandleMode,
+  assetXtoCanvasX,
+  assetYtoCanvasY,
 } from "@/utils/canvasUtil";
 
 import { useUndoStack } from "@/utils/undo";
@@ -451,6 +453,9 @@ export default defineComponent({
       onClickToPickLayer,
       currentToken,
       tokenSelected,
+
+      assetXtoCanvasX,
+      assetYtoCanvasY,
     };
   },
 });
