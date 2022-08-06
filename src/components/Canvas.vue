@@ -149,11 +149,11 @@
       <Layers
         :layers="layers"
         :layerIndex="layerIndex"
-        @insertLayer="insertLayer($event)"
-        @pivotLayer="pivotLayer($event)"
-        @copyLayer="copyLayer($event)"
-        @onSelectLayer="onSelectLayer($event)"
-        @deleteLayer="deleteLayer()"
+        @insertLayer="insertLayer"
+        @pivotLayer="pivotLayer"
+        @copyLayer="copyLayer"
+        @onSelectLayer="onSelectLayer"
+        @deleteLayer="deleteLayer"
       />
     </div>
   </div>
