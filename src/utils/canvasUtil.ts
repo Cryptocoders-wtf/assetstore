@@ -27,20 +27,21 @@ export interface RotationInfo {
 }
 
 const canvasSize = {w: 1024, h: 1024};
+const assetSize = {w: 512, h: 512 };
+
 export const canvasParams = {
   canw: canvasSize.w,
   canh: canvasSize.h,
   offx: 40, // fix
   offy: 80, // fix
-  curw: canvasSize.w * 30 / 512,
-  curh: canvasSize.h  * 30 / 512,
+  curw: canvasSize.w * 30 / assetSize.w,
+  curh: canvasSize.h  * 30 / assetSize.h,
   sidew: 150,  //fix
-  toold: canvasSize.w * 60 / 512,
+  toold: canvasSize.w * 60 / assetSize.w,
 };
 
 const { canw, canh } = canvasParams;
 
-const assetSize = {w: 512, h: 512 };
 export const roundRect: Point[] = [
   { x: assetSize.w / 4, y: assetSize.h / 4, c: false },
   { x: assetSize.w - assetSize.w / 4, y: assetSize.h / 4, c: false },
