@@ -49,12 +49,27 @@ export const roundRect: Point[] = [
   { x: assetSize.w / 4, y: assetSize.h - assetSize.h / 4, c: false },
 ];
 
-export const getPageX = (evt: DragEvent | MouseEvent | TouchEvent): number =>
-  evt instanceof TouchEvent ? evt.targetTouches[0].pageX : evt.pageX;
+const canvasXtoAssetX = (x: number) => {
+  return x / canvasSize.w * assetSize.w;
+}
+const canvasYtoAssetY = (y: number) => {
+  return y / canvasSize.h * assetSize.h;
+}
+const assetXtoCanvasX = (x: number) => {
+  return x / assetSize.w * canvasSize.w;
+}
+const assetYtoCanvasY = (y: number) => {
+  return y / assetSize.h * canvasSize.h;
+}
 
-export const getPageY = (evt: DragEvent | MouseEvent | TouchEvent): number =>
-  evt instanceof TouchEvent ? evt.targetTouches[0].pageY : evt.pageY;
-
+export const getPageX = (evt: DragEvent | MouseEvent | TouchEvent): number => {
+  const x = evt instanceof TouchEvent ? evt.targetTouches[0].pageX : evt.pageX;
+  return canvasXtoAssetX(x);
+}
+export const getPageY = (evt: DragEvent | MouseEvent | TouchEvent): number => {
+  const y = evt instanceof TouchEvent ? evt.targetTouches[0].pageY : evt.pageY;
+  return canvasYtoAssetY(y);
+}
 export const getOffsetX = (evt: DragEvent | MouseEvent | TouchEvent): number =>
   evt instanceof TouchEvent ? 0 : evt.offsetX;
 
@@ -95,14 +110,16 @@ export const useToolHandleMode = () => {
   const moveToolPos = computed(() => {
     const { x, y, top, left } = cursors.value.reduce(
       ({ x, y }: Pos, cursor): UIPos => {
+        const vx = assetXtoCanvasX(cursor.x);
+        const vy = assetYtoCanvasY(cursor.y);
         return {
-          x: Math.round(x + cursor.x / cursors.value.length),
-          y: Math.round(y + cursor.y / cursors.value.length),
+          x: Math.round(x + vx / cursors.value.length),
+          y: Math.round(y + vy / cursors.value.length),
           left:
-            Math.round(x + cursor.x / cursors.value.length) -
+          Math.round(x + vx / cursors.value.length) -
             canvasParams.curh / 2,
           top:
-            Math.round(y + cursor.y / cursors.value.length) -
+            Math.round(y + vy / cursors.value.length) -
             canvasParams.curw / 2,
         };
       },
