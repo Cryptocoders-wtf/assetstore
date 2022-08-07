@@ -125,7 +125,6 @@
         :layers="layers"
         :layerIndex="layerIndex"
         @insertLayer="insertLayer"
-        @pivotLayer="pivotLayer"
         @copyLayer="copyLayer"
         @onSelectLayer="onSelectLayer"
         @updateLayers="updateLayers"
@@ -346,15 +345,6 @@ export default defineComponent({
       layers.value = array;
       updateLayerIndex(index);
     };
-    const pivotLayer = (index: number) => {
-      recordState();
-      const array = layers.value.map((layer) => layer);
-      const tmp = array[index];
-      array[index] = array[index - 1];
-      array[index - 1] = tmp;
-      layers.value = array;
-      updateLayerIndex(index);
-    };
     const onSelectLayer = (index: number) => {
       updateLayerIndex(index);
     };
@@ -428,7 +418,6 @@ export default defineComponent({
       insertLayer,
       updateLayers,
       copyLayer,
-      pivotLayer,
       onSelectLayer,
       onColorFocus,
       onClose,
