@@ -40,12 +40,12 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
-    const network = 
+    const network =
       typeof route.query.network == "string" ? route.query.network : "mainnet";
     const addresses = getContractAddresses(network);
     if (!addresses) {
       return {
-        error: true
+        error: true,
       };
     }
     addresses.tokenAddress = addresses.kamonAddress;

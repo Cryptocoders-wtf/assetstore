@@ -1,6 +1,3 @@
 <template>
-  <div>
-    Network Error
-  </div>
+  <div>Network Error</div>
 </template>
-  

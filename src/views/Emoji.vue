@@ -42,7 +42,7 @@ export default defineComponent({
     const addresses = getContractAddresses(network);
     if (!addresses) {
       return {
-        error: true
+        error: true,
       };
     }
     addresses.tokenAddress = addresses.flagAddress;
