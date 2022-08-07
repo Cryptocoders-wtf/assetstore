@@ -47,7 +47,6 @@ export default defineComponent({
   props: ["layers", "layerIndex"],
   emits: [
     "insertLayer",
-    "copyLayer",
     "onSelectLayer",
     "updateLayers",
   ],
@@ -65,7 +64,10 @@ export default defineComponent({
       context.emit("updateLayers", array, props.layerIndex);
     };
     const copyLayer = (index: number) => {
-      context.emit("copyLayer", index);
+      const array = props.layers.map((layer:Layer) => layer);
+      const newLayer = { ...props.layers[index] };
+      array.splice(index, 0, newLayer);
+      context.emit("updateLayers", array, props.layerIndex + 1);
     };
     const onSelectLayer = (index: number) => {
       context.emit("onSelectLayer", index);

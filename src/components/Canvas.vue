@@ -125,7 +125,6 @@
         :layers="layers"
         :layerIndex="layerIndex"
         @insertLayer="insertLayer"
-        @copyLayer="copyLayer"
         @onSelectLayer="onSelectLayer"
         @updateLayers="updateLayers"
       />
@@ -337,14 +336,6 @@ export default defineComponent({
       layers.value = array;
       updateLayerIndex(index);
     };
-    const copyLayer = (index: number) => {
-      recordState();
-      const array = layers.value.map((layer) => layer);
-      const newLayer = { ...layers.value[index] };
-      array.splice(index, 0, newLayer);
-      layers.value = array;
-      updateLayerIndex(index);
-    };
     const onSelectLayer = (index: number) => {
       updateLayerIndex(index);
     };
@@ -417,7 +408,6 @@ export default defineComponent({
       onSelect,
       insertLayer,
       updateLayers,
-      copyLayer,
       onSelectLayer,
       onColorFocus,
       onClose,
