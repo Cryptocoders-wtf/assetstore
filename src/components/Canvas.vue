@@ -128,7 +128,7 @@
         @pivotLayer="pivotLayer"
         @copyLayer="copyLayer"
         @onSelectLayer="onSelectLayer"
-        @deleteLayer="deleteLayer"
+        @updateLayers="updateLayers"
       />
     </div>
   </div>
@@ -333,15 +333,10 @@ export default defineComponent({
       layers.value = array;
       updateLayerIndex(index);
     };
-    const deleteLayer = () => {
-      if (layers.value.length == 1) {
-        return;
-      }
+    const updateLayers = (array: Layer[], index: number) => {
       recordState();
-      layers.value = layers.value.filter((layer, index) => {
-        return index != layerIndex.value;
-      });
-      updateLayerIndex(layerIndex.value - 1);
+      layers.value = array;
+      updateLayerIndex(index);
     };
     const copyLayer = (index: number) => {
       recordState();
@@ -431,7 +426,7 @@ export default defineComponent({
       deletePoint,
       onSelect,
       insertLayer,
-      deleteLayer,
+      updateLayers,
       copyLayer,
       pivotLayer,
       onSelectLayer,

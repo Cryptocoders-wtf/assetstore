@@ -49,7 +49,7 @@ export default defineComponent({
     "pivotLayer",
     "copyLayer",
     "onSelectLayer",
-    "deleteLayer",
+    "updateLayer",
   ],
   setup(props, context) {
     const { canvasParams } = useCanvasParams();
@@ -67,7 +67,13 @@ export default defineComponent({
       context.emit("onSelectLayer", index);
     };
     const deleteLayer = () => {
-      context.emit("deleteLayer");
+      if (props.layers.length == 1) {
+        return;
+      }
+      const array = props.layers.filter((layer, index) => {
+        return index != props.layerIndex;
+      });
+      context.emit("updateLayers", array, props.layerIndex - 1);
     };
     return {
       canvasParams,
