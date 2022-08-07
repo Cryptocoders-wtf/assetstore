@@ -5,6 +5,7 @@ interface State {
   ethereum: any | null;
   chainId: string | null;
   account: undefined | null | string;
+  windowWidth: number;
 }
 
 export default createStore<State>({
@@ -12,6 +13,7 @@ export default createStore<State>({
     ethereum: null,
     chainId: null,
     account: undefined,
+    windowWidth: 500,
   },
   mutations: {
     setEthereum(state: State, ethereum: any | null) {
@@ -25,6 +27,9 @@ export default createStore<State>({
     },
     setAccount(state: State, account: string | null) {
       state.account = account && account.toLowerCase();
+    },
+    setWindowWidth(state: State, windowWidth: number) {
+      state.windowWidth = windowWidth;
     },
   },
   getters: {
