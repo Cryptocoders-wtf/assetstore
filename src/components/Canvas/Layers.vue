@@ -41,33 +41,46 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 import { useCanvasParams } from "@/utils/canvasUtil";
+import { Layer } from "@/models/point";
 
 export default defineComponent({
-  props: ["layers", "layerIndex"],
+  props: ["layers", "layerIndex", "newLayer"],
   emits: [
-    "insertLayer",
-    "pivotLayer",
-    "copyLayer",
     "onSelectLayer",
-    "deleteLayer",
+    "updateLayers",
   ],
   setup(props, context) {
     const { canvasParams } = useCanvasParams();
 
     const insertLayer = (index: number) => {
-      context.emit("insertLayer", index);
+      const array = props.layers.map((layer:Layer) => layer);
+      array.splice(index, 0, props.newLayer);
+      context.emit("updateLayers", array, props.layerIndex + 1);
     };
     const pivotLayer = (index: number) => {
-      context.emit("pivotLayer", index);
+      const array = props.layers.map((layer:Layer) => layer);
+      const tmp = array[index];
+      array[index] = array[index - 1];
+      array[index - 1] = tmp;
+      context.emit("updateLayers", array, props.layerIndex);
     };
     const copyLayer = (index: number) => {
-      context.emit("copyLayer", index);
+      const array = props.layers.map((layer:Layer) => layer);
+      const layer = { ...props.layers[index] };
+      array.splice(index, 0, layer);
+      context.emit("updateLayers", array, props.layerIndex + 1);
     };
     const onSelectLayer = (index: number) => {
       context.emit("onSelectLayer", index);
     };
     const deleteLayer = () => {
-      context.emit("deleteLayer");
+      if (props.layers.length == 1) {
+        return;
+      }
+      const array = props.layers.filter((layer:Layer, index:number) => {
+        return index != props.layerIndex;
+      });
+      context.emit("updateLayers", array, props.layerIndex - 1);
     };
     return {
       canvasParams,

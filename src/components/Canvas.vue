@@ -124,11 +124,9 @@
       <Layers
         :layers="layers"
         :layerIndex="layerIndex"
-        @insertLayer="insertLayer"
-        @pivotLayer="pivotLayer"
-        @copyLayer="copyLayer"
+        :newLayer="newLayer"
         @onSelectLayer="onSelectLayer"
-        @deleteLayer="deleteLayer"
+        @updateLayers="updateLayers"
       />
     </div>
   </div>
@@ -319,44 +317,17 @@ export default defineComponent({
       pointIndex.value =
         (pointIndex.value + cursors.value.length - 1) % cursors.value.length;
     };
-    const insertLayer = (index: number) => {
-      recordState();
-      const array = layers.value.map((layer) => layer);
+    const newLayer = computed(() => {
       const path = pathFromPoints(roundRect);
-      const newLayer = {
+      return {
         points: roundRect,
         color: currentColor.value,
         path,
         svgImage: svgImageFromPath(path, currentColor.value),
-      };
-      array.splice(index, 0, newLayer);
-      layers.value = array;
-      updateLayerIndex(index);
-    };
-    const deleteLayer = () => {
-      if (layers.value.length == 1) {
-        return;
-      }
+      } as Layer;
+    });
+    const updateLayers = (array: Layer[], index: number) => {
       recordState();
-      layers.value = layers.value.filter((layer, index) => {
-        return index != layerIndex.value;
-      });
-      updateLayerIndex(layerIndex.value - 1);
-    };
-    const copyLayer = (index: number) => {
-      recordState();
-      const array = layers.value.map((layer) => layer);
-      const newLayer = { ...layers.value[index] };
-      array.splice(index, 0, newLayer);
-      layers.value = array;
-      updateLayerIndex(index);
-    };
-    const pivotLayer = (index: number) => {
-      recordState();
-      const array = layers.value.map((layer) => layer);
-      const tmp = array[index];
-      array[index] = array[index - 1];
-      array[index - 1] = tmp;
       layers.value = array;
       updateLayerIndex(index);
     };
@@ -430,10 +401,8 @@ export default defineComponent({
       splitSegment,
       deletePoint,
       onSelect,
-      insertLayer,
-      deleteLayer,
-      copyLayer,
-      pivotLayer,
+      newLayer,
+      updateLayers,
       onSelectLayer,
       onColorFocus,
       onClose,
