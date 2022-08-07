@@ -4,7 +4,7 @@ import { assets } from "../../generated/kamon_assets";
 
 export const actions = {
   group: "Hakko Daiodo (CC-BY equivalent)",
-  category: "Asanoha",
+  category: "Ikari",
   width: 24,
   height: 24,
   assets: assets,
