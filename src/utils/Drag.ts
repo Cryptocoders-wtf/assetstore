@@ -79,8 +79,18 @@ export const useDrag = (
       const f = (can: number, n: number, offset: number, cur: number) =>
         Math.max(0, Math.min(can - g - 1, n - offset + cur / 2));
       return {
-        x: f(canvasParams.value.assw, pos.x, offsetX.value, canvasParams.value.curw),
-        y: f(canvasParams.value.assh, pos.y, offsetY.value, canvasParams.value.curh),
+        x: f(
+          canvasParams.value.assw,
+          pos.x,
+          offsetX.value,
+          canvasParams.value.curw
+        ),
+        y: f(
+          canvasParams.value.assh,
+          pos.y,
+          offsetY.value,
+          canvasParams.value.curh
+        ),
       };
     };
     const magnification =

@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-8 p-2 bg-gray-300">
+  <div class="mt-8 bg-gray-300 p-2">
     <div class="mb-2">
       <p class="font-bold">{{ $t("message.resources") }}</p>
     </div>

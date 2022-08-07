@@ -36,12 +36,12 @@ export const menuSize = {
 const assetSize = { w: 512, h: 512 };
 export const useCanvasParams = () => {
   const store = useStore();
-  
+
   const windowWidth = computed(() => {
-    return store.state.windowWidth  - menuSize.sidew * 2 - menuSize.offx * 2
+    return store.state.windowWidth - menuSize.sidew * 2 - menuSize.offx * 2;
   });
 
-  const canvasSize = computed<{w: number, h: number }>(() => {
+  const canvasSize = computed<{ w: number; h: number }>(() => {
     return { w: windowWidth.value, h: windowWidth.value };
   });
 
@@ -55,7 +55,7 @@ export const useCanvasParams = () => {
       assw: assetSize.w,
       assh: assetSize.h,
       caratio: canvasSize.value.w / assetSize.w,
-      ...menuSize
+      ...menuSize,
     };
   });
 
@@ -71,25 +71,27 @@ export const useCanvasParams = () => {
   const assetYtoCanvasY = (y: number) => {
     return (y / assetSize.h) * canvasSize.value.h;
   };
-  
+
   const canvastoAsset = ({ x, y }: Pos): Pos => {
     return { x: canvasXtoAssetX(x), y: canvasYtoAssetY(y) };
   };
-  
+
   const getPageX = (evt: DragEvent | MouseEvent | TouchEvent): number => {
-    const x = evt instanceof TouchEvent ? evt.targetTouches[0].pageX : evt.pageX;
+    const x =
+      evt instanceof TouchEvent ? evt.targetTouches[0].pageX : evt.pageX;
     return canvasXtoAssetX(x - offx);
   };
   const getPageY = (evt: DragEvent | MouseEvent | TouchEvent): number => {
-    const y = evt instanceof TouchEvent ? evt.targetTouches[0].pageY : evt.pageY;
+    const y =
+      evt instanceof TouchEvent ? evt.targetTouches[0].pageY : evt.pageY;
     return canvasYtoAssetY(y - offy);
   };
   const getOffsetX = (evt: DragEvent | MouseEvent | TouchEvent): number =>
     evt instanceof TouchEvent ? 0 : evt.offsetX / canvasParams.value.caratio;
-  
+
   const getOffsetY = (evt: DragEvent | MouseEvent | TouchEvent): number =>
     evt instanceof TouchEvent ? 0 : evt.offsetY / canvasParams.value.caratio;
-  
+
   return {
     canvasParams,
     assetXtoCanvasX,
@@ -100,7 +102,7 @@ export const useCanvasParams = () => {
     getOffsetY,
     canvastoAsset,
   };
-}
+};
 const { offx, offy } = menuSize;
 
 export const roundRect: Point[] = [
@@ -114,13 +116,8 @@ export const roundRect: Point[] = [
   { x: assetSize.w / 4, y: assetSize.h - assetSize.h / 4, c: false },
 ];
 
-
 export const useToolHandleMode = () => {
-  const {
-    assetXtoCanvasX,
-    assetYtoCanvasY,
-    canvasParams,
-  } = useCanvasParams();
+  const { assetXtoCanvasX, assetYtoCanvasY, canvasParams } = useCanvasParams();
   const cursors = ref<Point[]>([]);
   const toolHandleMode = ref<boolean>(true);
   const toolHandles = computed(() => {
@@ -159,9 +156,11 @@ export const useToolHandleMode = () => {
           x: Math.round(x + vx / cursors.value.length),
           y: Math.round(y + vy / cursors.value.length),
           left:
-            Math.round(x + vx / cursors.value.length) - canvasParams.value.curh / 2,
+            Math.round(x + vx / cursors.value.length) -
+            canvasParams.value.curh / 2,
           top:
-            Math.round(y + vy / cursors.value.length) - canvasParams.value.curw / 2,
+            Math.round(y + vy / cursors.value.length) -
+            canvasParams.value.curw / 2,
         };
       },
       { x: 0, y: 0, top: 0, left: 0 }

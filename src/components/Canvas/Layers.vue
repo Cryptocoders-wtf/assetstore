@@ -12,7 +12,9 @@
       <img
         @click="onSelectLayer(index)"
         :src="layer.svgImage"
-        :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew / 2}px`"
+        :style="`width:${canvasParams.sidew}px;height:${
+          canvasParams.sidew / 2
+        }px`"
         class="border-2 border-solid object-fill"
         :class="`${
           index == layerIndex ? 'border-blue-400' : 'border-slate-200'
@@ -38,9 +40,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
-import {
-  useCanvasParams,
-} from "@/utils/canvasUtil";
+import { useCanvasParams } from "@/utils/canvasUtil";
 
 export default defineComponent({
   props: ["layers", "layerIndex"],

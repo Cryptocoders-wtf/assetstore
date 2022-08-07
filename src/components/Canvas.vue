@@ -10,7 +10,7 @@
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
       @dragover="dragOver"
       @touchmove="dragOver"
-      >
+    >
       <img
         v-if="currentToken"
         class="absolute"
@@ -29,21 +29,23 @@
         "
         @click="onClickToPickLayer($event)"
       />
-        <div
-          v-for="(cursor, index) in cursors"
-          :key="index"
-          :style="`width:${canvasParams.curw}px; height:${canvasParams.curh}px; left:${assetXtoCanvasX(
-            cursor.x - canvasParams.curw / 2
-          )}px; top:${assetYtoCanvasY(cursor.y - canvasParams.curh / 2)}px`"
-          :class="`${
-            index == pointIndex ? 'border-blue-800' : 'border-blue-400'
-          } ${cursor.c ? '' : 'rounded-xl'}`"
-          draggable="true"
-          class="absolute border-2 border-solid"
-          @dragstart="dragStart($event, index)"
-          @touchstart="dragStart($event, index)"
-          @click="onSelect($event, index)"
-        />
+      <div
+        v-for="(cursor, index) in cursors"
+        :key="index"
+        :style="`width:${canvasParams.curw}px; height:${
+          canvasParams.curh
+        }px; left:${assetXtoCanvasX(
+          cursor.x - canvasParams.curw / 2
+        )}px; top:${assetYtoCanvasY(cursor.y - canvasParams.curh / 2)}px`"
+        :class="`${
+          index == pointIndex ? 'border-blue-800' : 'border-blue-400'
+        } ${cursor.c ? '' : 'rounded-xl'}`"
+        draggable="true"
+        class="absolute border-2 border-solid"
+        @dragstart="dragStart($event, index)"
+        @touchstart="dragStart($event, index)"
+        @click="onSelect($event, index)"
+      />
       <div
         class="absolute border-2 border-solid border-red-800"
         :style="
@@ -73,9 +75,11 @@
       </div>
     </div>
     <div
-      :style="`width:${canvasParams.sidew}px; height:${canvasParams.canh}px; left:${
-              canvasParams.offx + canvasParams.canw - 2
-      }px; top:${canvasParams.offy}px`"
+      :style="`width:${canvasParams.sidew}px; height:${
+        canvasParams.canh
+      }px; left:${canvasParams.offx + canvasParams.canw - 2}px; top:${
+        canvasParams.offy
+      }px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-300"
     >
       <div class="ml-2 mr-2 flex justify-between">
@@ -139,8 +143,10 @@
       </div>
     </div>
     <div
-      :style="`width:${canvasParams.sidew}px; height:${canvasParams.canh}px; left:${
-              canvasParams.offx + canvasParams.canw - 2 + canvasParams.sidew
+      :style="`width:${canvasParams.sidew}px; height:${
+        canvasParams.canh
+      }px; left:${
+        canvasParams.offx + canvasParams.canw - 2 + canvasParams.sidew
       }px; top:${canvasParams.offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-300"
     >

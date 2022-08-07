@@ -22,12 +22,11 @@ export default defineComponent({
     };
     store.commit("setWindowWidth", window.innerWidth);
     onMounted(() => {
-      window.addEventListener('resize', setWindowWidth)
-    })
+      window.addEventListener("resize", setWindowWidth);
+    });
     onUnmounted(() => {
-      window.removeEventListener('resize', setWindowWidth)
-    })
-    
-  }
+      window.removeEventListener("resize", setWindowWidth);
+    });
+  },
 });
 </script>

@@ -1,12 +1,15 @@
 <template>
-  <header id="header" class="py-1.5 mx-auto max-w-xl flex justify-between items-center">
-    <div class="flex justify-start items-center gap-1">
-        <img src="@/assets/AssetStoreLogo.png" width="40" height="auto" />
-        <div class="leading-none font-bold text-left">
-            <div>On-chain<br />Asset Store</div>
-        </div>
+  <header
+    id="header"
+    class="mx-auto flex max-w-xl items-center justify-between py-1.5"
+  >
+    <div class="flex items-center justify-start gap-1">
+      <img src="@/assets/AssetStoreLogo.png" width="40" height="auto" />
+      <div class="text-left font-bold leading-none">
+        <div>On-chain<br />Asset Store</div>
+      </div>
     </div>
-    <nav id="nav" class="flex flex-wrap justify-start items-center">
+    <nav id="nav" class="flex flex-wrap items-center justify-start">
       <router-link :to="localizedUrl('/')" class="text-md">{{
         $t("header.home")
       }}</router-link>
