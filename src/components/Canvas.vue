@@ -124,7 +124,7 @@
       <Layers
         :layers="layers"
         :layerIndex="layerIndex"
-        @insertLayer="insertLayer"
+        :newLayer="newLayer"
         @onSelectLayer="onSelectLayer"
         @updateLayers="updateLayers"
       />
@@ -317,20 +317,15 @@ export default defineComponent({
       pointIndex.value =
         (pointIndex.value + cursors.value.length - 1) % cursors.value.length;
     };
-    const insertLayer = (index: number) => {
-      recordState();
-      const array = layers.value.map((layer) => layer);
+    const newLayer = computed(() => {
       const path = pathFromPoints(roundRect);
-      const newLayer = {
+      return {
         points: roundRect,
         color: currentColor.value,
         path,
         svgImage: svgImageFromPath(path, currentColor.value),
-      };
-      array.splice(index, 0, newLayer);
-      layers.value = array;
-      updateLayerIndex(index);
-    };
+      } as Layer;
+    });
     const updateLayers = (array: Layer[], index: number) => {
       recordState();
       layers.value = array;
@@ -406,7 +401,7 @@ export default defineComponent({
       splitSegment,
       deletePoint,
       onSelect,
-      insertLayer,
+      newLayer,
       updateLayers,
       onSelectLayer,
       onColorFocus,

@@ -44,9 +44,8 @@ import { useCanvasParams } from "@/utils/canvasUtil";
 import { Layer } from "@/models/point";
 
 export default defineComponent({
-  props: ["layers", "layerIndex"],
+  props: ["layers", "layerIndex", "newLayer"],
   emits: [
-    "insertLayer",
     "onSelectLayer",
     "updateLayers",
   ],
@@ -54,7 +53,9 @@ export default defineComponent({
     const { canvasParams } = useCanvasParams();
 
     const insertLayer = (index: number) => {
-      context.emit("insertLayer", index);
+      const array = props.layers.map((layer:Layer) => layer);
+      array.splice(index, 0, props.newLayer);
+      context.emit("updateLayers", array, props.layerIndex + 1);
     };
     const pivotLayer = (index: number) => {
       const array = props.layers.map((layer:Layer) => layer);
@@ -65,8 +66,8 @@ export default defineComponent({
     };
     const copyLayer = (index: number) => {
       const array = props.layers.map((layer:Layer) => layer);
-      const newLayer = { ...props.layers[index] };
-      array.splice(index, 0, newLayer);
+      const layer = { ...props.layers[index] };
+      array.splice(index, 0, layer);
       context.emit("updateLayers", array, props.layerIndex + 1);
     };
     const onSelectLayer = (index: number) => {
