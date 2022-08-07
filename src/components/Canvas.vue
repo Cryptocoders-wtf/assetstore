@@ -387,7 +387,6 @@ export default defineComponent({
       pointIndex,
       currentColor,
       canvasParams,
-      ...canvasParams,
       moveToolPos,
       toolHandles,
       dragLayerImgStart,
