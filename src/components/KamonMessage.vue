@@ -15,11 +15,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from "vue";
+import { defineComponent, computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
-  setup(props) {
+  setup() {
     const i18n = useI18n();
     const lang = computed(() => {
       return i18n.locale.value;

@@ -221,10 +221,6 @@ export default defineComponent({
       cursors,
     } = useToolHandleMode();
 
-    const onColorFocus = () => {
-      recordState();
-    };
-
     const tokenSelected = (token: Token) => {
       recordState();
       currentToken.value = token;
@@ -289,7 +285,6 @@ export default defineComponent({
       dragToolHandleStart,
       dragStart,
       dragOver,
-      currentTool,
       toggleGrid,
       grid,
     } = useDrag(pointIndex, moveToolPos, cursors, recordState);
@@ -403,7 +398,6 @@ export default defineComponent({
       newLayer,
       updateLayers,
       onSelectLayer,
-      onColorFocus,
       onClose,
       undo,
       redo,
@@ -412,7 +406,6 @@ export default defineComponent({
       layerIndex,
       layers,
       grid,
-      currentTool,
       toggleGrid,
       onClickToPickLayer,
       currentToken,

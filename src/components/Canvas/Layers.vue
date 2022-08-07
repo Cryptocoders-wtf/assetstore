@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent } from "vue";
 import { useCanvasParams } from "@/utils/canvasUtil";
 import { Layer } from "@/models/point";
 

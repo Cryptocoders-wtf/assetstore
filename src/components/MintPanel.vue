@@ -112,7 +112,6 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { ethers } from "ethers";
 import NetworkGate from "@/components/NetworkGate.vue";
-import { emit } from "process";
 
 export default defineComponent({
   props: [
@@ -163,7 +162,7 @@ export default defineComponent({
     const messageRef = ref<string | null>(null);
     watch(
       () => props.selection,
-      (selection) => {
+      () => {
         messageRef.value = null;
       }
     );

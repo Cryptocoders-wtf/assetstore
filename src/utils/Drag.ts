@@ -66,7 +66,7 @@ export const useDrag = (
     recordState();
   };
   const dragOver = (evt: DragEvent | TouchEvent) => {
-    const { offx, offy } = menuSize;
+    const { offx } = menuSize;
     const g = grid.value;
     const gridder = (pos: Pos): Pos => {
       const f = (n: number) => (g == 0 ? n : Math.round(n / g) * g);
@@ -195,7 +195,6 @@ export const useDrag = (
     dragToolHandleStart,
     dragStart,
     dragOver,
-    currentTool,
     toggleGrid,
     grid,
   };
