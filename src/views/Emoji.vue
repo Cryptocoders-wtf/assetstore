@@ -30,7 +30,7 @@ const contentsToken = {
 };
 
 export default defineComponent({
-  name: "EmijiMint",
+  name: "EmojiMint",
   components: {
     MintView,
     NetworkError,
