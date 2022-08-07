@@ -39,12 +39,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch, PropType } from "vue";
 import { useCanvasParams } from "@/utils/canvasUtil";
 import { Layer } from "@/models/point";
 
 export default defineComponent({
-  props: ["layers", "layerIndex", "newLayer"],
+  props: {
+    layers: {
+      type: Object as PropType<Layer[]>,
+      required: true,
+    },
+    layerIndex: {
+      type: Number,
+      required: true,
+    },
+    newLayer: {
+      type: Object as PropType<Layer>,
+      required: true,
+    },
+  },
   emits: [
     "onSelectLayer",
     "updateLayers",
@@ -53,19 +66,19 @@ export default defineComponent({
     const { canvasParams } = useCanvasParams();
 
     const insertLayer = (index: number) => {
-      const array = props.layers.map((layer:Layer) => layer);
+      const array = props.layers.map((layer) => layer);
       array.splice(index, 0, props.newLayer);
       context.emit("updateLayers", array, props.layerIndex + 1);
     };
     const pivotLayer = (index: number) => {
-      const array = props.layers.map((layer:Layer) => layer);
+      const array = props.layers.map((layer) => layer);
       const tmp = array[index];
       array[index] = array[index - 1];
       array[index - 1] = tmp;
       context.emit("updateLayers", array, props.layerIndex);
     };
     const copyLayer = (index: number) => {
-      const array = props.layers.map((layer:Layer) => layer);
+      const array = props.layers.map((layer) => layer);
       const layer = { ...props.layers[index] };
       array.splice(index, 0, layer);
       context.emit("updateLayers", array, props.layerIndex + 1);
@@ -77,7 +90,7 @@ export default defineComponent({
       if (props.layers.length == 1) {
         return;
       }
-      const array = props.layers.filter((layer:Layer, index:number) => {
+      const array = props.layers.filter((layer, index:number) => {
         return index != props.layerIndex;
       });
       context.emit("updateLayers", array, props.layerIndex - 1);
