@@ -10,6 +10,7 @@ import {
   UIPos,
   Tools,
   RotationInfo,
+  canvastoAsset,
 } from "@/utils/canvasUtil";
 import { Point } from "@/models/point";
 
@@ -40,7 +41,7 @@ export const useDrag = (
     offsetY.value = curh / 2;
     startPoint.value.x = getPageX(evt);
     startPoint.value.y = getPageY(evt);
-    pivotPos.value = moveToolPos.value;
+    pivotPos.value = canvastoAsset(moveToolPos.value);
     initialCursors.value = cursors.value;
     recordState();
   };
@@ -71,30 +72,30 @@ export const useDrag = (
       };
     };
     const limiter = (pos: Pos): Pos => {
-      const { canw, canh } = canvasParams;
+      const { assw, assh } = canvasParams;
       const f = (can: number, n: number, offset: number, cur: number) =>
         Math.max(0, Math.min(can - g - 1, n - offset + cur / 2));
       return {
-        x: f(canw, pos.x, offsetX.value, curw),
-        y: f(canh, pos.y, offsetY.value, curh),
+        x: f(assw, pos.x, offsetX.value, curw),
+        y: f(assh, pos.y, offsetY.value, curh),
       };
     };
     const magnification =
       currentTool.value === Tools.ZOOM &&
-      Math.abs(pivotPos.value.y + offy - startPoint.value.y) !== 0
-        ? Math.abs(pivotPos.value.y + offy - getPageY(evt)) /
-          Math.abs(pivotPos.value.y + offy - startPoint.value.y)
+      Math.abs(pivotPos.value.y - startPoint.value.y) !== 0
+        ? Math.abs(pivotPos.value.y - getPageY(evt)) /
+          Math.abs(pivotPos.value.y - startPoint.value.y)
         : 0;
     const rad =
       currentTool.value === Tools.ROTATE
         ? pivotPos.value.x + offx - startPoint.value.x > 1
           ? Math.atan2(
-              pivotPos.value.y + offy - getPageY(evt),
-              pivotPos.value.x + offx - getPageX(evt)
+              pivotPos.value.y - getPageY(evt),
+              pivotPos.value.x - getPageX(evt)
             )
           : (Math.atan2(
-              pivotPos.value.y + offy - getPageY(evt),
-              pivotPos.value.x + offx - getPageX(evt)
+              pivotPos.value.y - getPageY(evt),
+              pivotPos.value.x - getPageX(evt)
             ) +
               Math.PI) %
             (2 * Math.PI)
@@ -163,8 +164,8 @@ export const useDrag = (
             return {
               ...gridder(
                 limiter({
-                  x: getPageX(evt) - offx - 3,
-                  y: getPageY(evt) - offy - 3,
+                  x: getPageX(evt),
+                  y: getPageY(evt),
                 })
               ),
               c: cursor.c,
