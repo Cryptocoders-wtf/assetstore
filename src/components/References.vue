@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-2">
-    <div class="mt-4 mb-2">
+  <div class="mt-8 p-2 bg-gray-300">
+    <div class="mb-2">
       <p class="font-bold">{{ $t("message.resources") }}</p>
     </div>
     <p v-if="EtherscanStore">
