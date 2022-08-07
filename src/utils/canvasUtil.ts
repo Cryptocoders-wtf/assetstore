@@ -1,4 +1,5 @@
 import { ref, computed } from "vue";
+import { useStore } from "vuex";
 
 import { Point } from "@/models/point";
 
@@ -25,25 +26,82 @@ export interface RotationInfo {
   sin: number;
 }
 
-// const canvasSize = { w: 1024, h: 1024 };
-const canvasSize = { w: 800, h: 800 };
-const assetSize = { w: 512, h: 512 };
-
-export const canvasParams = {
-  canw: canvasSize.w,
-  canh: canvasSize.h,
+export const menuSize = {
   offx: 40, // fix
   offy: 80, // fix
-  curw: (canvasSize.w * 30) / assetSize.w,
-  curh: (canvasSize.h * 30) / assetSize.h,
   sidew: 150, //fix
-  toold: (canvasSize.w * 60) / assetSize.w,
-  assw: assetSize.w,
-  assh: assetSize.h,
-  caratio: canvasSize.w / assetSize.w,
 };
 
-const { offx, offy, caratio } = canvasParams;
+// const canvasSize = { w: 1024, h: 1024 };
+const assetSize = { w: 512, h: 512 };
+export const useCanvasParams = () => {
+  const store = useStore();
+  
+  const windowWidth = computed(() => {
+    return store.state.windowWidth  - menuSize.sidew * 2 - menuSize.offx * 2
+  });
+
+  const canvasSize = computed<{w: number, h: number }>(() => {
+    return { w: windowWidth.value, h: windowWidth.value };
+  });
+
+  const canvasParams = computed(() => {
+    return {
+      canw: canvasSize.value.w,
+      canh: canvasSize.value.h,
+      curw: (canvasSize.value.w * 30) / assetSize.w,
+      curh: (canvasSize.value.h * 30) / assetSize.h,
+      toold: (canvasSize.value.w * 60) / assetSize.w,
+      assw: assetSize.w,
+      assh: assetSize.h,
+      caratio: canvasSize.value.w / assetSize.w,
+      ...menuSize
+    };
+  });
+
+  const canvasXtoAssetX = (x: number) => {
+    return (x / canvasSize.value.w) * assetSize.w;
+  };
+  const canvasYtoAssetY = (y: number) => {
+    return (y / canvasSize.value.h) * assetSize.h;
+  };
+  const assetXtoCanvasX = (x: number) => {
+    return (x / assetSize.w) * canvasSize.value.w;
+  };
+  const assetYtoCanvasY = (y: number) => {
+    return (y / assetSize.h) * canvasSize.value.h;
+  };
+  
+  const canvastoAsset = ({ x, y }: Pos): Pos => {
+    return { x: canvasXtoAssetX(x), y: canvasYtoAssetY(y) };
+  };
+  
+  const getPageX = (evt: DragEvent | MouseEvent | TouchEvent): number => {
+    const x = evt instanceof TouchEvent ? evt.targetTouches[0].pageX : evt.pageX;
+    return canvasXtoAssetX(x - offx);
+  };
+  const getPageY = (evt: DragEvent | MouseEvent | TouchEvent): number => {
+    const y = evt instanceof TouchEvent ? evt.targetTouches[0].pageY : evt.pageY;
+    return canvasYtoAssetY(y - offy);
+  };
+  const getOffsetX = (evt: DragEvent | MouseEvent | TouchEvent): number =>
+    evt instanceof TouchEvent ? 0 : evt.offsetX / canvasParams.value.caratio;
+  
+  const getOffsetY = (evt: DragEvent | MouseEvent | TouchEvent): number =>
+    evt instanceof TouchEvent ? 0 : evt.offsetY / canvasParams.value.caratio;
+  
+  return {
+    canvasParams,
+    assetXtoCanvasX,
+    assetYtoCanvasY,
+    getPageX,
+    getPageY,
+    getOffsetX,
+    getOffsetY,
+    canvastoAsset,
+  };
+}
+const { offx, offy } = menuSize;
 
 export const roundRect: Point[] = [
   { x: assetSize.w / 4, y: assetSize.h / 4, c: false },
@@ -56,62 +114,36 @@ export const roundRect: Point[] = [
   { x: assetSize.w / 4, y: assetSize.h - assetSize.h / 4, c: false },
 ];
 
-const canvasXtoAssetX = (x: number) => {
-  return (x / canvasSize.w) * assetSize.w;
-};
-const canvasYtoAssetY = (y: number) => {
-  return (y / canvasSize.h) * assetSize.h;
-};
-export const assetXtoCanvasX = (x: number) => {
-  return (x / assetSize.w) * canvasSize.w;
-};
-export const assetYtoCanvasY = (y: number) => {
-  return (y / assetSize.h) * canvasSize.h;
-};
-
-export const canvastoAsset = ({ x, y }: Pos): Pos => {
-  return { x: canvasXtoAssetX(x), y: canvasYtoAssetY(y) };
-};
-
-export const getPageX = (evt: DragEvent | MouseEvent | TouchEvent): number => {
-  const x = evt instanceof TouchEvent ? evt.targetTouches[0].pageX : evt.pageX;
-  return canvasXtoAssetX(x - offx);
-};
-export const getPageY = (evt: DragEvent | MouseEvent | TouchEvent): number => {
-  const y = evt instanceof TouchEvent ? evt.targetTouches[0].pageY : evt.pageY;
-  return canvasYtoAssetY(y - offy);
-};
-export const getOffsetX = (evt: DragEvent | MouseEvent | TouchEvent): number =>
-  evt instanceof TouchEvent ? 0 : evt.offsetX / caratio;
-
-export const getOffsetY = (evt: DragEvent | MouseEvent | TouchEvent): number =>
-  evt instanceof TouchEvent ? 0 : evt.offsetY / caratio;
 
 export const useToolHandleMode = () => {
+  const {
+    assetXtoCanvasX,
+    assetYtoCanvasY,
+    canvasParams,
+  } = useCanvasParams();
   const cursors = ref<Point[]>([]);
   const toolHandleMode = ref<boolean>(true);
   const toolHandles = computed(() => {
-    const { toold } = canvasParams;
     return [
       {
         type: Tools.ROTATE,
-        x: moveToolPos.value.left + toold,
+        x: moveToolPos.value.left + canvasParams.value.toold,
         y: moveToolPos.value.top,
       },
       {
         type: Tools.ROTATE,
-        x: moveToolPos.value.left - toold,
+        x: moveToolPos.value.left - canvasParams.value.toold,
         y: moveToolPos.value.top,
       },
       {
         type: Tools.ZOOM,
         x: moveToolPos.value.left,
-        y: moveToolPos.value.top + toold,
+        y: moveToolPos.value.top + canvasParams.value.toold,
       },
       {
         type: Tools.ZOOM,
         x: moveToolPos.value.left,
-        y: moveToolPos.value.top - toold,
+        y: moveToolPos.value.top - canvasParams.value.toold,
       },
     ];
   });
@@ -127,9 +159,9 @@ export const useToolHandleMode = () => {
           x: Math.round(x + vx / cursors.value.length),
           y: Math.round(y + vy / cursors.value.length),
           left:
-            Math.round(x + vx / cursors.value.length) - canvasParams.curh / 2,
+            Math.round(x + vx / cursors.value.length) - canvasParams.value.curh / 2,
           top:
-            Math.round(y + vy / cursors.value.length) - canvasParams.curw / 2,
+            Math.round(y + vy / cursors.value.length) - canvasParams.value.curw / 2,
         };
       },
       { x: 0, y: 0, top: 0, left: 0 }
