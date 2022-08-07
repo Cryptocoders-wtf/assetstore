@@ -6,16 +6,16 @@
     @dragover.prevent
   >
     <div
-      :style="`width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`"
+      :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px; left:${canvasParams.offx}px; top:${canvasParams.offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
       @dragover="dragOver"
       @touchmove="dragOver"
-    >
+      >
       <img
         v-if="currentToken"
         class="absolute"
         :src="currentToken.image"
-        :style="`width:${canw}px; height:${canh}px`"
+        :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px`"
       />
       <img
         v-for="(layer, index) in layers"
@@ -24,7 +24,7 @@
         class="absolute"
         draggable="false"
         :style="
-          `width:${canw}px; height:${canh}px;` +
+          `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
           `opacity:${index > layerIndex ? '0.5' : '1.0'}`
         "
         @click="onClickToPickLayer($event)"
@@ -32,9 +32,9 @@
         <div
           v-for="(cursor, index) in cursors"
           :key="index"
-          :style="`width:${curw}px; height:${curh}px; left:${assetXtoCanvasX(
-            cursor.x - curw / 2
-          )}px; top:${assetYtoCanvasY(cursor.y - curh / 2)}px`"
+          :style="`width:${canvasParams.curw}px; height:${canvasParams.curh}px; left:${assetXtoCanvasX(
+            cursor.x - canvasParams.curw / 2
+          )}px; top:${assetYtoCanvasY(cursor.y - canvasParams.curh / 2)}px`"
           :class="`${
             index == pointIndex ? 'border-blue-800' : 'border-blue-400'
           } ${cursor.c ? '' : 'rounded-xl'}`"
@@ -47,7 +47,7 @@
       <div
         class="absolute border-2 border-solid border-red-800"
         :style="
-          `width:${curw}px; height:${curh}px; ` +
+          `width:${canvasParams.curw}px; height:${canvasParams.curh}px; ` +
           `left: ${moveToolPos.left}px; ` +
           `top: ${moveToolPos.top}px; `
         "
@@ -64,7 +64,7 @@
           :class="
             type === Tools.ROTATE ? 'border-green-800' : 'border-yellow-800'
           "
-          :style="`width:${curw}px; height:${curh}px;
+          :style="`width:${canvasParams.curw}px; height:${canvasParams.curh}px;
           left: ${x}px; top: ${y}px;`"
           draggable="true"
           @dragstart="dragToolHandleStart($event, type)"
@@ -73,9 +73,9 @@
       </div>
     </div>
     <div
-      :style="`width:${sidew}px; height:${canh}px; left:${
-        offx + canw - 2
-      }px; top:${offy}px`"
+      :style="`width:${canvasParams.sidew}px; height:${canvasParams.canh}px; left:${
+              canvasParams.offx + canvasParams.canw - 2
+      }px; top:${canvasParams.offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-300"
     >
       <div class="ml-2 mr-2 flex justify-between">
@@ -139,9 +139,9 @@
       </div>
     </div>
     <div
-      :style="`width:${sidew}px; height:${canh}px; left:${
-        offx + canw - 2 + sidew
-      }px; top:${offy}px`"
+      :style="`width:${canvasParams.sidew}px; height:${canvasParams.canh}px; left:${
+              canvasParams.offx + canvasParams.canw - 2 + canvasParams.sidew
+      }px; top:${canvasParams.offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-300"
     >
       <Layers
@@ -176,14 +176,10 @@ import { Token } from "@/models/token";
 import "vue3-colorpicker/style.css";
 
 import {
-  canvasParams,
+  useCanvasParams,
   roundRect,
   Tools,
   useToolHandleMode,
-  assetXtoCanvasX,
-  assetYtoCanvasY,
-  getPageX,
-  getPageY,
 } from "@/utils/canvasUtil";
 
 import { useUndoStack } from "@/utils/undo";
@@ -194,6 +190,13 @@ export default defineComponent({
   components: { ColorPicker, TokenPicker, Layers },
   props: ["drawing", "tokens"],
   setup(props, context) {
+    const {
+      canvasParams,
+      assetXtoCanvasX,
+      assetYtoCanvasY,
+      getPageX,
+      getPageY,
+    } = useCanvasParams();
     const currentToken = ref<Token | null>(null);
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
@@ -419,6 +422,7 @@ export default defineComponent({
       cursors,
       pointIndex,
       currentColor,
+      canvasParams,
       ...canvasParams,
       moveToolPos,
       toolHandles,
