@@ -22,8 +22,8 @@ import { useRoute } from "vue-router";
 import { getContractAddresses } from "@/utils/networks";
 
 import MintView from "@/components/MintView.vue";
-import KamonMessage from "@/components/KamonMessage.vue";
 import NetworkError from "@/components/NetworkError.vue";
+import KamonMessage from "@/components/KamonMessage.vue";
 
 import { loadedAssets } from "../resources/kamon";
 
@@ -32,7 +32,7 @@ const contentsToken = {
 };
 
 export default defineComponent({
-  name: "HomePage",
+  name: "KamonMint",
   components: {
     MintView,
     KamonMessage,

@@ -1,5 +1,8 @@
 <template>
-  <div class="mx-auto max-w-xl p-2 text-left">
+  <div v-if="error">
+    <NetworkError />
+  </div>
+  <div class="mx-auto max-w-xl p-2 text-left" v-else>
     <mint-view
       :addresses="addresses"
       title="OpenMoji National Flags"
@@ -16,7 +19,10 @@
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import { getContractAddresses } from "@/utils/networks";
+
 import MintView from "@/components/MintView.vue";
+import NetworkError from "@/components/NetworkError.vue";
+
 import { loadedAssets } from "../resources/emoji";
 
 const contentsToken = {
@@ -24,15 +30,21 @@ const contentsToken = {
 };
 
 export default defineComponent({
-  name: "HomePage",
+  name: "EmijiMint",
   components: {
     MintView,
+    NetworkError,
   },
   setup() {
     const route = useRoute();
     const network =
       typeof route.query.network == "string" ? route.query.network : "mainnet";
-    const addresses = getContractAddresses(network)!;
+    const addresses = getContractAddresses(network);
+    if (!addresses) {
+      return {
+        error: true
+      };
+    }
     addresses.tokenAddress = addresses.flagAddress;
     const options = {
       tokenOffset: -1,
@@ -41,6 +53,7 @@ export default defineComponent({
       tokenName: "EmojiFlagToken",
     };
     return {
+      error: false,
       addresses,
       contentsToken,
       loadedAssets,
