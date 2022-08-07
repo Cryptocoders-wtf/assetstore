@@ -1,4 +1,4 @@
-import { ref, computed, Ref } from "vue";
+import { ref, computed } from "vue";
 
 import { Point } from "@/models/point";
 
@@ -25,7 +25,8 @@ export interface RotationInfo {
   sin: number;
 }
 
-const canvasSize = { w: 1024, h: 1024 };
+// const canvasSize = { w: 1024, h: 1024 };
+const canvasSize = { w: 800, h: 800 };
 const assetSize = { w: 512, h: 512 };
 
 export const canvasParams = {
@@ -37,9 +38,12 @@ export const canvasParams = {
   curh: (canvasSize.h * 30) / assetSize.h,
   sidew: 150, //fix
   toold: (canvasSize.w * 60) / assetSize.w,
+  assw: assetSize.w,
+  assh: assetSize.h,
+  caratio: canvasSize.w / assetSize.w,
 };
 
-const { canw, canh } = canvasParams;
+const { offx, offy, caratio } = canvasParams;
 
 export const roundRect: Point[] = [
   { x: assetSize.w / 4, y: assetSize.h / 4, c: false },
@@ -65,23 +69,27 @@ export const assetYtoCanvasY = (y: number) => {
   return (y / assetSize.h) * canvasSize.h;
 };
 
+export const canvastoAsset = ({ x, y }: Pos): Pos => {
+  return { x: canvasXtoAssetX(x), y: canvasYtoAssetY(y) };
+};
+
 export const getPageX = (evt: DragEvent | MouseEvent | TouchEvent): number => {
   const x = evt instanceof TouchEvent ? evt.targetTouches[0].pageX : evt.pageX;
-  return canvasXtoAssetX(x);
+  return canvasXtoAssetX(x - offx);
 };
 export const getPageY = (evt: DragEvent | MouseEvent | TouchEvent): number => {
   const y = evt instanceof TouchEvent ? evt.targetTouches[0].pageY : evt.pageY;
-  return canvasYtoAssetY(y);
+  return canvasYtoAssetY(y - offy);
 };
 export const getOffsetX = (evt: DragEvent | MouseEvent | TouchEvent): number =>
-  evt instanceof TouchEvent ? 0 : evt.offsetX;
+  evt instanceof TouchEvent ? 0 : evt.offsetX / caratio;
 
 export const getOffsetY = (evt: DragEvent | MouseEvent | TouchEvent): number =>
-  evt instanceof TouchEvent ? 0 : evt.offsetY;
+  evt instanceof TouchEvent ? 0 : evt.offsetY / caratio;
 
 export const useToolHandleMode = () => {
   const cursors = ref<Point[]>([]);
-  const toolHandleMode = ref<boolean>(false);
+  const toolHandleMode = ref<boolean>(true);
   const toolHandles = computed(() => {
     const { toold } = canvasParams;
     return [

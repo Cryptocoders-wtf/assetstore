@@ -9,6 +9,7 @@
       :style="`width:${canw}px; height:${canh}px; left:${offx}px; top:${offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
       @dragover="dragOver"
+      @touchmove="dragOver"
     >
       <img
         v-if="currentToken"
@@ -16,7 +17,6 @@
         :src="currentToken.image"
         :style="`width:${canw}px; height:${canh}px`"
       />
-      <img @touchmove="dragOver" />
       <img
         v-for="(layer, index) in layers"
         :key="index"
@@ -29,7 +29,6 @@
         "
         @click="onClickToPickLayer($event)"
       />
-      <div v-if="!toolHandleMode">
         <div
           v-for="(cursor, index) in cursors"
           :key="index"
@@ -45,7 +44,6 @@
           @touchstart="dragStart($event, index)"
           @click="onSelect($event, index)"
         />
-      </div>
       <div
         class="absolute border-2 border-solid border-red-800"
         :style="
@@ -184,6 +182,8 @@ import {
   useToolHandleMode,
   assetXtoCanvasX,
   assetYtoCanvasY,
+  getPageX,
+  getPageY,
 } from "@/utils/canvasUtil";
 
 import { useUndoStack } from "@/utils/undo";
@@ -379,26 +379,25 @@ export default defineComponent({
       context.emit("close", drawing);
     };
     const onClickToPickLayer = (evt: MouseEvent) => {
-      const { offx, offy } = canvasParams;
       const results: number[] = [];
       layers.value.forEach((layer: Layer, index: number) => {
         if (
-          evt.pageX - offx >
+          getPageX(evt) >
             Math.min.apply(
               null,
               layer.points.map((p) => p.x)
             ) &&
-          evt.pageX - offx <
+          getPageX(evt) <
             Math.max.apply(
               null,
               layer.points.map((p) => p.x)
             ) &&
-          evt.pageY - offy >
+          getPageY(evt) >
             Math.min.apply(
               null,
               layer.points.map((p) => p.y)
             ) &&
-          evt.pageY - offy <
+          getPageY(evt) <
             Math.max.apply(
               null,
               layer.points.map((p) => p.y)
