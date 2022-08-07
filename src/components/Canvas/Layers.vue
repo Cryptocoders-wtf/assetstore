@@ -58,10 +58,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: [
-    "onSelectLayer",
-    "updateLayers",
-  ],
+  emits: ["onSelectLayer", "updateLayers"],
   setup(props, context) {
     const { canvasParams } = useCanvasParams();
 
@@ -90,7 +87,7 @@ export default defineComponent({
       if (props.layers.length == 1) {
         return;
       }
-      const array = props.layers.filter((layer, index:number) => {
+      const array = props.layers.filter((layer, index: number) => {
         return index != props.layerIndex;
       });
       context.emit("updateLayers", array, props.layerIndex - 1);
