@@ -1,5 +1,5 @@
 <template>
-  <div :style="`height:${canh - 4}px; overflow-y: scroll`">
+  <div :style="`height:${canvasParams.canh - 4}px; overflow-y: scroll`">
     <div v-for="(layer, index) in layers" :key="index">
       <div v-if="index == layerIndex">
         <button @click="insertLayer(index)">
@@ -12,7 +12,7 @@
       <img
         @click="onSelectLayer(index)"
         :src="layer.svgImage"
-        :style="`width:${sidew}px;height:${sidew / 2}px`"
+        :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew / 2}px`"
         class="border-2 border-solid object-fill"
         :class="`${
           index == layerIndex ? 'border-blue-400' : 'border-slate-200'
@@ -38,7 +38,9 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
-import { canvasParams } from "@/utils/canvasUtil";
+import {
+  useCanvasParams,
+} from "@/utils/canvasUtil";
 
 export default defineComponent({
   props: ["layers", "layerIndex"],
@@ -50,7 +52,7 @@ export default defineComponent({
     "deleteLayer",
   ],
   setup(props, context) {
-    const { canh, sidew } = canvasParams;
+    const { canvasParams } = useCanvasParams();
 
     const insertLayer = (index: number) => {
       context.emit("insertLayer", index);
@@ -68,8 +70,7 @@ export default defineComponent({
       context.emit("deleteLayer");
     };
     return {
-      canh,
-      sidew,
+      canvasParams,
       insertLayer,
       pivotLayer,
       copyLayer,

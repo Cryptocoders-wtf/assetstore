@@ -1,20 +1,16 @@
 import { ref, Ref, ComputedRef } from "vue";
 
 import {
-  getPageX,
-  getPageY,
-  getOffsetX,
-  getOffsetY,
-  canvasParams,
+  useCanvasParams,
+  menuSize,
   Pos,
   UIPos,
   Tools,
   RotationInfo,
-  canvastoAsset,
 } from "@/utils/canvasUtil";
 import { Point } from "@/models/point";
 
-const { curw, curh } = canvasParams;
+// const { curw, curh } = canvasParams;
 
 export const useDrag = (
   pointIndex: Ref<number>,
@@ -22,6 +18,14 @@ export const useDrag = (
   cursors: Ref<Point[]>,
   recordState: () => void
 ) => {
+  const {
+    getPageX,
+    getPageY,
+    getOffsetX,
+    getOffsetY,
+    canvastoAsset,
+    canvasParams,
+  } = useCanvasParams();
   const pivotPos = ref<Pos>({ x: 0, y: 0 });
   const offsetX = ref<number>(0);
   const offsetY = ref<number>(0);
@@ -37,8 +41,8 @@ export const useDrag = (
 
   const dragToolHandleStart = (evt: DragEvent | TouchEvent, tool: Tools) => {
     currentTool.value = tool;
-    offsetX.value = curw / 2;
-    offsetY.value = curh / 2;
+    offsetX.value = canvasParams.value.curw / 2;
+    offsetY.value = canvasParams.value.curh / 2;
     startPoint.value.x = getPageX(evt);
     startPoint.value.y = getPageY(evt);
     pivotPos.value = canvastoAsset(moveToolPos.value);
@@ -47,8 +51,8 @@ export const useDrag = (
   };
   const dragLayerImgStart = (evt: MouseEvent | TouchEvent) => {
     currentTool.value = Tools.MOVE;
-    offsetX.value = curw / 2;
-    offsetY.value = curh / 2;
+    offsetX.value = canvasParams.value.curw / 2;
+    offsetY.value = canvasParams.value.curh / 2;
     startPoint.value.x = getPageX(evt);
     startPoint.value.y = getPageY(evt);
     initialCursors.value = cursors.value;
@@ -62,7 +66,7 @@ export const useDrag = (
     recordState();
   };
   const dragOver = (evt: DragEvent | TouchEvent) => {
-    const { offx, offy } = canvasParams;
+    const { offx, offy } = menuSize;
     const g = grid.value;
     const gridder = (pos: Pos): Pos => {
       const f = (n: number) => (g == 0 ? n : Math.round(n / g) * g);
@@ -72,12 +76,11 @@ export const useDrag = (
       };
     };
     const limiter = (pos: Pos): Pos => {
-      const { assw, assh } = canvasParams;
       const f = (can: number, n: number, offset: number, cur: number) =>
         Math.max(0, Math.min(can - g - 1, n - offset + cur / 2));
       return {
-        x: f(assw, pos.x, offsetX.value, curw),
-        y: f(assh, pos.y, offsetY.value, curh),
+        x: f(canvasParams.value.assw, pos.x, offsetX.value, canvasParams.value.curw),
+        y: f(canvasParams.value.assh, pos.y, offsetY.value, canvasParams.value.curh),
       };
     };
     const magnification =

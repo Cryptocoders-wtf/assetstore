@@ -20,6 +20,7 @@ export default defineComponent({
     const setWindowWidth = () => {
       store.commit("setWindowWidth", window.innerWidth);
     };
+    store.commit("setWindowWidth", window.innerWidth);
     onMounted(() => {
       window.addEventListener('resize', setWindowWidth)
     })
