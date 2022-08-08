@@ -199,12 +199,22 @@ export default defineComponent({
         messageRef.value = "message.minting";
         asset.minter = minterName.value;
         asset.group = ""; // gas saving
-        console.log("*** minting", asset);
+        console.log("*** minting", props.isRemix, asset);
         const tx = props.isRemix
           ? await networkContext.value.contract.mintWithAsset(
               asset,
               props.remixId, // remixId
-              "" // color
+              "", // color
+              "", // transform
+              [] // overlays
+              /*
+                [{
+                  assetId: 55,
+                  isComposition: false,
+                  fill: "blue",
+                  transform: "scale(0.4, 0.4)"
+                }]
+              */
             )
           : await networkContext.value.contract.mintWithAsset(
               asset,
