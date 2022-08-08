@@ -1,3 +1,3 @@
 export const token_addresses = {
-  customTokenAddress:"0x94235cF53792fd210F572ca697A9b6328ef8ED3E"
+  customTokenAddress:"0x58A46933621124A22aED125B9d9cE9b06b6d002B"
 }
