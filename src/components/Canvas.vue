@@ -74,45 +74,39 @@
         />
       </div>
     </div>
+
     <div
-      :style="`width:${canvasParams.sidew}px; height:${
-        canvasParams.canh
-      }px; left:${canvasParams.offx + canvasParams.canw - 2}px; top:${
-        canvasParams.offy
-      }px`"
-      class="absolute border-2 border-solid border-blue-700 bg-slate-300"
+      :style="`width:${canvasParams.canw + canvasParams.sidew}px;
+      height:50px;
+      left:${canvasParams.offx}px;
+      top:${canvasParams.offy - 50}px`"
+      class="absolute flex justify-between items-center border-2 border-solid border-blue-700 bg-slate-300"
     >
-      <div class="ml-2 mr-2 flex justify-between">
+      <div class="flex items-center gap-1.5">
         <Undo
           :isUndoable="isUndoable"
           :isRedoable="isRedoable"
           @undo="undo"
           @redo="redo"
         />
-        <Close @onClose="onClose" />
-      </div>
-      <div>
+        
         <token-picker
           :tokens="tokens"
           @tokenSelected="tokenSelected"
           :selectedToken="currentToken"
         />
-      </div>
-      <div>
         <ToggleGrid @toggleGrid="toggleGrid" :grid="grid" />
-      </div>
-      <div class="ml-2 mr-2 flex justify-between">
         <TogglePoint @togglePoint="togglePoint" isSharpCorner="isSharpCorner" />
         <DeletePoint @deletePoint="deletePoint" :cursors="cursors" />
         <SplitSegment @splitSegment="splitSegment" />
-      </div>
-      <div>
         <color-picker
           style="`margin: 10px; width: 100%"
           v-model:pureColor="currentColor"
         />
       </div>
+      <Close @onClose="onClose" />
     </div>
+
     <div
       :style="`width:${canvasParams.sidew}px; height:${
         canvasParams.canh
