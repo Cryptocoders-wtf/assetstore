@@ -199,7 +199,7 @@ export default defineComponent({
         messageRef.value = "message.minting";
         asset.minter = minterName.value;
         asset.group = ""; // gas saving
-        console.log("*** minting", asset);
+        console.log("*** minting", props.isRemix, asset);
         const tx = props.isRemix
           ? await networkContext.value.contract.mintWithAsset(
               asset,
