@@ -1,5 +1,8 @@
 <template>
-  <div class="mx-auto max-w-xl p-2 text-left">
+  <div v-if="error">
+    <NetworkError />
+  </div>
+  <div class="mx-auto max-w-xl p-2 text-left" v-else>
     <mint-view
       :addresses="addresses"
       title="Google Material Icons"
@@ -15,7 +18,10 @@
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import { getContractAddresses } from "@/utils/networks";
+
 import MintView from "@/components/MintView.vue";
+import NetworkError from "@/components/NetworkError.vue";
+
 import { loadedAssets } from "../resources/materials";
 
 const contentsToken = {
@@ -23,15 +29,21 @@ const contentsToken = {
 };
 
 export default defineComponent({
-  name: "HomePage",
+  name: "MaterialsMint",
   components: {
     MintView,
+    NetworkError,
   },
   setup() {
     const route = useRoute();
     const network =
       typeof route.query.network == "string" ? route.query.network : "mainnet";
-    const addresses = getContractAddresses(network)!;
+    const addresses = getContractAddresses(network);
+    if (!addresses) {
+      return {
+        error: true,
+      };
+    }
     addresses.tokenAddress = addresses.materialAddress;
     const options = {
       tokenOffset: addresses.network == "rinkeby" ? -1 : 580,
@@ -40,6 +52,7 @@ export default defineComponent({
       tokenName: "MaterialToken",
     };
     return {
+      error: false,
       addresses,
       contentsToken,
       loadedAssets,
