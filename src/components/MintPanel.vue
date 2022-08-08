@@ -205,7 +205,8 @@ export default defineComponent({
               asset,
               props.remixId, // remixId
               "", // color
-              ""  // transform
+              "", // transform
+              [] // overlays
             )
           : await networkContext.value.contract.mintWithAsset(
               asset,
