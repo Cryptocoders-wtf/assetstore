@@ -207,6 +207,14 @@ export default defineComponent({
               "", // color
               "", // transform
               [] // overlays
+              /*
+                [{
+                  assetId: 55,
+                  isComposition: false,
+                  fill: "blue",
+                  transform: "scale(0.4, 0.4)"
+                }]
+              */
             )
           : await networkContext.value.contract.mintWithAsset(
               asset,
