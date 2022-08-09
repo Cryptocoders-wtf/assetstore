@@ -28,8 +28,9 @@ export interface RotationInfo {
 
 export const menuSize = {
   offx: 40, // fix
-  offy: 80, // fix
+  offy: 145, // fix
   sidew: 150, //fix
+  headh: 50,
 };
 
 // const canvasSize = { w: 1024, h: 1024 };
