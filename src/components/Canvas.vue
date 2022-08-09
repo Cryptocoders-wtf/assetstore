@@ -77,10 +77,10 @@
 
     <div
       :style="`width:${canvasParams.canw + canvasParams.sidew}px;
-      height:50px;
+      height:${canvasParams.headh}px;
       left:${canvasParams.offx}px;
-      top:${canvasParams.offy - 50}px`"
-      class="absolute flex justify-between items-center border-2 border-solid border-blue-700 bg-slate-300"
+      top:${canvasParams.offy - canvasParams.headh}px`"
+      class="absolute flex justify-between px-4 items-center border-2 border-solid border-blue-700 bg-slate-300"
     >
       <div class="flex items-center gap-1.5">
         <Undo
@@ -111,7 +111,7 @@
       :style="`width:${canvasParams.sidew}px; height:${
         canvasParams.canh
       }px; left:${
-        canvasParams.offx + canvasParams.canw - 2 + canvasParams.sidew
+        canvasParams.offx + canvasParams.canw
       }px; top:${canvasParams.offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-300"
     >
