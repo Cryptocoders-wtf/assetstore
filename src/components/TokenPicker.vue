@@ -13,7 +13,7 @@
     </div>
     <div
       v-if="showTokens"
-      style="width: 400px; height: 200px; left: -350px; overflow-y: scroll"
+      style="width: 400px; height: 200px; left: 40px; overflow-y: scroll"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
     >
       <span v-for="token in tokens" :key="token.tokenId">
