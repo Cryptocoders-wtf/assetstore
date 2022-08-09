@@ -39,7 +39,7 @@ export const useCanvasParams = () => {
   const store = useStore();
 
   const windowWidth = computed(() => {
-    return store.state.windowWidth - menuSize.sidew * 2 - menuSize.offx * 2;
+    return store.state.windowWidth - menuSize.sidew - menuSize.offx * 2;
   });
 
   const canvasSize = computed<{ w: number; h: number }>(() => {
