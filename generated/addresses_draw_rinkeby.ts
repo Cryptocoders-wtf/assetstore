@@ -1,4 +1,4 @@
 export const token_addresses = {
-  customTokenAddress:"0x851E6460F4220ca0F73401DeF8482AF363E60f80",
-  composerAddress:"0x5d7584feE64738198914d5950610d5E7Cd6A76a5"
+  customTokenAddress:"0x6875CF61ac2b5fD10662798FeF1E535D684B9c67",
+  composerAddress:"0xA774DE37932B4709780195f1DCe92E2aC629Aa78"
 }
