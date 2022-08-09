@@ -1,3 +1,3 @@
 export const token_addresses = {
-  emojiFlagAddress:"0x4720F87b9382171fdC70181C2bd97c7BbfcF6801"
+  emojiFlagAddress:"0xA491F2133fbb0D5Caa2645532FB740ad8B3F2D51"
 }
