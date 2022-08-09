@@ -36,7 +36,7 @@ export const pathFromPoints = (points: Point[]) => {
 };
 
 const svgHead =
-  '<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">\n';
+  '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">\n';
 
 export const svgImageFromPath = (path: string, color: string) => {
   const svgTail = "</g></defs>" + `<use href="#asset" fill="${color}" /></svg>`;
