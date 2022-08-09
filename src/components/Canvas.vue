@@ -77,7 +77,7 @@
 
     <div
       :style="`width:${canvasParams.canw + canvasParams.sidew}px;
-      height:${canvasParams.headh}px;
+      height:${canvasParams.headh+2}px;
       left:${canvasParams.offx}px;
       top:${canvasParams.offy - canvasParams.headh}px`"
       class="absolute flex justify-between px-4 items-center border-2 border-solid border-blue-700 bg-slate-300"
@@ -108,10 +108,10 @@
     </div>
 
     <div
-      :style="`width:${canvasParams.sidew}px; height:${
+      :style="`width:${canvasParams.sidew + 2}px; height:${
         canvasParams.canh
       }px; left:${
-        canvasParams.offx + canvasParams.canw
+        canvasParams.offx + canvasParams.canw - 2
       }px; top:${canvasParams.offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-300"
     >
