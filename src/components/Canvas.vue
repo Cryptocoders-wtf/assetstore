@@ -47,7 +47,7 @@
         @click="onSelect($event, index)"
       />
       <div
-        class="absolute border-2 border-solid border-red-800"
+        class="absolute tool-handle-move"
         :style="
           `width:${canvasParams.curw}px; height:${canvasParams.curh}px; ` +
           `left: ${moveToolPos.left}px; ` +
@@ -62,9 +62,9 @@
         <div
           v-for="({ type, x, y }, index) in toolHandles"
           :key="index"
-          class="absolute border-2 border-solid"
+          class="absolute"
           :class="
-            type === Tools.ROTATE ? 'border-green-800' : 'border-yellow-800'
+            type === Tools.ROTATE ? 'tool-handle-rotation' : 'tool-handle-scaling'
           "
           :style="`width:${canvasParams.curw}px; height:${canvasParams.curh}px;
           left: ${x}px; top: ${y}px;`"
@@ -89,16 +89,19 @@
           @undo="undo"
           @redo="redo"
         />
-        
+        <div class="self-start">|</div>
         <token-picker
           :tokens="tokens"
           @tokenSelected="tokenSelected"
           :selectedToken="currentToken"
         />
+        <div class="self-start">|</div>
         <ToggleGrid @toggleGrid="toggleGrid" :grid="grid" />
+        <div class="self-start">|</div>
         <TogglePoint @togglePoint="togglePoint" isSharpCorner="isSharpCorner" />
         <DeletePoint @deletePoint="deletePoint" :cursors="cursors" />
         <SplitSegment @splitSegment="splitSegment" />
+        <div class="self-start">|</div>
         <color-picker
           style="`margin: 10px; width: 100%"
           v-model:pureColor="currentColor"
@@ -411,3 +414,33 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.tool-handle-move::before{
+    font-family: 'Material Icons';
+    content: 'control_camera';
+    @apply text-4xl;
+    @apply text-red-800;
+    @apply relative;
+    @apply bottom-2.5;
+    @apply right-2;
+}
+.tool-handle-rotation::before{
+    font-family: 'Material Icons';
+    content: 'screen_rotation_alt';
+    @apply text-2xl;
+    @apply text-green-800;
+    @apply relative;
+    @apply bottom-2;
+    @apply right-0.5;
+}
+.tool-handle-scaling::before{
+    font-family: 'Material Icons';
+    content: 'zoom_out_map';
+    @apply text-2xl;
+    @apply text-yellow-800;
+    @apply relative;
+    @apply bottom-2;
+    @apply right-0.5;
+}
+</style>
