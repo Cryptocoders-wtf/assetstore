@@ -221,7 +221,7 @@ export default defineComponent({
       };
       const actions: OriginalAssetDataSet = {
         group: "",
-        category: "CC0 Drawing (14)",
+        category: "CC0 Drawing (16)",
         width: 1024,
         height: 1024,
         assets: [asset],
