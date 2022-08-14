@@ -209,8 +209,8 @@ export default defineComponent({
               [] // overlays
               /*
                 [{
-                  assetId: 55,
-                  isComposition: false,
+                  assetId: 54,
+                  provider: "asset",
                   fill: "blue",
                   transform: "scale(0.4, 0.4)"
                 }]
