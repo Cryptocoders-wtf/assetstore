@@ -98,7 +98,7 @@
         <div class="self-start">|</div>
         <ToggleGrid @toggleGrid="toggleGrid" :grid="grid" />
         <div class="self-start">|</div>
-        <TogglePoint @togglePoint="togglePoint" isSharpCorner="isSharpCorner" />
+        <TogglePoint @togglePoint="togglePoint" :isSharpCorner="isSharpCorner" />
         <DeletePoint @deletePoint="deletePoint" :cursors="cursors" />
         <SplitSegment @splitSegment="splitSegment" />
         <div class="self-start">|</div>
