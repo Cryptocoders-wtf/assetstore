@@ -50,7 +50,7 @@ const lang = {
     invalidNetwork: "Please switch network to { networkName }.",
     processing: "Processing...",
     copy: "copy",
-    nftListTitle: "List of crowd-minted NFTs",
+    nftListTitle: "List of crowd-minted NFTs ({count})",
     resources: "Resources",
     loading: "Loading...",
   },

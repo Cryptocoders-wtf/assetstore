@@ -2,7 +2,7 @@
   <div>
     <div v-if="tokens.length > 0">
       <div class="mt-4 mb-2">
-        <p class="font-bold">{{ $t("message.nftListTitle") }}</p>
+        <p class="font-bold">{{ $t("message.nftListTitle", {count:tokens.length}) }}</p>
       </div>
       <span v-for="token in tokens" :key="token.tokenId">
         <a
