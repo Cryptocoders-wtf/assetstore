@@ -430,7 +430,7 @@ export default defineComponent({
 .tool-handle-rotation::before{
     font-family: 'Material Icons';
     content: 'screen_rotation_alt';
-    @apply text-2xl;
+    @apply text-xl;
     @apply text-green-800;
     @apply relative;
     @apply bottom-2;
@@ -439,7 +439,7 @@ export default defineComponent({
 .tool-handle-scaling::before{
     font-family: 'Material Icons';
     content: 'zoom_out_map';
-    @apply text-2xl;
+    @apply text-xl;
     @apply text-yellow-800;
     @apply relative;
     @apply bottom-2;

@@ -52,7 +52,7 @@ export const useCanvasParams = () => {
       canh: canvasSize.value.h,
       curw: (canvasSize.value.w * 30) / assetSize.w,
       curh: (canvasSize.value.h * 30) / assetSize.h,
-      toold: (canvasSize.value.w * 60) / assetSize.w,
+      toold: (canvasSize.value.w * 100) / assetSize.w,
       assw: assetSize.w,
       assh: assetSize.h,
       caratio: canvasSize.value.w / assetSize.w,
