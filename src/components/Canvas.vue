@@ -35,8 +35,8 @@
         :style="`width:${canvasParams.curw}px; height:${
           canvasParams.curh
         }px; left:${assetXtoCanvasX(
-          cursor.x - canvasParams.curw / 2
-        )}px; top:${assetYtoCanvasY(cursor.y - canvasParams.curh / 2)}px`"
+          cursor.x) - canvasParams.curw / 2
+        }px; top:${assetYtoCanvasY(cursor.y) - canvasParams.curh / 2}px`"
         :class="`${
           index == pointIndex ? 'border-blue-800' : 'border-blue-400'
         } ${cursor.c ? '' : 'rounded-xl'}`"
