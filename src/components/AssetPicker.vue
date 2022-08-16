@@ -19,8 +19,9 @@
         </option>
       </select>
       <div style="width: 100%; height: 200px; overflow-y: scroll">
-        <span v-for="image in assetImages" :key="image">
+        <span v-for="(image, index) in assetImages" :key="image">
           <img
+            @click="onSelect(index)"
             :src="image"
             class="mr-1 mb-1 inline-block w-14 rounded-xl"
           />
@@ -104,6 +105,9 @@ export default defineComponent({
       const images:string[] = [];
       for (let i=0; i<count; i++) {
         const result = await assetProvider.functions.generateSVGPart(i);
+        if (selectedProvider.value != newValue) {
+          return;
+        }
         const svgPart = result[0];
         const tag = result[1];
         const svg = '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">\n' 
@@ -119,12 +123,17 @@ export default defineComponent({
     const onOpen = () => {
       showPopup.value = !showPopup.value;
     };
+
+    const onSelect = (index: number) => {
+      context.emit("AssetSelected", selectedProvider.value, index, assetImages.value[index]);
+    };
     return {
       onOpen,
       showPopup,
       assetProviderInfos,
       selectedProvider,
-      assetImages
+      assetImages,
+      onSelect
     };
   },
 });

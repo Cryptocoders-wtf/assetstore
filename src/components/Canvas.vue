@@ -109,7 +109,7 @@
           v-model:pureColor="currentColor"
         />
         <div class="self-start">|</div>
-        <asset-picker :addresses="addresses" />
+        <asset-picker :addresses="addresses" @AssetSelected="AssetSelected"/>
       </div>
       <Close @onClose="onClose" />
     </div>
@@ -378,6 +378,9 @@ export default defineComponent({
         );
       }
     };
+    const AssetSelected = (key:string, index:number, image:string) => {
+      console.log("AssetSelected", key, index);
+    };
     return {
       toolHandleMode,
       Tools,
@@ -416,6 +419,7 @@ export default defineComponent({
 
       assetXtoCanvasX,
       assetYtoCanvasY,
+      AssetSelected,
     };
   },
 });
