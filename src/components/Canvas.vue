@@ -108,6 +108,8 @@
           style="`margin: 10px; width: 100%"
           v-model:pureColor="currentColor"
         />
+        <div class="self-start">|</div>
+        <asset-picker />
       </div>
       <Close @onClose="onClose" />
     </div>
@@ -144,6 +146,7 @@ import {
 import { ColorPicker } from "vue3-colorpicker";
 
 import TokenPicker from "@/components/TokenPicker.vue";
+import AssetPicker from "@/components/AssetPicker.vue";
 import Layers from "@/components/Canvas/Layers.vue";
 import Undo from "@/components/Canvas/Menu/Undo.vue";
 import Close from "@/components/Canvas/Menu/Close.vue";
@@ -170,6 +173,7 @@ export default defineComponent({
   components: {
     ColorPicker,
     TokenPicker,
+    AssetPicker,
     Layers,
     Undo,
     Close,
