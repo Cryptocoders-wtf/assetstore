@@ -10,9 +10,14 @@
       style="width: 400px; height: 200px; left: 40px; overflow-y: scroll"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
     >
-      <span v-for="provider in assetProviders" :key="provider.name">
+    <select
+      class="form-select block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700"
+      v-model="selectedProvider"
+    >
+      <option v-for="provider in assetProviders" :key="provider.name">
         {{ provider.name }}
-      </span>
+      </option>
+    </select>
     </div>
   </div>
 </template>
@@ -39,6 +44,7 @@ export default defineComponent({
   setup(props, context) {
     const showPopup = ref<boolean>(false);
     const assetProviders = ref<AssetProvider[]>([]);
+    const selectedProvider = ref<AssetProvider | null>(null);
     console.log("***", props.addresses.composerAddress);
     const provider =
       props.addresses.network == "localhost"
@@ -80,7 +86,8 @@ export default defineComponent({
     return {
       onOpen,
       showPopup,
-      assetProviders
+      assetProviders,
+      selectedProvider
     };
   },
 });
