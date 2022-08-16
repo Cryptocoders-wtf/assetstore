@@ -45,7 +45,7 @@ export default defineComponent({
   setup(props, context) {
     const showPopup = ref<boolean>(false);
     const assetProviders = ref<AssetProvider[]>([]);
-    const selectedProvider = ref<AssetProvider | null>(null);
+    const selectedProvider = ref<string | null>(null);
     console.log("***", props.addresses.composerAddress);
     const provider =
       props.addresses.network == "localhost"
@@ -81,8 +81,22 @@ export default defineComponent({
       assetProviders.value = providers;
     };
     fetchProviders();
-    watch(selectedProvider, (newValue) => {
+    watch(selectedProvider, async (newValue) => {
       console.log("selectedProvider", newValue);
+      // Later: Eliminated this O(n) search with key mapping
+      const providers = assetProviders.value.filter(item => {
+        return item.key == newValue;
+      })
+      if (providers.length != 1) {
+        console.error("providers.length != 1");
+        return;
+      }
+      console.log("selectedProvider", providers[0]);
+      const assetProvider = providers[0].provider;
+      console.log("selectedProvider", assetProvider);
+      const result2 = await assetProvider.functions.totalSupply();
+      console.log("totalSupply", result2[0].toNumber())
+
     });
 
     const onOpen = () => {
