@@ -14,7 +14,7 @@
       class="form-select block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700"
       v-model="selectedProvider"
     >
-      <option v-for="provider in assetProviders" :key="provider.name">
+      <option v-for="provider in assetProviders" :key="provider.name" :value="provider.key">
         {{ provider.name }}
       </option>
     </select>
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { ethers } from "ethers";
 
 const AssetComposer = {
@@ -35,6 +35,7 @@ const IAssetProvider = {
 };
 
 interface AssetProvider {
+  key: string,
   name: string,
   provider: ethers.Contract
 }
@@ -71,6 +72,7 @@ export default defineComponent({
         const result2 = await assetProvider.functions.totalSupply();
         console.log("totalSupply", result2[0].toNumber())
         providers.push({
+          key: providerInfo.key,
           name: providerInfo.name,
           provider: assetProvider,
         })
@@ -79,6 +81,9 @@ export default defineComponent({
       assetProviders.value = providers;
     };
     fetchProviders();
+    watch(selectedProvider, (newValue) => {
+      console.log("selectedProvider", newValue);
+    });
 
     const onOpen = () => {
       showPopup.value = !showPopup.value;
