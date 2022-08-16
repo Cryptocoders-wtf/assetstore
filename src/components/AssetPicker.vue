@@ -16,12 +16,32 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import { ethers } from "ethers";
+
+const AssetComposer = {
+  wabi: require("../abis/AssetComposer.json"), // wrapped abi
+};
 
 export default defineComponent({
   props: ["addresses"],
   setup(props, context) {
     const showPopup = ref<boolean>(false);
     console.log("***", props.addresses.composerAddress);
+    const provider =
+      props.addresses.network == "localhost"
+        ? new ethers.providers.JsonRpcProvider()
+        : new ethers.providers.AlchemyProvider(props.addresses.network);
+    const assetComposer = new ethers.Contract(
+      props.addresses.composerAddress,
+      AssetComposer.wabi.abi,
+      provider
+    );
+    const fetchProviders = async () => {
+      const result = await assetComposer.functions.providerCount();
+      const count = result[0].toNumber();
+      console.log("providerCount", count);
+    };
+    fetchProviders();
 
     const onOpen = () => {
       showPopup.value = !showPopup.value;
