@@ -195,7 +195,7 @@ export default defineComponent({
       resultInfo ? JSON.parse(resultInfo) || baseInfo : baseInfo
     );
     //console.log("info", info.value);
-    drawings.value = info.value.keys.map((key, index) => {
+    drawings.value = info.value.keys.map(key => {
       const result = localStorage.getItem(key);
       //console.log("result", key, index, result);
       const drawing: Drawing = result
