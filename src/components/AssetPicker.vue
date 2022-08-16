@@ -10,6 +10,9 @@
       style="width: 400px; height: 200px; left: 40px; overflow-y: scroll"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
     >
+      <span v-for="provider in assetProviders" :key="provider.name">
+        {{ provider.name }}
+      </span>
     </div>
   </div>
 </template>
@@ -26,10 +29,16 @@ const IAssetProvider = {
   wabi: require("../abis/IAssetProvider.json"), // wrapped abi
 };
 
+interface AssetProvider {
+  name: string,
+  provider: ethers.Contract
+}
+
 export default defineComponent({
   props: ["addresses"],
   setup(props, context) {
     const showPopup = ref<boolean>(false);
+    const assetProviders = ref<AssetProvider[]>([]);
     console.log("***", props.addresses.composerAddress);
     const provider =
       props.addresses.network == "localhost"
@@ -44,6 +53,7 @@ export default defineComponent({
       const result = await assetComposer.functions.providerCount();
       const count = result[0].toNumber();
       console.log("providerCount", count);
+      const providers:AssetProvider[] = [];
       for (let i=0; i<count; i++) {
         const result = await assetComposer.functions.getProvider(i);
         const providerInfo = result[0];
@@ -54,7 +64,13 @@ export default defineComponent({
         );
         const result2 = await assetProvider.functions.totalSupply();
         console.log("totalSupply", result2[0].toNumber())
+        providers.push({
+          name: providerInfo.name,
+          provider: assetProvider,
+        })
       }
+      console.log("providers", providers);
+      assetProviders.value = providers;
     };
     fetchProviders();
 
@@ -63,7 +79,8 @@ export default defineComponent({
     };
     return {
       onOpen,
-      showPopup
+      showPopup,
+      assetProviders
     };
   },
 });
