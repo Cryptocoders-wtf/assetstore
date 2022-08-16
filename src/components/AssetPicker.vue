@@ -40,6 +40,10 @@ export default defineComponent({
       const result = await assetComposer.functions.providerCount();
       const count = result[0].toNumber();
       console.log("providerCount", count);
+      for (let i=0; i<count; i++) {
+        const result = await assetComposer.functions.getProvider(i);
+        console.log("getProvider", result[0], result[1], result[2]);
+      }
     };
     fetchProviders();
 
