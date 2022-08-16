@@ -7,8 +7,9 @@ import {
   UIPos,
   Tools,
   RotationInfo,
+  TransForm,
 } from "@/utils/canvasUtil";
-import { Point } from "@/models/point";
+import { Point, LayerType } from "@/models/point";
 
 // const { curw, curh } = canvasParams;
 
@@ -16,7 +17,9 @@ export const useDrag = (
   pointIndex: Ref<number>,
   moveToolPos: ComputedRef<UIPos>,
   cursors: Ref<Point[]>,
-  recordState: () => void
+  recordState: () => void,
+  currentLayerType: Ref<number>,
+  remixTransForm: Ref<TransForm>,
 ) => {
   const {
     getPageX,
@@ -121,7 +124,9 @@ export const useDrag = (
             cos: Math.cos(rad),
           }
         : { radian: 0, sin: 0, cos: 0 };
-    cursors.value = cursors.value.map((cursor, index) => {
+
+    if (currentLayerType.value === LayerType.LAYER) 
+      cursors.value = cursors.value.map((cursor, index) => {
       switch (currentTool.value) {
         case Tools.ZOOM:
           return {
@@ -187,6 +192,28 @@ export const useDrag = (
       }
       return cursor;
     });
+    if (currentLayerType.value === LayerType.REMIX) {
+      switch (currentTool.value) {
+        case Tools.MOVE: {
+          const {x, y} = {...gridder(limiter({
+            x: getPageX(evt) ,
+            y: getPageY(evt) 
+          }))}
+          remixTransForm.value.translateX = x - canvasParams.value.assw / 2;
+          remixTransForm.value.translateY = y - canvasParams.value.assh / 2;
+          break;
+        }
+        case Tools.ZOOM: {
+          remixTransForm.value.scale = magnification;
+          break;
+        }
+        case Tools.ROTATE: {
+          remixTransForm.value.rotate = RotationInfo.radian;
+          break;
+        }
+      }
+
+    }
     evt.preventDefault();
   };
 

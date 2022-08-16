@@ -15,7 +15,10 @@
         v-if="currentToken"
         class="absolute"
         :src="currentToken.image"
-        :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px`"
+        :style="
+          `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` + 
+          `transform: ${remixTransForm.toString()};`
+        "
       />
       <img
         v-for="(layer, index) in layers"
@@ -137,6 +140,7 @@
 import { defineComponent, ref, watch, computed } from "vue";
 import {
   Layer,
+  LayerType,
   Drawing,
   svgImageFromPath,
   pathFromPoints,
@@ -163,6 +167,7 @@ import {
   roundRect,
   Tools,
   useToolHandleMode,
+  TransForm,
 } from "@/utils/canvasUtil";
 
 import { useUndoStack } from "@/utils/undo";
@@ -194,6 +199,8 @@ export default defineComponent({
     const currentToken = ref<Token | null>(null);
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
+    const currentLayerType = ref<number>(LayerType.LAYER);
+    const remixTransForm = ref<TransForm>(new TransForm(""));
     //console.log("initialLayers", props.initialLayers ? "A" : "B");
     const layers = ref<Layer[]>(
       props.drawing.layers?.length > 0
@@ -222,7 +229,7 @@ export default defineComponent({
       onClickToolHandle,
       moveToolPos,
       cursors,
-    } = useToolHandleMode();
+    } = useToolHandleMode(currentLayerType, remixTransForm);
 
     const tokenSelected = (token: Token) => {
       recordState();
@@ -290,7 +297,7 @@ export default defineComponent({
       dragOver,
       toggleGrid,
       grid,
-    } = useDrag(pointIndex, moveToolPos, cursors, recordState);
+    } = useDrag(pointIndex, moveToolPos, cursors, recordState, currentLayerType, remixTransForm);
 
     const togglePoint = () => {
       recordState();
@@ -376,6 +383,10 @@ export default defineComponent({
             ? [...results, ...results][results.indexOf(layerIndex.value) + 1]
             : results[0]
         );
+        currentLayerType.value = LayerType.LAYER;
+      } else {
+        currentLayerType.value = LayerType.REMIX;
+
       }
     };
     const AssetSelected = (key:string, index:number, image:string) => {
@@ -419,6 +430,8 @@ export default defineComponent({
 
       assetXtoCanvasX,
       assetYtoCanvasY,
+      currentLayerType,
+      remixTransForm,
       AssetSelected,
     };
   },
