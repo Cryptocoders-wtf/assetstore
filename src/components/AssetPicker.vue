@@ -7,7 +7,7 @@
     </div>
     <div
       v-if="showPopup"
-      style="width: 400px; height: 200px; left: 40px; overflow-y: scroll"
+      style="width: 400px; left: 40px"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
     >
       <select
@@ -18,7 +18,7 @@
           {{ provider.name }}
         </option>
       </select>
-      <div>
+      <div style="width: 100%; height: 200px; overflow-y: scroll">
         <span v-for="image in assetImages" :key="image">
           <img
             :src="image"
