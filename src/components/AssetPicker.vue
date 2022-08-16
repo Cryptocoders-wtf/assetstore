@@ -14,7 +14,7 @@
       class="form-select block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700"
       v-model="selectedProvider"
     >
-      <option v-for="provider in assetProviders" :key="provider.name" :value="provider.key">
+      <option v-for="provider in assetProviderInfos" :key="provider.name" :value="provider.key">
         {{ provider.name }}
       </option>
     </select>
@@ -34,7 +34,7 @@ const IAssetProvider = {
   wabi: require("../abis/IAssetProvider.json"), // wrapped abi
 };
 
-interface AssetProvider {
+interface AssetProviderInfo {
   key: string,
   name: string,
   provider: string
@@ -44,7 +44,7 @@ export default defineComponent({
   props: ["addresses"],
   setup(props, context) {
     const showPopup = ref<boolean>(false);
-    const assetProviders = ref<AssetProvider[]>([]);
+    const assetProviderInfos = ref<AssetProviderInfo[]>([]);
     const selectedProvider = ref<string | null>(null);
     console.log("***", props.addresses.composerAddress);
     const provider =
@@ -59,34 +59,30 @@ export default defineComponent({
     const fetchProviders = async () => {
       const result = await assetComposer.functions.providerCount();
       const count = result[0].toNumber();
-      console.log("providerCount", count);
-      const providers:AssetProvider[] = [];
+      const infos:AssetProviderInfo[] = [];
       for (let i=0; i<count; i++) {
         const result = await assetComposer.functions.getProvider(i);
         const providerInfo = result[0];
 
-        providers.push({
+        infos.push({
           key: providerInfo.key,
           name: providerInfo.name,
           provider: providerInfo.provider,
         })
       }
-      console.log("providers", providers);
-      assetProviders.value = providers;
+      assetProviderInfos.value = infos;
     };
     fetchProviders();
     watch(selectedProvider, async (newValue) => {
-      console.log("selectedProvider", newValue);
       // Later: Eliminated this O(n) search with key mapping
-      const providers = assetProviders.value.filter(item => {
+      const infos = assetProviderInfos.value.filter(item => {
         return item.key == newValue;
       })
-      if (providers.length != 1) {
+      if (infos.length != 1) {
         console.error("providers.length != 1");
         return;
       }
-      console.log("selectedProvider", providers[0]);
-      const providerInfo = providers[0];
+      const providerInfo = infos[0];
 
       const assetProvider = new ethers.Contract(
         providerInfo.provider,
@@ -103,7 +99,7 @@ export default defineComponent({
     return {
       onOpen,
       showPopup,
-      assetProviders,
+      assetProviderInfos,
       selectedProvider
     };
   },
