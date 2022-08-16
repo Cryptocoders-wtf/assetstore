@@ -22,6 +22,10 @@ const AssetComposer = {
   wabi: require("../abis/AssetComposer.json"), // wrapped abi
 };
 
+const IAssetProvider = {
+  wabi: require("../abis/IAssetProvider.json"), // wrapped abi
+};
+
 export default defineComponent({
   props: ["addresses"],
   setup(props, context) {
@@ -42,7 +46,14 @@ export default defineComponent({
       console.log("providerCount", count);
       for (let i=0; i<count; i++) {
         const result = await assetComposer.functions.getProvider(i);
-        console.log("getProvider", result[0], result[1], result[2]);
+        const providerInfo = result[0];
+        const assetProvider = new ethers.Contract(
+          providerInfo.provider,
+          IAssetProvider.wabi.abi,
+          provider
+        );
+        const result2 = await assetProvider.functions.totalSupply();
+        console.log("totalSupply", result2[0].toNumber())
       }
     };
     fetchProviders();
