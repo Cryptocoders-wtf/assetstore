@@ -37,7 +37,7 @@ const IAssetProvider = {
 interface AssetProvider {
   key: string,
   name: string,
-  provider: ethers.Contract
+  provider: string
 }
 
 export default defineComponent({
@@ -64,17 +64,11 @@ export default defineComponent({
       for (let i=0; i<count; i++) {
         const result = await assetComposer.functions.getProvider(i);
         const providerInfo = result[0];
-        const assetProvider = new ethers.Contract(
-          providerInfo.provider,
-          IAssetProvider.wabi.abi,
-          provider
-        );
-        const result2 = await assetProvider.functions.totalSupply();
-        console.log("totalSupply", result2[0].toNumber())
+
         providers.push({
           key: providerInfo.key,
           name: providerInfo.name,
-          provider: assetProvider,
+          provider: providerInfo.provider,
         })
       }
       console.log("providers", providers);
@@ -92,11 +86,15 @@ export default defineComponent({
         return;
       }
       console.log("selectedProvider", providers[0]);
-      const assetProvider = providers[0].provider;
-      console.log("selectedProvider", assetProvider);
+      const providerInfo = providers[0];
+
+      const assetProvider = new ethers.Contract(
+        providerInfo.provider,
+        IAssetProvider.wabi.abi,
+        provider
+      );
       const result2 = await assetProvider.functions.totalSupply();
       console.log("totalSupply", result2[0].toNumber())
-
     });
 
     const onOpen = () => {
