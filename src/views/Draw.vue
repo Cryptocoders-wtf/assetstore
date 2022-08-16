@@ -5,6 +5,7 @@
       @close="onClose"
       :drawing="selectedDrawing"
       :tokens="tokens"
+      :addresses="addresses"
     />
 
     <div class="mx-auto max-w-xl p-2 text-left">

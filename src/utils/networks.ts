@@ -21,6 +21,7 @@ export const getContractAddresses = (network: string) => {
       kamonAddress: kamon_localhost.kamonAddress,
       flagAddress: flag_localhost.emojiFlagAddress,
       drawAddress: draw_localhost.customTokenAddress,
+      composerAddress: draw_localhost.composerAddress,
       tokenAddress: "",
     };
   }
@@ -34,6 +35,7 @@ export const getContractAddresses = (network: string) => {
       kamonAddress: kamon_rinkeby.kamonAddress,
       flagAddress: flag_rinkeby.emojiFlagAddress,
       drawAddress: draw_rinkeby.customTokenAddress,
+      composerAddress: draw_rinkeby.composerAddress,
       tokenAddress: "",
     };
   }
@@ -46,7 +48,8 @@ export const getContractAddresses = (network: string) => {
       materialAddress: mainnet.tokenAddress,
       kamonAddress: kamon_mainnet.kamonAddress,
       flagAddress: flag_mainnet.emojiFlagAddress,
-      drawAddress: "to be determined",
+      drawAddress: "to be determined", // MEMO: don't forget to change the category in Draw.vue as well
+      composerAddress: "to be determined",
       tokenAddress: "",
     };
   }

@@ -109,7 +109,7 @@
           v-model:pureColor="currentColor"
         />
         <div class="self-start">|</div>
-        <asset-picker />
+        <asset-picker :addresses="addresses" />
       </div>
       <Close @onClose="onClose" />
     </div>
@@ -182,7 +182,7 @@ export default defineComponent({
     DeletePoint,
     SplitSegment,
   },
-  props: ["drawing", "tokens"],
+  props: ["drawing", "tokens", "addresses"],
   setup(props, context) {
     const {
       canvasParams,

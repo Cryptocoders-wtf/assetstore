@@ -18,8 +18,11 @@
 import { defineComponent, ref } from "vue";
 
 export default defineComponent({
+  props: ["addresses"],
   setup(props, context) {
     const showPopup = ref<boolean>(false);
+    console.log("***", props.addresses.composerAddress);
+
     const onOpen = () => {
       showPopup.value = !showPopup.value;
     };
