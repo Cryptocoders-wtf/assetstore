@@ -43,7 +43,7 @@ export class TransForm {
   constructor(value: string) {
     [, this.rotate, this.scale, this.translateX, this.translateY] = (
       value?.match(
-        /rotate\(([0-1.]*)deg\) scale\(([0-1.]*)\) translate\(([0-1.]*)px,([0-1.]*)px\)/
+        /translate\(([0-1.]*)px,([0-1.]*)px\) rotate\(([0-1.]*)deg\) scale\(([0-1.]*)\)/
       ) ?? ["0", "0", "1", "0", "0"]
     ).map((v) => parseFloat(v));
   }
@@ -51,10 +51,10 @@ export class TransForm {
   toString() {
     const { assetXtoCanvasX, assetYtoCanvasY } = useCanvasParams();
     return (
-      `rotate(${this.rotate}rad) ` +
-      `scale(${this.scale}) ` +
       `translate(${assetXtoCanvasX(this.translateX)}px,` +
-      `${assetYtoCanvasY(this.translateY)}px)`
+      `${assetYtoCanvasY(this.translateY)}px)` +
+      `scale(${this.scale}) ` +
+      `rotate(${this.rotate}rad) `
     );
   }
 }

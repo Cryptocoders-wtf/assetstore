@@ -81,10 +81,7 @@ import { getAddresses } from "@/utils/const";
 import References from "@/components/References.vue";
 import NFTList from "@/components/NFTList.vue";
 import { v4 as uuidv4 } from "uuid";
-import {
-  OriginalAssetData,
-  OriginalAssetDataSet,
-} from "@/models/asset";
+import { OriginalAssetData, OriginalAssetDataSet } from "@/models/asset";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -196,7 +193,7 @@ export default defineComponent({
       resultInfo ? JSON.parse(resultInfo) || baseInfo : baseInfo
     );
     //console.log("info", info.value);
-    drawings.value = info.value.keys.map(key => {
+    drawings.value = info.value.keys.map((key) => {
       const result = localStorage.getItem(key);
       //console.log("result", key, index, result);
       const drawing: Drawing = result
