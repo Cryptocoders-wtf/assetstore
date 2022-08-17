@@ -360,6 +360,7 @@ export default defineComponent({
       const drawing: Drawing = {
         layers: layers.value,
         remixId: token ? token.tokenId + 1 : 0,
+        // transform: remixTransForm.value ? remixTransForm.value.toString() : "", 
       };
       context.emit("close", drawing);
     };
