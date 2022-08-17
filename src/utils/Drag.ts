@@ -34,6 +34,7 @@ export const useDrag = (
   const offsetY = ref<number>(0);
   const startPoint = ref<Pos>({ x: 0, y: 0 });
   const initialCursors = ref<Point[]>([]);
+  const initialTransform = ref<TransForm>(new TransForm(""));
   const grid = ref<number>(0);
 
   const currentTool = ref<Tools>(0);
@@ -50,6 +51,7 @@ export const useDrag = (
     startPoint.value.y = getPageY(evt);
     pivotPos.value = canvastoAsset(moveToolPos.value);
     initialCursors.value = cursors.value;
+    initialTransform.value = remixTransForm.value;
     recordState();
   };
   const dragLayerImgStart = (evt: MouseEvent | TouchEvent) => {
@@ -59,6 +61,7 @@ export const useDrag = (
     startPoint.value.x = getPageX(evt);
     startPoint.value.y = getPageY(evt);
     initialCursors.value = cursors.value;
+    initialTransform.value = remixTransForm.value;
     recordState();
   };
   const dragStart = (evt: DragEvent | TouchEvent, index: number) => {
@@ -215,11 +218,11 @@ export const useDrag = (
           break;
         }
         case Tools.ZOOM: {
-          tx.scale = magnification;
+          tx.scale = initialTransform.value.scale * magnification;
           break;
         }
         case Tools.ROTATE: {
-          tx.rotate = RotationInfo.radian;
+          tx.rotate = initialTransform.value.rotate + RotationInfo.radian;
           break;
         }
       }
