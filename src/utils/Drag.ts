@@ -193,8 +193,8 @@ export const useDrag = (
         return cursor;
       });
     if (currentLayerType.value === LayerType.REMIX) {
-      //console.log("***", remixTransForm.value);
-      const tx = new TransForm(""); // new TransForm(remixTransForm.value.toString());
+      // Note: We need to create a new instance in order to make it work with undo/redo.
+      const tx = new TransForm(""); 
       tx.rotate = remixTransForm.value.rotate;
       tx.scale = remixTransForm.value.scale;
       tx.translateX = remixTransForm.value.translateX;
@@ -223,7 +223,6 @@ export const useDrag = (
           break;
         }
       }
-      console.log("tx.x", tx.translateX);
       remixTransForm.value = tx;
     }
     evt.preventDefault();
