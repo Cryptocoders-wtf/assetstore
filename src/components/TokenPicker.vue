@@ -7,7 +7,11 @@
           {{ selectedToken.tokenId }}
         </span>
       </button>
-      <button :style="`opacity:${selectedToken ? '1.0' : '0.5'}`" @click="onRemove" class="ml-2 flex">
+      <button
+        :style="`opacity:${selectedToken ? '1.0' : '0.5'}`"
+        @click="onRemove"
+        class="ml-2 flex"
+      >
         <span class="material-icons">image_not_supported</span>
       </button>
     </div>

@@ -14,7 +14,11 @@
         class="form-select block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700"
         v-model="selectedProvider"
       >
-        <option v-for="provider in assetProviderInfos" :key="provider.name" :value="provider.key">
+        <option
+          v-for="provider in assetProviderInfos"
+          :key="provider.name"
+          :value="provider.key"
+        >
           {{ provider.name }}
         </option>
       </select>
@@ -44,9 +48,9 @@ const IAssetProvider = {
 };
 
 interface AssetProviderInfo {
-  key: string,
-  name: string,
-  provider: string
+  key: string;
+  name: string;
+  provider: string;
 }
 
 export default defineComponent({
@@ -69,8 +73,8 @@ export default defineComponent({
     const fetchProviders = async () => {
       const result = await assetComposer.functions.providerCount();
       const count = result[0].toNumber();
-      const infos:AssetProviderInfo[] = [];
-      for (let i=0; i<count; i++) {
+      const infos: AssetProviderInfo[] = [];
+      for (let i = 0; i < count; i++) {
         const result = await assetComposer.functions.getProvider(i);
         const providerInfo = result[0];
 
@@ -78,16 +82,16 @@ export default defineComponent({
           key: providerInfo.key,
           name: providerInfo.name,
           provider: providerInfo.provider,
-        })
+        });
       }
       assetProviderInfos.value = infos;
     };
     fetchProviders();
     watch(selectedProvider, async (newValue) => {
       // Later: Eliminated this O(n) search with key mapping
-      const infos = assetProviderInfos.value.filter(item => {
+      const infos = assetProviderInfos.value.filter((item) => {
         return item.key == newValue;
-      })
+      });
       if (infos.length != 1) {
         console.error("providers.length != 1");
         return;
@@ -102,21 +106,23 @@ export default defineComponent({
       const result2 = await assetProvider.functions.totalSupply();
       const count = result2[0].toNumber();
       console.log("totalSupply", count);
-      const images:string[] = [];
-      for (let i=0; i<count; i++) {
+      const images: string[] = [];
+      for (let i = 0; i < count; i++) {
         const result = await assetProvider.functions.generateSVGPart(i);
         if (selectedProvider.value != newValue) {
           return;
         }
         const svgPart = result[0];
         const tag = result[1];
-        const svg = '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">\n' 
-              + `<defs>\n${svgPart}\n</defs>\n`
-              + `<use href="#${tag}" />\n`
-              + '</svg>\n';
-        const image = "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
+        const svg =
+          '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">\n' +
+          `<defs>\n${svgPart}\n</defs>\n` +
+          `<use href="#${tag}" />\n` +
+          "</svg>\n";
+        const image =
+          "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
         images.push(image);
-        assetImages.value = images.map(image=>image);
+        assetImages.value = images.map((image) => image);
       }
     });
 
@@ -125,7 +131,12 @@ export default defineComponent({
     };
 
     const onSelect = (index: number) => {
-      context.emit("AssetSelected", selectedProvider.value, index, assetImages.value[index]);
+      context.emit(
+        "AssetSelected",
+        selectedProvider.value,
+        index,
+        assetImages.value[index]
+      );
     };
     return {
       onOpen,
@@ -133,7 +144,7 @@ export default defineComponent({
       assetProviderInfos,
       selectedProvider,
       assetImages,
-      onSelect
+      onSelect,
     };
   },
 });
