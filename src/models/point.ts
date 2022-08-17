@@ -28,7 +28,7 @@ export interface Drawing {
   remixId: number; // optional remix tokenId (0 = no remix)
   color?: string;
   transform?: string;
-  overlays?: Overlay[]
+  overlays?: Overlay[];
 }
 
 // asset,

@@ -40,27 +40,23 @@ export class TransForm {
   public translateX = 0;
   public translateY = 0;
 
-  constructor(value:string) {
-    [,
-      this.rotate ,
-      this.scale ,
-      this.translateX ,
-      this.translateY ,
-    ] = (value?.match(
-      /rotate\(([0-1.]*)deg\) scale\(([0-1.]*)\) translate\(([0-1.]*)px,([0-1.]*)px\)/
-    ) ?? ["0","0","1","0","0"]).map((v) => parseFloat(v));
+  constructor(value: string) {
+    [, this.rotate, this.scale, this.translateX, this.translateY] = (
+      value?.match(
+        /rotate\(([0-1.]*)deg\) scale\(([0-1.]*)\) translate\(([0-1.]*)px,([0-1.]*)px\)/
+      ) ?? ["0", "0", "1", "0", "0"]
+    ).map((v) => parseFloat(v));
   }
 
   toString() {
     const { assetXtoCanvasX, assetYtoCanvasY } = useCanvasParams();
     return (
-      `rotate(${this.rotate}rad) ` 
-      + `scale(${this.scale}) ` 
-      + `translate(${assetXtoCanvasX(this.translateX)}px,` 
-      + `${assetYtoCanvasY(this.translateY)}px)`
+      `rotate(${this.rotate}rad) ` +
+      `scale(${this.scale}) ` +
+      `translate(${assetXtoCanvasX(this.translateX)}px,` +
+      `${assetYtoCanvasY(this.translateY)}px)`
     );
   }
-  
 }
 
 // const canvasSize = { w: 1024, h: 1024 };
@@ -149,7 +145,7 @@ export const roundRect: Point[] = [
 
 export const useToolHandleMode = (
   currentLayerType: Ref<number>,
-  remixTransForm: Ref<TransForm>,
+  remixTransForm: Ref<TransForm>
 ) => {
   const { assetXtoCanvasX, assetYtoCanvasY, canvasParams } = useCanvasParams();
   const cursors = ref<Point[]>([]);
@@ -203,8 +199,12 @@ export const useToolHandleMode = (
         );
 
       case LayerType.REMIX: {
-        const resultX = canvasParams.value.canh / 2 + assetXtoCanvasX(remixTransForm.value.translateX);
-        const resultY = canvasParams.value.canw / 2 + assetYtoCanvasY(remixTransForm.value.translateY);
+        const resultX =
+          canvasParams.value.canh / 2 +
+          assetXtoCanvasX(remixTransForm.value.translateX);
+        const resultY =
+          canvasParams.value.canw / 2 +
+          assetYtoCanvasY(remixTransForm.value.translateY);
         return {
           x: resultX,
           y: resultY,
@@ -213,7 +213,7 @@ export const useToolHandleMode = (
         };
       }
     }
-    return { x: 0, y: 0, top: 0, left: 0 }
+    return { x: 0, y: 0, top: 0, left: 0 };
   });
 
   return {
