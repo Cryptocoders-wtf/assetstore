@@ -225,7 +225,8 @@ export default defineComponent({
       layers,
       layerIndex,
       pointIndex,
-      currentToken
+      currentToken,
+      remixTransForm
     );
 
     const {
@@ -397,6 +398,7 @@ export default defineComponent({
         );
         currentLayerType.value = LayerType.LAYER;
       } else if (props.drawing.remixId > 0) {
+        recordState();
         currentLayerType.value = LayerType.REMIX;
       }
     };

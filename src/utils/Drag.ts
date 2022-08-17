@@ -193,6 +193,13 @@ export const useDrag = (
         return cursor;
       });
     if (currentLayerType.value === LayerType.REMIX) {
+      //console.log("***", remixTransForm.value);
+      const tx = new TransForm(""); // new TransForm(remixTransForm.value.toString());
+      tx.rotate = remixTransForm.value.rotate;
+      tx.scale = remixTransForm.value.scale;
+      tx.translateX = remixTransForm.value.translateX;
+      tx.translateY = remixTransForm.value.translateY;
+
       switch (currentTool.value) {
         case Tools.MOVE: {
           const { x, y } = {
@@ -203,19 +210,21 @@ export const useDrag = (
               })
             ),
           };
-          remixTransForm.value.translateX = x - canvasParams.value.assw / 2;
-          remixTransForm.value.translateY = y - canvasParams.value.assh / 2;
+          tx.translateX = x - canvasParams.value.assw / 2;
+          tx.translateY = y - canvasParams.value.assh / 2;
           break;
         }
         case Tools.ZOOM: {
-          remixTransForm.value.scale = magnification;
+          tx.scale = magnification;
           break;
         }
         case Tools.ROTATE: {
-          remixTransForm.value.rotate = RotationInfo.radian;
+          tx.rotate = RotationInfo.radian;
           break;
         }
       }
+      console.log("tx.x", tx.translateX);
+      remixTransForm.value = tx;
     }
     evt.preventDefault();
   };
