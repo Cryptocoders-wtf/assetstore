@@ -396,7 +396,7 @@ export default defineComponent({
             : results[0]
         );
         currentLayerType.value = LayerType.LAYER;
-      } else {
+      } else if (props.drawing.remixId > 0) {
         currentLayerType.value = LayerType.REMIX;
       }
     };
