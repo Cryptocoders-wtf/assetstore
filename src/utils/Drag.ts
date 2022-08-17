@@ -7,8 +7,9 @@ import {
   UIPos,
   Tools,
   RotationInfo,
+  TransForm,
 } from "@/utils/canvasUtil";
-import { Point } from "@/models/point";
+import { Point, LayerType } from "@/models/point";
 
 // const { curw, curh } = canvasParams;
 
@@ -16,7 +17,9 @@ export const useDrag = (
   pointIndex: Ref<number>,
   moveToolPos: ComputedRef<UIPos>,
   cursors: Ref<Point[]>,
-  recordState: () => void
+  recordState: () => void,
+  currentLayerType: Ref<number>,
+  remixTransForm: Ref<TransForm>
 ) => {
   const {
     getPageX,
@@ -121,72 +124,99 @@ export const useDrag = (
             cos: Math.cos(rad),
           }
         : { radian: 0, sin: 0, cos: 0 };
-    cursors.value = cursors.value.map((cursor, index) => {
-      switch (currentTool.value) {
-        case Tools.ZOOM:
-          return {
-            ...gridder(
-              limiter({
-                x:
-                  initialCursors.value[index].x * magnification +
-                  (pivotPos.value.x - pivotPos.value.x * magnification),
-                y:
-                  initialCursors.value[index].y * magnification +
-                  (pivotPos.value.y - pivotPos.value.y * magnification),
-              })
-            ),
-            c: cursor.c,
-          };
-        case Tools.ROTATE:
-          return {
-            ...gridder(
-              limiter({
-                x:
-                  (initialCursors.value[index].x - pivotPos.value.x) *
-                    RotationInfo.cos -
-                  (initialCursors.value[index].y - pivotPos.value.y) *
-                    RotationInfo.sin +
-                  pivotPos.value.x,
-                y:
-                  (initialCursors.value[index].x - pivotPos.value.x) *
-                    RotationInfo.sin +
-                  (initialCursors.value[index].y - pivotPos.value.y) *
-                    RotationInfo.cos +
-                  pivotPos.value.y,
-              })
-            ),
-            c: cursor.c,
-          };
-        case Tools.MOVE:
-          return {
-            ...gridder(
-              limiter({
-                x:
-                  initialCursors.value[index].x -
-                  (startPoint.value.x - getPageX(evt)),
-                y:
-                  initialCursors.value[index].y -
-                  (startPoint.value.y - getPageY(evt)),
-              })
-            ),
-            c: cursor.c,
-          };
-        case Tools.CURSOR:
-        default:
-          if (index == pointIndex.value) {
+
+    if (currentLayerType.value === LayerType.LAYER)
+      cursors.value = cursors.value.map((cursor, index) => {
+        switch (currentTool.value) {
+          case Tools.ZOOM:
             return {
               ...gridder(
                 limiter({
-                  x: getPageX(evt),
-                  y: getPageY(evt),
+                  x:
+                    initialCursors.value[index].x * magnification +
+                    (pivotPos.value.x - pivotPos.value.x * magnification),
+                  y:
+                    initialCursors.value[index].y * magnification +
+                    (pivotPos.value.y - pivotPos.value.y * magnification),
                 })
               ),
               c: cursor.c,
             };
-          }
+          case Tools.ROTATE:
+            return {
+              ...gridder(
+                limiter({
+                  x:
+                    (initialCursors.value[index].x - pivotPos.value.x) *
+                      RotationInfo.cos -
+                    (initialCursors.value[index].y - pivotPos.value.y) *
+                      RotationInfo.sin +
+                    pivotPos.value.x,
+                  y:
+                    (initialCursors.value[index].x - pivotPos.value.x) *
+                      RotationInfo.sin +
+                    (initialCursors.value[index].y - pivotPos.value.y) *
+                      RotationInfo.cos +
+                    pivotPos.value.y,
+                })
+              ),
+              c: cursor.c,
+            };
+          case Tools.MOVE:
+            return {
+              ...gridder(
+                limiter({
+                  x:
+                    initialCursors.value[index].x -
+                    (startPoint.value.x - getPageX(evt)),
+                  y:
+                    initialCursors.value[index].y -
+                    (startPoint.value.y - getPageY(evt)),
+                })
+              ),
+              c: cursor.c,
+            };
+          case Tools.CURSOR:
+          default:
+            if (index == pointIndex.value) {
+              return {
+                ...gridder(
+                  limiter({
+                    x: getPageX(evt),
+                    y: getPageY(evt),
+                  })
+                ),
+                c: cursor.c,
+              };
+            }
+        }
+        return cursor;
+      });
+    if (currentLayerType.value === LayerType.REMIX) {
+      switch (currentTool.value) {
+        case Tools.MOVE: {
+          const { x, y } = {
+            ...gridder(
+              limiter({
+                x: getPageX(evt),
+                y: getPageY(evt),
+              })
+            ),
+          };
+          remixTransForm.value.translateX = x - canvasParams.value.assw / 2;
+          remixTransForm.value.translateY = y - canvasParams.value.assh / 2;
+          break;
+        }
+        case Tools.ZOOM: {
+          remixTransForm.value.scale = magnification;
+          break;
+        }
+        case Tools.ROTATE: {
+          remixTransForm.value.rotate = RotationInfo.radian;
+          break;
+        }
       }
-      return cursor;
-    });
+    }
     evt.preventDefault();
   };
 

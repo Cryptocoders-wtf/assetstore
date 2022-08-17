@@ -15,7 +15,10 @@
         v-if="currentToken"
         class="absolute"
         :src="currentToken.image"
-        :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px`"
+        :style="
+          `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
+          `transform: ${remixTransForm.toString()};`
+        "
       />
       <img
         v-for="(layer, index) in layers"
@@ -30,7 +33,7 @@
         @click="onClickToPickLayer($event)"
       />
       <div
-        class="absolute tool-handle-move"
+        class="tool-handle-move absolute"
         :style="
           `width:${canvasParams.curw}px; height:${canvasParams.curh}px; ` +
           `left: ${moveToolPos.left}px; ` +
@@ -47,7 +50,9 @@
           :key="index"
           class="absolute"
           :class="
-            type === Tools.ROTATE ? 'tool-handle-rotation' : 'tool-handle-scaling'
+            type === Tools.ROTATE
+              ? 'tool-handle-rotation'
+              : 'tool-handle-scaling'
           "
           :style="`width:${canvasParams.curw}px; height:${canvasParams.curh}px;
           left: ${x}px; top: ${y}px;`"
@@ -62,8 +67,8 @@
           :key="index"
           :style="`width:${canvasParams.curw}px; height:${
             canvasParams.curh
-          }px; left:${assetXtoCanvasX(
-            cursor.x) - canvasParams.curw / 2
+          }px; left:${
+            assetXtoCanvasX(cursor.x) - canvasParams.curw / 2
           }px; top:${assetYtoCanvasY(cursor.y) - canvasParams.curh / 2}px`"
           :class="`${
             index == pointIndex ? 'border-blue-800' : 'border-blue-400'
@@ -79,10 +84,10 @@
 
     <div
       :style="`width:${canvasParams.canw + canvasParams.sidew}px;
-      height:${canvasParams.headh+2}px;
+      height:${canvasParams.headh + 2}px;
       left:${canvasParams.offx}px;
       top:${canvasParams.offy - canvasParams.headh}px`"
-      class="absolute flex justify-between px-4 items-center border-2 border-solid border-blue-700 bg-slate-300"
+      class="absolute flex items-center justify-between border-2 border-solid border-blue-700 bg-slate-300 px-4"
     >
       <div class="flex items-center gap-1.5">
         <Undo
@@ -100,7 +105,10 @@
         <div class="self-start">|</div>
         <ToggleGrid @toggleGrid="toggleGrid" :grid="grid" />
         <div class="self-start">|</div>
-        <TogglePoint @togglePoint="togglePoint" :isSharpCorner="isSharpCorner" />
+        <TogglePoint
+          @togglePoint="togglePoint"
+          :isSharpCorner="isSharpCorner"
+        />
         <DeletePoint @deletePoint="deletePoint" :cursors="cursors" />
         <SplitSegment @splitSegment="splitSegment" />
         <div class="self-start">|</div>
@@ -109,7 +117,7 @@
           v-model:pureColor="currentColor"
         />
         <div class="self-start">|</div>
-        <asset-picker :addresses="addresses" @AssetSelected="AssetSelected"/>
+        <asset-picker :addresses="addresses" @AssetSelected="AssetSelected" />
       </div>
       <Close @onClose="onClose" />
     </div>
@@ -117,9 +125,9 @@
     <div
       :style="`width:${canvasParams.sidew + 2}px; height:${
         canvasParams.canh
-      }px; left:${
-        canvasParams.offx + canvasParams.canw - 2
-      }px; top:${canvasParams.offy}px`"
+      }px; left:${canvasParams.offx + canvasParams.canw - 2}px; top:${
+        canvasParams.offy
+      }px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-300"
     >
       <Layers
@@ -137,6 +145,7 @@
 import { defineComponent, ref, watch, computed } from "vue";
 import {
   Layer,
+  LayerType,
   Drawing,
   svgImageFromPath,
   pathFromPoints,
@@ -163,6 +172,7 @@ import {
   roundRect,
   Tools,
   useToolHandleMode,
+  TransForm,
 } from "@/utils/canvasUtil";
 
 import { useUndoStack } from "@/utils/undo";
@@ -194,6 +204,8 @@ export default defineComponent({
     const currentToken = ref<Token | null>(null);
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
+    const currentLayerType = ref<number>(LayerType.LAYER);
+    const remixTransForm = ref<TransForm>(new TransForm(""));
     //console.log("initialLayers", props.initialLayers ? "A" : "B");
     const layers = ref<Layer[]>(
       props.drawing.layers?.length > 0
@@ -222,7 +234,7 @@ export default defineComponent({
       onClickToolHandle,
       moveToolPos,
       cursors,
-    } = useToolHandleMode();
+    } = useToolHandleMode(currentLayerType, remixTransForm);
 
     const tokenSelected = (token: Token) => {
       recordState();
@@ -290,7 +302,14 @@ export default defineComponent({
       dragOver,
       toggleGrid,
       grid,
-    } = useDrag(pointIndex, moveToolPos, cursors, recordState);
+    } = useDrag(
+      pointIndex,
+      moveToolPos,
+      cursors,
+      recordState,
+      currentLayerType,
+      remixTransForm
+    );
 
     const togglePoint = () => {
       recordState();
@@ -376,9 +395,12 @@ export default defineComponent({
             ? [...results, ...results][results.indexOf(layerIndex.value) + 1]
             : results[0]
         );
+        currentLayerType.value = LayerType.LAYER;
+      } else {
+        currentLayerType.value = LayerType.REMIX;
       }
     };
-    const AssetSelected = (key:string, index:number, image:string) => {
+    const AssetSelected = (key: string, index: number, image: string) => {
       console.log("AssetSelected", key, index);
     };
     return {
@@ -419,6 +441,8 @@ export default defineComponent({
 
       assetXtoCanvasX,
       assetYtoCanvasY,
+      currentLayerType,
+      remixTransForm,
       AssetSelected,
     };
   },
@@ -426,31 +450,31 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.tool-handle-move::before{
-    font-family: 'Material Icons';
-    content: 'control_camera';
-    @apply text-4xl;
-    @apply text-red-800;
-    @apply relative;
-    @apply bottom-2.5;
-    @apply right-2;
+.tool-handle-move::before {
+  font-family: "Material Icons";
+  content: "control_camera";
+  @apply text-4xl;
+  @apply text-red-800;
+  @apply relative;
+  @apply bottom-2.5;
+  @apply right-2;
 }
-.tool-handle-rotation::before{
-    font-family: 'Material Icons';
-    content: 'screen_rotation_alt';
-    @apply text-xl;
-    @apply text-green-800;
-    @apply relative;
-    @apply bottom-2;
-    @apply right-0.5;
+.tool-handle-rotation::before {
+  font-family: "Material Icons";
+  content: "screen_rotation_alt";
+  @apply text-xl;
+  @apply text-green-800;
+  @apply relative;
+  @apply bottom-2;
+  @apply right-0.5;
 }
-.tool-handle-scaling::before{
-    font-family: 'Material Icons';
-    content: 'zoom_out_map';
-    @apply text-xl;
-    @apply text-yellow-800;
-    @apply relative;
-    @apply bottom-2;
-    @apply right-0.5;
+.tool-handle-scaling::before {
+  font-family: "Material Icons";
+  content: "zoom_out_map";
+  @apply text-xl;
+  @apply text-yellow-800;
+  @apply relative;
+  @apply bottom-2;
+  @apply right-0.5;
 }
 </style>

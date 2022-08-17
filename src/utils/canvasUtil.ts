@@ -1,7 +1,8 @@
-import { ref, computed } from "vue";
+import { ref, Ref, computed } from "vue";
 import { useStore } from "vuex";
 
-import { Point } from "@/models/point";
+import { Point, LayerType } from "@/models/point";
+import { Token } from "@/models/token";
 
 export enum Tools {
   CURSOR,
@@ -32,6 +33,31 @@ export const menuSize = {
   sidew: 150, //fix
   headh: 50,
 };
+
+export class TransForm {
+  public rotate = 0;
+  public scale = 1;
+  public translateX = 0;
+  public translateY = 0;
+
+  constructor(value: string) {
+    [, this.rotate, this.scale, this.translateX, this.translateY] = (
+      value?.match(
+        /translate\(([0-1.]*)px,([0-1.]*)px\) rotate\(([0-1.]*)deg\) scale\(([0-1.]*)\)/
+      ) ?? ["0", "0", "1", "0", "0"]
+    ).map((v) => parseFloat(v));
+  }
+
+  toString() {
+    const { assetXtoCanvasX, assetYtoCanvasY } = useCanvasParams();
+    return (
+      `translate(${assetXtoCanvasX(this.translateX)}px,` +
+      `${assetYtoCanvasY(this.translateY)}px)` +
+      `scale(${this.scale}) ` +
+      `rotate(${this.rotate}rad) `
+    );
+  }
+}
 
 // const canvasSize = { w: 1024, h: 1024 };
 const assetSize = { w: 1024, h: 1024 };
@@ -117,7 +143,10 @@ export const roundRect: Point[] = [
   { x: assetSize.w / 4, y: assetSize.h - assetSize.h / 4, c: false },
 ];
 
-export const useToolHandleMode = () => {
+export const useToolHandleMode = (
+  currentLayerType: Ref<number>,
+  remixTransForm: Ref<TransForm>
+) => {
   const { assetXtoCanvasX, assetYtoCanvasY, canvasParams } = useCanvasParams();
   const cursors = ref<Point[]>([]);
   const toolHandleMode = ref<boolean>(true);
@@ -149,25 +178,44 @@ export const useToolHandleMode = () => {
     toolHandleMode.value = !toolHandleMode.value;
   };
   const moveToolPos = computed<UIPos>(() => {
-    const { x, y, top, left } = cursors.value.reduce(
-      ({ x, y }: Pos, cursor): UIPos => {
-        const vx = assetXtoCanvasX(cursor.x);
-        const vy = assetYtoCanvasY(cursor.y);
+    switch (currentLayerType.value) {
+      case LayerType.LAYER:
+        return cursors.value.reduce(
+          ({ x, y }: Pos, cursor): UIPos => {
+            const resultX = Math.round(
+              x + assetXtoCanvasX(cursor.x) / cursors.value.length
+            );
+            const resultY = Math.round(
+              y + assetYtoCanvasY(cursor.y) / cursors.value.length
+            );
+            return {
+              x: resultX,
+              y: resultY,
+              left: resultX - canvasParams.value.curh / 2,
+              top: resultY - canvasParams.value.curw / 2,
+            };
+          },
+          { x: 0, y: 0, top: 0, left: 0 }
+        );
+
+      case LayerType.REMIX: {
+        const resultX =
+          canvasParams.value.canh / 2 +
+          assetXtoCanvasX(remixTransForm.value.translateX);
+        const resultY =
+          canvasParams.value.canw / 2 +
+          assetYtoCanvasY(remixTransForm.value.translateY);
         return {
-          x: Math.round(x + vx / cursors.value.length),
-          y: Math.round(y + vy / cursors.value.length),
-          left:
-            Math.round(x + vx / cursors.value.length) -
-            canvasParams.value.curh / 2,
-          top:
-            Math.round(y + vy / cursors.value.length) -
-            canvasParams.value.curw / 2,
+          x: resultX,
+          y: resultY,
+          left: resultX - canvasParams.value.curh / 2,
+          top: resultY - canvasParams.value.curw / 2,
         };
-      },
-      { x: 0, y: 0, top: 0, left: 0 }
-    );
-    return { x, y, top, left };
+      }
+    }
+    return { x: 0, y: 0, top: 0, left: 0 };
   });
+
   return {
     toolHandleMode,
     toolHandles,

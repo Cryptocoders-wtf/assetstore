@@ -4,6 +4,12 @@ export interface Point {
   c: boolean;
 }
 
+export enum LayerType {
+  REMIX,
+  LAYER,
+  OVERLAY,
+}
+
 export interface Layer {
   points: Point[];
   color: string;
@@ -11,10 +17,33 @@ export interface Layer {
   svgImage: string;
 }
 
+export interface Overlay {
+  assetId: number;
+  provider: string;
+  fill: string;
+  transform: string;
+}
 export interface Drawing {
   layers: Layer[];
   remixId: number; // optional remix tokenId (0 = no remix)
+  color?: string;
+  transform?: string;
+  overlays?: Overlay[];
 }
+
+// asset,
+// props.remixId, // remixId
+// "", // color
+// "", // transform
+// [] // overlays
+/*
+  [{
+    assetId: 54,
+    provider: "asset",
+    fill: "blue",
+    transform: "scale(0.4, 0.4)"
+  }]
+*/
 
 export const pathFromPoints = (points: Point[]) => {
   const length = points.length;
