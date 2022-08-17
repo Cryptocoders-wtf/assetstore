@@ -31,7 +31,7 @@ export const useUndoStack = (
       layerIndex: layerIndex.value,
       pointIndex: pointIndex.value,
       token: currentToken.value,
-      remixTransform: remixTransForm.value
+      remixTransform: remixTransForm.value,
     });
     undoStack.value = array;
     undoIndex.value = undoStack.value.length;
