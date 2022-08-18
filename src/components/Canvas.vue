@@ -17,7 +17,7 @@
         :src="currentToken.image"
         :style="
           `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
-          `transform: ${remixTransForm.toString()};`
+          `transform: ${remixTransformString};`
         "
       />
       <img
@@ -206,6 +206,12 @@ export default defineComponent({
     const pointIndex = ref<number>(0);
     const currentLayerType = ref<number>(LayerType.LAYER);
     const remixTransForm = ref<TransForm>(new TransForm(""));
+    const remixTransformString = computed(() => {
+      const xf = remixTransForm.value;
+      return `translate(${assetXtoCanvasX(xf.translateX)}px,` 
+        + `${assetYtoCanvasY(xf.translateY)}px)` 
+        + `scale(${xf.scale})  rotate(${xf.rotate}rad) `;
+    });
     //console.log("initialLayers", props.initialLayers ? "A" : "B");
     const layers = ref<Layer[]>(
       props.drawing.layers?.length > 0
@@ -444,7 +450,7 @@ export default defineComponent({
       assetXtoCanvasX,
       assetYtoCanvasY,
       currentLayerType,
-      remixTransForm,
+      remixTransformString,
       AssetSelected,
     };
   },
