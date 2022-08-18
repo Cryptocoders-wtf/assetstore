@@ -33,8 +33,8 @@ export const useDrag = (
   const offsetX = ref<number>(0);
   const offsetY = ref<number>(0);
   const startPoint = ref<Pos>({ x: 0, y: 0 });
-  const initialCursors = ref<Point[]>([]);
-  const initialTransform = ref<Transform>(new Transform(""));
+  let initialCursors:Point[] = [];
+  let initialTransform = new Transform("");
   const grid = ref<number>(0);
 
   const currentTool = ref<Tools>(0);
@@ -50,8 +50,8 @@ export const useDrag = (
     startPoint.value.x = getPageX(evt);
     startPoint.value.y = getPageY(evt);
     pivotPos.value = canvastoAsset(moveToolPos.value);
-    initialCursors.value = cursors.value;
-    initialTransform.value = remixTransForm.value;
+    initialCursors = cursors.value;
+    initialTransform = remixTransForm.value;
     recordState();
   };
   const dragLayerImgStart = (evt: MouseEvent | TouchEvent) => {
@@ -60,8 +60,8 @@ export const useDrag = (
     offsetY.value = canvasParams.value.curh / 2;
     startPoint.value.x = getPageX(evt);
     startPoint.value.y = getPageY(evt);
-    initialCursors.value = cursors.value;
-    initialTransform.value = remixTransForm.value;
+    initialCursors = cursors.value;
+    initialTransform = remixTransForm.value;
     recordState();
   };
   const dragStart = (evt: DragEvent | TouchEvent, index: number) => {
@@ -136,10 +136,10 @@ export const useDrag = (
               ...gridder(
                 limiter({
                   x:
-                    initialCursors.value[index].x * magnification +
+                    initialCursors[index].x * magnification +
                     (pivotPos.value.x - pivotPos.value.x * magnification),
                   y:
-                    initialCursors.value[index].y * magnification +
+                    initialCursors[index].y * magnification +
                     (pivotPos.value.y - pivotPos.value.y * magnification),
                 })
               ),
@@ -150,15 +150,15 @@ export const useDrag = (
               ...gridder(
                 limiter({
                   x:
-                    (initialCursors.value[index].x - pivotPos.value.x) *
+                    (initialCursors[index].x - pivotPos.value.x) *
                       RotationInfo.cos -
-                    (initialCursors.value[index].y - pivotPos.value.y) *
+                    (initialCursors[index].y - pivotPos.value.y) *
                       RotationInfo.sin +
                     pivotPos.value.x,
                   y:
-                    (initialCursors.value[index].x - pivotPos.value.x) *
+                    (initialCursors[index].x - pivotPos.value.x) *
                       RotationInfo.sin +
-                    (initialCursors.value[index].y - pivotPos.value.y) *
+                    (initialCursors[index].y - pivotPos.value.y) *
                       RotationInfo.cos +
                     pivotPos.value.y,
                 })
@@ -170,10 +170,10 @@ export const useDrag = (
               ...gridder(
                 limiter({
                   x:
-                    initialCursors.value[index].x -
+                    initialCursors[index].x -
                     (startPoint.value.x - getPageX(evt)),
                   y:
-                    initialCursors.value[index].y -
+                    initialCursors[index].y -
                     (startPoint.value.y - getPageY(evt)),
                 })
               ),
@@ -218,11 +218,11 @@ export const useDrag = (
           break;
         }
         case Tools.ZOOM: {
-          tx.scale = initialTransform.value.scale * magnification;
+          tx.scale = initialTransform.scale * magnification;
           break;
         }
         case Tools.ROTATE: {
-          tx.rotate = initialTransform.value.rotate + RotationInfo.radian;
+          tx.rotate = initialTransform.rotate + RotationInfo.radian;
           break;
         }
       }
