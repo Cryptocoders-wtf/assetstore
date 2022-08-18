@@ -406,6 +406,7 @@ export default defineComponent({
       } else if (props.drawing.remixId > 0) {
         recordState();
         currentLayerType.value = LayerType.REMIX;
+        toolHandleMode.value = true;
       }
     };
     const AssetSelected = (key: string, index: number, image: string) => {

@@ -165,7 +165,9 @@ export const useToolHandleMode = (
     ];
   });
   const onClickToolHandle = () => {
-    toolHandleMode.value = !toolHandleMode.value;
+    if (currentLayerType.value == LayerType.LAYER) {
+      toolHandleMode.value = !toolHandleMode.value;
+    }
   };
   const moveToolPos = computed<UIPos>(() => {
     switch (currentLayerType.value) {
