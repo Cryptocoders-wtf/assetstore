@@ -29,10 +29,10 @@ export const useDrag = (
     canvastoAsset,
     canvasParams,
   } = useCanvasParams();
-  const pivotPos = ref<Pos>({ x: 0, y: 0 });
-  const offsetX = ref<number>(0);
-  const offsetY = ref<number>(0);
-  const startPoint = ref<Pos>({ x: 0, y: 0 });
+  let pivotPos:Pos = { x: 0, y: 0 };
+  let offsetX = 0;
+  let offsetY = 0;
+  let startPoint:Pos = { x: 0, y: 0 };
   let initialCursors:Point[] = [];
   let initialTransform = new Transform("");
   const grid = ref<number>(0);
@@ -45,29 +45,28 @@ export const useDrag = (
 
   const dragToolHandleStart = (evt: DragEvent | TouchEvent, tool: Tools) => {
     currentTool.value = tool;
-    offsetX.value = canvasParams.value.curw / 2;
-    offsetY.value = canvasParams.value.curh / 2;
-    startPoint.value.x = getPageX(evt);
-    startPoint.value.y = getPageY(evt);
-    pivotPos.value = canvastoAsset(moveToolPos.value);
+    offsetX = canvasParams.value.curw / 2;
+    offsetY = canvasParams.value.curh / 2;
+    startPoint = {x: getPageX(evt), y:getPageY(evt)};
+    pivotPos = canvastoAsset(moveToolPos.value);
     initialCursors = cursors.value;
     initialTransform = remixTransForm.value;
     recordState();
   };
   const dragLayerImgStart = (evt: MouseEvent | TouchEvent) => {
     currentTool.value = Tools.MOVE;
-    offsetX.value = canvasParams.value.curw / 2;
-    offsetY.value = canvasParams.value.curh / 2;
-    startPoint.value.x = getPageX(evt);
-    startPoint.value.y = getPageY(evt);
+    offsetX = canvasParams.value.curw / 2;
+    offsetY = canvasParams.value.curh / 2;
+    startPoint.x = getPageX(evt);
+    startPoint.y = getPageY(evt);
     initialCursors = cursors.value;
     initialTransform = remixTransForm.value;
     recordState();
   };
   const dragStart = (evt: DragEvent | TouchEvent, index: number) => {
     currentTool.value = Tools.CURSOR;
-    offsetX.value = getOffsetX(evt);
-    offsetY.value = getOffsetY(evt);
+    offsetX = getOffsetX(evt);
+    offsetY = getOffsetY(evt);
     pointIndex.value = index;
     recordState();
   };
@@ -88,33 +87,33 @@ export const useDrag = (
         x: f(
           canvasParams.value.assw,
           pos.x,
-          offsetX.value,
+          offsetX,
           canvasParams.value.curw
         ),
         y: f(
           canvasParams.value.assh,
           pos.y,
-          offsetY.value,
+          offsetY,
           canvasParams.value.curh
         ),
       };
     };
     const magnification =
       currentTool.value === Tools.ZOOM &&
-      Math.abs(pivotPos.value.y - startPoint.value.y) !== 0
-        ? Math.abs(pivotPos.value.y - getPageY(evt)) /
-          Math.abs(pivotPos.value.y - startPoint.value.y)
+      Math.abs(pivotPos.y - startPoint.y) !== 0
+        ? Math.abs(pivotPos.y - getPageY(evt)) /
+          Math.abs(pivotPos.y - startPoint.y)
         : 0;
     const rad =
       currentTool.value === Tools.ROTATE
-        ? pivotPos.value.x + offx - startPoint.value.x > 1
+        ? pivotPos.x + offx - startPoint.x > 1
           ? Math.atan2(
-              pivotPos.value.y - getPageY(evt),
-              pivotPos.value.x - getPageX(evt)
+              pivotPos.y - getPageY(evt),
+              pivotPos.x - getPageX(evt)
             )
           : (Math.atan2(
-              pivotPos.value.y - getPageY(evt),
-              pivotPos.value.x - getPageX(evt)
+              pivotPos.y - getPageY(evt),
+              pivotPos.x - getPageX(evt)
             ) +
               Math.PI) %
             (2 * Math.PI)
@@ -137,10 +136,10 @@ export const useDrag = (
                 limiter({
                   x:
                     initialCursors[index].x * magnification +
-                    (pivotPos.value.x - pivotPos.value.x * magnification),
+                    (pivotPos.x - pivotPos.x * magnification),
                   y:
                     initialCursors[index].y * magnification +
-                    (pivotPos.value.y - pivotPos.value.y * magnification),
+                    (pivotPos.y - pivotPos.y * magnification),
                 })
               ),
               c: cursor.c,
@@ -150,17 +149,17 @@ export const useDrag = (
               ...gridder(
                 limiter({
                   x:
-                    (initialCursors[index].x - pivotPos.value.x) *
+                    (initialCursors[index].x - pivotPos.x) *
                       RotationInfo.cos -
-                    (initialCursors[index].y - pivotPos.value.y) *
+                    (initialCursors[index].y - pivotPos.y) *
                       RotationInfo.sin +
-                    pivotPos.value.x,
+                    pivotPos.x,
                   y:
-                    (initialCursors[index].x - pivotPos.value.x) *
+                    (initialCursors[index].x - pivotPos.x) *
                       RotationInfo.sin +
-                    (initialCursors[index].y - pivotPos.value.y) *
+                    (initialCursors[index].y - pivotPos.y) *
                       RotationInfo.cos +
-                    pivotPos.value.y,
+                    pivotPos.y,
                 })
               ),
               c: cursor.c,
@@ -171,10 +170,10 @@ export const useDrag = (
                 limiter({
                   x:
                     initialCursors[index].x -
-                    (startPoint.value.x - getPageX(evt)),
+                    (startPoint.x - getPageX(evt)),
                   y:
                     initialCursors[index].y -
-                    (startPoint.value.y - getPageY(evt)),
+                    (startPoint.y - getPageY(evt)),
                 })
               ),
               c: cursor.c,
