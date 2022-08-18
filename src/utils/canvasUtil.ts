@@ -47,16 +47,6 @@ export class TransForm {
       ) ?? ["0", "0", "1", "0", "0"]
     ).map((v) => parseFloat(v));
   }
-
-  toString() {
-    const { assetXtoCanvasX, assetYtoCanvasY } = useCanvasParams();
-    return (
-      `translate(${assetXtoCanvasX(this.translateX)}px,` +
-      `${assetYtoCanvasY(this.translateY)}px)` +
-      `scale(${this.scale}) ` +
-      `rotate(${this.rotate}rad) `
-    );
-  }
 }
 
 // const canvasSize = { w: 1024, h: 1024 };
