@@ -2,14 +2,14 @@ import { ref, computed, Ref } from "vue";
 
 import { Layer } from "@/models/point";
 import { Token } from "@/models/token";
-import { TransForm } from "@/utils/canvasUtil";
+import { Transform } from "@/utils/canvasUtil";
 
 interface State {
   layers: Layer[];
   layerIndex: number;
   pointIndex: number;
   token: Token | null;
-  remixTransform: TransForm;
+  remixTransform: Transform;
 }
 
 export const useUndoStack = (
@@ -17,7 +17,7 @@ export const useUndoStack = (
   layerIndex: Ref<number>,
   pointIndex: Ref<number>,
   currentToken: Ref<Token | null>,
-  remixTransForm: Ref<TransForm>
+  remixTransForm: Ref<Transform>
 ) => {
   const undoStack = ref<State[]>([]);
   const undoIndex = ref<number>(0);

@@ -34,7 +34,7 @@ export const menuSize = {
   headh: 50,
 };
 
-export class TransForm {
+export class Transform {
   public rotate = 0;
   public scale = 1;
   public translateX = 0;
@@ -135,7 +135,7 @@ export const roundRect: Point[] = [
 
 export const useToolHandleMode = (
   currentLayerType: Ref<number>,
-  remixTransForm: Ref<TransForm>
+  remixTransForm: Ref<Transform>
 ) => {
   const { assetXtoCanvasX, assetYtoCanvasY, canvasParams } = useCanvasParams();
   const cursors = ref<Point[]>([]);

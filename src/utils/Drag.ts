@@ -7,7 +7,7 @@ import {
   UIPos,
   Tools,
   RotationInfo,
-  TransForm,
+  Transform,
 } from "@/utils/canvasUtil";
 import { Point, LayerType } from "@/models/point";
 
@@ -19,7 +19,7 @@ export const useDrag = (
   cursors: Ref<Point[]>,
   recordState: () => void,
   currentLayerType: Ref<number>,
-  remixTransForm: Ref<TransForm>
+  remixTransForm: Ref<Transform>
 ) => {
   const {
     getPageX,
@@ -34,7 +34,7 @@ export const useDrag = (
   const offsetY = ref<number>(0);
   const startPoint = ref<Pos>({ x: 0, y: 0 });
   const initialCursors = ref<Point[]>([]);
-  const initialTransform = ref<TransForm>(new TransForm(""));
+  const initialTransform = ref<Transform>(new Transform(""));
   const grid = ref<number>(0);
 
   const currentTool = ref<Tools>(0);
@@ -197,7 +197,7 @@ export const useDrag = (
       });
     if (currentLayerType.value === LayerType.REMIX) {
       // Note: We need to create a new instance in order to make it work with undo/redo.
-      const tx = new TransForm("");
+      const tx = new Transform("");
       tx.rotate = remixTransForm.value.rotate;
       tx.scale = remixTransForm.value.scale;
       tx.translateX = remixTransForm.value.translateX;

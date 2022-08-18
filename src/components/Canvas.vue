@@ -17,7 +17,7 @@
         :src="currentToken.image"
         :style="
           `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
-          `transform: ${remixTransformString};`
+          `Transform: ${remixTransformString};`
         "
       />
       <img
@@ -172,7 +172,7 @@ import {
   roundRect,
   Tools,
   useToolHandleMode,
-  TransForm,
+  Transform,
 } from "@/utils/canvasUtil";
 
 import { useUndoStack } from "@/utils/undo";
@@ -205,7 +205,7 @@ export default defineComponent({
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     const currentLayerType = ref<number>(LayerType.LAYER);
-    const remixTransForm = ref<TransForm>(new TransForm(""));
+    const remixTransForm = ref<Transform>(new Transform(""));
     const remixTransformString = computed(() => {
       const xf = remixTransForm.value;
       return `translate(${assetXtoCanvasX(xf.translateX)}px,` 
