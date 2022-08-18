@@ -3,6 +3,7 @@ import { useStore } from "vuex";
 
 import { Point, LayerType } from "@/models/point";
 import { Token } from "@/models/token";
+import { TransForm } from "@/utils/TransForm";
 
 export enum Tools {
   CURSOR,
@@ -33,33 +34,6 @@ export const menuSize = {
   sidew: 150, //fix
   headh: 50,
 };
-
-/*
-export class TransForm {
-  public rotate = 0;
-  public scale = 1;
-  public translateX = 0;
-  public translateY = 0;
-
-  constructor(value: string) {
-    [, this.rotate, this.scale, this.translateX, this.translateY] = (
-      value?.match(
-        /translate\(([0-1.]*)px,([0-1.]*)px\) scale\(([0-1.]*)\) rotate\(([0-1.]*)deg\)/
-      ) ?? ["0", "0", "1", "0", "0"]
-    ).map((v) => parseFloat(v));
-  }
-
-  toString() {
-    const { assetXtoCanvasX, assetYtoCanvasY } = useCanvasParams();
-    return (
-      `translate(${assetXtoCanvasX(this.translateX)}px,` +
-      `${assetYtoCanvasY(this.translateY)}px) ` +
-      `scale(${this.scale}) ` +
-      `rotate(${this.rotate}rad) `
-    );
-  }
-}
-*/
 
 // const canvasSize = { w: 1024, h: 1024 };
 const assetSize = { w: 1024, h: 1024 };

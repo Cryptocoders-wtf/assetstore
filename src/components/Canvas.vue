@@ -17,7 +17,7 @@
         :src="currentToken.image"
         :style="
           `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
-          `transform: ${remixTransForm.toString()};`
+          `transform: ${transformString};`
         "
       />
       <img
@@ -172,11 +172,11 @@ import {
   roundRect,
   Tools,
   useToolHandleMode,
-  TransForm,
 } from "@/utils/canvasUtil";
 
 import { useUndoStack } from "@/utils/undo";
 import { useDrag } from "@/utils/Drag";
+import { TransForm, defaultTransForm, TransFormUtil } from "@/utils/TransForm";
 
 export default defineComponent({
   name: "HomePage",
@@ -205,7 +205,7 @@ export default defineComponent({
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     const currentLayerType = ref<number>(LayerType.LAYER);
-    const remixTransForm = ref<TransForm>(new TransForm(""));
+    const remixTransForm = ref<TransForm>(defaultTransForm);
     //console.log("initialLayers", props.initialLayers ? "A" : "B");
     const layers = ref<Layer[]>(
       props.drawing.layers?.length > 0
@@ -335,6 +335,11 @@ export default defineComponent({
       pointIndex.value =
         (pointIndex.value + cursors.value.length - 1) % cursors.value.length;
     };
+
+    const transformString = computed(() => {
+      return TransFormUtil.getCanvasTransFormString(remixTransForm.value);
+    });
+
     const newLayer = computed(() => {
       const path = pathFromPoints(roundRect);
       return {
@@ -360,7 +365,9 @@ export default defineComponent({
       const drawing: Drawing = {
         layers: layers.value,
         remixId: token ? token.tokenId + 1 : 0,
-        // transform: remixTransForm.value ? remixTransForm.value.toString() : "", 
+        transform: remixTransForm.value
+          ? TransFormUtil.getAssetTransFormString(remixTransForm.value)
+          : "",
       };
       context.emit("close", drawing);
     };
@@ -447,6 +454,8 @@ export default defineComponent({
       currentLayerType,
       remixTransForm,
       AssetSelected,
+      TransFormUtil,
+      transformString,
     };
   },
 });
