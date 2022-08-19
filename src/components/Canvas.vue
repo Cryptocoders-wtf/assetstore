@@ -201,7 +201,7 @@ export default defineComponent({
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     const currentLayerType = ref<number>(LayerType.LAYER);
-    const remixTransform = ref<Transform>({tx:0, ty:0, scale:1, rotate:0});
+    const remixTransform = ref<Transform>(props.drawing.transform || {tx:0, ty:0, scale:1, rotate:0});
     console.log("setup", remixTransform.value, props.drawing.transform);
     const remixTransformString = computed(() => {
       const xf = remixTransform.value;
@@ -362,7 +362,7 @@ export default defineComponent({
       const drawing: Drawing = {
         layers: layers.value,
         remixId: token ? token.tokenId + 1 : 0,
-        transform: remixTransformString.value
+        transform: remixTransform.value
       };
       context.emit("close", drawing);
     };

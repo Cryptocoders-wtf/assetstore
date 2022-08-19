@@ -34,7 +34,7 @@ export interface Drawing {
   layers: Layer[];
   remixId: number; // optional remix tokenId (0 = no remix)
   color?: string;
-  transform?: string;
+  transform?: Transform;
   overlays?: Overlay[];
 }
 
