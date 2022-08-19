@@ -41,10 +41,10 @@ export class Transform {
   public translateY = 0;
 
   constructor(value: string) {
-    [, this.rotate, this.scale, this.translateX, this.translateY] = (
+    [, this.translateX, this.translateY, this.scale, this.rotate] = (
       value?.match(
-        /translate\(([0-1.]*)px,([0-1.]*)px\) rotate\(([0-1.]*)deg\) scale\(([0-1.]*)\)/
-      ) ?? ["0", "0", "1", "0", "0"]
+        /translate\(([0-9.]*)px,([0-9.]*)px\) scale\(([0-9.]*)\) rotate\(([0-9.]*)rad\)/
+      ) ?? ["0", "0", "0", "1", "0"]
     ).map((v) => parseFloat(v));
   }
 }

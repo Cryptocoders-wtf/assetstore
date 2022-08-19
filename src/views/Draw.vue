@@ -210,6 +210,7 @@ export default defineComponent({
     const onDrawingSelect = async (index: number) => {
       selectedIndex.value = index;
       const drawing = drawings.value[index];
+      console.log("onDrawingSelect", drawing.transform);
       const uuid = uuidv4();
       const asset: OriginalAssetData = {
         name: uuid,
@@ -244,6 +245,7 @@ export default defineComponent({
     };
     const onOpen = () => {
       selectedDrawing.value = drawings.value[selectedIndex.value];
+      console.log("onOpen", selectedDrawing.value.transform);
       showCanvas.value = true;
     };
     const onDelete = () => {
@@ -287,6 +289,7 @@ export default defineComponent({
       selectedIndex.value = 9999;
     };
     const onClose = (output: Drawing) => {
+      console.log("onClose:transform", output.transform);
       drawings.value = drawings.value.map((drawing, index) => {
         if (index == selectedIndex.value) {
           return output;
