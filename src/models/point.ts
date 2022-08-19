@@ -17,6 +17,13 @@ export interface Layer {
   svgImage: string;
 }
 
+export interface Transform {
+  tx: number,
+  ty: number,
+  scale: number,
+  rotate: number
+}
+
 export interface Overlay {
   assetId: number;
   provider: string;

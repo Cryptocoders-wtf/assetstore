@@ -7,9 +7,8 @@ import {
   UIPos,
   Tools,
   RotationInfo,
-  Transform,
 } from "@/utils/canvasUtil";
-import { Point, LayerType } from "@/models/point";
+import { Point, LayerType, Transform } from "@/models/point";
 
 // const { curw, curh } = canvasParams;
 

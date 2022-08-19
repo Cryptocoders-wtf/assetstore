@@ -1,8 +1,7 @@
 import { ref, Ref, computed } from "vue";
 import { useStore } from "vuex";
 
-import { Point, LayerType } from "@/models/point";
-import { Token } from "@/models/token";
+import { Point, LayerType, Transform } from "@/models/point";
 
 export enum Tools {
   CURSOR,
@@ -33,13 +32,6 @@ export const menuSize = {
   sidew: 150, //fix
   headh: 50,
 };
-
-export interface Transform {
-  tx: number,
-  ty: number,
-  scale: number,
-  rotate: number
-}
 
 // const canvasSize = { w: 1024, h: 1024 };
 const assetSize = { w: 1024, h: 1024 };

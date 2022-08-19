@@ -149,6 +149,7 @@ import {
   pathFromPoints,
   splitPoint,
   togglePointType,
+  Transform,
 } from "@/models/point";
 import { ColorPicker } from "vue3-colorpicker";
 
@@ -169,7 +170,6 @@ import {
   roundRect,
   Tools,
   useToolHandleMode,
-  Transform,
 } from "@/utils/canvasUtil";
 
 import { useUndoStack } from "@/utils/undo";

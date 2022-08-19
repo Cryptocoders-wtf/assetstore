@@ -2,7 +2,7 @@ import { ref, computed, Ref } from "vue";
 
 import { Layer } from "@/models/point";
 import { Token } from "@/models/token";
-import { Transform } from "@/utils/canvasUtil";
+import { Transform } from "@/models/point";
 
 interface State {
   layers: Layer[];
