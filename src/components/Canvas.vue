@@ -201,11 +201,11 @@ export default defineComponent({
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     const currentLayerType = ref<number>(LayerType.LAYER);
-    const remixTransForm = ref<Transform>(
+    const remixTransform = ref<Transform>(
       props.drawing.transform ? new Transform(props.drawing.transform) : new Transform(""));
-    console.log("setup", remixTransForm.value, props.drawing.transform);
+    console.log("setup", remixTransform.value, props.drawing.transform);
     const remixTransformString = computed(() => {
-      const xf = remixTransForm.value;
+      const xf = remixTransform.value;
       return `translate(${assetXtoCanvasX(xf.translateX)}px,` 
         + `${assetYtoCanvasY(xf.translateY)}px) ` 
         + `scale(${xf.scale}) rotate(${xf.rotate}rad) `;
@@ -231,7 +231,7 @@ export default defineComponent({
       layerIndex,
       pointIndex,
       currentToken,
-      remixTransForm
+      remixTransform
     );
 
     const {
@@ -240,11 +240,11 @@ export default defineComponent({
       onClickToolHandle,
       moveToolPos,
       cursors,
-    } = useToolHandleMode(currentLayerType, remixTransForm);
+    } = useToolHandleMode(currentLayerType, remixTransform);
 
     const tokenSelected = (token: Token) => {
       recordState();
-      remixTransForm.value = new Transform("");
+      remixTransform.value = new Transform("");
       console.log("tokenSelected", remixTransformString.value);
       currentToken.value = token;
     };
@@ -312,7 +312,7 @@ export default defineComponent({
       cursors,
       recordState,
       currentLayerType,
-      remixTransForm
+      remixTransform
     );
 
     const togglePoint = () => {
