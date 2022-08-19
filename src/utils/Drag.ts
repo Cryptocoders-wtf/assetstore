@@ -211,16 +211,16 @@ export const useDrag = (
               })
             ),
           };
-          tx.tx = x - canvasParams.value.assw / 2;
-          tx.ty = y - canvasParams.value.assh / 2;
+          tx.tx = Math.round(x - canvasParams.value.assw / 2);
+          tx.ty = Math.round(y - canvasParams.value.assh / 2);
           break;
         }
         case Tools.ZOOM: {
-          tx.scale = initialTransform.scale * magnification;
+          tx.scale = Math.round(100 * initialTransform.scale * magnification) / 100;
           break;
         }
         case Tools.ROTATE: {
-          tx.rotate = initialTransform.rotate + RotationInfo.radian;
+          tx.rotate = Math.round(initialTransform.rotate + RotationInfo.radian / Math.PI * 180);
           break;
         }
       }

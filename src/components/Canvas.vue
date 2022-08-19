@@ -207,7 +207,7 @@ export default defineComponent({
       const xf = remixTransform.value;
       return `translate(${assetXtoCanvasX(xf.tx)}px,` 
         + `${assetYtoCanvasY(xf.ty)}px) ` 
-        + `scale(${xf.scale}) rotate(${xf.rotate}rad) `;
+        + `scale(${xf.scale}) rotate(${xf.rotate}deg) `;
     });
     console.log("setup2", remixTransformString.value, assetXtoCanvasX(100));
     //console.log("initialLayers", props.initialLayers ? "A" : "B");
