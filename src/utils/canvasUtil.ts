@@ -34,19 +34,11 @@ export const menuSize = {
   headh: 50,
 };
 
-export class Transform {
-  public rotate = 0;
-  public scale = 1;
-  public translateX = 0;
-  public translateY = 0;
-
-  constructor(value: string) {
-    [, this.translateX, this.translateY, this.scale, this.rotate] = (
-      value?.match(
-        /translate\(([0-9.]*)px,([0-9.]*)px\) scale\(([0-9.]*)\) rotate\(([0-9.]*)rad\)/
-      ) ?? ["0", "0", "0", "1", "0"]
-    ).map((v) => parseFloat(v));
-  }
+export interface Transform {
+  tx: number,
+  ty: number,
+  scale: number,
+  rotate: number
 }
 
 // const canvasSize = { w: 1024, h: 1024 };
@@ -193,10 +185,10 @@ export const useToolHandleMode = (
       case LayerType.REMIX: {
         const resultX =
           canvasParams.value.canh / 2 +
-          assetXtoCanvasX(remixTransform.value.translateX);
+          assetXtoCanvasX(remixTransform.value.tx);
         const resultY =
           canvasParams.value.canw / 2 +
-          assetYtoCanvasY(remixTransform.value.translateY);
+          assetYtoCanvasY(remixTransform.value.ty);
         return {
           x: resultX,
           y: resultY,

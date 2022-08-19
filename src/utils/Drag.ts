@@ -34,7 +34,7 @@ export const useDrag = (
   let offsetY = 0;
   let startPoint:Pos = { x: 0, y: 0 };
   let initialCursors:Point[] = [];
-  let initialTransform = new Transform("");
+  let initialTransform = {tx:0, ty:0, scale:1, rotate:0};
   const grid = ref<number>(0);
 
   const currentTool = ref<Tools>(0);
@@ -196,11 +196,11 @@ export const useDrag = (
       });
     if (currentLayerType.value === LayerType.REMIX) {
       // Note: We need to create a new instance in order to make it work with undo/redo.
-      const tx = new Transform("");
+      const tx = {tx:0, ty:0, scale:1, rotate:0};
       tx.rotate = remixTransForm.value.rotate;
       tx.scale = remixTransForm.value.scale;
-      tx.translateX = remixTransForm.value.translateX;
-      tx.translateY = remixTransForm.value.translateY;
+      tx.tx = remixTransForm.value.tx;
+      tx.ty = remixTransForm.value.ty;
 
       switch (currentTool.value) {
         case Tools.MOVE: {
@@ -212,8 +212,8 @@ export const useDrag = (
               })
             ),
           };
-          tx.translateX = x - canvasParams.value.assw / 2;
-          tx.translateY = y - canvasParams.value.assh / 2;
+          tx.tx = x - canvasParams.value.assw / 2;
+          tx.ty = y - canvasParams.value.assh / 2;
           break;
         }
         case Tools.ZOOM: {

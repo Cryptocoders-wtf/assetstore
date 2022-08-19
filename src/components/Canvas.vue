@@ -201,13 +201,12 @@ export default defineComponent({
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     const currentLayerType = ref<number>(LayerType.LAYER);
-    const remixTransform = ref<Transform>(
-      props.drawing.transform ? new Transform(props.drawing.transform) : new Transform(""));
+    const remixTransform = ref<Transform>({tx:0, ty:0, scale:1, rotate:0});
     console.log("setup", remixTransform.value, props.drawing.transform);
     const remixTransformString = computed(() => {
       const xf = remixTransform.value;
-      return `translate(${assetXtoCanvasX(xf.translateX)}px,` 
-        + `${assetYtoCanvasY(xf.translateY)}px) ` 
+      return `translate(${assetXtoCanvasX(xf.tx)}px,` 
+        + `${assetYtoCanvasY(xf.ty)}px) ` 
         + `scale(${xf.scale}) rotate(${xf.rotate}rad) `;
     });
     console.log("setup2", remixTransformString.value, assetXtoCanvasX(100));
@@ -244,7 +243,7 @@ export default defineComponent({
 
     const tokenSelected = (token: Token) => {
       recordState();
-      remixTransform.value = new Transform("");
+      remixTransform.value = {tx:0, ty:0, scale:1, rotate:0};
       console.log("tokenSelected", remixTransformString.value);
       currentToken.value = token;
     };
