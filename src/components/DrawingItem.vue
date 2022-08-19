@@ -25,8 +25,8 @@ export default defineComponent({
       }
       console.log("****XF", xf);
       return (
-        `translate(${(xf.tx * 32) / assetSize.w}px,` +
-        `${(xf.ty * 32) / assetSize.h}px) ` +
+        `translate(${(xf.tx * 32 * 4) / assetSize.w}px,` +
+        `${(xf.ty * 32 * 4) / assetSize.h}px) ` +
         `scale(${xf.scale}) rotate(${xf.rotate}deg) `
       );
     });
