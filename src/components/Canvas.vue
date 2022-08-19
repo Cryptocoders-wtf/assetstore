@@ -134,7 +134,7 @@
         :newLayer="newLayer"
         :tokens="tokens"
         :currentToken="currentToken"
-        :remixTransformString="remixTransformString"
+        :remixTransform="remixTransform"
         @tokenSelected="tokenSelected"
         @onSelectLayer="onSelectLayer"
         @updateLayers="updateLayers"
@@ -457,6 +457,7 @@ export default defineComponent({
       assetYtoCanvasY,
       currentLayerType,
       remixTransformString,
+      remixTransform,
       AssetSelected,
     };
   },

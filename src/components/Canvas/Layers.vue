@@ -6,7 +6,7 @@
         @tokenSelected="tokenSelected"
         :selectedToken="currentToken"
         :canvasParams="canvasParams"
-        :remixTransformString="remixTransformString"
+        :remixTransform="remixTransform"
       />
     </div>
     <div v-for="(layer, index) in layers" :key="index">
@@ -50,7 +50,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { useCanvasParams } from "@/utils/canvasUtil";
-import { Layer } from "@/models/point";
+import { Layer, Transform } from "@/models/point";
 import TokenPicker from "@/components/Canvas/TokenPicker.vue";
 import { Token } from "@/models/token";
 
@@ -78,8 +78,8 @@ export default defineComponent({
     currentToken: {
       type: Object as PropType<Token | null>,
     },
-    remixTransformString: {
-      type: String,
+    remixTransform: {
+      type: Object as PropType<Transform>,
       required: true,
     },
   },

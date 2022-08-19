@@ -6,7 +6,7 @@
     >
       <img
         :src="selectedToken.image"
-        :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;Transform: ${remixTransformString};`"
+        :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;Transform: ${transform};`"
       />
     </div>
     <div class="ml-2 mr-2 flex justify-between">
@@ -37,12 +37,26 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import { Token } from "@/models/token";
+import { useCanvasParams } from "@/utils/canvasUtil";
 
 export default defineComponent({
-  props: ["tokens", "selectedToken", "canvasParams", "remixTransformString"],
+  props: ["tokens", "selectedToken", "canvasParams", "remixTransform"],
   setup(props, context) {
+    const transform = computed(() => {
+      const xf = props.remixTransform;
+      if (xf == null) {
+        return "";
+      }
+      return (
+        `translate(${
+          (xf.tx * props.canvasParams.sidew) / props.canvasParams.assw
+        }px,` +
+        `${(xf.ty * props.canvasParams.sidew) / props.canvasParams.assh}px) ` +
+        `scale(${xf.scale}) rotate(${xf.rotate}deg) `
+      );
+    });
     const showTokens = ref<boolean>(false);
     const onOpen = () => {
       console.log("onOpen");
@@ -63,6 +77,7 @@ export default defineComponent({
       showTokens,
       onSelect,
       onRemove,
+      transform,
     };
   },
 });
