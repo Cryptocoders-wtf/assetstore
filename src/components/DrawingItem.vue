@@ -1,11 +1,13 @@
 <template>
   <div>
-    <img
-      v-if="token"
-      class="absolute -z-10 w-32"
-      :src="token.image"
-      :style="`Transform:${transform}`"
-    />
+    <div class="absolute -z-10 w-32 overflow-hidden"> 
+      <img
+        v-if="token"
+        class="w-32"
+        :src="token.image"
+        :style="`Transform:${transform}`"
+      />
+    </div>
     <img :src="svgImageFromDrawing(drawing)" class="w-32" />
   </div>
 </template>
