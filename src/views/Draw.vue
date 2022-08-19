@@ -12,14 +12,14 @@
       <div class="mb-2 text-xl font-bold">{{ "Draw Your Own Token" }}</div>
       <div class="flex flex-wrap">
         <div
-          v-for="(body, index) in drawings"
+          v-for="(drawing, index) in drawings"
           :key="index"
           @click="onDrawingSelect(index)"
           :class="`border-2 ${
             index == selectedIndex ? 'border-blue-700' : 'border-white'
           }`"
         >
-          <drawing-item :drawing="body" :tokens="tokens" />
+          <drawing-item :drawing="drawing" :tokens="tokens" />
           <div
             v-if="index == selectedIndex"
             class="ml-2 mr-2 flex justify-between"
