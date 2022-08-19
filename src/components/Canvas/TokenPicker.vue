@@ -1,11 +1,18 @@
 <template>
   <div>
+    <div  v-if="selectedToken" :style="`width:${canvasParams.sidew}px;height:${
+          canvasParams.sidew
+        }px;overflow:hidden`"> 
+      <img
+        :src="selectedToken.image"
+        :style="`width:${canvasParams.sidew}px;height:${
+          canvasParams.sidew
+        }px;Transform: ${remixTransformString};`"
+      />
+    </div>
     <div class="ml-2 mr-2 flex justify-between">
       <button @click="onOpen" class="">
         <span class="material-icons">image</span>
-        <span v-if="selectedToken">
-          {{ selectedToken.tokenId }}
-        </span>
       </button>
       <button
         :style="`opacity:${selectedToken ? '1.0' : '0.5'}`"
@@ -35,7 +42,7 @@ import { defineComponent, ref } from "vue";
 import { Token } from "@/models/token";
 
 export default defineComponent({
-  props: ["tokens", "selectedToken"],
+  props: ["tokens", "selectedToken", "canvasParams", "remixTransformString"],
   setup(props, context) {
     const showTokens = ref<boolean>(false);
     const onOpen = () => {

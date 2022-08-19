@@ -5,6 +5,8 @@
         :tokens="tokens"
         @tokenSelected="tokenSelected"
         :selectedToken="currentToken"
+        :canvasParams="canvasParams"
+        :remixTransformString="remixTransformString"
       />
     </div>
     <div v-for="(layer, index) in layers" :key="index">
@@ -75,8 +77,11 @@ export default defineComponent({
     },
     currentToken: {
       type: Object as PropType<Token | null>,
-      required: true,
     },
+    remixTransformString: {
+      type: String,
+      required: true
+    }
   },
   emits: ["onSelectLayer", "updateLayers", "tokenSelected"],
   setup(props, context) {
