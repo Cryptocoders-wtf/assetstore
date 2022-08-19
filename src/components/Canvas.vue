@@ -154,7 +154,7 @@ import {
 } from "@/models/point";
 import { ColorPicker } from "vue3-colorpicker";
 
-import TokenPicker from "@/components/TokenPicker.vue";
+import TokenPicker from "@/components/Canvas/TokenPicker.vue";
 import AssetPicker from "@/components/AssetPicker.vue";
 import Layers from "@/components/Canvas/Layers.vue";
 import Undo from "@/components/Canvas/Menu/Undo.vue";

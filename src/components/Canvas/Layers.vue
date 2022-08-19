@@ -1,5 +1,8 @@
 <template>
   <div :style="`height:${canvasParams.canh - 4}px; overflow-y: scroll`">
+    <div>
+      Hello
+    </div>
     <div v-for="(layer, index) in layers" :key="index">
       <div v-if="index == layerIndex">
         <button @click="insertLayer(index)">
