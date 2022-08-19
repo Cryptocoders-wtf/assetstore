@@ -190,7 +190,6 @@ export default defineComponent({
   },
   props: ["drawing", "tokens", "addresses"],
   setup(props, context) {
-    console.log("setup", props.drawing.transform);
     const {
       canvasParams,
       assetXtoCanvasX,
@@ -204,13 +203,14 @@ export default defineComponent({
     const currentLayerType = ref<number>(LayerType.LAYER);
     const remixTransForm = ref<Transform>(
       props.drawing.transform ? new Transform(props.drawing.transform) : new Transform(""));
-    console.log("setup2", remixTransForm.value, props.drawing.transform, new Transform(props.drawing.transform));
+    console.log("setup", remixTransForm.value, props.drawing.transform);
     const remixTransformString = computed(() => {
       const xf = remixTransForm.value;
       return `translate(${assetXtoCanvasX(xf.translateX)}px,` 
         + `${assetYtoCanvasY(xf.translateY)}px) ` 
         + `scale(${xf.scale}) rotate(${xf.rotate}rad) `;
     });
+    console.log("setup2", remixTransformString.value, assetXtoCanvasX(100));
     //console.log("initialLayers", props.initialLayers ? "A" : "B");
     const layers = ref<Layer[]>(
       props.drawing.layers?.length > 0
@@ -250,16 +250,12 @@ export default defineComponent({
     };
 
     const fetchToken = async () => {
-      console.log("*** fetchToken", props.drawing.remixId, props.tokens.length);
+      //console.log("*** fetchToken", props.drawing.remixId, props.tokens.length);
       if (props.drawing.remixId > 0) {
         const index = Math.floor(props.drawing.remixId / 4);
         if (index < props.tokens.length) {
           currentToken.value = props.tokens[index];
-          console.log(
-            "*** fetchToken2",
-            props.drawing.remixId,
-            currentToken.value
-          );
+          //console.log("*** fetchToken2",props.drawing.remixId,currentToken.value);
         }
       }
     };

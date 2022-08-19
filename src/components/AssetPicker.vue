@@ -60,7 +60,7 @@ export default defineComponent({
     const assetProviderInfos = ref<AssetProviderInfo[]>([]);
     const selectedProvider = ref<string | null>(null);
     const assetImages = ref<string[]>([]);
-    console.log("***", props.addresses.composerAddress);
+    //console.log("***", props.addresses.composerAddress);
     const provider =
       props.addresses.network == "localhost"
         ? new ethers.providers.JsonRpcProvider()
