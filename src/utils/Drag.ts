@@ -28,12 +28,12 @@ export const useDrag = (
     canvastoAsset,
     canvasParams,
   } = useCanvasParams();
-  let pivotPos:Pos = { x: 0, y: 0 };
+  let pivotPos: Pos = { x: 0, y: 0 };
   let offsetX = 0;
   let offsetY = 0;
-  let startPoint:Pos = { x: 0, y: 0 };
-  let initialCursors:Point[] = [];
-  let initialTransform = {tx:0, ty:0, scale:1, rotate:0};
+  let startPoint: Pos = { x: 0, y: 0 };
+  let initialCursors: Point[] = [];
+  let initialTransform = { tx: 0, ty: 0, scale: 1, rotate: 0 };
   const grid = ref<number>(0);
 
   const currentTool = ref<Tools>(0);
@@ -46,7 +46,7 @@ export const useDrag = (
     currentTool.value = tool;
     offsetX = canvasParams.value.curw / 2;
     offsetY = canvasParams.value.curh / 2;
-    startPoint = {x: getPageX(evt), y:getPageY(evt)};
+    startPoint = { x: getPageX(evt), y: getPageY(evt) };
     pivotPos = canvastoAsset(moveToolPos.value);
     initialCursors = cursors.value;
     initialTransform = remixTransForm.value;
@@ -83,18 +83,8 @@ export const useDrag = (
       const f = (can: number, n: number, offset: number, cur: number) =>
         Math.max(0, Math.min(can - g - 1, n - offset + cur / 2));
       return {
-        x: f(
-          canvasParams.value.assw,
-          pos.x,
-          offsetX,
-          canvasParams.value.curw
-        ),
-        y: f(
-          canvasParams.value.assh,
-          pos.y,
-          offsetY,
-          canvasParams.value.curh
-        ),
+        x: f(canvasParams.value.assw, pos.x, offsetX, canvasParams.value.curw),
+        y: f(canvasParams.value.assh, pos.y, offsetY, canvasParams.value.curh),
       };
     };
     const magnification =
@@ -106,10 +96,7 @@ export const useDrag = (
     const rad =
       currentTool.value === Tools.ROTATE
         ? pivotPos.x + offx - startPoint.x > 1
-          ? Math.atan2(
-              pivotPos.y - getPageY(evt),
-              pivotPos.x - getPageX(evt)
-            )
+          ? Math.atan2(pivotPos.y - getPageY(evt), pivotPos.x - getPageX(evt))
           : (Math.atan2(
               pivotPos.y - getPageY(evt),
               pivotPos.x - getPageX(evt)
@@ -148,16 +135,12 @@ export const useDrag = (
               ...gridder(
                 limiter({
                   x:
-                    (initialCursors[index].x - pivotPos.x) *
-                      RotationInfo.cos -
-                    (initialCursors[index].y - pivotPos.y) *
-                      RotationInfo.sin +
+                    (initialCursors[index].x - pivotPos.x) * RotationInfo.cos -
+                    (initialCursors[index].y - pivotPos.y) * RotationInfo.sin +
                     pivotPos.x,
                   y:
-                    (initialCursors[index].x - pivotPos.x) *
-                      RotationInfo.sin +
-                    (initialCursors[index].y - pivotPos.y) *
-                      RotationInfo.cos +
+                    (initialCursors[index].x - pivotPos.x) * RotationInfo.sin +
+                    (initialCursors[index].y - pivotPos.y) * RotationInfo.cos +
                     pivotPos.y,
                 })
               ),
@@ -167,12 +150,8 @@ export const useDrag = (
             return {
               ...gridder(
                 limiter({
-                  x:
-                    initialCursors[index].x -
-                    (startPoint.x - getPageX(evt)),
-                  y:
-                    initialCursors[index].y -
-                    (startPoint.y - getPageY(evt)),
+                  x: initialCursors[index].x - (startPoint.x - getPageX(evt)),
+                  y: initialCursors[index].y - (startPoint.y - getPageY(evt)),
                 })
               ),
               c: cursor.c,
@@ -195,7 +174,7 @@ export const useDrag = (
       });
     if (currentLayerType.value === LayerType.REMIX) {
       // Note: We need to create a new instance in order to make it work with undo/redo.
-      const tx = {tx:0, ty:0, scale:1, rotate:0};
+      const tx = { tx: 0, ty: 0, scale: 1, rotate: 0 };
       tx.rotate = remixTransForm.value.rotate;
       tx.scale = remixTransForm.value.scale;
       tx.tx = remixTransForm.value.tx;
@@ -216,11 +195,14 @@ export const useDrag = (
           break;
         }
         case Tools.ZOOM: {
-          tx.scale = Math.round(100 * initialTransform.scale * magnification) / 100;
+          tx.scale =
+            Math.round(100 * initialTransform.scale * magnification) / 100;
           break;
         }
         case Tools.ROTATE: {
-          tx.rotate = Math.round(initialTransform.rotate + RotationInfo.radian / Math.PI * 180);
+          tx.rotate = Math.round(
+            initialTransform.rotate + (RotationInfo.radian / Math.PI) * 180
+          );
           break;
         }
       }

@@ -1,13 +1,12 @@
 <template>
   <div>
-    <div  v-if="selectedToken" :style="`width:${canvasParams.sidew}px;height:${
-          canvasParams.sidew
-        }px;overflow:hidden`"> 
+    <div
+      v-if="selectedToken"
+      :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;overflow:hidden`"
+    >
       <img
         :src="selectedToken.image"
-        :style="`width:${canvasParams.sidew}px;height:${
-          canvasParams.sidew
-        }px;Transform: ${remixTransformString};`"
+        :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;Transform: ${remixTransformString};`"
       />
     </div>
     <div class="ml-2 mr-2 flex justify-between">

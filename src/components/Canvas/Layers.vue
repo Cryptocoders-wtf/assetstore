@@ -80,8 +80,8 @@ export default defineComponent({
     },
     remixTransformString: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   emits: ["onSelectLayer", "updateLayers", "tokenSelected"],
   setup(props, context) {
@@ -117,10 +117,10 @@ export default defineComponent({
       });
       context.emit("updateLayers", array, props.layerIndex - 1);
     };
-    const tokenSelected = (token:Token | null) => {
+    const tokenSelected = (token: Token | null) => {
       console.log("tokenSelected", token);
       context.emit("tokenSelected", token);
-    }
+    };
     return {
       canvasParams,
       insertLayer,
@@ -128,7 +128,7 @@ export default defineComponent({
       copyLayer,
       deleteLayer,
       onSelectLayer,
-      tokenSelected
+      tokenSelected,
     };
   },
 });

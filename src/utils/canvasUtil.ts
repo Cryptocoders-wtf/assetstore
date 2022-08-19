@@ -34,7 +34,8 @@ export const menuSize = {
 };
 
 // const canvasSize = { w: 1024, h: 1024 };
-const assetSize = { w: 1024, h: 1024 };
+export const assetSize = { w: 1024, h: 1024 };
+
 export const useCanvasParams = () => {
   const store = useStore();
 

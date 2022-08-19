@@ -18,10 +18,10 @@ export interface Layer {
 }
 
 export interface Transform {
-  tx: number,
-  ty: number,
-  scale: number,
-  rotate: number
+  tx: number;
+  ty: number;
+  scale: number;
+  rotate: number;
 }
 
 export interface Overlay {

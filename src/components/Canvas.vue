@@ -201,13 +201,17 @@ export default defineComponent({
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     const currentLayerType = ref<number>(LayerType.LAYER);
-    const remixTransform = ref<Transform>(props.drawing.transform || {tx:0, ty:0, scale:1, rotate:0});
+    const remixTransform = ref<Transform>(
+      props.drawing.transform || { tx: 0, ty: 0, scale: 1, rotate: 0 }
+    );
     console.log("setup", remixTransform.value, props.drawing.transform);
     const remixTransformString = computed(() => {
       const xf = remixTransform.value;
-      return `translate(${assetXtoCanvasX(xf.tx)}px,` 
-        + `${assetYtoCanvasY(xf.ty)}px) ` 
-        + `scale(${xf.scale}) rotate(${xf.rotate}deg) `;
+      return (
+        `translate(${assetXtoCanvasX(xf.tx)}px,` +
+        `${assetYtoCanvasY(xf.ty)}px) ` +
+        `scale(${xf.scale}) rotate(${xf.rotate}deg) `
+      );
     });
     console.log("setup2", remixTransformString.value, assetXtoCanvasX(100));
     //console.log("initialLayers", props.initialLayers ? "A" : "B");
@@ -243,7 +247,7 @@ export default defineComponent({
 
     const tokenSelected = (token: Token) => {
       recordState();
-      remixTransform.value = {tx:0, ty:0, scale:1, rotate:0};
+      remixTransform.value = { tx: 0, ty: 0, scale: 1, rotate: 0 };
       console.log("tokenSelected", remixTransformString.value);
       currentToken.value = token;
     };
@@ -362,7 +366,7 @@ export default defineComponent({
       const drawing: Drawing = {
         layers: layers.value,
         remixId: token ? token.tokenId + 1 : 0,
-        transform: remixTransform.value
+        transform: remixTransform.value,
       };
       context.emit("close", drawing);
     };
