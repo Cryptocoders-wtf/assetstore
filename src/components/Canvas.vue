@@ -97,12 +97,6 @@
           @redo="redo"
         />
         <div class="self-start">|</div>
-        <token-picker
-          :tokens="tokens"
-          @tokenSelected="tokenSelected"
-          :selectedToken="currentToken"
-        />
-        <div class="self-start">|</div>
         <ToggleGrid @toggleGrid="toggleGrid" :grid="grid" />
         <div class="self-start">|</div>
         <TogglePoint
@@ -134,6 +128,9 @@
         :layers="layers"
         :layerIndex="layerIndex"
         :newLayer="newLayer"
+        :tokens="tokens"
+        :currentToken="currentToken"
+        @tokenSelected="tokenSelected"
         @onSelectLayer="onSelectLayer"
         @updateLayers="updateLayers"
       />
@@ -154,7 +151,6 @@ import {
 } from "@/models/point";
 import { ColorPicker } from "vue3-colorpicker";
 
-import TokenPicker from "@/components/Canvas/TokenPicker.vue";
 import AssetPicker from "@/components/AssetPicker.vue";
 import Layers from "@/components/Canvas/Layers.vue";
 import Undo from "@/components/Canvas/Menu/Undo.vue";
@@ -182,7 +178,6 @@ export default defineComponent({
   name: "HomePage",
   components: {
     ColorPicker,
-    TokenPicker,
     AssetPicker,
     Layers,
     Undo,

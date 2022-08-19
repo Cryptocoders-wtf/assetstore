@@ -1,7 +1,11 @@
 <template>
   <div :style="`height:${canvasParams.canh - 4}px; overflow-y: scroll`">
     <div>
-      Hello
+      <token-picker
+        :tokens="tokens"
+        @tokenSelected="tokenSelected"
+        :selectedToken="currentToken"
+      />
     </div>
     <div v-for="(layer, index) in layers" :key="index">
       <div v-if="index == layerIndex">
@@ -45,8 +49,13 @@
 import { defineComponent, PropType } from "vue";
 import { useCanvasParams } from "@/utils/canvasUtil";
 import { Layer } from "@/models/point";
+import TokenPicker from "@/components/Canvas/TokenPicker.vue";
+import { Token } from "@/models/token";
 
 export default defineComponent({
+  components: {
+    TokenPicker,
+  },
   props: {
     layers: {
       type: Object as PropType<Layer[]>,
@@ -60,8 +69,16 @@ export default defineComponent({
       type: Object as PropType<Layer>,
       required: true,
     },
+    tokens: {
+      type: Array as PropType<Token[]>,
+      required: true,
+    },
+    currentToken: {
+      type: Object as PropType<Token | null>,
+      required: true,
+    },
   },
-  emits: ["onSelectLayer", "updateLayers"],
+  emits: ["onSelectLayer", "updateLayers", "tokenSelected"],
   setup(props, context) {
     const { canvasParams } = useCanvasParams();
 
@@ -95,6 +112,10 @@ export default defineComponent({
       });
       context.emit("updateLayers", array, props.layerIndex - 1);
     };
+    const tokenSelected = (token:Token | null) => {
+      console.log("tokenSelected", token);
+      context.emit("tokenSelected", token);
+    }
     return {
       canvasParams,
       insertLayer,
@@ -102,6 +123,7 @@ export default defineComponent({
       copyLayer,
       deleteLayer,
       onSelectLayer,
+      tokenSelected
     };
   },
 });
