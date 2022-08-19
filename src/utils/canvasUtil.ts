@@ -135,7 +135,7 @@ export const roundRect: Point[] = [
 
 export const useToolHandleMode = (
   currentLayerType: Ref<number>,
-  remixTransForm: Ref<Transform>
+  remixTransform: Ref<Transform>
 ) => {
   const { assetXtoCanvasX, assetYtoCanvasY, canvasParams } = useCanvasParams();
   const cursors = ref<Point[]>([]);
@@ -193,10 +193,10 @@ export const useToolHandleMode = (
       case LayerType.REMIX: {
         const resultX =
           canvasParams.value.canh / 2 +
-          assetXtoCanvasX(remixTransForm.value.translateX);
+          assetXtoCanvasX(remixTransform.value.translateX);
         const resultY =
           canvasParams.value.canw / 2 +
-          assetYtoCanvasY(remixTransForm.value.translateY);
+          assetYtoCanvasY(remixTransform.value.translateY);
         return {
           x: resultX,
           y: resultY,
