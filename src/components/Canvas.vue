@@ -11,10 +11,12 @@
       @dragover="dragOver"
       @touchmove="dragOver"
     >
-      <div v-if="currentToken"
+      <div
+        v-if="currentToken"
         :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
-        class="absolute overflow-hidden">
-        <img 
+        class="absolute overflow-hidden"
+      >
+        <img
           :src="currentToken.image"
           :style="
             `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +

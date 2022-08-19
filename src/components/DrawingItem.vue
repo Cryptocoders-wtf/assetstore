@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="absolute -z-10 w-32 overflow-hidden"> 
+    <div class="absolute -z-10 w-32 overflow-hidden">
       <img
         v-if="token"
         class="w-32"
