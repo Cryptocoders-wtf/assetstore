@@ -11,15 +11,17 @@
       @dragover="dragOver"
       @touchmove="dragOver"
     >
-      <img
-        v-if="currentToken"
-        class="absolute"
-        :src="currentToken.image"
-        :style="
-          `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
-          `Transform: ${remixTransformString};`
-        "
-      />
+      <div v-if="currentToken"
+        :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
+        class="absolute overflow-hidden">
+        <img 
+          :src="currentToken.image"
+          :style="
+            `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
+            `Transform: ${remixTransformString};`
+          "
+        />
+      </div>
       <img
         v-for="(layer, index) in layers"
         :key="index"
