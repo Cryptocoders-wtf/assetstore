@@ -312,11 +312,10 @@ export default defineComponent({
       if (xf == null) {
         return "";
       }
-      //  <use href="#comp0" transform="translate(178 138) scale(1) rotate(52 512 512)" />
       const d = Math.round(512 * (xf.scale - 1))
       return (
         `translate(${xf.tx - d} ${xf.ty - d}) ` +
-        `scale(${xf.scale}) rotate(${xf.rotate} 512 512) `
+        `scale(${xf.scale}) rotate(${xf.rotate} 512 512)`
       );
     });
     return {
