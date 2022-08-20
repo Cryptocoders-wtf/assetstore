@@ -123,6 +123,8 @@ export default defineComponent({
     "priceRange",
     "isRemix",
     "remixId",
+    "remixTransform",
+    "remixColor"
   ],
   components: {
     NetworkGate,
@@ -199,13 +201,13 @@ export default defineComponent({
         messageRef.value = "message.minting";
         asset.minter = minterName.value;
         asset.group = ""; // gas saving
-        console.log("*** minting", props.isRemix, asset);
+        console.log("*** minting", props.isRemix, asset, props.remixTransform);
         const tx = props.isRemix
           ? await networkContext.value.contract.mintWithAsset(
               asset,
               props.remixId, // remixId
-              "", // color
-              "", // transform
+              props.remixColor || "", // color
+              props.remixTransform || "", // transform
               [] // overlays
               /*
                 [{

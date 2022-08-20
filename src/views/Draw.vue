@@ -49,6 +49,7 @@
         :priceRange="priceRange"
         :isRemix="true"
         :remixId="remixId"
+        :remixTransform="remixTransformString"
         @minted="minted"
       >
         <p class="mb-2">
@@ -65,11 +66,11 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import { ethers } from "ethers";
 import { useRoute } from "vue-router";
 import Canvas from "@/components/Canvas.vue";
-import { Drawing } from "@/models/point";
+import { Drawing, Transform } from "@/models/point";
 import DrawingItem from "@/components/DrawingItem.vue";
 import MintPanel from "@/components/MintPanel.vue";
 import { getContractAddresses } from "@/utils/networks";
@@ -127,6 +128,7 @@ export default defineComponent({
 
     // Temporary code
     const remixId = ref<number>(0);
+    const remixTransform = ref<Transform | null>(null);
 
     const { EtherscanStore, EtherscanToken, OpenSeaPath } = getAddresses(
       addresses.network,
@@ -206,7 +208,7 @@ export default defineComponent({
 
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(9999);
-    const selectedDrawing = ref<Drawing>({ layers: [], remixId: 0 });
+    const selectedDrawing = ref<Drawing>({ layers: [], remixId: 0, transform:null });
     const onDrawingSelect = async (index: number) => {
       selectedIndex.value = index;
       const drawing = drawings.value[index];
@@ -242,6 +244,7 @@ export default defineComponent({
       }
       onSelect(loadedAssets[0], tag);
       remixId.value = drawing.remixId;
+      remixTransform.value = drawing.transform;
     };
     const onOpen = () => {
       selectedDrawing.value = drawings.value[selectedIndex.value];
@@ -268,7 +271,7 @@ export default defineComponent({
       const keys = info.value.keys;
       // Prepare to open
       selectedIndex.value = keys.length;
-      selectedDrawing.value = { layers: [], remixId: 0 };
+      selectedDrawing.value = { layers: [], remixId: 0, transform: null };
 
       // Update the info and save it
       const array: Drawing[] = drawings.value.map((body) => body);
@@ -304,6 +307,17 @@ export default defineComponent({
       selection.value = null; // force redraw
       onDrawingSelect(selectedIndex.value);
     };
+    const remixTransformString = computed(() => {
+      const xf = remixTransform.value;
+      if (xf == null) {
+        return "";
+      }
+      return (
+        `translate(${xf.tx}px,` +
+        `${xf.ty}px) ` +
+        `scale(${xf.scale}) rotate(${xf.rotate}deg) `
+      );
+    });
     return {
       showCanvas,
       onOpen,
@@ -326,6 +340,7 @@ export default defineComponent({
       EtherscanToken,
       OpenSeaPath,
       remixId,
+      remixTransformString,
       minted,
     };
   },
