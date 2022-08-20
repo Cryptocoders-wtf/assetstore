@@ -312,10 +312,10 @@ export default defineComponent({
       if (xf == null) {
         return "";
       }
+      //  <use href="#comp0" transform="translate(178 138) scale(1) rotate(52 512 512)" />
       return (
-        `translate(${xf.tx}px,` +
-        `${xf.ty}px) ` +
-        `scale(${xf.scale}) rotate(${xf.rotate}deg) `
+        `translate(${xf.tx} ${xf.ty}) ` +
+        `scale(${xf.scale}) rotate(${xf.rotate} 512 512) `
       );
     });
     return {

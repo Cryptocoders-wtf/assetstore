@@ -119,6 +119,7 @@ export default defineComponent({
           `<defs>\n${svgPart}\n</defs>\n` +
           `<use href="#${tag}" />\n` +
           "</svg>\n";
+        console.log(svg);
         const image =
           "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
         images.push(image);
