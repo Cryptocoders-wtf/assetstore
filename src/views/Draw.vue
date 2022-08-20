@@ -230,21 +230,21 @@ export default defineComponent({
       const loadedAssets = loadAssets(actions);
       let tag = "item";
       //console.log(loadedAssets[0].svgPart);
+      remixId.value = drawing.remixId;
+      remixTransform.value = drawing.transform;
       if (drawing.remixId) {
         const result = await tokenRO.functions.generateSVGPart(drawing.remixId);
-        //console.log("** mix-in", result[0], result[1]);
+        console.log("** mix-in", result[1], remixTransformString.value);
         loadedAssets[0].svgPart =
           result[0] +
           loadedAssets[0].svgPart +
           `<g id="mixed">\n` +
-          ` <use href="#${result[1]}" />\n` +
+          ` <use href="#${result[1]}" transform="${remixTransformString.value}" />\n` +
           ` <use href="#item" />\n` +
           `</g>\n`;
         tag = "mixed";
       }
       onSelect(loadedAssets[0], tag);
-      remixId.value = drawing.remixId;
-      remixTransform.value = drawing.transform;
     };
     const onOpen = () => {
       selectedDrawing.value = drawings.value[selectedIndex.value];
