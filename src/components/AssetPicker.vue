@@ -111,9 +111,11 @@ export default defineComponent({
       const result2 = await assetProvider.functions.totalSupply();
       const count = result2[0].toNumber();
       console.log("totalSupply", count);
-      const images: string[] = [];
-      for (let i = 0; i < count; i++) {
-        const result = await assetProvider.functions.generateSVGPart(i);
+      const limit = (count > 0) ? count: 10;
+      const images: AssetImage[] = [];
+      for (let i = 0; i < limit; i++) {
+        const assetId = (count > 0) ? i : Math.floor(Math.random() * 0x1000000);
+        const result = await assetProvider.functions.generateSVGPart(assetId);
         if (selectedProvider.value != newValue) {
           return;
         }
@@ -127,10 +129,8 @@ export default defineComponent({
         console.log(svg);
         const image =
           "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
-        images.push(image);
-        assetImages.value = images.map((image, index) => { 
-          return {image, assetId:index};
-        });
+        images.push({ image, assetId} );
+        assetImages.value = images.map(assetImage => assetImage);
       }
     });
 
