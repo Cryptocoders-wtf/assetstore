@@ -111,7 +111,7 @@ export default defineComponent({
       const result2 = await assetProvider.functions.totalSupply();
       const count = result2[0].toNumber();
       console.log("totalSupply", count);
-      const limit = (count > 0) ? count: 10;
+      const limit = (count > 0) ? count: 50;
       const images: AssetImage[] = [];
       for (let i = 0; i < limit; i++) {
         const assetId = (count > 0) ? i : Math.floor(Math.random() * 0x1000000);
@@ -126,7 +126,7 @@ export default defineComponent({
           `<defs>\n${svgPart}\n</defs>\n` +
           `<use href="#${tag}" />\n` +
           "</svg>\n";
-        console.log(svg);
+        //console.log(svg);
         const image =
           "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
         images.push({ image, assetId} );
