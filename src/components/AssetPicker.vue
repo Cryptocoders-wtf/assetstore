@@ -139,11 +139,13 @@ export default defineComponent({
     };
 
     const onSelect = (index: number) => {
+      const assetImage = assetImages.value[index];
       context.emit(
         "AssetSelected",
         selectedProvider.value,
         index,
-        assetImages.value[index]
+        assetImage.image,
+        assetImage.assetId
       );
     };
     return {
