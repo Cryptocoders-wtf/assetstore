@@ -414,8 +414,8 @@ export default defineComponent({
         toolHandleMode.value = true;
       }
     };
-    const AssetSelected = (key: string, index: number, image: string) => {
-      console.log("AssetSelected", key, index);
+    const AssetSelected = (key: string, index: number, image: any) => {
+      console.log("AssetSelected", key, index, image.assetId);
     };
     return {
       toolHandleMode,

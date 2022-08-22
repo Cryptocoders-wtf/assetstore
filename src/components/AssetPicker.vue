@@ -23,10 +23,10 @@
         </option>
       </select>
       <div style="width: 100%; height: 200px; overflow-y: scroll">
-        <span v-for="(image, index) in assetImages" :key="image">
+        <span v-for="(assetImage, index) in assetImages" :key="assetImage.image">
           <img
             @click="onSelect(index)"
-            :src="image"
+            :src="assetImage.image"
             class="mr-1 mb-1 inline-block w-14 rounded-xl"
           />
         </span>
@@ -53,13 +53,18 @@ interface AssetProviderInfo {
   provider: string;
 }
 
+interface AssetImage {
+  image: string;
+  assetId: number;
+}
+
 export default defineComponent({
   props: ["addresses"],
   setup(props, context) {
     const showPopup = ref<boolean>(false);
     const assetProviderInfos = ref<AssetProviderInfo[]>([]);
     const selectedProvider = ref<string | null>(null);
-    const assetImages = ref<string[]>([]);
+    const assetImages = ref<AssetImage[]>([]);
     //console.log("***", props.addresses.composerAddress);
     const provider =
       props.addresses.network == "localhost"
@@ -123,7 +128,9 @@ export default defineComponent({
         const image =
           "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
         images.push(image);
-        assetImages.value = images.map((image) => image);
+        assetImages.value = images.map((image, index) => { 
+          return {image, assetId:index};
+        });
       }
     });
 
