@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="mb-2 text-xl font-bold">On-chain Asset Store</div>
     <KeyMessage />
     <p class="mb-2">
       {{ $t("storyView.message") }}

@@ -29,6 +29,12 @@
       >
     </p>
     <p>
+      Project Vision:
+      <a href="https://hackmd.io/@snakajima/HJva6n-Jj" class="underline" target="_blank"
+        >On-line Asset Store and Composer</a
+      >
+    </p>
+    <p>
       Discord:
       <a href="https://discord.gg/4JGURQujXK" class="underline" target="_blank"
         >On-chain Asset Store</a

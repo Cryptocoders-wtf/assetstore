@@ -16,6 +16,8 @@ const lang = {
   keyMessage: {
     message1:
       'This is a part of "On-Chain Asset Store" project, which is an effort to make variety of vector assets available on blockchains.',
+    message1a: 'Please see',
+    message1b: 'for the details.',
     message2:
       'We are using a "crowd-minting" method, where each minter pays a small amount of gas fees to upload a vector image to the blockchain, and receives multiple NFTs as rewards.',
   },

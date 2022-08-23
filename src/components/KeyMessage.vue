@@ -2,6 +2,9 @@
   <div>
     <p class="mb-2">
       {{ $t("keyMessage.message1") }}
+      {{ $t("keyMessage.message1a") }}
+      <a href="https://hackmd.io/@snakajima/HJva6n-Jj" class="underline" target="_blank">On-Chain Asset Store and Composer</a>
+      {{ $t("keyMessage.message1b") }}
     </p>
     <p class="mb-2">
       {{ $t("keyMessage.message2") }}
