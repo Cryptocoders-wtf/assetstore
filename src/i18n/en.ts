@@ -15,7 +15,7 @@ const lang = {
   },
   keyMessage: {
     message1:
-      'This is a part of "On-Chain Asset Store" project, which is an effort to make variety of vector assets available on blockchains.',
+      'This is a part of "On-Chain Asset Store" project, which is an effort to make variety of vector assets available on blockchains and make them composable.',
     message1a: 'Please see',
     message1b: 'for the details.',
     message2:
