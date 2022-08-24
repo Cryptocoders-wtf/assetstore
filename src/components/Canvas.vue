@@ -146,7 +146,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, computed } from "vue";
+import { defineComponent, ref, watch, computed, PropType } from "vue";
 import {
   Layer,
   Overlay,
@@ -195,7 +195,20 @@ export default defineComponent({
     DeletePoint,
     SplitSegment,
   },
-  props: ["drawing", "tokens", "addresses"],
+  props: {
+    drawing: {
+      type: Object as PropType<Drawing>,
+      required: true,
+    },
+    tokens: {
+      type: Array as PropType<Token[]>,
+      required: true,
+    },
+    addresse: {
+      type: Object,
+      required: true,
+    },
+  },
   setup(props, context) {
     const {
       canvasParams,
@@ -234,7 +247,7 @@ export default defineComponent({
             },
           ]
     );
-    const overlays = ref<Overlay[]>(props.drawing.ovelays || []);
+    const overlays = ref<Overlay[]>(props.drawing.overlays || []);
     const stagingColor = ref<string>(""); // staging for undoable color change
     const currentColor = ref<string>("");
     watch([stagingColor], ([color])=>{
