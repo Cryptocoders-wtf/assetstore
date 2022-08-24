@@ -225,8 +225,9 @@ export default defineComponent({
       props.drawing.remix?.transform || { tx: 0, ty: 0, scale: 1, rotate: 0 }
     );
     const remix = computed(() => {
+      const token = remixToken.value;
       const foo: Remix = {
-        tokenId: remixToken.value?.tokenId || 0,
+        tokenId: token ? token.tokenId + 1 : 0,
         transform: remixTransform.value,
         image: remixToken.value?.image,
       };
@@ -401,14 +402,9 @@ export default defineComponent({
       evt.preventDefault();
     };
     const onClose = () => {
-      const token = remixToken.value;
       const drawing: Drawing = {
         layers: layers.value,
-        remix: {
-          tokenId: token ? token.tokenId + 1 : 0,
-          transform: remixTransform.value,
-          image: token?.image,
-        },
+        remix: remix.value,
       };
       context.emit("close", drawing);
     };
