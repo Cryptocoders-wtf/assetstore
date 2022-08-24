@@ -4,7 +4,7 @@
       <token-picker
         :tokens="tokens"
         @tokenSelected="tokenSelected"
-        :selectedToken="currentToken"
+        :selectedToken="remixToken"
         :canvasParams="canvasParams"
         :remixTransform="remixTransform"
       />
@@ -75,7 +75,7 @@ export default defineComponent({
       type: Array as PropType<Token[]>,
       required: true,
     },
-    currentToken: {
+    remixToken: {
       type: Object as PropType<Token | null>,
     },
     remixTransform: {

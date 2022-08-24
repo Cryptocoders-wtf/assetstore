@@ -133,7 +133,7 @@
         :layerIndex="layerIndex"
         :newLayer="newLayer"
         :tokens="tokens"
-        :currentToken="currentToken"
+        :remixToken="currentToken"
         :remixTransform="remixTransform"
         @tokenSelected="tokenSelected"
         @onSelectLayer="onSelectLayer"
