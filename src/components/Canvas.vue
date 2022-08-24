@@ -209,7 +209,6 @@ export default defineComponent({
       required: true,
     },
   },
-  //props: ["drawing", "tokens", "addresses"],
   setup(props, context) {
     const {
       canvasParams,
@@ -223,9 +222,9 @@ export default defineComponent({
     const pointIndex = ref<number>(0);
     const currentLayerType = ref<number>(LayerType.LAYER);
     const remixTransform = ref<Transform>(
-      props.drawing.transform || { tx: 0, ty: 0, scale: 1, rotate: 0 }
+      props.drawing.remix?.transform || { tx: 0, ty: 0, scale: 1, rotate: 0 }
     );
-    console.log("setup", remixTransform.value, props.drawing.transform);
+    //console.log("setup", remixTransform.value, props.drawing.transform);
     const remixTransformString = computed(() => {
       const xf = remixTransform.value;
       return (
@@ -248,7 +247,7 @@ export default defineComponent({
             },
           ]
     );
-    const overlays = ref<Overlay[]>(props.drawing.ovelays || []);
+    const overlays = ref<Overlay[]>(props.drawing.overlays || []);
     const stagingColor = ref<string>(""); // staging for undoable color change
     const currentColor = ref<string>("");
     watch([stagingColor], ([color])=>{
@@ -285,8 +284,8 @@ export default defineComponent({
 
     const fetchToken = async () => {
       //console.log("*** fetchToken", props.drawing.remixId, props.tokens.length);
-      if (props.drawing.remixId > 0) {
-        const index = Math.floor(props.drawing.remixId / 4);
+      if (props.drawing.remix && props.drawing.remix.tokenId > 0) {
+        const index = Math.floor(props.drawing.remix.tokenId / 4);
         if (index < props.tokens.length) {
           remixToken.value = props.tokens[index];
           //console.log("*** fetchToken2",props.drawing.remixId,remixToken.value);
@@ -436,7 +435,7 @@ export default defineComponent({
             : results[0]
         );
         currentLayerType.value = LayerType.LAYER;
-      } else if (props.drawing.remixId > 0) {
+      } else if (props.drawing.remix && props.drawing.remix.tokenId > 0) {
         currentLayerType.value = LayerType.REMIX;
         toolHandleMode.value = true;
       }
