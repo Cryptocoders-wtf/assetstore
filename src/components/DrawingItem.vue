@@ -12,12 +12,22 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed } from "vue";
-import { svgImageFromDrawing } from "@/models/point";
+import { defineComponent, computed, PropType } from "vue";
+import { svgImageFromDrawing, Drawing } from "@/models/point";
 import { assetSize } from "@/utils/canvasUtil";
+import { Token } from "@/models/token";
 
 export default defineComponent({
-  props: ["drawing", "tokens"],
+  props: {
+    drawing: {
+      type: Object as PropType<Drawing>,
+      required: true,
+    },
+    tokens: {
+      type: Array as PropType<Token[]>,
+      required: true,
+    },
+  },
 
   setup(props) {
     const transform = computed(() => {
