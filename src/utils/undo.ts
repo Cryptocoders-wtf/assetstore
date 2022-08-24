@@ -50,7 +50,8 @@ export const useUndoStack = (
     }
     const state = undoStack.value[undoIndex.value - 1];
     layers.value = state.layers;
-    console.log("**", remixTransForm.value, state.remixTransform);
+    //console.log("**", remixTransForm.value, state.remixTransform);
+    remixToken.value = state.remixToken;
     remixTransForm.value = state.remixTransform;
     undoIndex.value -= 1;
   };
@@ -60,6 +61,7 @@ export const useUndoStack = (
     }
     const state = undoStack.value[undoIndex.value + 1];
     layers.value = state.layers;
+    remixToken.value = state.remixToken;
     remixTransForm.value = state.remixTransform;
     undoIndex.value += 1;
   };
