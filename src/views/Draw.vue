@@ -19,7 +19,7 @@
             index == selectedIndex ? 'border-blue-700' : 'border-white'
           }`"
         >
-          <drawing-item :drawing="drawing" :tokens="tokens" />
+          <drawing-item :drawing="drawing" />
           <div
             v-if="index == selectedIndex"
             class="ml-2 mr-2 flex justify-between"
