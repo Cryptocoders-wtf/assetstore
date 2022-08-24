@@ -409,7 +409,6 @@ export default defineComponent({
         );
         currentLayerType.value = LayerType.LAYER;
       } else if (props.drawing.remixId > 0) {
-        recordState();
         currentLayerType.value = LayerType.REMIX;
         toolHandleMode.value = true;
       }
