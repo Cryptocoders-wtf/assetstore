@@ -263,13 +263,16 @@ export default defineComponent({
       remixTransform
     );
 
+    const computedRemixTransform = computed(() => {
+      return remixTransform.value;
+    });
     const {
       toolHandleMode,
       toolHandles,
       onClickToolHandle,
       moveToolPos,
       cursors,
-    } = useToolHandleMode(currentLayerType, remixTransform);
+    } = useToolHandleMode(currentLayerType, computedRemixTransform);
 
     const tokenSelected = (token: Token) => {
       recordState();

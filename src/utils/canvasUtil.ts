@@ -1,4 +1,4 @@
-import { ref, Ref, computed } from "vue";
+import { ref, Ref, computed, ComputedRef } from "vue";
 import { useStore } from "vuex";
 
 import { Point, LayerType, Transform } from "@/models/point";
@@ -120,7 +120,7 @@ export const roundRect: Point[] = [
 
 export const useToolHandleMode = (
   currentLayerType: Ref<number>,
-  remixTransform: Ref<Transform>
+  remixTransform: ComputedRef<Transform>
 ) => {
   const { assetXtoCanvasX, assetYtoCanvasY, canvasParams } = useCanvasParams();
   const cursors = ref<Point[]>([]);
