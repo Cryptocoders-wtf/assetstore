@@ -237,8 +237,6 @@ export default defineComponent({
 
     const { recordState, isRedoable, isUndoable, _undo, _redo } = useUndoStack(
       layers,
-      layerIndex,
-      pointIndex,
       remixToken,
       remixTransform
     );
@@ -297,16 +295,12 @@ export default defineComponent({
     };
     updateLayerIndex(0);
     const undo = () => {
-      const index = _undo();
-      if (index !== null) {
-        updateLayerIndex(index);
-      }
+      _undo();
+      updateLayerIndex(layerIndex.value);
     };
     const redo = () => {
-      const index = _redo();
-      if (index !== null) {
-        updateLayerIndex(index);
-      }
+      _redo();
+      updateLayerIndex(layerIndex.value);
     };
 
     const onSelect = (evt: Event, index: number) => {
