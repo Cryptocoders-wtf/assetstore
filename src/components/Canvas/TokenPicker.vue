@@ -1,12 +1,13 @@
 <template>
   <div>
     <div
-      v-if="selectedToken"
+      v-if="remixToken"
       :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;overflow:hidden`"
+      class="border-2 border-solid border-slate-200"
     >
       <img
-        :src="selectedToken.image"
-        :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;Transform: ${transform};`"
+        :src="remixToken.image"
+        :style="`width:100%;height:100%;Transform: ${transform};`"
       />
     </div>
     <div class="ml-2 mr-2 flex justify-between">
@@ -14,7 +15,7 @@
         <span class="material-icons">image</span>
       </button>
       <button
-        :style="`opacity:${selectedToken ? '1.0' : '0.5'}`"
+        :style="`opacity:${remixToken ? '1.0' : '0.5'}`"
         @click="onRemove"
         class="ml-2 flex"
       >
@@ -42,7 +43,7 @@ import { Token } from "@/models/token";
 import { useCanvasParams } from "@/utils/canvasUtil";
 
 export default defineComponent({
-  props: ["tokens", "selectedToken", "canvasParams", "remixTransform"],
+  props: ["tokens", "remixToken", "canvasParams", "remixTransform"],
   setup(props, context) {
     const transform = computed(() => {
       const xf = props.remixTransform;
@@ -64,7 +65,7 @@ export default defineComponent({
     };
     const onSelect = (token: Token) => {
       console.log("onSelect", token.tokenId);
-      //context.emit("update:selectedToken", token);
+      //context.emit("update:remixToken", token);
       context.emit("tokenSelected", token);
       showTokens.value = false;
     };

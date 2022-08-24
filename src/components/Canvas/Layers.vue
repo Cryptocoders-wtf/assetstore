@@ -4,7 +4,7 @@
       <token-picker
         :tokens="tokens"
         @tokenSelected="tokenSelected"
-        :selectedToken="remixToken"
+        :remixToken="remixToken"
         :canvasParams="canvasParams"
         :remixTransform="remixTransform"
       />
