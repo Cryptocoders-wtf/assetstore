@@ -204,7 +204,7 @@ export default defineComponent({
       type: Array as PropType<Token[]>,
       required: true,
     },
-    addresse: {
+    addresses: {
       type: Object,
       required: true,
     },
