@@ -49,7 +49,7 @@
         :priceRange="priceRange"
         :isRemix="true"
         :remixId="remix.tokenId"
-        :remixTransform="remix.transform"
+        :remixTransform="remixTransformString"
         @minted="minted"
       >
         <p class="mb-2">
@@ -342,6 +342,7 @@ export default defineComponent({
       EtherscanToken,
       OpenSeaPath,
       remix,
+      remixTransformString,
       minted,
     };
   },

@@ -31,7 +31,7 @@ export default defineComponent({
 
   setup(props) {
     const transform = computed(() => {
-      const xf = props.drawing.transform;
+      const xf = props.drawing.remix?.transform;
       if (xf == null) {
         return "";
       }
@@ -43,8 +43,8 @@ export default defineComponent({
     });
 
     const token = computed(() => {
-      if (props.drawing.remixId > 0) {
-        const index = Math.floor(props.drawing.remixId / 4);
+      if (props.drawing.remix && props.drawing.remix.tokenId > 0) {
+        const index = Math.floor(props.drawing.remix.tokenId / 4);
         if (index < props.tokens.length) {
           return props.tokens[index];
         }
