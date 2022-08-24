@@ -8,7 +8,7 @@ import {
   Tools,
   RotationInfo,
 } from "@/utils/canvasUtil";
-import { Point, LayerType, Transform } from "@/models/point";
+import { Point, LayerType, identityTransform, Remix } from "@/models/point";
 
 // const { curw, curh } = canvasParams;
 
@@ -18,7 +18,7 @@ export const useDrag = (
   cursors: Ref<Point[]>,
   recordState: () => void,
   currentLayerType: Ref<number>,
-  remixTransForm: Ref<Transform>
+  remix: Ref<Remix>
 ) => {
   const {
     getPageX,
@@ -33,7 +33,7 @@ export const useDrag = (
   let offsetY = 0;
   let startPoint: Pos = { x: 0, y: 0 };
   let initialCursors: Point[] = [];
-  let initialTransform = { tx: 0, ty: 0, scale: 1, rotate: 0 };
+  let initialTransform = identityTransform;
   const grid = ref<number>(0);
 
   const currentTool = ref<Tools>(0);
@@ -49,7 +49,7 @@ export const useDrag = (
     startPoint = { x: getPageX(evt), y: getPageY(evt) };
     pivotPos = canvastoAsset(moveToolPos.value);
     initialCursors = cursors.value;
-    initialTransform = remixTransForm.value;
+    initialTransform = remix.value.transform;
     recordState();
   };
   const dragLayerImgStart = (evt: MouseEvent | TouchEvent) => {
@@ -59,7 +59,7 @@ export const useDrag = (
     startPoint.x = getPageX(evt);
     startPoint.y = getPageY(evt);
     initialCursors = cursors.value;
-    initialTransform = remixTransForm.value;
+    initialTransform = remix.value.transform;
     recordState();
   };
   const dragStart = (evt: DragEvent | TouchEvent, index: number) => {
@@ -174,7 +174,7 @@ export const useDrag = (
       });
     if (currentLayerType.value === LayerType.REMIX) {
       // Note: We need to create a new instance in order to make it work with undo/redo.
-      const tx = Object.assign({}, remixTransForm.value);
+      const tx = Object.assign({}, remix.value.transform);
       
       switch (currentTool.value) {
         case Tools.MOVE: {
@@ -202,7 +202,9 @@ export const useDrag = (
           break;
         }
       }
-      remixTransForm.value = tx;
+      const newValue = Object.assign({}, remix.value);
+      newValue.transform = tx;
+      remix.value = newValue;
     }
     evt.preventDefault();
   };

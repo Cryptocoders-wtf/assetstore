@@ -157,6 +157,7 @@ import {
   togglePointType,
   Transform,
   Remix,
+  identityTransform
 } from "@/models/point";
 import { ColorPicker } from "vue3-colorpicker";
 
@@ -221,17 +222,8 @@ export default defineComponent({
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     const currentLayerType = ref<number>(LayerType.LAYER);
-    const remixTransform = ref<Transform>(
-      props.drawing.remix?.transform || { tx: 0, ty: 0, scale: 1, rotate: 0 }
-    );
-    const remix = computed(() => {
-      const token = remixToken.value;
-      const foo: Remix = {
-        tokenId: token ? token.tokenId + 1 : 0,
-        transform: remixTransform.value,
-        image: remixToken.value?.image,
-      };
-      return foo;
+    const remix = ref<Remix>(props.drawing.remix || {
+      tokenId:0, transform: identityTransform
     });
     //console.log("setup", remixTransform.value, props.drawing.transform);
     const remixTransformString = computed(() => {
@@ -268,12 +260,11 @@ export default defineComponent({
 
     const { recordState, isRedoable, isUndoable, _undo, _redo } = useUndoStack(
       layers,
-      remixToken,
-      remixTransform
+      remix,
     );
 
     const computedRemixTransform = computed(() => {
-      return remixTransform.value;
+      return remix.value.transform;
     });
     const {
       toolHandleMode,
@@ -285,9 +276,11 @@ export default defineComponent({
 
     const tokenSelected = (token: Token) => {
       recordState();
-      remixTransform.value = { tx: 0, ty: 0, scale: 1, rotate: 0 };
-      console.log("tokenSelected", remixTransformString.value);
-      remixToken.value = token;
+      remix.value = {
+        tokenId: token.tokenId,
+        transform: identityTransform,
+        image: token.image
+      };
     };
     const remixSelected = () => {
       currentLayerType.value = LayerType.REMIX;
@@ -354,7 +347,7 @@ export default defineComponent({
       cursors,
       recordState,
       currentLayerType,
-      remixTransform
+      remix
     );
 
     const togglePoint = () => {
@@ -495,7 +488,6 @@ export default defineComponent({
       assetYtoCanvasY,
       currentLayerType,
       remixTransformString,
-      remixTransform,
       AssetSelected,
       remix,
     };
