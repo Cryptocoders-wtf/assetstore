@@ -218,7 +218,6 @@ export default defineComponent({
       getPageX,
       getPageY,
     } = useCanvasParams();
-    const remixToken = ref<Token | null>(null);
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     const currentLayerType = ref<number>(LayerType.LAYER);
@@ -276,28 +275,20 @@ export default defineComponent({
 
     const tokenSelected = (token: Token) => {
       recordState();
-      remix.value = {
-        tokenId: token.tokenId,
+      const newValue:Remix = {
+        tokenId: 0,
         transform: identityTransform,
-        image: token.image
       };
+      if (token) {
+        newValue.tokenId = token.tokenId;
+        newValue.image = token.image;
+      }
+      remix.value = newValue;
     };
     const remixSelected = () => {
       currentLayerType.value = LayerType.REMIX;
       toolHandleMode.value = true;
     };
-
-    const fetchToken = async () => {
-      //console.log("*** fetchToken", props.drawing.remixId, props.tokens.length);
-      if (props.drawing.remix && props.drawing.remix.tokenId > 0) {
-        const index = Math.floor(props.drawing.remix.tokenId / 4);
-        if (index < props.tokens.length) {
-          remixToken.value = props.tokens[index];
-          //console.log("*** fetchToken2",props.drawing.remixId,remixToken.value);
-        }
-      }
-    };
-    fetchToken();
 
     watch([cursors, currentColor], ([points, color]) => {
       layers.value = layers.value.map((layer, index) => {
@@ -435,7 +426,7 @@ export default defineComponent({
             : results[0]
         );
         currentLayerType.value = LayerType.LAYER;
-      } else if (props.drawing.remix && props.drawing.remix.tokenId > 0) {
+      } else if (remix.value.image) {
         currentLayerType.value = LayerType.REMIX;
         toolHandleMode.value = true;
       }
