@@ -8,7 +8,7 @@ interface State {
   layers: Layer[];
   layerIndex: number;
   pointIndex: number;
-  token: Token | null;
+  remixToken: Token | null;
   remixTransform: Transform;
 }
 
@@ -16,7 +16,7 @@ export const useUndoStack = (
   layers: Ref<Layer[]>,
   layerIndex: Ref<number>,
   pointIndex: Ref<number>,
-  currentToken: Ref<Token | null>,
+  remixToken: Ref<Token | null>,
   remixTransForm: Ref<Transform>
 ) => {
   const undoStack = ref<State[]>([]);
@@ -30,7 +30,7 @@ export const useUndoStack = (
       layers: layers.value,
       layerIndex: layerIndex.value,
       pointIndex: pointIndex.value,
-      token: currentToken.value,
+      remixToken: remixToken.value,
       remixTransform: remixTransForm.value,
     });
     undoStack.value = array;
@@ -58,7 +58,7 @@ export const useUndoStack = (
     layers.value = state.layers;
     // updateLayerIndex(state.layerIndex);
     pointIndex.value = state.pointIndex;
-    currentToken.value = state.token;
+    remixToken.value = state.remixToken;
     console.log("**", remixTransForm.value, state.remixTransform);
     remixTransForm.value = state.remixTransform;
     undoIndex.value -= 1;
@@ -72,7 +72,7 @@ export const useUndoStack = (
     layers.value = state.layers;
     // updateLayerIndex(state.layerIndex);
     pointIndex.value = state.pointIndex;
-    currentToken.value = state.token;
+    remixToken.value = state.remixToken;
     remixTransForm.value = state.remixTransform;
     undoIndex.value += 1;
     return state.layerIndex;
