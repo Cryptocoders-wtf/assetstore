@@ -45,7 +45,13 @@ import { Token } from "@/models/token";
 import { useCanvasParams } from "@/utils/canvasUtil";
 
 export default defineComponent({
-  props: ["tokens", "remixToken", "canvasParams", "remixTransform", "isRemixType"],
+  props: [
+    "tokens",
+    "remixToken",
+    "canvasParams",
+    "remixTransform",
+    "isRemixType",
+  ],
   setup(props, context) {
     const transform = computed(() => {
       const xf = props.remixTransform;

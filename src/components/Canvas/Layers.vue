@@ -28,7 +28,9 @@
         }px`"
         class="border-2 border-solid object-fill"
         :class="`${
-          (index == layerIndex && isLayerType) ? 'border-blue-400' : 'border-slate-200'
+          index == layerIndex && isLayerType
+            ? 'border-blue-400'
+            : 'border-slate-200'
         }`"
       />
       <div v-if="index == layerIndex" class="ml-2 mr-2 flex justify-between">
@@ -87,7 +89,7 @@ export default defineComponent({
     currentLayerType: {
       type: Number as PropType<LayerType>,
       require: true,
-    }
+    },
   },
   emits: ["onSelectLayer", "updateLayers", "tokenSelected", "remixSelected"],
   setup(props, context) {
@@ -145,7 +147,7 @@ export default defineComponent({
       tokenSelected,
       remixSelected,
       isLayerType,
-      isRemixType
+      isRemixType,
     };
   },
 });
