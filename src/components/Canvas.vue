@@ -112,7 +112,7 @@
         <div class="self-start">|</div>
         <color-picker
           style="`margin: 10px; width: 100%"
-          v-model:pureColor="currentColor"
+          v-model:pureColor="stagingColor"
         />
         <div class="self-start">|</div>
         <asset-picker :addresses="addresses" @AssetSelected="AssetSelected" />
@@ -235,7 +235,14 @@ export default defineComponent({
           ]
     );
     const overlays = ref<Overlay[]>(props.drawing.ovelays || []);
+    const stagingColor = ref<string>(""); // staging for undoable color change
     const currentColor = ref<string>("");
+    watch([stagingColor], ([color])=>{
+      if (currentColor.value != color) {
+        recordState();      
+        currentColor.value = color;
+      }
+    });
 
     const { recordState, isRedoable, isUndoable, _undo, _redo } = useUndoStack(
       layers,
@@ -293,6 +300,7 @@ export default defineComponent({
       const layer = layers.value[layerIndex.value];
       cursors.value = layer.points;
       currentColor.value = layer.color;
+      stagingColor.value = layer.color;
       pointIndex.value = 0;
     };
     updateLayerIndex(0);
@@ -429,7 +437,7 @@ export default defineComponent({
       Tools,
       cursors,
       pointIndex,
-      currentColor,
+      stagingColor,
       canvasParams,
       moveToolPos,
       toolHandles,
