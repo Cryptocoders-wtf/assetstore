@@ -7,6 +7,7 @@
         :remixToken="remixToken"
         :canvasParams="canvasParams"
         :remixTransform="remixTransform"
+        :isRemixType="isRemixType"
       />
     </div>
     <div v-for="(layer, index) in layers" :key="index">
@@ -93,6 +94,9 @@ export default defineComponent({
     const isLayerType = computed(() => {
       return props.currentLayerType == LayerType.LAYER;
     });
+    const isRemixType = computed(() => {
+      return props.currentLayerType == LayerType.REMIX;
+    });
     const insertLayer = (index: number) => {
       const array = props.layers.map((layer) => layer);
       array.splice(index, 0, props.newLayer);
@@ -135,7 +139,8 @@ export default defineComponent({
       deleteLayer,
       onSelectLayer,
       tokenSelected,
-      isLayerType
+      isLayerType,
+      isRemixType
     };
   },
 });

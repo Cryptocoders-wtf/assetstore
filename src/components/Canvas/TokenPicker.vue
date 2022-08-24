@@ -3,7 +3,8 @@
     <div
       v-if="remixToken"
       :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;overflow:hidden`"
-      class="border-2 border-solid border-slate-200"
+      class="border-2 border-solid"
+      :class="`${isRemixType ? 'border-blue-400' : 'border-slate-200'}`"
     >
       <img
         :src="remixToken.image"
@@ -43,7 +44,7 @@ import { Token } from "@/models/token";
 import { useCanvasParams } from "@/utils/canvasUtil";
 
 export default defineComponent({
-  props: ["tokens", "remixToken", "canvasParams", "remixTransform"],
+  props: ["tokens", "remixToken", "canvasParams", "remixTransform", "isRemixType"],
   setup(props, context) {
     const transform = computed(() => {
       const xf = props.remixTransform;

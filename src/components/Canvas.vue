@@ -362,6 +362,7 @@ export default defineComponent({
     };
     const onSelectLayer = (index: number) => {
       updateLayerIndex(index);
+      currentLayerType.value = LayerType.LAYER;
     };
     const drop = (evt: MouseEvent) => {
       evt.preventDefault();
