@@ -48,8 +48,8 @@
         :assetStoreRO="assetStoreRO"
         :priceRange="priceRange"
         :isRemix="true"
-        :remixId="remixId"
-        :remixTransform="remixTransformString"
+        :remixId="remix.tokenId"
+        :remixTransform="remix.transform"
         @minted="minted"
       >
         <p class="mb-2">
@@ -70,7 +70,7 @@ import { defineComponent, ref, computed } from "vue";
 import { ethers } from "ethers";
 import { useRoute } from "vue-router";
 import Canvas from "@/components/Canvas.vue";
-import { Drawing, Transform } from "@/models/point";
+import { Drawing, Transform, Remix } from "@/models/point";
 import DrawingItem from "@/components/DrawingItem.vue";
 import MintPanel from "@/components/MintPanel.vue";
 import { getContractAddresses } from "@/utils/networks";
@@ -127,8 +127,7 @@ export default defineComponent({
     addresses.tokenAddress = addresses.drawAddress;
 
     // Temporary code
-    const remixId = ref<number>(0);
-    const remixTransform = ref<Transform | null>(null);
+    const remix = ref<Remix>({ tokenId:0 });
 
     const { EtherscanStore, EtherscanToken, OpenSeaPath } = getAddresses(
       addresses.network,
@@ -209,14 +208,11 @@ export default defineComponent({
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(9999);
     const selectedDrawing = ref<Drawing>({
-      layers: [],
-      remixId: 0,
-      transform: null,
+      layers: []
     });
     const onDrawingSelect = async (index: number) => {
       selectedIndex.value = index;
       const drawing = drawings.value[index];
-      console.log("onDrawingSelect", drawing.transform);
       const uuid = uuidv4();
       const asset: OriginalAssetData = {
         name: uuid,
@@ -234,10 +230,12 @@ export default defineComponent({
       const loadedAssets = loadAssets(actions);
       let tag = "item";
       //console.log(loadedAssets[0].svgPart);
-      remixId.value = drawing.remixId;
-      remixTransform.value = drawing.transform;
-      if (drawing.remixId) {
-        const result = await tokenRO.functions.generateSVGPart(drawing.remixId);
+      remix.value = {
+        tokenId: drawing.remix?.tokenId || 0,
+        transform: drawing.remix?.transform
+      }
+      if (drawing.remix) {
+        const result = await tokenRO.functions.generateSVGPart(drawing.remix.tokenId);
         console.log("** mix-in", result[1], remixTransformString.value);
         loadedAssets[0].svgPart =
           result[0] +
@@ -252,7 +250,7 @@ export default defineComponent({
     };
     const onOpen = () => {
       selectedDrawing.value = drawings.value[selectedIndex.value];
-      console.log("onOpen", selectedDrawing.value.transform);
+      // console.log("onOpen", selectedDrawing.value.transform);
       showCanvas.value = true;
     };
     const onDelete = () => {
@@ -275,7 +273,7 @@ export default defineComponent({
       const keys = info.value.keys;
       // Prepare to open
       selectedIndex.value = keys.length;
-      selectedDrawing.value = { layers: [], remixId: 0, transform: null };
+      selectedDrawing.value = { layers: [] };
 
       // Update the info and save it
       const array: Drawing[] = drawings.value.map((body) => body);
@@ -296,7 +294,7 @@ export default defineComponent({
       selectedIndex.value = 9999;
     };
     const onClose = (output: Drawing) => {
-      console.log("onClose:transform", output.transform);
+      // console.log("onClose:transform", output.transform);
       drawings.value = drawings.value.map((drawing, index) => {
         if (index == selectedIndex.value) {
           return output;
@@ -312,7 +310,7 @@ export default defineComponent({
       onDrawingSelect(selectedIndex.value);
     };
     const remixTransformString = computed(() => {
-      const xf = remixTransform.value;
+      const xf = remix.value.transform;
       if (xf == null) {
         return "";
       }
@@ -343,8 +341,7 @@ export default defineComponent({
       EtherscanStore,
       EtherscanToken,
       OpenSeaPath,
-      remixId,
-      remixTransformString,
+      remix,
       minted,
     };
   },

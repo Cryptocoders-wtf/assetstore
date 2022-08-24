@@ -30,11 +30,17 @@ export interface Overlay {
   fill: string;
   transform: string;
 }
-export interface Drawing {
-  layers: Layer[];
-  remixId: number; // optional remix tokenId (0 = no remix)
+
+export interface Remix {
+  tokenId: number; // optional remix tokenId (0 = no remix)
   color?: string;
-  transform: Transform | null;
+  transform?: Transform | null;
+  image?: string; // cached svg image
+}
+
+export interface Drawing {
+  remix?: Remix;
+  layers: Layer[];
   overlays?: Overlay[];
 }
 

@@ -146,7 +146,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, computed } from "vue";
+import { defineComponent, ref, watch, computed, PropType } from "vue";
 import {
   Layer,
   Overlay,
@@ -195,7 +195,21 @@ export default defineComponent({
     DeletePoint,
     SplitSegment,
   },
-  props: ["drawing", "tokens", "addresses"],
+  props: {
+    drawing: {
+      type: Object as PropType<Drawing>,
+      required: true,
+    },
+    tokens: {
+      type: Array as PropType<Token[]>,
+      required: true,
+    },
+    addresse: {
+      type: Object,
+      required: true,
+    },
+  },
+  //props: ["drawing", "tokens", "addresses"],
   setup(props, context) {
     const {
       canvasParams,
@@ -380,8 +394,11 @@ export default defineComponent({
       const token = remixToken.value;
       const drawing: Drawing = {
         layers: layers.value,
-        remixId: token ? token.tokenId + 1 : 0,
-        transform: remixTransform.value,
+        remix: { 
+          tokenId: token ? token.tokenId + 1 : 0,
+          transform: remixTransform.value,
+          image: token?.image
+        }
       };
       context.emit("close", drawing);
     };
