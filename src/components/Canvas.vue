@@ -149,6 +149,7 @@
 import { defineComponent, ref, watch, computed } from "vue";
 import {
   Layer,
+  Overlay,
   LayerType,
   Drawing,
   svgImageFromPath,
@@ -233,6 +234,7 @@ export default defineComponent({
             },
           ]
     );
+    const overlays = ref<Overlay[]>(props.drawing.ovelays || []);
     const currentColor = ref<string>("");
 
     const { recordState, isRedoable, isUndoable, _undo, _redo } = useUndoStack(

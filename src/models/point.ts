@@ -25,8 +25,8 @@ export interface Transform {
 }
 
 export interface Overlay {
-  assetId: number;
   provider: string;
+  assetId: number;
   fill: string;
   transform: string;
 }
