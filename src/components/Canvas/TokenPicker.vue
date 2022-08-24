@@ -46,12 +46,7 @@ import { Remix } from "@/models/point";
 import { useCanvasParams } from "@/utils/canvasUtil";
 
 export default defineComponent({
-  props: [
-    "tokens",
-    "remix",
-    "canvasParams",
-    "isRemixType",
-  ],
+  props: ["tokens", "remix", "canvasParams", "isRemixType"],
   setup(props, context) {
     const transform = computed(() => {
       const xf = props.remix.transform;

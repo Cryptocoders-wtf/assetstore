@@ -225,16 +225,16 @@ export default defineComponent({
       props.drawing.remix?.transform || { tx: 0, ty: 0, scale: 1, rotate: 0 }
     );
     const remix = computed(() => {
-      const foo:Remix = {
+      const foo: Remix = {
         tokenId: remixToken.value?.tokenId || 0,
         transform: remixTransform.value,
-        image: remixToken.value?.image
+        image: remixToken.value?.image,
       };
       return foo;
     });
     //console.log("setup", remixTransform.value, props.drawing.transform);
     const remixTransformString = computed(() => {
-      const xf = remixTransform.value;
+      const xf = remix.value.transform;
       return (
         `translate(${assetXtoCanvasX(xf.tx)}px,` +
         `${assetYtoCanvasY(xf.ty)}px) ` +
@@ -501,7 +501,7 @@ export default defineComponent({
       remixTransformString,
       remixTransform,
       AssetSelected,
-      remix
+      remix,
     };
   },
 });
