@@ -224,6 +224,12 @@ export default defineComponent({
     const remix = ref<Remix>(props.drawing.remix || {
       tokenId:0, transform: identityTransform
     });
+    const remixTransform = ref<Transform>(remix.value.transform);
+    watch([remixTransform], ([transform]) => {
+      const newValue = Object.assign({}, remix.value);
+      newValue.transform = transform;
+      remix.value = newValue;
+    });
     //console.log("setup", remixTransform.value, props.drawing.transform);
     const remixTransformString = computed(() => {
       const xf = remix.value.transform;
@@ -338,7 +344,7 @@ export default defineComponent({
       cursors,
       recordState,
       currentLayerType,
-      remix
+      remixTransform
     );
 
     const togglePoint = () => {
