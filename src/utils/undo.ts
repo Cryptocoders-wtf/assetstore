@@ -6,16 +6,12 @@ import { Transform } from "@/models/point";
 
 interface State {
   layers: Layer[];
-  layerIndex: number;
-  pointIndex: number;
   remixToken: Token | null;
   remixTransform: Transform;
 }
 
 export const useUndoStack = (
   layers: Ref<Layer[]>,
-  layerIndex: Ref<number>,
-  pointIndex: Ref<number>,
   remixToken: Ref<Token | null>,
   remixTransForm: Ref<Transform>
 ) => {
@@ -28,8 +24,6 @@ export const useUndoStack = (
     });
     array.push({
       layers: layers.value,
-      layerIndex: layerIndex.value,
-      pointIndex: pointIndex.value,
       remixToken: remixToken.value,
       remixTransform: remixTransForm.value,
     });
@@ -56,13 +50,9 @@ export const useUndoStack = (
     }
     const state = undoStack.value[undoIndex.value - 1];
     layers.value = state.layers;
-    // updateLayerIndex(state.layerIndex);
-    pointIndex.value = state.pointIndex;
-    remixToken.value = state.remixToken;
     console.log("**", remixTransForm.value, state.remixTransform);
     remixTransForm.value = state.remixTransform;
     undoIndex.value -= 1;
-    return state.layerIndex;
   };
   const _redo = () => {
     if (!isRedoable.value) {
@@ -70,12 +60,8 @@ export const useUndoStack = (
     }
     const state = undoStack.value[undoIndex.value + 1];
     layers.value = state.layers;
-    // updateLayerIndex(state.layerIndex);
-    pointIndex.value = state.pointIndex;
-    remixToken.value = state.remixToken;
     remixTransForm.value = state.remixTransform;
     undoIndex.value += 1;
-    return state.layerIndex;
   };
 
   return {
