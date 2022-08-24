@@ -12,12 +12,12 @@
       @touchmove="dragOver"
     >
       <div
-        v-if="currentToken"
+        v-if="remixToken"
         :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
         class="absolute overflow-hidden"
       >
         <img
-          :src="currentToken.image"
+          :src="remixToken.image"
           :style="
             `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
             `Transform: ${remixTransformString};`
@@ -133,7 +133,7 @@
         :layerIndex="layerIndex"
         :newLayer="newLayer"
         :tokens="tokens"
-        :remixToken="currentToken"
+        :remixToken="remixToken"
         :remixTransform="remixTransform"
         @tokenSelected="tokenSelected"
         @onSelectLayer="onSelectLayer"
@@ -201,7 +201,7 @@ export default defineComponent({
       getPageX,
       getPageY,
     } = useCanvasParams();
-    const currentToken = ref<Token | null>(null);
+    const remixToken = ref<Token | null>(null);
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     const currentLayerType = ref<number>(LayerType.LAYER);
@@ -237,7 +237,7 @@ export default defineComponent({
       layers,
       layerIndex,
       pointIndex,
-      currentToken,
+      remixToken,
       remixTransform
     );
 
@@ -253,7 +253,7 @@ export default defineComponent({
       recordState();
       remixTransform.value = { tx: 0, ty: 0, scale: 1, rotate: 0 };
       console.log("tokenSelected", remixTransformString.value);
-      currentToken.value = token;
+      remixToken.value = token;
     };
 
     const fetchToken = async () => {
@@ -261,8 +261,8 @@ export default defineComponent({
       if (props.drawing.remixId > 0) {
         const index = Math.floor(props.drawing.remixId / 4);
         if (index < props.tokens.length) {
-          currentToken.value = props.tokens[index];
-          //console.log("*** fetchToken2",props.drawing.remixId,currentToken.value);
+          remixToken.value = props.tokens[index];
+          //console.log("*** fetchToken2",props.drawing.remixId,remixToken.value);
         }
       }
     };
@@ -366,7 +366,7 @@ export default defineComponent({
       evt.preventDefault();
     };
     const onClose = () => {
-      const token = currentToken.value;
+      const token = remixToken.value;
       const drawing: Drawing = {
         layers: layers.value,
         remixId: token ? token.tokenId + 1 : 0,
@@ -450,7 +450,7 @@ export default defineComponent({
       grid,
       toggleGrid,
       onClickToPickLayer,
-      currentToken,
+      remixToken,
       tokenSelected,
 
       assetXtoCanvasX,
