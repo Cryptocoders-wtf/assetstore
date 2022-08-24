@@ -23,7 +23,10 @@
         </option>
       </select>
       <div style="width: 100%; height: 200px; overflow-y: scroll">
-        <span v-for="(assetImage, index) in assetImages" :key="assetImage.image">
+        <span
+          v-for="(assetImage, index) in assetImages"
+          :key="assetImage.image"
+        >
           <img
             @click="onSelect(index)"
             :src="assetImage.image"
@@ -111,10 +114,10 @@ export default defineComponent({
       const result2 = await assetProvider.functions.totalSupply();
       const count = result2[0].toNumber();
       console.log("totalSupply", count);
-      const limit = (count > 0) ? count: 50;
+      const limit = count > 0 ? count : 50;
       const images: AssetImage[] = [];
       for (let i = 0; i < limit; i++) {
-        const assetId = (count > 0) ? i : Math.floor(Math.random() * 0x1000000);
+        const assetId = count > 0 ? i : Math.floor(Math.random() * 0x1000000);
         const result = await assetProvider.functions.generateSVGPart(assetId);
         if (selectedProvider.value != newValue) {
           return;
@@ -129,8 +132,8 @@ export default defineComponent({
         //console.log(svg);
         const image =
           "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
-        images.push({ image, assetId} );
-        assetImages.value = images.map(assetImage => assetImage);
+        images.push({ image, assetId });
+        assetImages.value = images.map((assetImage) => assetImage);
       }
     });
 

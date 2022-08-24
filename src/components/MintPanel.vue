@@ -124,7 +124,7 @@ export default defineComponent({
     "isRemix",
     "remixId",
     "remixTransform",
-    "remixColor"
+    "remixColor",
   ],
   components: {
     NetworkGate,

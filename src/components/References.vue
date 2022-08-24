@@ -30,7 +30,10 @@
     </p>
     <p>
       Project Vision:
-      <a href="https://hackmd.io/@snakajima/HJva6n-Jj" class="underline" target="_blank"
+      <a
+        href="https://hackmd.io/@snakajima/HJva6n-Jj"
+        class="underline"
+        target="_blank"
         >On-line Asset Store and Composer</a
       >
     </p>

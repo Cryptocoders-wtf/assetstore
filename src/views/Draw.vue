@@ -208,7 +208,11 @@ export default defineComponent({
 
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(9999);
-    const selectedDrawing = ref<Drawing>({ layers: [], remixId: 0, transform:null });
+    const selectedDrawing = ref<Drawing>({
+      layers: [],
+      remixId: 0,
+      transform: null,
+    });
     const onDrawingSelect = async (index: number) => {
       selectedIndex.value = index;
       const drawing = drawings.value[index];
@@ -312,7 +316,7 @@ export default defineComponent({
       if (xf == null) {
         return "";
       }
-      const d = Math.round(512 * (xf.scale - 1))
+      const d = Math.round(512 * (xf.scale - 1));
       return (
         `translate(${xf.tx - d} ${xf.ty - d}) ` +
         `scale(${xf.scale}) rotate(${xf.rotate} 512 512)`

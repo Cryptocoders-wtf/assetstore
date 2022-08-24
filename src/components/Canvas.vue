@@ -413,7 +413,12 @@ export default defineComponent({
         toolHandleMode.value = true;
       }
     };
-    const AssetSelected = (key: string, index: number, image: string, assetId: number) => {
+    const AssetSelected = (
+      key: string,
+      index: number,
+      image: string,
+      assetId: number
+    ) => {
       console.log("AssetSelected", key, index, assetId);
     };
     return {
