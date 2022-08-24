@@ -70,7 +70,7 @@ import { defineComponent, ref, computed } from "vue";
 import { ethers } from "ethers";
 import { useRoute } from "vue-router";
 import Canvas from "@/components/Canvas.vue";
-import { Drawing, Transform, Remix } from "@/models/point";
+import { Drawing, Transform, Remix, identityTransform } from "@/models/point";
 import DrawingItem from "@/components/DrawingItem.vue";
 import MintPanel from "@/components/MintPanel.vue";
 import { getContractAddresses } from "@/utils/networks";
@@ -127,7 +127,7 @@ export default defineComponent({
     addresses.tokenAddress = addresses.drawAddress;
 
     // Temporary code
-    const remix = ref<Remix>({ tokenId:0 });
+    const remix = ref<Remix>({ tokenId:0, transform:identityTransform });
 
     const { EtherscanStore, EtherscanToken, OpenSeaPath } = getAddresses(
       addresses.network,
@@ -232,7 +232,7 @@ export default defineComponent({
       //console.log(loadedAssets[0].svgPart);
       remix.value = {
         tokenId: drawing.remix?.tokenId || 0,
-        transform: drawing.remix?.transform
+        transform: drawing.remix?.transform || identityTransform
       }
       if (drawing.remix) {
         const result = await tokenRO.functions.generateSVGPart(drawing.remix.tokenId);

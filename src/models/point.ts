@@ -24,6 +24,8 @@ export interface Transform {
   rotate: number;
 }
 
+export const identityTransform: Transform = { tx: 0, ty: 0, scale: 1, rotate: 0 };
+
 export interface Overlay {
   provider: string;
   assetId: number;
@@ -34,7 +36,7 @@ export interface Overlay {
 export interface Remix {
   tokenId: number; // optional remix tokenId (0 = no remix)
   color?: string;
-  transform?: Transform | null;
+  transform: Transform;
   image?: string; // cached svg image
 }
 
