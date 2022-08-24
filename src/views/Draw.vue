@@ -311,7 +311,8 @@ export default defineComponent({
     };
     const remixTransformString = computed(() => {
       const xf = remix.value.transform;
-      if (xf == null) {
+      if (xf.tx == identityTransform.tx && xf.ty == identityTransform.ty
+        && xf.scale == identityTransform.scale && xf.rotate == identityTransform.rotate) {
         return "";
       }
       const d = Math.round(512 * (xf.scale - 1));
