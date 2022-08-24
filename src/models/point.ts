@@ -24,7 +24,12 @@ export interface Transform {
   rotate: number;
 }
 
-export const identityTransform: Transform = { tx: 0, ty: 0, scale: 1, rotate: 0 };
+export const identityTransform: Transform = {
+  tx: 0,
+  ty: 0,
+  scale: 1,
+  rotate: 0,
+};
 
 export interface Overlay {
   provider: string;

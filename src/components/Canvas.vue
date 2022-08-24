@@ -250,9 +250,9 @@ export default defineComponent({
     const overlays = ref<Overlay[]>(props.drawing.overlays || []);
     const stagingColor = ref<string>(""); // staging for undoable color change
     const currentColor = ref<string>("");
-    watch([stagingColor], ([color])=>{
+    watch([stagingColor], ([color]) => {
       if (currentColor.value != color) {
-        recordState();      
+        recordState();
         currentColor.value = color;
       }
     });
@@ -393,11 +393,11 @@ export default defineComponent({
       const token = remixToken.value;
       const drawing: Drawing = {
         layers: layers.value,
-        remix: { 
+        remix: {
           tokenId: token ? token.tokenId + 1 : 0,
           transform: remixTransform.value,
-          image: token?.image
-        }
+          image: token?.image,
+        },
       };
       context.emit("close", drawing);
     };

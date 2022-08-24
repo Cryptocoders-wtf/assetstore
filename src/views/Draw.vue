@@ -127,7 +127,7 @@ export default defineComponent({
     addresses.tokenAddress = addresses.drawAddress;
 
     // Temporary code
-    const remix = ref<Remix>({ tokenId:0, transform:identityTransform });
+    const remix = ref<Remix>({ tokenId: 0, transform: identityTransform });
 
     const { EtherscanStore, EtherscanToken, OpenSeaPath } = getAddresses(
       addresses.network,
@@ -208,7 +208,7 @@ export default defineComponent({
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(9999);
     const selectedDrawing = ref<Drawing>({
-      layers: []
+      layers: [],
     });
     const onDrawingSelect = async (index: number) => {
       selectedIndex.value = index;
@@ -232,10 +232,12 @@ export default defineComponent({
       //console.log(loadedAssets[0].svgPart);
       remix.value = {
         tokenId: drawing.remix?.tokenId || 0,
-        transform: drawing.remix?.transform || identityTransform
-      }
+        transform: drawing.remix?.transform || identityTransform,
+      };
       if (drawing.remix) {
-        const result = await tokenRO.functions.generateSVGPart(drawing.remix.tokenId);
+        const result = await tokenRO.functions.generateSVGPart(
+          drawing.remix.tokenId
+        );
         console.log("** mix-in", result[1], remixTransformString.value);
         loadedAssets[0].svgPart =
           result[0] +
@@ -311,8 +313,12 @@ export default defineComponent({
     };
     const remixTransformString = computed(() => {
       const xf = remix.value.transform;
-      if (xf.tx == identityTransform.tx && xf.ty == identityTransform.ty
-        && xf.scale == identityTransform.scale && xf.rotate == identityTransform.rotate) {
+      if (
+        xf.tx == identityTransform.tx &&
+        xf.ty == identityTransform.ty &&
+        xf.scale == identityTransform.scale &&
+        xf.rotate == identityTransform.rotate
+      ) {
         return "";
       }
       const d = Math.round(512 * (xf.scale - 1));
