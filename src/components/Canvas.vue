@@ -139,6 +139,7 @@
         @tokenSelected="tokenSelected"
         @onSelectLayer="onSelectLayer"
         @updateLayers="updateLayers"
+        @remixSelected="remixSelected"
       />
     </div>
   </div>
@@ -255,6 +256,10 @@ export default defineComponent({
       remixTransform.value = { tx: 0, ty: 0, scale: 1, rotate: 0 };
       console.log("tokenSelected", remixTransformString.value);
       remixToken.value = token;
+    };
+    const remixSelected = () => {
+      currentLayerType.value = LayerType.REMIX;
+      toolHandleMode.value = true;
     };
 
     const fetchToken = async () => {
@@ -458,6 +463,7 @@ export default defineComponent({
       onClickToPickLayer,
       remixToken,
       tokenSelected,
+      remixSelected,
 
       assetXtoCanvasX,
       assetYtoCanvasY,

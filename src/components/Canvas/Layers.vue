@@ -4,6 +4,7 @@
       <token-picker
         :tokens="tokens"
         @tokenSelected="tokenSelected"
+        @remixSelected="remixSelected"
         :remixToken="remixToken"
         :canvasParams="canvasParams"
         :remixTransform="remixTransform"
@@ -88,7 +89,7 @@ export default defineComponent({
       require: true,
     }
   },
-  emits: ["onSelectLayer", "updateLayers", "tokenSelected"],
+  emits: ["onSelectLayer", "updateLayers", "tokenSelected", "remixSelected"],
   setup(props, context) {
     const { canvasParams } = useCanvasParams();
     const isLayerType = computed(() => {
@@ -131,6 +132,9 @@ export default defineComponent({
       console.log("tokenSelected", token);
       context.emit("tokenSelected", token);
     };
+    const remixSelected = () => {
+      context.emit("remixSelected");
+    };
     return {
       canvasParams,
       insertLayer,
@@ -139,6 +143,7 @@ export default defineComponent({
       deleteLayer,
       onSelectLayer,
       tokenSelected,
+      remixSelected,
       isLayerType,
       isRemixType
     };

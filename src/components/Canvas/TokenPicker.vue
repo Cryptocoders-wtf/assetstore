@@ -2,6 +2,7 @@
   <div>
     <div
       v-if="remixToken"
+      @click="onSelectRemix"
       :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;overflow:hidden`"
       class="border-2 border-solid"
       :class="`${isRemixType ? 'border-blue-400' : 'border-slate-200'}`"
@@ -74,12 +75,17 @@ export default defineComponent({
       context.emit("tokenSelected", null);
       showTokens.value = false;
     };
+    const onSelectRemix = () => {
+      console.log("**onSelectRemix");
+      context.emit("remixSelected");
+    };
     return {
       onOpen,
       showTokens,
       onSelect,
       onRemove,
       transform,
+      onSelectRemix,
     };
   },
 });
