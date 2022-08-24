@@ -12,12 +12,12 @@
       @touchmove="dragOver"
     >
       <div
-        v-if="remixToken"
+        v-if="remix.image"
         :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
         class="absolute overflow-hidden"
       >
         <img
-          :src="remixToken.image"
+          :src="remix.image"
           :style="
             `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
             `Transform: ${remixTransformString};`
@@ -492,7 +492,6 @@ export default defineComponent({
       grid,
       toggleGrid,
       onClickToPickLayer,
-      remixToken,
       tokenSelected,
       remixSelected,
 
