@@ -1,14 +1,14 @@
 <template>
   <div>
     <div
-      v-if="remixToken"
+      v-if="remix.image"
       @click="onSelectRemix"
       :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;overflow:hidden`"
       class="border-2 border-solid"
       :class="`${isRemixType ? 'border-blue-400' : 'border-slate-200'}`"
     >
       <img
-        :src="remixToken.image"
+        :src="remix.image"
         :style="`width:100%;height:100%;Transform:${transform};`"
       />
     </div>
@@ -17,7 +17,7 @@
         <span class="material-icons">image</span>
       </button>
       <button
-        :style="`opacity:${remixToken ? '1.0' : '0.5'}`"
+        :style="`opacity:${remix.image ? '1.0' : '0.5'}`"
         @click="onRemove"
         class="ml-2 flex"
       >
@@ -42,22 +42,19 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
 import { Token } from "@/models/token";
+import { Remix } from "@/models/point";
 import { useCanvasParams } from "@/utils/canvasUtil";
 
 export default defineComponent({
   props: [
     "tokens",
-    "remixToken",
+    "remix",
     "canvasParams",
-    "remixTransform",
     "isRemixType",
   ],
   setup(props, context) {
     const transform = computed(() => {
-      const xf = props.remixTransform;
-      if (xf == null) {
-        return "";
-      }
+      const xf = props.remix.transform;
       return (
         `translate(${
           (xf.tx * props.canvasParams.sidew) / props.canvasParams.assw

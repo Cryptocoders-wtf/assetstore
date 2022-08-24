@@ -5,9 +5,8 @@
         :tokens="tokens"
         @tokenSelected="tokenSelected"
         @remixSelected="remixSelected"
-        :remixToken="remixToken"
         :canvasParams="canvasParams"
-        :remixTransform="remixTransform"
+        :remix="remix"
         :isRemixType="isRemixType"
       />
     </div>
@@ -54,7 +53,7 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
 import { useCanvasParams } from "@/utils/canvasUtil";
-import { Layer, LayerType, Transform } from "@/models/point";
+import { Layer, LayerType, Transform, Remix } from "@/models/point";
 import TokenPicker from "@/components/Canvas/TokenPicker.vue";
 import { Token } from "@/models/token";
 
@@ -79,12 +78,8 @@ export default defineComponent({
       type: Array as PropType<Token[]>,
       required: true,
     },
-    remixToken: {
-      type: Object as PropType<Token | null>,
-    },
-    remixTransform: {
-      type: Object as PropType<Transform>,
-      required: true,
+    remix: {
+      type: Object as PropType<Remix>,
     },
     currentLayerType: {
       type: Number as PropType<LayerType>,

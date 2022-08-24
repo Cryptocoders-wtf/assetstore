@@ -133,8 +133,7 @@
         :layerIndex="layerIndex"
         :newLayer="newLayer"
         :tokens="tokens"
-        :remixToken="remixToken"
-        :remixTransform="remixTransform"
+        :remix="remix"
         :currentLayerType="currentLayerType"
         @tokenSelected="tokenSelected"
         @onSelectLayer="onSelectLayer"
@@ -157,6 +156,7 @@ import {
   splitPoint,
   togglePointType,
   Transform,
+  Remix,
 } from "@/models/point";
 import { ColorPicker } from "vue3-colorpicker";
 
@@ -224,6 +224,14 @@ export default defineComponent({
     const remixTransform = ref<Transform>(
       props.drawing.remix?.transform || { tx: 0, ty: 0, scale: 1, rotate: 0 }
     );
+    const remix = computed(() => {
+      const foo:Remix = {
+        tokenId: remixToken.value?.tokenId || 0,
+        transform: remixTransform.value,
+        image: remixToken.value?.image
+      };
+      return foo;
+    });
     //console.log("setup", remixTransform.value, props.drawing.transform);
     const remixTransformString = computed(() => {
       const xf = remixTransform.value;
@@ -494,6 +502,7 @@ export default defineComponent({
       remixTransformString,
       remixTransform,
       AssetSelected,
+      remix
     };
   },
 });
