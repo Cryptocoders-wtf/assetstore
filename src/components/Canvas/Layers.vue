@@ -26,7 +26,7 @@
         }px`"
         class="border-2 border-solid object-fill"
         :class="`${
-          index == layerIndex ? 'border-blue-400' : 'border-slate-200'
+          (index == layerIndex && isLayerType) ? 'border-blue-400' : 'border-slate-200'
         }`"
       />
       <div v-if="index == layerIndex" class="ml-2 mr-2 flex justify-between">
@@ -48,9 +48,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, computed } from "vue";
 import { useCanvasParams } from "@/utils/canvasUtil";
-import { Layer, Transform } from "@/models/point";
+import { Layer, LayerType, Transform } from "@/models/point";
 import TokenPicker from "@/components/Canvas/TokenPicker.vue";
 import { Token } from "@/models/token";
 
@@ -82,11 +82,17 @@ export default defineComponent({
       type: Object as PropType<Transform>,
       required: true,
     },
+    currentLayerType: {
+      type: Number as PropType<LayerType>,
+      require: true,
+    }
   },
   emits: ["onSelectLayer", "updateLayers", "tokenSelected"],
   setup(props, context) {
     const { canvasParams } = useCanvasParams();
-
+    const isLayerType = computed(() => {
+      return props.currentLayerType == LayerType.LAYER;
+    });
     const insertLayer = (index: number) => {
       const array = props.layers.map((layer) => layer);
       array.splice(index, 0, props.newLayer);
@@ -129,6 +135,7 @@ export default defineComponent({
       deleteLayer,
       onSelectLayer,
       tokenSelected,
+      isLayerType
     };
   },
 });

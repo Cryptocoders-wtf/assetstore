@@ -135,6 +135,7 @@
         :tokens="tokens"
         :remixToken="remixToken"
         :remixTransform="remixTransform"
+        :currentLayerType="currentLayerType"
         @tokenSelected="tokenSelected"
         @onSelectLayer="onSelectLayer"
         @updateLayers="updateLayers"

@@ -7,7 +7,7 @@
     >
       <img
         :src="remixToken.image"
-        :style="`width:100%;height:100%;Transform: ${transform};`"
+        :style="`width:100%;height:100%;Transform:${transform};`"
       />
     </div>
     <div class="ml-2 mr-2 flex justify-between">
