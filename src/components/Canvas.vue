@@ -157,6 +157,7 @@ import {
   togglePointType,
   Transform,
   Remix,
+  identityTransform
 } from "@/models/point";
 import { ColorPicker } from "vue3-colorpicker";
 
@@ -217,21 +218,11 @@ export default defineComponent({
       getPageX,
       getPageY,
     } = useCanvasParams();
-    const remixToken = ref<Token | null>(null);
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     const currentLayerType = ref<number>(LayerType.LAYER);
-    const remixTransform = ref<Transform>(
-      props.drawing.remix?.transform || { tx: 0, ty: 0, scale: 1, rotate: 0 }
-    );
-    const remix = computed(() => {
-      const token = remixToken.value;
-      const foo: Remix = {
-        tokenId: token ? token.tokenId + 1 : 0,
-        transform: remixTransform.value,
-        image: remixToken.value?.image,
-      };
-      return foo;
+    const remix = ref<Remix>(props.drawing.remix || {
+      tokenId: 0, transform: identityTransform
     });
     //console.log("setup", remixTransform.value, props.drawing.transform);
     const remixTransformString = computed(() => {
@@ -268,12 +259,11 @@ export default defineComponent({
 
     const { recordState, isRedoable, isUndoable, _undo, _redo } = useUndoStack(
       layers,
-      remixToken,
-      remixTransform
+      remix
     );
 
     const computedRemixTransform = computed(() => {
-      return remixTransform.value;
+      return remix.value.transform;
     });
     const {
       toolHandleMode,
@@ -285,26 +275,17 @@ export default defineComponent({
 
     const tokenSelected = (token: Token) => {
       recordState();
-      remixTransform.value = { tx: 0, ty: 0, scale: 1, rotate: 0 };
-      console.log("tokenSelected", remixTransformString.value);
-      remixToken.value = token;
+      remix.value = {
+        tokenId: token.tokenId + 1,
+        transform: identityTransform,
+        image: token.image
+      }
+      console.log("**tokenSelected", remix.value);
     };
     const remixSelected = () => {
       currentLayerType.value = LayerType.REMIX;
       toolHandleMode.value = true;
     };
-
-    const fetchToken = async () => {
-      //console.log("*** fetchToken", props.drawing.remixId, props.tokens.length);
-      if (props.drawing.remix && props.drawing.remix.tokenId > 0) {
-        const index = Math.floor(props.drawing.remix.tokenId / 4);
-        if (index < props.tokens.length) {
-          remixToken.value = props.tokens[index];
-          //console.log("*** fetchToken2",props.drawing.remixId,remixToken.value);
-        }
-      }
-    };
-    fetchToken();
 
     watch([cursors, currentColor], ([points, color]) => {
       layers.value = layers.value.map((layer, index) => {
@@ -354,7 +335,7 @@ export default defineComponent({
       cursors,
       recordState,
       currentLayerType,
-      remixTransform
+      remix
     );
 
     const togglePoint = () => {
@@ -495,7 +476,6 @@ export default defineComponent({
       assetYtoCanvasY,
       currentLayerType,
       remixTransformString,
-      remixTransform,
       AssetSelected,
       remix,
     };

@@ -8,7 +8,7 @@ import {
   Tools,
   RotationInfo,
 } from "@/utils/canvasUtil";
-import { Point, LayerType, Transform } from "@/models/point";
+import { Point, LayerType, Transform, Remix } from "@/models/point";
 
 // const { curw, curh } = canvasParams;
 
@@ -18,7 +18,7 @@ export const useDrag = (
   cursors: Ref<Point[]>,
   recordState: () => void,
   currentLayerType: Ref<number>,
-  remixTransForm: Ref<Transform>
+  remix: Ref<Remix>
 ) => {
   const {
     getPageX,
@@ -49,7 +49,7 @@ export const useDrag = (
     startPoint = { x: getPageX(evt), y: getPageY(evt) };
     pivotPos = canvastoAsset(moveToolPos.value);
     initialCursors = cursors.value;
-    initialTransform = remixTransForm.value;
+    initialTransform = remix.value.transform;
     recordState();
   };
   const dragLayerImgStart = (evt: MouseEvent | TouchEvent) => {
@@ -59,7 +59,7 @@ export const useDrag = (
     startPoint.x = getPageX(evt);
     startPoint.y = getPageY(evt);
     initialCursors = cursors.value;
-    initialTransform = remixTransForm.value;
+    initialTransform = remix.value.transform;
     recordState();
   };
   const dragStart = (evt: DragEvent | TouchEvent, index: number) => {
@@ -174,11 +174,7 @@ export const useDrag = (
       });
     if (currentLayerType.value === LayerType.REMIX) {
       // Note: We need to create a new instance in order to make it work with undo/redo.
-      const tx = { tx: 0, ty: 0, scale: 1, rotate: 0 };
-      tx.rotate = remixTransForm.value.rotate;
-      tx.scale = remixTransForm.value.scale;
-      tx.tx = remixTransForm.value.tx;
-      tx.ty = remixTransForm.value.ty;
+      const tx = remix.value.transform;
 
       switch (currentTool.value) {
         case Tools.MOVE: {
@@ -206,7 +202,9 @@ export const useDrag = (
           break;
         }
       }
-      remixTransForm.value = tx;
+      const newValue:Remix = Object.assign({}, remix.value);
+      newValue.transform = tx;
+      remix.value = newValue;
     }
     evt.preventDefault();
   };
