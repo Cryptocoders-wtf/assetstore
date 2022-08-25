@@ -145,6 +145,7 @@
         :tokens="tokens"
         :currentLayerType="currentLayerType"
         :addresses="addresses"
+        :overlayTransform="overlayTransform"
         @tokenSelected="tokenSelected"
         @onSelectLayer="onSelectLayer"
         @updateLayers="updateLayers"

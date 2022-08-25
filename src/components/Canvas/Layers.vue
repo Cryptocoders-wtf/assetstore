@@ -61,17 +61,21 @@
           <span class="material-icons">swap_vert</span>
         </button>
       </div>
-      <img
-        @click="onSelectOverlay(index)"
-        :src="overlay.image"
-        :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px`"
-        class="border-2 border-solid object-fill"
-        :class="`${
-          index == overlayIndex && isOverlayType
-            ? 'border-blue-400'
-            : 'border-slate-200'
-        }`"
-      />
+      <div class="border-2 border-solid object-fill"
+          @click="onSelectOverlay(index)"
+          :class="`${
+            index == overlayIndex && isOverlayType
+              ? 'border-blue-400'
+              : 'border-slate-200'
+          }`"
+      > 
+        <img
+          :src="overlay.image"
+          :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;`+
+                  `Transform: ${overlayTransform(index, canvasParams.sidew)}`"
+          
+        />
+      </div>
       <div v-if="index == overlayIndex && isOverlayType" class="ml-2 mr-2 flex justify-between">
         <button @click="copyOverlay(index)">
           <span class="material-icons">content_copy</span>
@@ -138,6 +142,10 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    overlayTransform: {
+      type: Function,
+      required: true,
+    }
   },
   emits: ["onSelectLayer", "updateLayers", "tokenSelected", 
   "remixSelected", "updateOverlays", "onSelectOverlay"],
