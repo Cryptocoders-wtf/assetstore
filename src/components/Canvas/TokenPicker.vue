@@ -42,8 +42,6 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
 import { Token } from "@/models/token";
-import { Remix } from "@/models/point";
-import { useCanvasParams } from "@/utils/canvasUtil";
 
 export default defineComponent({
   props: ["tokens", "remix", "canvasParams", "isRemixType"],

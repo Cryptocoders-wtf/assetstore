@@ -155,7 +155,6 @@ import {
   splitPoint,
   togglePointType,
   Transform,
-  Remix,
   identityTransform,
 } from "@/models/point";
 import { ColorPicker } from "vue3-colorpicker";
