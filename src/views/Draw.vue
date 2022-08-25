@@ -70,7 +70,7 @@ import { defineComponent, ref, computed } from "vue";
 import { ethers } from "ethers";
 import { useRoute } from "vue-router";
 import Canvas from "@/components/Canvas.vue";
-import { Drawing, Transform, Remix, identityTransform } from "@/models/point";
+import { Drawing, Remix, identityTransform } from "@/models/point";
 import DrawingItem from "@/components/DrawingItem.vue";
 import MintPanel from "@/components/MintPanel.vue";
 import { getContractAddresses } from "@/utils/networks";

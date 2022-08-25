@@ -1,6 +1,6 @@
 import { ref, computed, Ref } from "vue";
 
-import { Drawing, identityTransform } from "@/models/point";
+import { Drawing } from "@/models/point";
 
 export const useUndoStack = (drawing: Ref<Drawing>) => {
   const undoStack = ref<Drawing[]>([]);

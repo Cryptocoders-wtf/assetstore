@@ -53,7 +53,7 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
 import { useCanvasParams } from "@/utils/canvasUtil";
-import { Layer, LayerType, Transform, Remix } from "@/models/point";
+import { Layer, LayerType, Remix } from "@/models/point";
 import TokenPicker from "@/components/Canvas/TokenPicker.vue";
 import { Token } from "@/models/token";
 

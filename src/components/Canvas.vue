@@ -148,7 +148,6 @@
 import { defineComponent, ref, watch, computed, PropType } from "vue";
 import {
   Layer,
-  Overlay,
   LayerType,
   Drawing,
   svgImageFromPath,
@@ -224,9 +223,11 @@ export default defineComponent({
 
     const currentDrawing = ref<Drawing>(props.drawing);
 
-    const remixTransform = ref<Transform>(currentDrawing.value.remix?.transform || identityTransform);
+    const remixTransform = ref<Transform>(
+      currentDrawing.value.remix?.transform || identityTransform
+    );
     watch([remixTransform], ([transform]) => {
-      const newValue:Drawing = Object.assign({}, currentDrawing.value);
+      const newValue: Drawing = Object.assign({}, currentDrawing.value);
       if (newValue.remix) {
         const newRemix = Object.assign({}, newValue.remix);
         newRemix.transform = transform;
@@ -237,11 +238,11 @@ export default defineComponent({
 
     const remixTransformString = computed(() => {
       const xf = currentDrawing.value.remix?.transform;
-      return xf ? (
-        `translate(${assetXtoCanvasX(xf.tx)}px,` +
-        `${assetYtoCanvasY(xf.ty)}px) ` +
-        `scale(${xf.scale}) rotate(${xf.rotate}deg) `
-      ) : "";
+      return xf
+        ? `translate(${assetXtoCanvasX(xf.tx)}px,` +
+            `${assetYtoCanvasY(xf.ty)}px) ` +
+            `scale(${xf.scale}) rotate(${xf.rotate}deg) `
+        : "";
     });
 
     const stagingColor = ref<string>(""); // staging for undoable color change
@@ -253,9 +254,8 @@ export default defineComponent({
       }
     });
 
-    const { recordState, isRedoable, isUndoable, _undo, _redo } = useUndoStack(
-      currentDrawing,
-    );
+    const { recordState, isRedoable, isUndoable, _undo, _redo } =
+      useUndoStack(currentDrawing);
 
     const computedRemixTransform = computed(() => {
       return currentDrawing.value.remix?.transform || identityTransform;
@@ -270,13 +270,16 @@ export default defineComponent({
 
     const tokenSelected = (token: Token) => {
       recordState();
-      const newValue:Drawing = { layers:currentDrawing.value.layers, overlays:currentDrawing.value.overlays };
+      const newValue: Drawing = {
+        layers: currentDrawing.value.layers,
+        overlays: currentDrawing.value.overlays,
+      };
       if (token) {
         newValue.remix = {
           tokenId: token.tokenId,
           image: token.image,
-          transform: identityTransform
-        }
+          transform: identityTransform,
+        };
       }
       currentDrawing.value = newValue;
     };
