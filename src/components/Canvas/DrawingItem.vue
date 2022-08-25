@@ -11,7 +11,7 @@
     <img :src="svgImageFromDrawing(drawing)" class="w-32 -z-10 absolute" />
     <img v-for="(overlay, index) in drawing.overlays" :key="index" 
       class="absolute w-32 -z-10"
-      :style="`Transform: scale(0.5)`"
+      :style="`Transform: ${overlayTransform(overlay)}`"
       :src="overlay.image"
     />
     <img :src="svgImageFromDrawing(drawing)" class="w-32" style="visibility:hidden"/>
@@ -19,8 +19,9 @@
 </template>
 <script lang="ts">
 import { defineComponent, computed, PropType } from "vue";
-import { svgImageFromDrawing, Drawing } from "@/models/point";
+import { svgImageFromDrawing, Drawing, Overlay } from "@/models/point";
 import { assetSize } from "@/utils/canvasUtil";
+import { useCanvasParams} from "@/utils/canvasUtil";
 
 export default defineComponent({
   props: {
@@ -31,6 +32,9 @@ export default defineComponent({
   },
 
   setup(props) {
+    const {
+      canvasParams,
+    } = useCanvasParams();
     const transform = computed(() => {
       const xf = props.drawing.remix?.transform;
       if (xf == null) {
@@ -42,10 +46,21 @@ export default defineComponent({
         `scale(${xf.scale}) rotate(${xf.rotate}deg) `
       );
     });
+    const overlayTransform = (overlay:Overlay) => {
+      const xf = overlay.transform;
+      return (
+        `translate(${
+          (xf.tx * 32 * 4) / canvasParams.value.assw
+        }px,` +
+        `${(xf.ty * 32 * 4) / canvasParams.value.assh}px) ` +
+        `scale(${xf.scale}) rotate(${xf.rotate}deg) `
+      );
+    };
 
     return {
       svgImageFromDrawing,
       transform,
+      overlayTransform
     };
   },
 });
