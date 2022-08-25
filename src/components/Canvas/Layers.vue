@@ -73,19 +73,18 @@
         }`"
       />
       <div v-if="index == overlayIndex && isOverlayType" class="ml-2 mr-2 flex justify-between">
-        <button @click="copyLayer(index)">
+        <button @click="copyOverlay(index)">
           <span class="material-icons">content_copy</span>
         </button>
         <button
-          @click="swapLayer(index + 1)"
+          @click="swapOverlay(index + 1)"
           v-if="index < drawing.overlays.length - 1"
         >
           <span class="material-icons">swap_vert</span>
         </button>
         <button
-          v-if="drawing.layers.length > 1"
           class="ml-2"
-          @click="deleteLayer()"
+          @click="deleteOverlay()"
         >
           <span class="material-icons">delete</span>
         </button>
@@ -153,6 +152,9 @@ export default defineComponent({
     const isOverlayType = computed(() => {
       return props.currentLayerType == LayerType.OVERLAY;
     });
+    const onSelectLayer = (index: number) => {
+      context.emit("onSelectLayer", index);
+    };
     const insertLayer = (index: number) => {
       const array = props.drawing.layers.map((layer) => layer);
       array.splice(index, 0, props.newLayer);
@@ -171,9 +173,6 @@ export default defineComponent({
       array.splice(index, 0, layer);
       context.emit("updateLayers", array, props.layerIndex + 1);
     };
-    const onSelectLayer = (index: number) => {
-      context.emit("onSelectLayer", index);
-    };
     const deleteLayer = () => {
       if (props.drawing.layers.length == 1) {
         return;
@@ -186,6 +185,25 @@ export default defineComponent({
 
     const onSelectOverlay = (index: number) => {
       context.emit("onSelectOverlay", index);
+    };
+    const swapOverlay = (index: number) => {
+      const array = props.drawing.overlays.map((layer) => layer);
+      const tmp = array[index];
+      array[index] = array[index - 1];
+      array[index - 1] = tmp;
+      context.emit("updateOverlays", array, props.overlayIndex);
+    };
+    const copyOverlay = (index: number) => {
+      const array = props.drawing.overlays.map((layer) => layer);
+      const overlay = { ...props.drawing.overlays[index] };
+      array.splice(index, 0, overlay);
+      context.emit("updateOverlays", array, props.overlayIndex + 1);
+    };
+    const deleteOverlay = () => {
+      const array = props.drawing.overlays.filter((overlay, index: number) => {
+        return index != props.overlayIndex;
+      });
+      context.emit("updateOverlays", array, props.overlayIndex - 1);
     };
 
     const tokenSelected = (token: Token | null) => {
@@ -211,18 +229,21 @@ export default defineComponent({
     };
     return {
       canvasParams,
+      onSelectLayer,
       insertLayer,
       swapLayer,
       copyLayer,
       deleteLayer,
-      onSelectLayer,
+      onSelectOverlay,
+      swapOverlay,
+      copyOverlay,
+      deleteOverlay,
       tokenSelected,
       remixSelected,
       isLayerType,
       isRemixType,
       AssetSelected,
       isOverlayType,
-      onSelectOverlay,
     };
   },
 });
