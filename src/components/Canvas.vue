@@ -129,6 +129,7 @@
       <Layers
         :drawing="currentDrawing"
         :layerIndex="layerIndex"
+        :overlayIndex="overlayIndex"
         :newLayer="newLayer"
         :tokens="tokens"
         :currentLayerType="currentLayerType"
@@ -137,6 +138,7 @@
         @onSelectLayer="onSelectLayer"
         @updateLayers="updateLayers"
         @remixSelected="remixSelected"
+        @onSelectOverlay="onSelectOverlay"
         @updateOverlays="updateOverlays"
       />
     </div>
@@ -216,6 +218,7 @@ export default defineComponent({
     } = useCanvasParams();
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
+    const overlayIndex = ref<number>(0);
     const currentLayerType = ref<number>(LayerType.LAYER);
 
     const currentDrawing = ref<Drawing>(props.drawing);
@@ -388,6 +391,14 @@ export default defineComponent({
       updateLayerIndex(index);
       currentLayerType.value = LayerType.LAYER;
     };
+    const updateOverlayIndex = (index: number) => {
+      const overlays = currentDrawing.value.overlays;
+      overlayIndex.value = (index + overlays.length) % overlays.length;
+    };
+    const onSelectOverlay = (index: number) => {
+      updateOverlayIndex(index);
+      currentLayerType.value = LayerType.OVERLAY;
+    };
     const drop = (evt: MouseEvent) => {
       evt.preventDefault();
     };
@@ -483,6 +494,8 @@ export default defineComponent({
       remixTransformString,
       AssetSelected,
       updateOverlays,
+      onSelectOverlay,
+      overlayIndex,
     };
   },
 });

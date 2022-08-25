@@ -16,7 +16,7 @@
         <button @click="insertLayer(index)">
           <span class="material-icons">add</span>
         </button>
-        <button @click="pivotLayer(index)" v-if="index > 0">
+        <button @click="swapLayer(index)" v-if="index > 0">
           <span class="material-icons">swap_vert</span>
         </button>
       </div>
@@ -41,7 +41,7 @@
           <span class="material-icons">content_copy</span>
         </button>
         <button
-          @click="pivotLayer(index + 1)"
+          @click="swapLayer(index + 1)"
           v-if="index < drawing.layers.length - 1"
         >
           <span class="material-icons">swap_vert</span>
@@ -56,24 +56,29 @@
       </div>
     </div>
     <div v-for="(overlay, index) in drawing.overlays" :key="index">
+      <div v-if="index == overlayIndex && isOverlayType" class="ml-2 mr-2 flex justify-between">
+        <button @click="swapLayer(index)" v-if="index > 0">
+          <span class="material-icons">swap_vert</span>
+        </button>
+      </div>
       <img
-        @click="onSelectLayer(index)"
+        @click="onSelectOverlay(index)"
         :src="overlay.image"
         :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px`"
         class="border-2 border-solid object-fill"
         :class="`${
-          index == layerIndex && isLayerType
+          index == overlayIndex && isOverlayType
             ? 'border-blue-400'
             : 'border-slate-200'
         }`"
       />
-      <div v-if="index == layerIndex" class="ml-2 mr-2 flex justify-between">
+      <div v-if="index == overlayIndex && isOverlayType" class="ml-2 mr-2 flex justify-between">
         <button @click="copyLayer(index)">
           <span class="material-icons">content_copy</span>
         </button>
         <button
-          @click="pivotLayer(index + 1)"
-          v-if="index < drawing.layers.length - 1"
+          @click="swapLayer(index + 1)"
+          v-if="index < drawing.overlays.length - 1"
         >
           <span class="material-icons">swap_vert</span>
         </button>
@@ -114,6 +119,10 @@ export default defineComponent({
       type: Number,
       required: true,
     },
+    overlayIndex: {
+      type: Number,
+      required: true,
+    },
     newLayer: {
       type: Object as PropType<Layer>,
       required: true,
@@ -131,7 +140,8 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["onSelectLayer", "updateLayers", "tokenSelected", "remixSelected", "updateOverlays"],
+  emits: ["onSelectLayer", "updateLayers", "tokenSelected", 
+  "remixSelected", "updateOverlays", "onSelectOverlay"],
   setup(props, context) {
     const { canvasParams } = useCanvasParams();
     const isLayerType = computed(() => {
@@ -140,12 +150,15 @@ export default defineComponent({
     const isRemixType = computed(() => {
       return props.currentLayerType == LayerType.REMIX;
     });
+    const isOverlayType = computed(() => {
+      return props.currentLayerType == LayerType.OVERLAY;
+    });
     const insertLayer = (index: number) => {
       const array = props.drawing.layers.map((layer) => layer);
       array.splice(index, 0, props.newLayer);
       context.emit("updateLayers", array, props.layerIndex + 1);
     };
-    const pivotLayer = (index: number) => {
+    const swapLayer = (index: number) => {
       const array = props.drawing.layers.map((layer) => layer);
       const tmp = array[index];
       array[index] = array[index - 1];
@@ -170,6 +183,11 @@ export default defineComponent({
       });
       context.emit("updateLayers", array, props.layerIndex - 1);
     };
+
+    const onSelectOverlay = (index: number) => {
+      context.emit("onSelectOverlay", index);
+    };
+
     const tokenSelected = (token: Token | null) => {
       console.log("tokenSelected", token);
       context.emit("tokenSelected", token);
@@ -194,7 +212,7 @@ export default defineComponent({
     return {
       canvasParams,
       insertLayer,
-      pivotLayer,
+      swapLayer,
       copyLayer,
       deleteLayer,
       onSelectLayer,
@@ -203,6 +221,8 @@ export default defineComponent({
       isLayerType,
       isRemixType,
       AssetSelected,
+      isOverlayType,
+      onSelectOverlay,
     };
   },
 });
