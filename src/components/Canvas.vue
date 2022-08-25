@@ -222,21 +222,21 @@ export default defineComponent({
     const pointIndex = ref<number>(0);
     const currentLayerType = ref<number>(LayerType.LAYER);
 
-    const drawing = ref<Drawing>(props.drawing);
+    const currentDrawing = ref<Drawing>(props.drawing);
 
-    const remixTransform = ref<Transform>(drawing.value.remix?.transform || identityTransform);
+    const remixTransform = ref<Transform>(currentDrawing.value.remix?.transform || identityTransform);
     watch([remixTransform], ([transform]) => {
-      const newValue:Drawing = Object.assign({}, drawing.value);
+      const newValue:Drawing = Object.assign({}, currentDrawing.value);
       if (newValue.remix) {
         const newRemix = Object.assign({}, newValue.remix);
         newRemix.transform = transform;
         newValue.remix = newRemix;
       }
-      drawing.value = newValue;
+      currentDrawing.value = newValue;
     });
 
     const remixTransformString = computed(() => {
-      const xf = drawing.value.remix?.transform;
+      const xf = currentDrawing.value.remix?.transform;
       return xf ? (
         `translate(${assetXtoCanvasX(xf.tx)}px,` +
         `${assetYtoCanvasY(xf.ty)}px) ` +
@@ -254,11 +254,11 @@ export default defineComponent({
     });
 
     const { recordState, isRedoable, isUndoable, _undo, _redo } = useUndoStack(
-      drawing,
+      currentDrawing,
     );
 
     const computedRemixTransform = computed(() => {
-      return drawing.value.remix?.transform || identityTransform;
+      return currentDrawing.value.remix?.transform || identityTransform;
     });
     const {
       toolHandleMode,
@@ -270,7 +270,7 @@ export default defineComponent({
 
     const tokenSelected = (token: Token) => {
       recordState();
-      const newValue:Drawing = { layers:drawing.value.layers, overlays:drawing.value.overlays };
+      const newValue:Drawing = { layers:currentDrawing.value.layers, overlays:currentDrawing.value.overlays };
       if (token) {
         newValue.remix = {
           tokenId: token.tokenId,
@@ -278,7 +278,7 @@ export default defineComponent({
           transform: identityTransform
         }
       }
-      drawing.value = newValue;
+      currentDrawing.value = newValue;
     };
     const remixSelected = () => {
       currentLayerType.value = LayerType.REMIX;
@@ -286,8 +286,8 @@ export default defineComponent({
     };
 
     watch([cursors, currentColor], ([points, color]) => {
-      const newValue = Object.assign({}, drawing.value);
-      newValue.layers = drawing.value.layers.map((layer, index) => {
+      const newValue = Object.assign({}, currentDrawing.value);
+      newValue.layers = currentDrawing.value.layers.map((layer, index) => {
         if (index == layerIndex.value) {
           const path = pathFromPoints(points);
           return {
@@ -299,10 +299,10 @@ export default defineComponent({
         }
         return layer;
       });
-      drawing.value = newValue;
+      currentDrawing.value = newValue;
     });
     const updateLayerIndex = (index: number) => {
-      const layers = drawing.value.layers;
+      const layers = currentDrawing.value.layers;
       layerIndex.value = (index + layers.length) % layers.length;
       const layer = layers[layerIndex.value];
       cursors.value = layer.points;
@@ -373,9 +373,9 @@ export default defineComponent({
     });
     const updateLayers = (array: Layer[], index: number) => {
       recordState();
-      const newValue = Object.assign({}, drawing.value);
+      const newValue = Object.assign({}, currentDrawing.value);
       newValue.layers = array;
-      drawing.value = newValue;
+      currentDrawing.value = newValue;
       updateLayerIndex(index);
     };
     const onSelectLayer = (index: number) => {
@@ -386,11 +386,11 @@ export default defineComponent({
       evt.preventDefault();
     };
     const onClose = () => {
-      context.emit("close", drawing.value);
+      context.emit("close", currentDrawing.value);
     };
     const onClickToPickLayer = (evt: MouseEvent) => {
       const results: number[] = [];
-      drawing.value.layers.forEach((layer: Layer, index: number) => {
+      currentDrawing.value.layers.forEach((layer: Layer, index: number) => {
         if (
           getPageX(evt) >
             Math.min.apply(
@@ -422,7 +422,7 @@ export default defineComponent({
             : results[0]
         );
         currentLayerType.value = LayerType.LAYER;
-      } else if (drawing.value.remix?.image) {
+      } else if (currentDrawing.value.remix?.image) {
         currentLayerType.value = LayerType.REMIX;
         toolHandleMode.value = true;
       }
@@ -464,7 +464,7 @@ export default defineComponent({
       isUndoable,
       isRedoable,
       layerIndex,
-      currentDrawing: drawing,
+      currentDrawing,
       grid,
       toggleGrid,
       onClickToPickLayer,
