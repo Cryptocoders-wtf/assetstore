@@ -44,7 +44,7 @@
         draggable="false"
         :style="
           `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
-          `opacity:'1.0'}`
+          `opacity:1.0; Transform: ${overlayTransform(index, canvasParams.canw)}`
         "
       />
       <div
@@ -455,6 +455,16 @@ export default defineComponent({
         toolHandleMode.value = true;
       }
     };
+    const overlayTransform = (index:number, width:number) => {
+      const xf = currentDrawing.value.overlays[index].transform;
+      return (
+        `translate(${
+          (xf.tx * width) / canvasParams.value.assw
+        }px,` +
+        `${(xf.ty * width) / canvasParams.value.assh}px) ` +
+        `scale(${xf.scale}) rotate(${xf.rotate}deg) `
+      );
+    };
     const AssetSelected = (
       key: string,
       index: number,
@@ -507,6 +517,7 @@ export default defineComponent({
       updateOverlays,
       onSelectOverlay,
       overlayIndex,
+      overlayTransform,
     };
   },
 });
