@@ -129,11 +129,10 @@
       class="absolute border-2 border-solid border-blue-700 bg-slate-300"
     >
       <Layers
-        :layers="currentDrawing.layers"
+        :drawing="currentDrawing"
         :layerIndex="layerIndex"
         :newLayer="newLayer"
         :tokens="tokens"
-        :remix="currentDrawing.remix"
         :currentLayerType="currentLayerType"
         @tokenSelected="tokenSelected"
         @onSelectLayer="onSelectLayer"

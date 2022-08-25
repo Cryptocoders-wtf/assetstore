@@ -6,11 +6,11 @@
         @tokenSelected="tokenSelected"
         @remixSelected="remixSelected"
         :canvasParams="canvasParams"
-        :remix="remix"
+        :remix="drawing.remix"
         :isRemixType="isRemixType"
       />
     </div>
-    <div v-for="(layer, index) in layers" :key="index">
+    <div v-for="(layer, index) in drawing.layers" :key="index">
       <div v-if="index == layerIndex">
         <button @click="insertLayer(index)">
           <span class="material-icons">add</span>
@@ -39,10 +39,10 @@
         <button @click="copyLayer(index)">
           <span class="material-icons">content_copy</span>
         </button>
-        <button @click="pivotLayer(index + 1)" v-if="index < layers.length - 1">
+        <button @click="pivotLayer(index + 1)" v-if="index < drawing.layers.length - 1">
           <span class="material-icons">swap_vert</span>
         </button>
-        <button v-if="layers.length > 1" class="ml-2" @click="deleteLayer()">
+        <button v-if="drawing.layers.length > 1" class="ml-2" @click="deleteLayer()">
           <span class="material-icons">delete</span>
         </button>
       </div>
@@ -53,7 +53,7 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
 import { useCanvasParams } from "@/utils/canvasUtil";
-import { Layer, LayerType, Remix } from "@/models/point";
+import { Layer, LayerType, Remix, Drawing } from "@/models/point";
 import TokenPicker from "@/components/Canvas/TokenPicker.vue";
 import { Token } from "@/models/token";
 
@@ -62,8 +62,8 @@ export default defineComponent({
     TokenPicker,
   },
   props: {
-    layers: {
-      type: Object as PropType<Layer[]>,
+    drawing: {
+      type: Object as PropType<Drawing>,
       required: true,
     },
     layerIndex: {
@@ -77,9 +77,6 @@ export default defineComponent({
     tokens: {
       type: Array as PropType<Token[]>,
       required: true,
-    },
-    remix: {
-      type: Object as PropType<Remix>,
     },
     currentLayerType: {
       type: Number as PropType<LayerType>,
@@ -96,20 +93,20 @@ export default defineComponent({
       return props.currentLayerType == LayerType.REMIX;
     });
     const insertLayer = (index: number) => {
-      const array = props.layers.map((layer) => layer);
+      const array = props.drawing.layers.map((layer) => layer);
       array.splice(index, 0, props.newLayer);
       context.emit("updateLayers", array, props.layerIndex + 1);
     };
     const pivotLayer = (index: number) => {
-      const array = props.layers.map((layer) => layer);
+      const array = props.drawing.layers.map((layer) => layer);
       const tmp = array[index];
       array[index] = array[index - 1];
       array[index - 1] = tmp;
       context.emit("updateLayers", array, props.layerIndex);
     };
     const copyLayer = (index: number) => {
-      const array = props.layers.map((layer) => layer);
-      const layer = { ...props.layers[index] };
+      const array = props.drawing.layers.map((layer) => layer);
+      const layer = { ...props.drawing.layers[index] };
       array.splice(index, 0, layer);
       context.emit("updateLayers", array, props.layerIndex + 1);
     };
@@ -117,10 +114,10 @@ export default defineComponent({
       context.emit("onSelectLayer", index);
     };
     const deleteLayer = () => {
-      if (props.layers.length == 1) {
+      if (props.drawing.layers.length == 1) {
         return;
       }
-      const array = props.layers.filter((layer, index: number) => {
+      const array = props.drawing.layers.filter((layer, index: number) => {
         return index != props.layerIndex;
       });
       context.emit("updateLayers", array, props.layerIndex - 1);
