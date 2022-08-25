@@ -40,10 +40,17 @@
         <button @click="copyLayer(index)">
           <span class="material-icons">content_copy</span>
         </button>
-        <button @click="pivotLayer(index + 1)" v-if="index < drawing.layers.length - 1">
+        <button
+          @click="pivotLayer(index + 1)"
+          v-if="index < drawing.layers.length - 1"
+        >
           <span class="material-icons">swap_vert</span>
         </button>
-        <button v-if="drawing.layers.length > 1" class="ml-2" @click="deleteLayer()">
+        <button
+          v-if="drawing.layers.length > 1"
+          class="ml-2"
+          @click="deleteLayer()"
+        >
           <span class="material-icons">delete</span>
         </button>
       </div>
@@ -65,7 +72,7 @@ import AssetPicker from "@/components/Canvas/AssetPicker.vue";
 export default defineComponent({
   components: {
     TokenPicker,
-    AssetPicker
+    AssetPicker,
   },
   props: {
     drawing: {
