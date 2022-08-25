@@ -7,7 +7,7 @@
     </div>
     <div
       v-if="showPopup"
-      style="width: 400px; left: 40px"
+      style="width: 400px; left: -240px"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
     >
       <select

@@ -10,6 +10,7 @@
         :isRemixType="isRemixType"
       />
     </div>
+
     <div v-for="(layer, index) in drawing.layers" :key="index">
       <div v-if="index == layerIndex">
         <button @click="insertLayer(index)">
@@ -47,19 +48,24 @@
         </button>
       </div>
     </div>
+    <div>
+      <asset-picker :addresses="addresses" @AssetSelected="AssetSelected" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
 import { useCanvasParams } from "@/utils/canvasUtil";
-import { Layer, LayerType, Remix, Drawing } from "@/models/point";
+import { Layer, LayerType, Drawing } from "@/models/point";
 import TokenPicker from "@/components/Canvas/TokenPicker.vue";
 import { Token } from "@/models/token";
+import AssetPicker from "@/components/AssetPicker.vue";
 
 export default defineComponent({
   components: {
     TokenPicker,
+    AssetPicker
   },
   props: {
     drawing: {
@@ -81,6 +87,10 @@ export default defineComponent({
     currentLayerType: {
       type: Number as PropType<LayerType>,
       require: true,
+    },
+    addresses: {
+      type: Object,
+      required: true,
     },
   },
   emits: ["onSelectLayer", "updateLayers", "tokenSelected", "remixSelected"],
@@ -129,6 +139,14 @@ export default defineComponent({
     const remixSelected = () => {
       context.emit("remixSelected");
     };
+    const AssetSelected = (
+      key: string,
+      index: number,
+      image: string,
+      assetId: number
+    ) => {
+      console.log("AssetSelected", key, index, assetId);
+    };
     return {
       canvasParams,
       insertLayer,
@@ -140,6 +158,7 @@ export default defineComponent({
       remixSelected,
       isLayerType,
       isRemixType,
+      AssetSelected,
     };
   },
 });

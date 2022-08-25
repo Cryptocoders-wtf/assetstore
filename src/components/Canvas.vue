@@ -134,6 +134,7 @@
         :newLayer="newLayer"
         :tokens="tokens"
         :currentLayerType="currentLayerType"
+        :addresses="addresses"
         @tokenSelected="tokenSelected"
         @onSelectLayer="onSelectLayer"
         @updateLayers="updateLayers"
