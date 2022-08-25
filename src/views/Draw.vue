@@ -204,7 +204,7 @@ export default defineComponent({
         : { layers: [] };
       //console.log("drawing", drawing);
       drawing.overlays = drawing.overlays || [];
-      console.log("** setup:overlays.length", index, drawing.overlays.length);
+      console.log("** setup:overlays.length", index, drawing.layers.length, drawing.overlays.length);
       return drawing;
     });
     //console.log("drawings", drawings.value);
@@ -289,16 +289,17 @@ export default defineComponent({
       };
       const drawing:Drawing = { layers: [layer], overlays: [] };
 
+      const newDrawings: Drawing[] = drawings.value.map((body) => body);
+      newDrawings.push(drawing);
+      drawings.value = newDrawings;
+
       // Update the info and save it
-      const array: Drawing[] = drawings.value.map((body) => body);
-      array.push(selectedDrawing.value);
-      drawings.value = array;
       const key = `${keyDrawing}${info.value.nextIndex}`;
+      keys.push(key);
       localStorage.setItem(
         key,
         JSON.stringify(drawing)
       );
-      keys.push(key);
       info.value = {
         nextIndex: info.value.nextIndex + 1,
         keys,
