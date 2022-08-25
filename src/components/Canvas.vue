@@ -33,7 +33,7 @@
         draggable="false"
         :style="
           `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
-          `opacity:${index > layerIndex ? '0.5' : '1.0'}`
+          `opacity:1.0`
         "
         @click="onClickToPickLayer($event)"
       />
@@ -339,7 +339,7 @@ export default defineComponent({
       cursors,
       recordState,
       currentLayerType,
-      currentDrawing, 
+      currentDrawing,
       overlayIndex
     );
 

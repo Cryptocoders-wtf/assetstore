@@ -8,7 +8,13 @@ import {
   Tools,
   RotationInfo,
 } from "@/utils/canvasUtil";
-import { Point, LayerType, identityTransform, Transform, Drawing } from "@/models/point";
+import {
+  Point,
+  LayerType,
+  identityTransform,
+  Transform,
+  Drawing,
+} from "@/models/point";
 
 // const { curw, curh } = canvasParams;
 
@@ -30,7 +36,7 @@ export const useDrag = (
     canvasParams,
   } = useCanvasParams();
   const remixTransform = computed(() => {
-    return currentDrawing.value.remix?.transform || identityTransform
+    return currentDrawing.value.remix?.transform || identityTransform;
   });
 
   let pivotPos: Pos = { x: 0, y: 0 };
@@ -54,7 +60,10 @@ export const useDrag = (
     startPoint = { x: getPageX(evt), y: getPageY(evt) };
     pivotPos = canvastoAsset(moveToolPos.value);
     initialCursors = cursors.value;
-    initialTransform = remixTransform.value;
+    initialTransform =
+      currentLayerType.value == LayerType.OVERLAY
+        ? currentDrawing.value.overlays[overlayIndex.value].transform
+        : remixTransform.value;
     recordState();
   };
   const dragLayerImgStart = (evt: MouseEvent | TouchEvent) => {
@@ -64,7 +73,10 @@ export const useDrag = (
     startPoint.x = getPageX(evt);
     startPoint.y = getPageY(evt);
     initialCursors = cursors.value;
-    initialTransform = remixTransform.value;
+    initialTransform =
+      currentLayerType.value == LayerType.OVERLAY
+        ? currentDrawing.value.overlays[overlayIndex.value].transform
+        : remixTransform.value;
     recordState();
   };
   const dragStart = (evt: DragEvent | TouchEvent, index: number) => {
