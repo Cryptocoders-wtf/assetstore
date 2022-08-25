@@ -58,6 +58,18 @@
     <div>
       <asset-picker :addresses="addresses" @AssetSelected="AssetSelected" />
     </div>
+    <div v-for="(overlay, index) in drawing.overlays" :key="index">
+      <img
+        :src="overlay.image"
+        :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px`"
+        class="border-2 border-solid object-fill"
+        :class="`${
+          index == layerIndex && isLayerType
+            ? 'border-blue-400'
+            : 'border-slate-200'
+        }`"
+      />
+    </div>
   </div>
 </template>
 
