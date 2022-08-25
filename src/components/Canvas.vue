@@ -241,9 +241,11 @@ export default defineComponent({
 
     const remixTransformString = computed(() => {
       const xf = currentDrawing.value.remix.transform;
-      return `translate(${assetXtoCanvasX(xf.tx)}px,` +
-            `${assetYtoCanvasY(xf.ty)}px) ` +
-            `scale(${xf.scale}) rotate(${xf.rotate}deg) `;
+      return (
+        `translate(${assetXtoCanvasX(xf.tx)}px,` +
+        `${assetYtoCanvasY(xf.ty)}px) ` +
+        `scale(${xf.scale}) rotate(${xf.rotate}deg) `
+      );
     });
 
     const stagingColor = ref<string>(""); // staging for undoable color change
@@ -271,7 +273,7 @@ export default defineComponent({
       const newValue: Drawing = {
         layers: currentDrawing.value.layers,
         overlays: currentDrawing.value.overlays,
-        remix: { transform:identityTransform }
+        remix: { transform: identityTransform },
       };
       if (token) {
         newValue.remix = {

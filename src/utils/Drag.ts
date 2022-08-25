@@ -215,7 +215,7 @@ export const useDrag = (
         }
       }
       return tx;
-    }
+    };
     if (currentLayerType.value === LayerType.REMIX) {
       const tx = updateTransform(remixTransform.value);
       const newDrawing: Drawing = Object.assign({}, currentDrawing.value);
@@ -234,13 +234,13 @@ export const useDrag = (
         if (index == overlayIndex.value) {
           const newOverlay = Object.assign({}, overlay);
           newOverlay.transform = tx;
-          return newOverlay; 
+          return newOverlay;
         }
         return overlay;
-      })
+      });
       currentDrawing.value = newDrawing;
     }
-  
+
     evt.preventDefault();
   };
 

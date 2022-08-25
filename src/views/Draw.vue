@@ -41,7 +41,8 @@
           </button>
         </div>
       </div>
-      <MintPanel v-if="selection"
+      <MintPanel
+        v-if="selection"
         :selection="selection"
         :tokenAbi="tokenAbi"
         :addresses="addresses"
@@ -71,7 +72,14 @@ import { defineComponent, ref, computed } from "vue";
 import { ethers } from "ethers";
 import { useRoute } from "vue-router";
 import Canvas from "@/components/Canvas.vue";
-import { Drawing, Remix, identityTransform, Layer, svgImageFromPath, pathFromPoints } from "@/models/point";
+import {
+  Drawing,
+  Remix,
+  identityTransform,
+  Layer,
+  svgImageFromPath,
+  pathFromPoints,
+} from "@/models/point";
 import DrawingItem from "@/components/Canvas/DrawingItem.vue";
 import MintPanel from "@/components/MintPanel.vue";
 import { getContractAddresses } from "@/utils/networks";
@@ -201,8 +209,13 @@ export default defineComponent({
         : { layers: [] };
       // Backward compativility
       drawing.overlays = drawing.overlays || [];
-      drawing.remix = drawing.remix || { transform:identityTransform };
-      console.log("** setup:overlays.length", index, drawing.layers.length, drawing.overlays.length);
+      drawing.remix = drawing.remix || { transform: identityTransform };
+      console.log(
+        "** setup:overlays.length",
+        index,
+        drawing.layers.length,
+        drawing.overlays.length
+      );
       return drawing;
     });
     //console.log("drawings", drawings.value);
@@ -272,13 +285,17 @@ export default defineComponent({
       // Prepare to open
       selectedIndex.value = keys.length;
       const path = pathFromPoints(roundRect);
-      const layer:Layer = {
+      const layer: Layer = {
         points: roundRect,
         color: "",
         path,
         svgImage: svgImageFromPath(path, ""),
       };
-      const drawing:Drawing = { layers:[layer], overlays:[], remix:{ transform:identityTransform} };
+      const drawing: Drawing = {
+        layers: [layer],
+        overlays: [],
+        remix: { transform: identityTransform },
+      };
 
       const newDrawings: Drawing[] = drawings.value.map((body) => body);
       newDrawings.push(drawing);
@@ -287,10 +304,7 @@ export default defineComponent({
       // Update the info and save it
       const key = `${keyDrawing}${info.value.nextIndex}`;
       keys.push(key);
-      localStorage.setItem(
-        key,
-        JSON.stringify(drawing)
-      );
+      localStorage.setItem(key, JSON.stringify(drawing));
       info.value = {
         nextIndex: info.value.nextIndex + 1,
         keys,
