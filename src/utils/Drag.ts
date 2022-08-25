@@ -175,7 +175,7 @@ export const useDrag = (
     if (currentLayerType.value === LayerType.REMIX) {
       // Note: We need to create a new instance in order to make it work with undo/redo.
       const tx = Object.assign({}, remixTransform.value);
-      
+
       switch (currentTool.value) {
         case Tools.MOVE: {
           const { x, y } = {

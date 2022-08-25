@@ -3,10 +3,7 @@ import { ref, computed, Ref } from "vue";
 import { Layer, Remix, Drawing, identityTransform } from "@/models/point";
 import { id } from "ethers/lib/utils";
 
-export const useUndoStack = (
-  layers: Ref<Layer[]>,
-  remix: Ref<Remix>
-) => {
+export const useUndoStack = (layers: Ref<Layer[]>, remix: Ref<Remix>) => {
   const undoStack = ref<Drawing[]>([]);
   const undoIndex = ref<number>(0);
 
@@ -17,7 +14,7 @@ export const useUndoStack = (
     array.push({
       layers: layers.value,
       remix: remix.value,
-      overlays: []
+      overlays: [],
     });
     undoStack.value = array;
     undoIndex.value = undoStack.value.length;
@@ -42,7 +39,7 @@ export const useUndoStack = (
     }
     const drawing = undoStack.value[undoIndex.value - 1];
     layers.value = drawing.layers;
-    remix.value = drawing.remix || { tokenId:0, transform:identityTransform };
+    remix.value = drawing.remix || { tokenId: 0, transform: identityTransform };
     undoIndex.value -= 1;
   };
   const _redo = () => {
@@ -51,7 +48,7 @@ export const useUndoStack = (
     }
     const drawing = undoStack.value[undoIndex.value + 1];
     layers.value = drawing.layers;
-    remix.value = drawing.remix || { tokenId:0, transform:identityTransform };
+    remix.value = drawing.remix || { tokenId: 0, transform: identityTransform };
     undoIndex.value += 1;
   };
 
