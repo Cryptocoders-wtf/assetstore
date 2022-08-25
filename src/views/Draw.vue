@@ -71,7 +71,7 @@ import { defineComponent, ref, computed } from "vue";
 import { ethers } from "ethers";
 import { useRoute } from "vue-router";
 import Canvas from "@/components/Canvas.vue";
-import { Drawing, Remix, identityTransform } from "@/models/point";
+import { Drawing, Remix, identityTransform, Layer, svgImageFromPath, pathFromPoints } from "@/models/point";
 import DrawingItem from "@/components/Canvas/DrawingItem.vue";
 import MintPanel from "@/components/MintPanel.vue";
 import { getContractAddresses } from "@/utils/networks";
@@ -84,6 +84,7 @@ import References from "@/components/References.vue";
 import NFTList from "@/components/NFTList.vue";
 import { v4 as uuidv4 } from "uuid";
 import { OriginalAssetData, OriginalAssetDataSet } from "@/models/asset";
+import { roundRect } from "@/utils/canvasUtil";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -279,20 +280,33 @@ export default defineComponent({
       const keys = info.value.keys;
       // Prepare to open
       selectedIndex.value = keys.length;
-      selectedDrawing.value = { layers: [], overlays: [] };
+      const path = pathFromPoints(roundRect);
+      const layer:Layer = {
+        points: roundRect,
+        color: "",
+        path,
+        svgImage: svgImageFromPath(path, ""),
+      };
+      const drawing:Drawing = { layers: [layer], overlays: [] };
 
       // Update the info and save it
       const array: Drawing[] = drawings.value.map((body) => body);
       array.push(selectedDrawing.value);
       drawings.value = array;
-      keys.push(`${keyDrawing}${info.value.nextIndex}`);
+      const key = `${keyDrawing}${info.value.nextIndex}`;
+      localStorage.setItem(
+        key,
+        JSON.stringify(drawing)
+      );
+      keys.push(key);
       info.value = {
         nextIndex: info.value.nextIndex + 1,
         keys,
       };
       localStorage.setItem(keyInfo, JSON.stringify(info.value));
 
-      showCanvas.value = true;
+      // selectedDrawing.value = drawing;
+      // showCanvas.value = true;
     };
     const minted = () => {
       console.log("minted");

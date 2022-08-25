@@ -218,19 +218,19 @@ export const useDrag = (
     }
     if (currentLayerType.value === LayerType.REMIX) {
       const tx = updateTransform(remixTransform.value);
-      const newValue: Drawing = Object.assign({}, currentDrawing.value);
-      if (newValue.remix) {
-        const newRemix = Object.assign({}, newValue.remix);
+      const newDrawing: Drawing = Object.assign({}, currentDrawing.value);
+      if (newDrawing.remix) {
+        const newRemix = Object.assign({}, newDrawing.remix);
         newRemix.transform = tx;
-        newValue.remix = newRemix;
+        newDrawing.remix = newRemix;
       }
-      currentDrawing.value = newValue;
+      currentDrawing.value = newDrawing;
     }
     if (currentLayerType.value === LayerType.OVERLAY) {
       const overlay = currentDrawing.value.overlays[overlayIndex.value];
       const tx = updateTransform(overlay.transform);
-      const newValue: Drawing = Object.assign({}, currentDrawing.value);
-      newValue.overlays = newValue.overlays.map((overlay, index) => {
+      const newDrawing: Drawing = Object.assign({}, currentDrawing.value);
+      newDrawing.overlays = newDrawing.overlays.map((overlay, index) => {
         if (index == overlayIndex.value) {
           const newOverlay = Object.assign({}, overlay);
           newOverlay.transform = tx;
@@ -238,7 +238,7 @@ export const useDrag = (
         }
         return overlay;
       })
-      currentDrawing.value = newValue;
+      currentDrawing.value = newDrawing;
     }
   
     evt.preventDefault();
