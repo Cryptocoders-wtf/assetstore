@@ -12,7 +12,7 @@
     </div>
 
     <div v-for="(layer, index) in drawing.layers" :key="index">
-      <div v-if="index == layerIndex">
+      <div v-if="index == layerIndex && isLayerType">
         <button @click="insertLayer(index)">
           <span class="material-icons">add</span>
         </button>
@@ -33,7 +33,7 @@
             : 'border-slate-200'
         }`"
       />
-      <div v-if="index == layerIndex" class="ml-2 mr-2 flex justify-between">
+      <div v-if="index == layerIndex && isLayerType" class="ml-2 mr-2 flex justify-between">
         <button @click="insertLayer(index + 1)">
           <span class="material-icons">add</span>
         </button>
@@ -55,11 +55,9 @@
         </button>
       </div>
     </div>
-    <div>
-      <asset-picker :addresses="addresses" @AssetSelected="AssetSelected" />
-    </div>
     <div v-for="(overlay, index) in drawing.overlays" :key="index">
       <img
+        @click="onSelectLayer(index)"
         :src="overlay.image"
         :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px`"
         class="border-2 border-solid object-fill"
@@ -69,6 +67,27 @@
             : 'border-slate-200'
         }`"
       />
+      <div v-if="index == layerIndex" class="ml-2 mr-2 flex justify-between">
+        <button @click="copyLayer(index)">
+          <span class="material-icons">content_copy</span>
+        </button>
+        <button
+          @click="pivotLayer(index + 1)"
+          v-if="index < drawing.layers.length - 1"
+        >
+          <span class="material-icons">swap_vert</span>
+        </button>
+        <button
+          v-if="drawing.layers.length > 1"
+          class="ml-2"
+          @click="deleteLayer()"
+        >
+          <span class="material-icons">delete</span>
+        </button>
+      </div>
+    </div>
+    <div>
+      <asset-picker :addresses="addresses" @AssetSelected="AssetSelected" />
     </div>
   </div>
 </template>
