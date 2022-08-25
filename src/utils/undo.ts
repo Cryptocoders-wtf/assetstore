@@ -1,17 +1,13 @@
 import { ref, computed, Ref } from "vue";
 
-import { Layer, Remix } from "@/models/point";
-
-interface State {
-  layers: Layer[];
-  remix: Remix;
-}
+import { Layer, Remix, Drawing, identityTransform } from "@/models/point";
+import { id } from "ethers/lib/utils";
 
 export const useUndoStack = (
   layers: Ref<Layer[]>,
   remix: Ref<Remix>
 ) => {
-  const undoStack = ref<State[]>([]);
+  const undoStack = ref<Drawing[]>([]);
   const undoIndex = ref<number>(0);
 
   const recordState = () => {
@@ -21,6 +17,7 @@ export const useUndoStack = (
     array.push({
       layers: layers.value,
       remix: remix.value,
+      overlays: []
     });
     undoStack.value = array;
     undoIndex.value = undoStack.value.length;
@@ -43,18 +40,18 @@ export const useUndoStack = (
       recordState();
       undoIndex.value -= 1;
     }
-    const state = undoStack.value[undoIndex.value - 1];
-    layers.value = state.layers;
-    remix.value = state.remix;
+    const drawing = undoStack.value[undoIndex.value - 1];
+    layers.value = drawing.layers;
+    remix.value = drawing.remix || { tokenId:0, transform:identityTransform };
     undoIndex.value -= 1;
   };
   const _redo = () => {
     if (!isRedoable.value) {
       return null;
     }
-    const state = undoStack.value[undoIndex.value + 1];
-    layers.value = state.layers;
-    remix.value = state.remix;
+    const drawing = undoStack.value[undoIndex.value + 1];
+    layers.value = drawing.layers;
+    remix.value = drawing.remix || { tokenId:0, transform:identityTransform };
     undoIndex.value += 1;
   };
 
