@@ -273,6 +273,7 @@ export default defineComponent({
       const newValue: Drawing = {
         layers: currentDrawing.value.layers,
         overlays: currentDrawing.value.overlays,
+        remix: { transform:identityTransform }
       };
       if (token) {
         newValue.remix = {

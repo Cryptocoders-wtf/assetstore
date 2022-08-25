@@ -40,14 +40,14 @@ export interface Overlay {
 }
 
 export interface Remix {
-  tokenId: number; // optional remix tokenId (0 = no remix)
+  tokenId?: number; // optional remix tokenId
   color?: string;
   transform: Transform;
   image?: string; // cached svg image
 }
 
 export interface Drawing {
-  remix?: Remix;
+  remix: Remix;
   layers: Layer[];
   overlays: Overlay[];
 }

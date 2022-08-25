@@ -41,7 +41,7 @@
           </button>
         </div>
       </div>
-      <MintPanel
+      <MintPanel v-if="selection"
         :selection="selection"
         :tokenAbi="tokenAbi"
         :addresses="addresses"
@@ -49,7 +49,7 @@
         :assetStoreRO="assetStoreRO"
         :priceRange="priceRange"
         :isRemix="true"
-        :remixId="remix.tokenId"
+        :remixId="selectedDrawing.remix.tokenId"
         :remixTransform="remixTransformString"
         @minted="minted"
       >
@@ -127,9 +127,6 @@ export default defineComponent({
       typeof route.query.network == "string" ? route.query.network : "mainnet";
     const addresses = getContractAddresses(network)!;
     addresses.tokenAddress = addresses.drawAddress;
-
-    // Temporary code
-    const remix = ref<Remix>({ tokenId: 0, transform: identityTransform });
 
     const { EtherscanStore, EtherscanToken, OpenSeaPath } = getAddresses(
       addresses.network,
@@ -211,13 +208,20 @@ export default defineComponent({
 
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(9999);
-    const selectedDrawing = ref<Drawing>({
-      layers: [],
-      overlays: [],
+    const selectedDrawing = computed(() => {
+      const drawing = drawings.value[selectedIndex.value];
+      // Backword compatibility
+      if (!drawing.remix) {
+        drawing.remix = { transform:identityTransform };
+      }
+      if (!drawing.overlays) {
+        drawing.overlays = [];
+      }
+      return drawing;
     });
     const onDrawingSelect = async (index: number) => {
       selectedIndex.value = index;
-      const drawing = drawings.value[index];
+      const drawing = selectedDrawing.value;
       const uuid = uuidv4();
       const asset: OriginalAssetData = {
         name: uuid,
@@ -234,12 +238,8 @@ export default defineComponent({
       };
       const loadedAssets = loadAssets(actions);
       let tag = "item";
-      //console.log(loadedAssets[0].svgPart);
-      remix.value = {
-        tokenId: drawing.remix?.tokenId || 0,
-        transform: drawing.remix?.transform || identityTransform,
-      };
-      if (drawing.remix) {
+
+      if (drawing.remix.tokenId) {
         const result = await tokenRO.functions.generateSVGPart(
           drawing.remix.tokenId
         );
@@ -256,8 +256,6 @@ export default defineComponent({
       onSelect(loadedAssets[0], tag);
     };
     const onOpen = () => {
-      selectedDrawing.value = drawings.value[selectedIndex.value];
-      // console.log("onOpen", selectedDrawing.value.transform);
       showCanvas.value = true;
     };
     const onDelete = () => {
@@ -287,7 +285,7 @@ export default defineComponent({
         path,
         svgImage: svgImageFromPath(path, ""),
       };
-      const drawing:Drawing = { layers: [layer], overlays: [] };
+      const drawing:Drawing = { layers:[layer], overlays:[], remix:{ transform:identityTransform} };
 
       const newDrawings: Drawing[] = drawings.value.map((body) => body);
       newDrawings.push(drawing);
@@ -331,7 +329,7 @@ export default defineComponent({
       onDrawingSelect(selectedIndex.value);
     };
     const remixTransformString = computed(() => {
-      const xf = remix.value.transform;
+      const xf = selectedDrawing.value.remix.transform;
       if (
         xf.tx == identityTransform.tx &&
         xf.ty == identityTransform.ty &&
@@ -367,7 +365,6 @@ export default defineComponent({
       EtherscanStore,
       EtherscanToken,
       OpenSeaPath,
-      remix,
       remixTransformString,
       minted,
     };
