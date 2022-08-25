@@ -240,7 +240,7 @@ export default defineComponent({
         const result = await tokenRO.functions.generateSVGPart(
           drawing.remix.tokenId
         );
-        console.log("** mix-in", result[1], remixTransformString.value);
+        // LATER: add overlays here
         loadedAssets[0].svgPart =
           result[0] +
           loadedAssets[0].svgPart +
