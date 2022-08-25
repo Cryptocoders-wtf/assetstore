@@ -60,7 +60,7 @@ import { useCanvasParams } from "@/utils/canvasUtil";
 import { Layer, LayerType, Drawing } from "@/models/point";
 import TokenPicker from "@/components/Canvas/TokenPicker.vue";
 import { Token } from "@/models/token";
-import AssetPicker from "@/components/AssetPicker.vue";
+import AssetPicker from "@/components/Canvas/AssetPicker.vue";
 
 export default defineComponent({
   components: {

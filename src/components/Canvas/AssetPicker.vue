@@ -43,11 +43,11 @@ import { defineComponent, ref, watch } from "vue";
 import { ethers } from "ethers";
 
 const AssetComposer = {
-  wabi: require("../abis/AssetComposer.json"), // wrapped abi
+  wabi: require("@/abis/AssetComposer.json"), // wrapped abi
 };
 
 const IAssetProvider = {
-  wabi: require("../abis/IAssetProvider.json"), // wrapped abi
+  wabi: require("@/abis/IAssetProvider.json"), // wrapped abi
 };
 
 interface AssetProviderInfo {

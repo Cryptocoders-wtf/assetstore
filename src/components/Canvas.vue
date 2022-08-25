@@ -114,8 +114,6 @@
           style="`margin: 10px; width: 100%"
           v-model:pureColor="stagingColor"
         />
-        <div class="self-start">|</div>
-        <asset-picker :addresses="addresses" @AssetSelected="AssetSelected" />
       </div>
       <Close @onClose="onClose" />
     </div>
@@ -159,7 +157,6 @@ import {
 } from "@/models/point";
 import { ColorPicker } from "vue3-colorpicker";
 
-import AssetPicker from "@/components/AssetPicker.vue";
 import Layers from "@/components/Canvas/Layers.vue";
 import Undo from "@/components/Canvas/Menu/Undo.vue";
 import Close from "@/components/Canvas/Menu/Close.vue";
@@ -185,7 +182,6 @@ export default defineComponent({
   name: "HomePage",
   components: {
     ColorPicker,
-    AssetPicker,
     Layers,
     Undo,
     Close,
