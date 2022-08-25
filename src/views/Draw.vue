@@ -193,8 +193,8 @@ export default defineComponent({
     const info = ref<Info>(
       resultInfo ? JSON.parse(resultInfo) || baseInfo : baseInfo
     );
-    //console.log("info", info.value);
-    drawings.value = info.value.keys.map((key) => {
+    console.log("** info", info.value.nextIndex, info.value.keys);
+    drawings.value = info.value.keys.map((key, index) => {
       const result = localStorage.getItem(key);
       //console.log("result", key, index, result);
       const drawing: Drawing = result
@@ -202,6 +202,7 @@ export default defineComponent({
         : { layers: [] };
       //console.log("drawing", drawing);
       drawing.overlays = drawing.overlays || [];
+      console.log("** setup:overlays.length", index, drawing.overlays.length);
       return drawing;
     });
     //console.log("drawings", drawings.value);
@@ -261,7 +262,7 @@ export default defineComponent({
         keys: info.value.keys.filter((_, index) => {
           return index !== selectedIndex.value;
         }),
-        nextIndex: info.value.nextIndex - 1,
+        nextIndex: info.value.nextIndex, // Notice that we don't decrement!
       };
       drawings.value = drawings.value.filter((_, index) => {
         return index !== selectedIndex.value;
@@ -297,7 +298,7 @@ export default defineComponent({
       selectedIndex.value = 9999;
     };
     const onClose = (output: Drawing) => {
-      // console.log("onClose:transform", output.transform);
+      console.log("** onClose:overlays.length", output.overlays.length);
       drawings.value = drawings.value.map((drawing, index) => {
         if (index == selectedIndex.value) {
           return output;
@@ -305,7 +306,7 @@ export default defineComponent({
         return drawing;
       });
       localStorage.setItem(
-        `${keyDrawing}${selectedIndex.value}`,
+        info.value.keys[selectedIndex.value],
         JSON.stringify(output)
       );
       showCanvas.value = false;
