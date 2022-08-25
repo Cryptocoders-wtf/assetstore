@@ -190,6 +190,21 @@ export const useToolHandleMode = (
           top: resultY - canvasParams.value.curw / 2,
         };
       }
+      case LayerType.OVERLAY: {
+        const overlay = currentDrawing.value.overlays[overlayIndex.value];
+        const resultX =
+          canvasParams.value.canh / 2 +
+          assetXtoCanvasX(overlay.transform.tx || 0);
+        const resultY =
+          canvasParams.value.canw / 2 +
+          assetYtoCanvasY(overlay.transform.ty || 0);
+        return {
+          x: resultX,
+          y: resultY,
+          left: resultX - canvasParams.value.curh / 2,
+          top: resultY - canvasParams.value.curw / 2,
+        };
+      }
     }
     return { x: 0, y: 0, top: 0, left: 0 };
   });
