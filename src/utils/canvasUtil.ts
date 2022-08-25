@@ -179,10 +179,10 @@ export const useToolHandleMode = (
       case LayerType.REMIX: {
         const resultX =
           canvasParams.value.canh / 2 +
-          assetXtoCanvasX(currentDrawing.value.remix?.transform.tx || 0);
+          assetXtoCanvasX(currentDrawing.value.remix.transform.tx || 0);
         const resultY =
           canvasParams.value.canw / 2 +
-          assetYtoCanvasY(currentDrawing.value.remix?.transform.ty || 0);
+          assetYtoCanvasY(currentDrawing.value.remix.transform.ty || 0);
         return {
           x: resultX,
           y: resultY,

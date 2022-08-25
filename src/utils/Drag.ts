@@ -36,7 +36,7 @@ export const useDrag = (
     canvasParams,
   } = useCanvasParams();
   const remixTransform = computed(() => {
-    return currentDrawing.value.remix?.transform || identityTransform;
+    return currentDrawing.value.remix.transform;
   });
 
   let pivotPos: Pos = { x: 0, y: 0 };

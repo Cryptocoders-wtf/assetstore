@@ -13,7 +13,7 @@
       @touchmove="dragOver"
     >
       <div
-        v-if="currentDrawing.remix?.image"
+        v-if="currentDrawing.remix.image"
         :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
         class="absolute overflow-hidden"
       >
@@ -240,12 +240,10 @@ export default defineComponent({
     const currentDrawing = ref<Drawing>(props.drawing);
 
     const remixTransformString = computed(() => {
-      const xf = currentDrawing.value.remix?.transform;
-      return xf
-        ? `translate(${assetXtoCanvasX(xf.tx)}px,` +
+      const xf = currentDrawing.value.remix.transform;
+      return `translate(${assetXtoCanvasX(xf.tx)}px,` +
             `${assetYtoCanvasY(xf.ty)}px) ` +
-            `scale(${xf.scale}) rotate(${xf.rotate}deg) `
-        : "";
+            `scale(${xf.scale}) rotate(${xf.rotate}deg) `;
     });
 
     const stagingColor = ref<string>(""); // staging for undoable color change
@@ -400,6 +398,7 @@ export default defineComponent({
     const onSelectOverlay = (index: number) => {
       updateOverlayIndex(index);
       currentLayerType.value = LayerType.OVERLAY;
+      toolHandleMode.value = true;
     };
     const drop = (evt: MouseEvent) => {
       evt.preventDefault();
@@ -441,7 +440,7 @@ export default defineComponent({
             : results[0]
         );
         currentLayerType.value = LayerType.LAYER;
-      } else if (currentDrawing.value.remix?.image) {
+      } else if (currentDrawing.value.remix.image) {
         currentLayerType.value = LayerType.REMIX;
         toolHandleMode.value = true;
       }

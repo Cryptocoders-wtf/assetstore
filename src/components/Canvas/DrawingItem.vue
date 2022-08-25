@@ -2,9 +2,9 @@
   <div class="w=32 -z-10 overflow-hidden">
     <div class="absolute -z-10 w-32 overflow-hidden">
       <img
-        v-if="drawing.remix?.image"
+        v-if="drawing.remix.image"
         class="w-32"
-        :src="drawing.remix?.image"
+        :src="drawing.remix.image"
         :style="`Transform:${transform}`"
       />
     </div>
@@ -40,10 +40,7 @@ export default defineComponent({
   setup(props) {
     const { canvasParams } = useCanvasParams();
     const transform = computed(() => {
-      const xf = props.drawing.remix?.transform;
-      if (xf == null) {
-        return "";
-      }
+      const xf = props.drawing.remix.transform;
       return (
         `translate(${(xf.tx * 32 * 4) / assetSize.w}px,` +
         `${(xf.ty * 32 * 4) / assetSize.h}px) ` +

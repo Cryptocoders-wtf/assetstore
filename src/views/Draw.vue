@@ -199,8 +199,9 @@ export default defineComponent({
       const drawing: Drawing = result
         ? JSON.parse(result) || { layers: [] }
         : { layers: [] };
-      //console.log("drawing", drawing);
+      // Backward compativility
       drawing.overlays = drawing.overlays || [];
+      drawing.remix = drawing.remix || { transform:identityTransform };
       console.log("** setup:overlays.length", index, drawing.layers.length, drawing.overlays.length);
       return drawing;
     });
@@ -209,15 +210,7 @@ export default defineComponent({
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(9999);
     const selectedDrawing = computed(() => {
-      const drawing = drawings.value[selectedIndex.value];
-      // Backword compatibility
-      if (!drawing.remix) {
-        drawing.remix = { transform:identityTransform };
-      }
-      if (!drawing.overlays) {
-        drawing.overlays = [];
-      }
-      return drawing;
+      return drawings.value[selectedIndex.value];
     });
     const onDrawingSelect = async (index: number) => {
       selectedIndex.value = index;
@@ -303,9 +296,7 @@ export default defineComponent({
         keys,
       };
       localStorage.setItem(keyInfo, JSON.stringify(info.value));
-
-      // selectedDrawing.value = drawing;
-      // showCanvas.value = true;
+      showCanvas.value = true;
     };
     const minted = () => {
       console.log("minted");
