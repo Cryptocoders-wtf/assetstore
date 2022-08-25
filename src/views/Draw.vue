@@ -211,7 +211,8 @@ export default defineComponent({
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(9999);
     const selectedDrawing = ref<Drawing>({
-      layers: [], overlays: []
+      layers: [],
+      overlays: [],
     });
     const onDrawingSelect = async (index: number) => {
       selectedIndex.value = index;

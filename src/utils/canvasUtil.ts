@@ -1,7 +1,7 @@
-import { ref, Ref, computed, ComputedRef } from "vue";
+import { ref, Ref, computed } from "vue";
 import { useStore } from "vuex";
 
-import { Point, LayerType, Transform, Drawing } from "@/models/point";
+import { Point, LayerType, Drawing } from "@/models/point";
 
 export enum Tools {
   CURSOR,
@@ -120,7 +120,7 @@ export const roundRect: Point[] = [
 
 export const useToolHandleMode = (
   currentLayerType: Ref<number>,
-  currentDrawing: Ref<Drawing>, 
+  currentDrawing: Ref<Drawing>,
   overlayIndex: Ref<number>
 ) => {
   const { assetXtoCanvasX, assetYtoCanvasY, canvasParams } = useCanvasParams();

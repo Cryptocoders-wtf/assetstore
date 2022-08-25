@@ -33,7 +33,10 @@
             : 'border-slate-200'
         }`"
       />
-      <div v-if="index == layerIndex && isLayerType" class="ml-2 mr-2 flex justify-between">
+      <div
+        v-if="index == layerIndex && isLayerType"
+        class="ml-2 mr-2 flex justify-between"
+      >
         <button @click="insertLayer(index + 1)">
           <span class="material-icons">add</span>
         </button>
@@ -56,27 +59,35 @@
       </div>
     </div>
     <div v-for="(overlay, index) in drawing.overlays" :key="index">
-      <div v-if="index == overlayIndex && isOverlayType" class="ml-2 mr-2 flex justify-between">
+      <div
+        v-if="index == overlayIndex && isOverlayType"
+        class="ml-2 mr-2 flex justify-between"
+      >
         <button @click="swapOverlay(index)" v-if="index > 0">
           <span class="material-icons">swap_vert</span>
         </button>
       </div>
-      <div class="border-2 border-solid object-fill"
-          @click="onSelectOverlay(index)"
-          :class="`${
-            index == overlayIndex && isOverlayType
-              ? 'border-blue-400'
-              : 'border-slate-200'
-          }`"
-      > 
+      <div
+        class="border-2 border-solid object-fill"
+        @click="onSelectOverlay(index)"
+        :class="`${
+          index == overlayIndex && isOverlayType
+            ? 'border-blue-400'
+            : 'border-slate-200'
+        }`"
+      >
         <img
           :src="overlay.image"
-          :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;`+
-                  `Transform: ${overlayTransform(index, canvasParams.sidew)}`"
-          
+          :style="
+            `width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;` +
+            `Transform: ${overlayTransform(index, canvasParams.sidew)}`
+          "
         />
       </div>
-      <div v-if="index == overlayIndex && isOverlayType" class="ml-2 mr-2 flex justify-between">
+      <div
+        v-if="index == overlayIndex && isOverlayType"
+        class="ml-2 mr-2 flex justify-between"
+      >
         <button @click="copyOverlay(index)">
           <span class="material-icons">content_copy</span>
         </button>
@@ -86,10 +97,7 @@
         >
           <span class="material-icons">swap_vert</span>
         </button>
-        <button
-          class="ml-2"
-          @click="deleteOverlay()"
-        >
+        <button class="ml-2" @click="deleteOverlay()">
           <span class="material-icons">delete</span>
         </button>
       </div>
@@ -103,7 +111,13 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
 import { useCanvasParams } from "@/utils/canvasUtil";
-import { Layer, LayerType, Drawing, identityTransform, Overlay } from "@/models/point";
+import {
+  Layer,
+  LayerType,
+  Drawing,
+  identityTransform,
+  Overlay,
+} from "@/models/point";
 import TokenPicker from "@/components/Canvas/TokenPicker.vue";
 import { Token } from "@/models/token";
 import AssetPicker from "@/components/Canvas/AssetPicker.vue";
@@ -145,10 +159,16 @@ export default defineComponent({
     overlayTransform: {
       type: Function,
       required: true,
-    }
+    },
   },
-  emits: ["onSelectLayer", "updateLayers", "tokenSelected", 
-  "remixSelected", "updateOverlays", "onSelectOverlay"],
+  emits: [
+    "onSelectLayer",
+    "updateLayers",
+    "tokenSelected",
+    "remixSelected",
+    "updateOverlays",
+    "onSelectOverlay",
+  ],
   setup(props, context) {
     const { canvasParams } = useCanvasParams();
     const isLayerType = computed(() => {
@@ -228,11 +248,15 @@ export default defineComponent({
       assetId: number
     ) => {
       console.log("AssetSelected", provider, index, assetId);
-      const overlay:Overlay = {
-        provider, assetId, image, fill:"", transform: identityTransform
-      }
+      const overlay: Overlay = {
+        provider,
+        assetId,
+        image,
+        fill: "",
+        transform: identityTransform,
+      };
       overlay.transform.scale = 0.5;
-      const overlays = props.drawing.overlays.map(overlay => overlay);
+      const overlays = props.drawing.overlays.map((overlay) => overlay);
       overlays.push(overlay);
       context.emit("updateOverlays", overlays);
     };
