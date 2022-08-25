@@ -71,7 +71,7 @@ import { ethers } from "ethers";
 import { useRoute } from "vue-router";
 import Canvas from "@/components/Canvas.vue";
 import { Drawing, Remix, identityTransform } from "@/models/point";
-import DrawingItem from "@/components/DrawingItem.vue";
+import DrawingItem from "@/components/Canvas/DrawingItem.vue";
 import MintPanel from "@/components/MintPanel.vue";
 import { getContractAddresses } from "@/utils/networks";
 import { useOnSelect } from "@/utils/mintUtils";
