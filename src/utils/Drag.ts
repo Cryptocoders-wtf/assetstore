@@ -130,7 +130,7 @@ export const useDrag = (
           }
         : { radian: 0, sin: 0, cos: 0 };
 
-    if (currentLayerType.value === LayerType.LAYER)
+    if (currentLayerType.value === LayerType.LAYER) {
       cursors.value = cursors.value.map((cursor, index) => {
         switch (currentTool.value) {
           case Tools.ZOOM:
@@ -189,6 +189,7 @@ export const useDrag = (
         }
         return cursor;
       });
+    }
     if (currentLayerType.value === LayerType.REMIX) {
       // Note: We need to create a new instance in order to make it work with undo/redo.
       const tx = Object.assign({}, remixTransform.value);
@@ -196,12 +197,7 @@ export const useDrag = (
       switch (currentTool.value) {
         case Tools.MOVE: {
           const { x, y } = {
-            ...gridder(
-              limiter({
-                x: getPageX(evt),
-                y: getPageY(evt),
-              })
-            ),
+            ...gridder(limiter({ x: getPageX(evt), y: getPageY(evt) })),
           };
           tx.tx = Math.round(x - canvasParams.value.assw / 2);
           tx.ty = Math.round(y - canvasParams.value.assh / 2);
