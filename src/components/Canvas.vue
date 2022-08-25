@@ -137,6 +137,7 @@
         @onSelectLayer="onSelectLayer"
         @updateLayers="updateLayers"
         @remixSelected="remixSelected"
+        @updateOverlays="updateOverlays"
       />
     </div>
   </div>
@@ -154,6 +155,7 @@ import {
   togglePointType,
   Transform,
   identityTransform,
+  Overlay
 } from "@/models/point";
 import { ColorPicker } from "vue3-colorpicker";
 
@@ -369,12 +371,18 @@ export default defineComponent({
         svgImage: svgImageFromPath(path, currentColor.value),
       } as Layer;
     });
-    const updateLayers = (array: Layer[], index: number) => {
+    const updateLayers = (layers: Layer[], index: number) => {
       recordState();
       const newValue = Object.assign({}, currentDrawing.value);
-      newValue.layers = array;
+      newValue.layers = layers;
       currentDrawing.value = newValue;
       updateLayerIndex(index);
+    };
+    const updateOverlays = (overlays: Overlay[]) => {
+      recordState();
+      const newValue = Object.assign({}, currentDrawing.value);
+      newValue.overlays = overlays;
+      currentDrawing.value = newValue;
     };
     const onSelectLayer = (index: number) => {
       updateLayerIndex(index);
@@ -474,6 +482,7 @@ export default defineComponent({
       currentLayerType,
       remixTransformString,
       AssetSelected,
+      updateOverlays,
     };
   },
 });

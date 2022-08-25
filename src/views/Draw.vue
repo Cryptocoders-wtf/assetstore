@@ -201,6 +201,7 @@ export default defineComponent({
         ? JSON.parse(result) || { layers: [] }
         : { layers: [] };
       //console.log("drawing", drawing);
+      drawing.overlays = drawing.overlays || [];
       return drawing;
     });
     //console.log("drawings", drawings.value);
@@ -208,7 +209,7 @@ export default defineComponent({
     const showCanvas = ref<boolean>(false);
     const selectedIndex = ref<number>(9999);
     const selectedDrawing = ref<Drawing>({
-      layers: [],
+      layers: [], overlays: []
     });
     const onDrawingSelect = async (index: number) => {
       selectedIndex.value = index;
@@ -275,7 +276,7 @@ export default defineComponent({
       const keys = info.value.keys;
       // Prepare to open
       selectedIndex.value = keys.length;
-      selectedDrawing.value = { layers: [] };
+      selectedDrawing.value = { layers: [], overlays: [] };
 
       // Update the info and save it
       const array: Drawing[] = drawings.value.map((body) => body);

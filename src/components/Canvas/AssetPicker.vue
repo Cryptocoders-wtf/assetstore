@@ -150,6 +150,7 @@ export default defineComponent({
         assetImage.image,
         assetImage.assetId
       );
+      showPopup.value = false;
     };
     return {
       onOpen,

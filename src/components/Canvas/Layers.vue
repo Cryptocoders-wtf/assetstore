@@ -64,7 +64,7 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
 import { useCanvasParams } from "@/utils/canvasUtil";
-import { Layer, LayerType, Drawing } from "@/models/point";
+import { Layer, LayerType, Drawing, identityTransform, Overlay } from "@/models/point";
 import TokenPicker from "@/components/Canvas/TokenPicker.vue";
 import { Token } from "@/models/token";
 import AssetPicker from "@/components/Canvas/AssetPicker.vue";
@@ -100,7 +100,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["onSelectLayer", "updateLayers", "tokenSelected", "remixSelected"],
+  emits: ["onSelectLayer", "updateLayers", "tokenSelected", "remixSelected", "updateOverlays"],
   setup(props, context) {
     const { canvasParams } = useCanvasParams();
     const isLayerType = computed(() => {
@@ -147,12 +147,18 @@ export default defineComponent({
       context.emit("remixSelected");
     };
     const AssetSelected = (
-      key: string,
+      provider: string,
       index: number,
       image: string,
       assetId: number
     ) => {
-      console.log("AssetSelected", key, index, assetId);
+      console.log("AssetSelected", provider, index, assetId);
+      const overlay:Overlay = {
+        provider, assetId, image, fill:"", transform: identityTransform
+      }
+      const overlays = props.drawing.overlays.map(overlay => overlay);
+      overlays.push(overlay);
+      context.emit("updateOverlays", overlays);
     };
     return {
       canvasParams,

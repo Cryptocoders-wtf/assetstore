@@ -25,7 +25,7 @@
       </button>
     </div>
     <div
-      v-if="showTokens"
+      v-if="showPopup"
       style="width: 400px; height: 200px; left: -240px; overflow-y: scroll"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
     >
@@ -56,20 +56,20 @@ export default defineComponent({
         `scale(${xf.scale}) rotate(${xf.rotate}deg) `
       );
     });
-    const showTokens = ref<boolean>(false);
+    const showPopup = ref<boolean>(false);
     const onOpen = () => {
       console.log("onOpen");
-      showTokens.value = !showTokens.value;
+      showPopup.value = !showPopup.value;
     };
     const onSelect = (token: Token) => {
       console.log("onSelect", token.tokenId);
       //context.emit("update:remixToken", token);
       context.emit("tokenSelected", token);
-      showTokens.value = false;
+      showPopup.value = false;
     };
     const onRemove = () => {
       context.emit("tokenSelected", null);
-      showTokens.value = false;
+      showPopup.value = false;
     };
     const onSelectRemix = () => {
       console.log("**onSelectRemix");
@@ -77,7 +77,7 @@ export default defineComponent({
     };
     return {
       onOpen,
-      showTokens,
+      showPopup,
       onSelect,
       onRemove,
       transform,
