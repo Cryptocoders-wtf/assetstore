@@ -190,10 +190,9 @@ export const useDrag = (
         return cursor;
       });
     }
-    if (currentLayerType.value === LayerType.REMIX) {
+    const updateTransform = (transform: Transform) => {
       // Note: We need to create a new instance in order to make it work with undo/redo.
-      const tx = Object.assign({}, remixTransform.value);
-
+      const tx = Object.assign({}, transform);
       switch (currentTool.value) {
         case Tools.MOVE: {
           const { x, y } = {
@@ -215,6 +214,10 @@ export const useDrag = (
           break;
         }
       }
+      return tx;
+    }
+    if (currentLayerType.value === LayerType.REMIX) {
+      const tx = updateTransform(remixTransform.value);
       const newValue: Drawing = Object.assign({}, currentDrawing.value);
       if (newValue.remix) {
         const newRemix = Object.assign({}, newValue.remix);
