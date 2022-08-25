@@ -1,7 +1,7 @@
 import { ref, Ref, computed, ComputedRef } from "vue";
 import { useStore } from "vuex";
 
-import { Point, LayerType, Transform } from "@/models/point";
+import { Point, LayerType, Transform, Drawing } from "@/models/point";
 
 export enum Tools {
   CURSOR,
@@ -120,7 +120,8 @@ export const roundRect: Point[] = [
 
 export const useToolHandleMode = (
   currentLayerType: Ref<number>,
-  remixTransform: ComputedRef<Transform>
+  currentDrawing: Ref<Drawing>, 
+  overlayIndex: Ref<number>
 ) => {
   const { assetXtoCanvasX, assetYtoCanvasY, canvasParams } = useCanvasParams();
   const cursors = ref<Point[]>([]);
@@ -178,10 +179,10 @@ export const useToolHandleMode = (
       case LayerType.REMIX: {
         const resultX =
           canvasParams.value.canh / 2 +
-          assetXtoCanvasX(remixTransform.value.tx);
+          assetXtoCanvasX(currentDrawing.value.remix?.transform.tx || 0);
         const resultY =
           canvasParams.value.canw / 2 +
-          assetYtoCanvasY(remixTransform.value.ty);
+          assetYtoCanvasY(currentDrawing.value.remix?.transform.ty || 0);
         return {
           x: resultX,
           y: resultY,

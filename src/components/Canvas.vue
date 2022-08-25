@@ -270,16 +270,13 @@ export default defineComponent({
     const { recordState, isRedoable, isUndoable, _undo, _redo } =
       useUndoStack(currentDrawing);
 
-    const computedRemixTransform = computed(() => {
-      return currentDrawing.value.remix?.transform || identityTransform;
-    });
     const {
       toolHandleMode,
       toolHandles,
       onClickToolHandle,
       moveToolPos,
       cursors,
-    } = useToolHandleMode(currentLayerType, computedRemixTransform);
+    } = useToolHandleMode(currentLayerType, currentDrawing, overlayIndex);
 
     const tokenSelected = (token: Token) => {
       recordState();
