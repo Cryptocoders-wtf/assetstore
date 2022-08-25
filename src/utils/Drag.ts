@@ -1,4 +1,4 @@
-import { ref, Ref, ComputedRef } from "vue";
+import { ref, Ref, ComputedRef, computed } from "vue";
 
 import {
   useCanvasParams,
@@ -8,7 +8,7 @@ import {
   Tools,
   RotationInfo,
 } from "@/utils/canvasUtil";
-import { Point, LayerType, identityTransform, Transform } from "@/models/point";
+import { Point, LayerType, identityTransform, Transform, Drawing } from "@/models/point";
 
 // const { curw, curh } = canvasParams;
 
@@ -18,7 +18,8 @@ export const useDrag = (
   cursors: Ref<Point[]>,
   recordState: () => void,
   currentLayerType: Ref<number>,
-  remixTransform: Ref<Transform>
+  currentDrawing: Ref<Drawing>,
+  overlayIndex: Ref<number>
 ) => {
   const {
     getPageX,
@@ -28,6 +29,10 @@ export const useDrag = (
     canvastoAsset,
     canvasParams,
   } = useCanvasParams();
+  const remixTransform = computed(() => {
+    return currentDrawing.value.remix?.transform || identityTransform
+  });
+
   let pivotPos: Pos = { x: 0, y: 0 };
   let offsetX = 0;
   let offsetY = 0;
@@ -202,7 +207,13 @@ export const useDrag = (
           break;
         }
       }
-      remixTransform.value = tx;
+      const newValue: Drawing = Object.assign({}, currentDrawing.value);
+      if (newValue.remix) {
+        const newRemix = Object.assign({}, newValue.remix);
+        newRemix.transform = tx;
+        newValue.remix = newRemix;
+      }
+      currentDrawing.value = newValue;
     }
     evt.preventDefault();
   };

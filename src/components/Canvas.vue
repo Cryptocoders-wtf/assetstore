@@ -239,19 +239,6 @@ export default defineComponent({
 
     const currentDrawing = ref<Drawing>(props.drawing);
 
-    const remixTransform = ref<Transform>(
-      currentDrawing.value.remix?.transform || identityTransform
-    );
-    watch([remixTransform], ([transform]) => {
-      const newValue: Drawing = Object.assign({}, currentDrawing.value);
-      if (newValue.remix) {
-        const newRemix = Object.assign({}, newValue.remix);
-        newRemix.transform = transform;
-        newValue.remix = newRemix;
-      }
-      currentDrawing.value = newValue;
-    });
-
     const remixTransformString = computed(() => {
       const xf = currentDrawing.value.remix?.transform;
       return xf
@@ -352,7 +339,8 @@ export default defineComponent({
       cursors,
       recordState,
       currentLayerType,
-      remixTransform
+      currentDrawing, 
+      overlayIndex
     );
 
     const togglePoint = () => {
