@@ -226,6 +226,21 @@ export const useDrag = (
       }
       currentDrawing.value = newValue;
     }
+    if (currentLayerType.value === LayerType.OVERLAY) {
+      const overlay = currentDrawing.value.overlays[overlayIndex.value];
+      const tx = updateTransform(overlay.transform);
+      const newValue: Drawing = Object.assign({}, currentDrawing.value);
+      newValue.overlays = newValue.overlays.map((overlay, index) => {
+        if (index == overlayIndex.value) {
+          const newOverlay = Object.assign({}, overlay);
+          newOverlay.transform = tx;
+          return newOverlay; 
+        }
+        return overlay;
+      })
+      currentDrawing.value = newValue;
+    }
+  
     evt.preventDefault();
   };
 
