@@ -223,6 +223,7 @@ export default defineComponent({
       const overlay:Overlay = {
         provider, assetId, image, fill:"", transform: identityTransform
       }
+      overlay.transform.scale = 0.5;
       const overlays = props.drawing.overlays.map(overlay => overlay);
       overlays.push(overlay);
       context.emit("updateOverlays", overlays);
