@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="absolute -z-10 w-32 overflow-hidden">
+  <div class="w=32 -z-10 overflow-hidden">
+    <div class="absolute  -z-10 w-32 overflow-hidden">
       <img
         v-if="drawing.remix?.image"
         class="w-32"
@@ -8,7 +8,13 @@
         :style="`Transform:${transform}`"
       />
     </div>
-    <img :src="svgImageFromDrawing(drawing)" class="w-32" />
+    <img :src="svgImageFromDrawing(drawing)" class="w-32 -z-10 absolute" />
+    <img v-for="(overlay, index) in drawing.overlays" :key="index" 
+      class="absolute w-32 -z-10"
+      :style="`Transform: scale(0.5)`"
+      :src="overlay.image"
+    />
+    <img :src="svgImageFromDrawing(drawing)" class="w-32" style="visibility:hidden"/>
   </div>
 </template>
 <script lang="ts">

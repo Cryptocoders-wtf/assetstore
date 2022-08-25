@@ -1,6 +1,7 @@
 <template>
   <div
     style="width: 100%"
+    class="z-10"
     @drop="drop($event)"
     @dragenter.prevent
     @dragover.prevent

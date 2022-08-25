@@ -3,6 +3,7 @@
     <Canvas
       v-if="showCanvas"
       @close="onClose"
+      class="z-10"
       :drawing="selectedDrawing"
       :tokens="tokens"
       :addresses="addresses"
