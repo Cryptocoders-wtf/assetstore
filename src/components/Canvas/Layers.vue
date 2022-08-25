@@ -57,7 +57,7 @@
     </div>
     <div v-for="(overlay, index) in drawing.overlays" :key="index">
       <div v-if="index == overlayIndex && isOverlayType" class="ml-2 mr-2 flex justify-between">
-        <button @click="swapLayer(index)" v-if="index > 0">
+        <button @click="swapOverlay(index)" v-if="index > 0">
           <span class="material-icons">swap_vert</span>
         </button>
       </div>

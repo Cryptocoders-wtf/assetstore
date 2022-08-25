@@ -36,6 +36,17 @@
         "
         @click="onClickToPickLayer($event)"
       />
+      <img
+        v-for="(overlay, index) in currentDrawing.overlays"
+        :key="index"
+        :src="overlay.image"
+        class="absolute"
+        draggable="false"
+        :style="
+          `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
+          `opacity:'1.0'}`
+        "
+      />
       <div
         class="tool-handle-move absolute"
         :style="
