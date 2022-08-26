@@ -8,7 +8,7 @@
   >
     <div
       :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px; left:${canvasParams.offx}px; top:${canvasParams.offy}px`"
-      class="absolute border-2 border-solid border-blue-700 bg-slate-100"
+      class="border-2 border-solid border-blue-700 bg-slate-100"
       @dragover="dragOver"
       @touchmove="dragOver"
     >

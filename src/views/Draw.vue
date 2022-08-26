@@ -1,17 +1,8 @@
 <template>
   <div>
-    <Canvas
-      v-if="showCanvas"
-      @close="onClose"
-      class="z-10"
-      :drawing="selectedDrawing"
-      :tokens="tokens"
-      :addresses="addresses"
-    />
-
-    <div class="mx-auto max-w-xl p-2 text-left">
+    <div class="mx-auto p-2 pl-8 pr-8 text-left">
       <div class="mb-2 text-xl font-bold">{{ "Draw Your Own Token" }}</div>
-      <div class="flex flex-wrap">
+      <div class="flex flex-wrap mb-4">
         <div
           v-for="(drawing, index) in drawings"
           :key="index"
@@ -41,8 +32,16 @@
           </button>
         </div>
       </div>
+      <Canvas
+        v-if="showCanvas"
+        @close="onClose"
+        class="z-10"
+        :drawing="selectedDrawing"
+        :tokens="tokens"
+        :addresses="addresses"
+      />
       <MintPanel
-        v-if="selection"
+        v-if="!showCanvas && selection"
         :selection="selection"
         :tokenAbi="tokenAbi"
         :addresses="addresses"
