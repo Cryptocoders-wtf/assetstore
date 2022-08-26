@@ -83,49 +83,51 @@
             )}`
           "
         />
-        <div
-          class="tool-handle-move absolute"
-          :style="`width:${canvasParams.curw}px; height:${canvasParams.curh}px; `"
-          draggable="true"
-          @dragstart="dragLayerImgStart($event)"
-          @touchstart="dragLayerImgStart($event)"
-          @click="onClickToolHandle()"
-        />
-        <div v-if="toolHandleMode">
+        <div class="absolute"> 
           <div
-            v-for="({ type, x, y }, index) in toolHandles"
-            :key="index"
-            class="absolute"
-            :class="
-              type === Tools.ROTATE
-                ? 'tool-handle-rotation'
-                : 'tool-handle-scaling'
-            "
-            :style="`width:${canvasParams.curw}px; height:${canvasParams.curh}px;
-            left: ${x}px; top: ${y}px;`"
+            class="tool-handle-move absolute"
+            :style="`width:${canvasParams.curw}px; height:${canvasParams.curh}px; `"
             draggable="true"
-            @dragstart="dragToolHandleStart($event, type)"
-            @touchstart="dragToolHandleStart($event, type)"
+            @dragstart="dragLayerImgStart($event)"
+            @touchstart="dragLayerImgStart($event)"
+            @click="onClickToolHandle()"
           />
-        </div>
-        <div v-else>
-          <div
-            v-for="(cursor, index) in cursors"
-            :key="index"
-            :style="`width:${canvasParams.curw}px; height:${
-              canvasParams.curh
-            }px; left:${
-              assetXtoCanvasX(cursor.x) - canvasParams.curw / 2
-            }px; top:${assetYtoCanvasY(cursor.y) - canvasParams.curh / 2}px`"
-            :class="`${
-              index == pointIndex ? 'border-blue-800' : 'border-blue-400'
-            } ${cursor.c ? '' : 'rounded-xl'}`"
-            draggable="true"
-            class="absolute border-2 border-solid"
-            @dragstart="dragStart($event, index)"
-            @touchstart="dragStart($event, index)"
-            @click="onSelect($event, index)"
-          />
+          <div v-if="toolHandleMode">
+            <div
+              v-for="({ type, x, y }, index) in toolHandles"
+              :key="index"
+              class="absolute"
+              :class="
+                type === Tools.ROTATE
+                  ? 'tool-handle-rotation'
+                  : 'tool-handle-scaling'
+              "
+              :style="`width:${canvasParams.curw}px; height:${canvasParams.curh}px;
+              left: ${x}px; top: ${y}px;`"
+              draggable="true"
+              @dragstart="dragToolHandleStart($event, type)"
+              @touchstart="dragToolHandleStart($event, type)"
+            />
+          </div>
+          <div v-else>
+            <div
+              v-for="(cursor, index) in cursors"
+              :key="index"
+              :style="`width:${canvasParams.curw}px; height:${
+                canvasParams.curh
+              }px; left:${
+                assetXtoCanvasX(cursor.x) - canvasParams.curw / 2
+              }px; top:${assetYtoCanvasY(cursor.y) - canvasParams.curh / 2}px`"
+              :class="`${
+                index == pointIndex ? 'border-blue-800' : 'border-blue-400'
+              } ${cursor.c ? '' : 'rounded-xl'}`"
+              draggable="true"
+              class="absolute border-2 border-solid"
+              @dragstart="dragStart($event, index)"
+              @touchstart="dragStart($event, index)"
+              @click="onSelect($event, index)"
+            />
+          </div>
         </div>
       </div>
 
