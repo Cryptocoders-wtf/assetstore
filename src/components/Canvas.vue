@@ -69,20 +69,24 @@
           "
           @click="onClickToPickLayer($event)"
         />
-        <img
-          v-for="(overlay, index) in currentDrawing.overlays"
-          :key="index"
-          :src="overlay.image"
-          class="absolute"
-          draggable="false"
-          :style="
-            `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
-            `opacity:1.0; Transform: ${overlayTransform(
-              index,
-              canvasParams.canw
-            )}`
-          "
-        />
+        <div
+          :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
+          class="absolute overflow-hidden"
+        >
+          <img
+            v-for="(overlay, index) in currentDrawing.overlays"
+            :key="index"
+            :src="overlay.image"
+            draggable="false"
+            :style="
+              `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
+              `opacity:1.0; Transform: ${overlayTransform(
+                index,
+                canvasParams.canw
+              )}`
+            "
+          />
+        </div>
         <div class="absolute"> 
           <div
             class="tool-handle-move absolute"
