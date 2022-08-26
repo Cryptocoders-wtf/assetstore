@@ -26,7 +26,7 @@
     </div>
     <div
       v-if="showPopup"
-      style="width: 400px; height: 200px; left: -240px; overflow-y: scroll"
+      style="width: 400px; height: 200px; left: 100px; overflow-y: scroll"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
     >
       <span v-for="token in tokens" :key="token.tokenId">
