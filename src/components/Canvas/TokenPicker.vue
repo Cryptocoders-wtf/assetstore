@@ -25,16 +25,20 @@
     </div>
     <div
       v-if="showPopup"
-      style="width: 400px; height: 200px; left: 100px; overflow-y: scroll"
+      :style="`width:${canvasParams.canw*2/3}px;
+              left: ${canvasParams.offx+canvasParams.canw/3}px; 
+              top: ${canvasParams.offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
     >
-      <span v-for="token in tokens" :key="token.tokenId">
-        <img
-          @click="onSelect(token)"
-          :src="token.image"
-          class="mr-1 mb-1 inline-block w-14 rounded-xl"
-        />
-      </span>
+      <div :style="`height:${canvasParams.canh/3}px; overflow-y:scroll`"> 
+        <span v-for="token in tokens" :key="token.tokenId">
+          <img
+            @click="onSelect(token)"
+            :src="token.image"
+            class="mr-1 mb-1 inline-block w-14 rounded-xl"
+          />
+        </span>
+      </div>
     </div>
   </div>
 </template>
