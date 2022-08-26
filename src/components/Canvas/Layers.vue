@@ -76,13 +76,17 @@
             : 'border-slate-200'
         }`"
       >
-        <img
-          :src="overlay.image"
-          :style="
-            `width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;` +
-            `Transform: ${overlayTransform(index, canvasParams.sidew)}`
-          "
-        />
+        <div class="overflow-hidden"
+          :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;`"
+        > 
+          <img
+            :src="overlay.image"
+            :style="
+              `width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;` +
+              `Transform: ${overlayTransform(index, canvasParams.sidew)}`
+            "
+          />
+        </div>
       </div>
       <div
         v-if="index == overlayIndex && isOverlayType"
