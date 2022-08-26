@@ -1,17 +1,17 @@
 <template>
   <div
-    style="width: 100%"
-    class="z-10"
+    class="bg-slate-400"
     @drop="drop($event)"
     @dragenter.prevent
     @dragover.prevent
   >
+    <div style="width:100%;height:1px"></div>
     <div
       :style="`width:${canvasParams.canw + canvasParams.sidew}px;
       height:${canvasParams.headh + 2}px;
       left:${canvasParams.offx}px;
       top:${canvasParams.offy - canvasParams.headh}px`"
-      class="flex items-center justify-between border-2 border-solid border-blue-700 bg-slate-300 px-4"
+      class="flex items-center justify-between m-1 bg-slate-300 px-4"
     >
       <div class="flex items-center gap-1.5">
         <Undo
@@ -42,7 +42,7 @@
 
       <div
         :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px; left:${canvasParams.offx}px; top:${canvasParams.offy}px`"
-        class="border-2 border-solid border-blue-700 bg-slate-100"
+        class="m-1 mt-0 bg-slate-100"
         @dragover="dragOver"
         @touchmove="dragOver"
       >
@@ -141,7 +141,7 @@
         }px; left:${canvasParams.offx + canvasParams.canw - 2}px; top:${
           canvasParams.offy
         }px`"
-        class="border-2 border-solid border-blue-700 bg-slate-300"
+        class=" bg-slate-300"
       >
         <Layers
           :drawing="currentDrawing"
