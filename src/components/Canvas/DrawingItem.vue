@@ -9,13 +9,17 @@
       />
     </div>
     <img :src="svgImageFromDrawing(drawing)" class="absolute -z-10 w-32" />
-    <img
-      v-for="(overlay, index) in drawing.overlays"
-      :key="index"
-      class="absolute -z-10 w-32"
-      :style="`Transform: ${overlayTransform(overlay)}`"
-      :src="overlay.image"
-    />
+    <div 
+        v-for="(overlay, index) in drawing.overlays"
+        :key="index"
+        style="width:128;height:128"
+        class="absolute overflow-hidden"> 
+      <img
+        class="-z-10 w-32"
+        :style="`Transform: ${overlayTransform(overlay)}`"
+        :src="overlay.image"
+      />
+    </div>
     <img
       :src="svgImageFromDrawing(drawing)"
       class="w-32"
