@@ -20,19 +20,22 @@
           <span class="material-icons">swap_vert</span>
         </button>
       </div>
-      <img
-        @click="onSelectLayer(index)"
-        :src="layer.svgImage"
-        :style="`width:${canvasParams.sidew}px;height:${
-          canvasParams.sidew / 2
-        }px`"
-        class="border-2 border-solid object-fill"
-        :class="`${
-          index == layerIndex && isLayerType
-            ? 'border-blue-400'
-            : 'border-slate-200'
-        }`"
-      />
+      <div
+          class="border-2 border-solid object-fill"
+          :class="`${
+            index == layerIndex && isLayerType
+              ? 'border-blue-400'
+              : 'border-slate-200'
+          }`"
+      > 
+        <img
+          @click="onSelectLayer(index)"
+          :src="layer.svgImage"
+          :style="`width:${canvasParams.sidew}px;height:${
+            canvasParams.sidew / 2
+          }px`"
+        />
+      </div>
       <div
         v-if="index == layerIndex && isLayerType"
         class="ml-2 mr-2 flex justify-between"

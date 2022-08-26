@@ -3,13 +3,12 @@
     <div
       v-if="remix.image"
       @click="onSelectRemix"
-      :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;overflow:hidden`"
-      class="border-2 border-solid"
+      class="border-2 border-solid overflow-hidden"
       :class="`${isRemixType ? 'border-blue-400' : 'border-slate-200'}`"
     >
       <img
         :src="remix.image"
-        :style="`width:100%;height:100%;Transform:${transform};`"
+        :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;Transform:${transform};`"
       />
     </div>
     <div class="ml-2 mr-2 flex justify-between">
