@@ -110,7 +110,10 @@
       </div>
     </div>
     <div>
-      <asset-picker :addresses="addresses" @AssetSelected="AssetSelected" />
+      <asset-picker 
+        :addresses="addresses" 
+        :canvasParams="canvasParams"
+        @AssetSelected="AssetSelected" />
     </div>
   </div>
 </template>
