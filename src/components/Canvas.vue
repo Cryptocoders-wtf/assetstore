@@ -51,32 +51,29 @@
           <img
             v-if="currentDrawing.remix.image"
             :src="currentDrawing.remix.image"
+            class="absolute"
             :style="
               `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
               `Transform: ${remixTransformString};`
             "
           />
-        </div>
-        <img
-          v-for="(layer, index) in currentDrawing.layers"
-          :key="index"
-          :src="layer.svgImage"
-          class="absolute"
-          draggable="false"
-          :style="
-            `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
-            `opacity:1.0`
-          "
-          @click="onClickToPickLayer($event)"
-        />
-        <div
-          :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
-          class="absolute overflow-hidden"
-        >
+          <img
+            v-for="(layer, index) in currentDrawing.layers"
+            :key="index"
+            :src="layer.svgImage"
+            class="absolute"
+            draggable="false"
+            :style="
+              `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
+              `opacity:1.0`
+            "
+            @click="onClickToPickLayer($event)"
+          />
           <img
             v-for="(overlay, index) in currentDrawing.overlays"
             :key="index"
             :src="overlay.image"
+            class="absolute"
             draggable="false"
             :style="
               `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
