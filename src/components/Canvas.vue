@@ -86,7 +86,11 @@
         <div class="absolute"> 
           <div
             class="tool-handle-move absolute"
-            :style="`width:${canvasParams.curw}px; height:${canvasParams.curh}px; `"
+            :style="
+              `width:${canvasParams.curw}px; height:${canvasParams.curh}px; ` +
+              `left: ${moveToolPos.left}px; ` +
+              `top: ${moveToolPos.top}px; `
+            "
             draggable="true"
             @dragstart="dragLayerImgStart($event)"
             @touchstart="dragLayerImgStart($event)"
