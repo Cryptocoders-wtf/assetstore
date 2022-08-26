@@ -45,11 +45,11 @@
         @touchmove="dragOver"
       >
         <div
-          v-if="currentDrawing.remix.image"
           :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
           class="absolute overflow-hidden"
         >
           <img
+            v-if="currentDrawing.remix.image"
             :src="currentDrawing.remix.image"
             :style="
               `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
