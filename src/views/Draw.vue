@@ -2,36 +2,6 @@
   <div>
     <div class="mx-auto p-2 pl-8 pr-8 text-left">
       <div class="mb-2 text-xl font-bold">{{ "Draw Your Own Token" }}</div>
-      <div class="flex flex-wrap mb-4">
-        <div
-          v-for="(drawing, index) in drawings"
-          :key="index"
-          @click="onDrawingSelect(index)"
-          :class="`border-2 ${
-            index == selectedIndex ? 'border-blue-700' : 'border-white'
-          }`"
-        >
-          <drawing-item :drawing="drawing" />
-          <div
-            v-if="index == selectedIndex"
-            class="ml-2 mr-2 flex justify-between"
-          >
-            <button @click="onOpen">
-              <span class="material-icons">edit</span>
-            </button>
-            <div>
-              <button @click.stop="onDelete">
-                <span class="material-icons">delete</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div>
-          <button @click="onCreate">
-            <span class="material-icons text-9xl">add</span>
-          </button>
-        </div>
-      </div>
       <Canvas
         v-if="showCanvas"
         @close="onClose"
@@ -40,23 +10,55 @@
         :tokens="tokens"
         :addresses="addresses"
       />
-      <MintPanel
-        v-if="!showCanvas && selection"
-        :selection="selection"
-        :tokenAbi="tokenAbi"
-        :addresses="addresses"
-        :tokensPerAsset="tokensPerAsset"
-        :assetStoreRO="assetStoreRO"
-        :priceRange="priceRange"
-        :isRemix="true"
-        :remixId="selectedDrawing.remix.tokenId"
-        :remixTransform="remixTransformString"
-        @minted="minted"
-      >
-        <p class="mb-2">
-          {{ $tc("mintPanel.cc0Message") }}
-        </p>
-      </MintPanel>
+      <div v-else>
+        <div class="flex flex-wrap mb-4">
+          <div
+            v-for="(drawing, index) in drawings"
+            :key="index"
+            @click="onDrawingSelect(index)"
+            :class="`border-2 ${
+              index == selectedIndex ? 'border-blue-700' : 'border-white'
+            }`"
+          >
+            <drawing-item :drawing="drawing" />
+            <div
+              v-if="index == selectedIndex"
+              class="ml-2 mr-2 flex justify-between"
+            >
+              <button @click="onOpen">
+                <span class="material-icons">edit</span>
+              </button>
+              <div>
+                <button @click.stop="onDelete">
+                  <span class="material-icons">delete</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button @click="onCreate">
+              <span class="material-icons text-9xl">add</span>
+            </button>
+          </div>
+        </div>
+        <MintPanel
+          v-if="selection"
+          :selection="selection"
+          :tokenAbi="tokenAbi"
+          :addresses="addresses"
+          :tokensPerAsset="tokensPerAsset"
+          :assetStoreRO="assetStoreRO"
+          :priceRange="priceRange"
+          :isRemix="true"
+          :remixId="selectedDrawing.remix.tokenId"
+          :remixTransform="remixTransformString"
+          @minted="minted"
+        >
+          <p class="mb-2">
+            {{ $tc("mintPanel.cc0Message") }}
+          </p>
+        </MintPanel>
+      </div>
       <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
       <References
         :EtherscanStore="EtherscanStore"
