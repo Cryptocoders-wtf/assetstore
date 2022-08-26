@@ -7,106 +7,11 @@
     @dragover.prevent
   >
     <div
-      :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px; left:${canvasParams.offx}px; top:${canvasParams.offy}px`"
-      class="border-2 border-solid border-blue-700 bg-slate-100"
-      @dragover="dragOver"
-      @touchmove="dragOver"
-    >
-      <div
-        v-if="currentDrawing.remix.image"
-        :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
-        class="absolute overflow-hidden"
-      >
-        <img
-          :src="currentDrawing.remix.image"
-          :style="
-            `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
-            `Transform: ${remixTransformString};`
-          "
-        />
-      </div>
-      <img
-        v-for="(layer, index) in currentDrawing.layers"
-        :key="index"
-        :src="layer.svgImage"
-        class="absolute"
-        draggable="false"
-        :style="
-          `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
-          `opacity:1.0`
-        "
-        @click="onClickToPickLayer($event)"
-      />
-      <img
-        v-for="(overlay, index) in currentDrawing.overlays"
-        :key="index"
-        :src="overlay.image"
-        class="absolute"
-        draggable="false"
-        :style="
-          `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
-          `opacity:1.0; Transform: ${overlayTransform(
-            index,
-            canvasParams.canw
-          )}`
-        "
-      />
-      <div
-        class="tool-handle-move absolute"
-        :style="
-          `width:${canvasParams.curw}px; height:${canvasParams.curh}px; ` +
-          `left: ${moveToolPos.left}px; ` +
-          `top: ${moveToolPos.top}px; `
-        "
-        draggable="true"
-        @dragstart="dragLayerImgStart($event)"
-        @touchstart="dragLayerImgStart($event)"
-        @click="onClickToolHandle()"
-      />
-      <div v-if="toolHandleMode">
-        <div
-          v-for="({ type, x, y }, index) in toolHandles"
-          :key="index"
-          class="absolute"
-          :class="
-            type === Tools.ROTATE
-              ? 'tool-handle-rotation'
-              : 'tool-handle-scaling'
-          "
-          :style="`width:${canvasParams.curw}px; height:${canvasParams.curh}px;
-          left: ${x}px; top: ${y}px;`"
-          draggable="true"
-          @dragstart="dragToolHandleStart($event, type)"
-          @touchstart="dragToolHandleStart($event, type)"
-        />
-      </div>
-      <div v-else>
-        <div
-          v-for="(cursor, index) in cursors"
-          :key="index"
-          :style="`width:${canvasParams.curw}px; height:${
-            canvasParams.curh
-          }px; left:${
-            assetXtoCanvasX(cursor.x) - canvasParams.curw / 2
-          }px; top:${assetYtoCanvasY(cursor.y) - canvasParams.curh / 2}px`"
-          :class="`${
-            index == pointIndex ? 'border-blue-800' : 'border-blue-400'
-          } ${cursor.c ? '' : 'rounded-xl'}`"
-          draggable="true"
-          class="absolute border-2 border-solid"
-          @dragstart="dragStart($event, index)"
-          @touchstart="dragStart($event, index)"
-          @click="onSelect($event, index)"
-        />
-      </div>
-    </div>
-
-    <div
       :style="`width:${canvasParams.canw + canvasParams.sidew}px;
       height:${canvasParams.headh + 2}px;
       left:${canvasParams.offx}px;
       top:${canvasParams.offy - canvasParams.headh}px`"
-      class="absolute flex items-center justify-between border-2 border-solid border-blue-700 bg-slate-300 px-4"
+      class="flex items-center justify-between border-2 border-solid border-blue-700 bg-slate-300 px-4"
     >
       <div class="flex items-center gap-1.5">
         <Undo
@@ -133,30 +38,128 @@
       <Close @onClose="onClose" />
     </div>
 
-    <div
-      :style="`width:${canvasParams.sidew + 2}px; height:${
-        canvasParams.canh
-      }px; left:${canvasParams.offx + canvasParams.canw - 2}px; top:${
-        canvasParams.offy
-      }px`"
-      class="absolute border-2 border-solid border-blue-700 bg-slate-300"
-    >
-      <Layers
-        :drawing="currentDrawing"
-        :layerIndex="layerIndex"
-        :overlayIndex="overlayIndex"
-        :newLayer="newLayer"
-        :tokens="tokens"
-        :currentLayerType="currentLayerType"
-        :addresses="addresses"
-        :overlayTransform="overlayTransform"
-        @tokenSelected="tokenSelected"
-        @onSelectLayer="onSelectLayer"
-        @updateLayers="updateLayers"
-        @remixSelected="remixSelected"
-        @onSelectOverlay="onSelectOverlay"
-        @updateOverlays="updateOverlays"
-      />
+    <div class="flex">
+
+      <div
+        :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px; left:${canvasParams.offx}px; top:${canvasParams.offy}px`"
+        class="border-2 border-solid border-blue-700 bg-slate-100"
+        @dragover="dragOver"
+        @touchmove="dragOver"
+      >
+        <div
+          v-if="currentDrawing.remix.image"
+          :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
+          class="absolute overflow-hidden"
+        >
+          <img
+            :src="currentDrawing.remix.image"
+            :style="
+              `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
+              `Transform: ${remixTransformString};`
+            "
+          />
+        </div>
+        <img
+          v-for="(layer, index) in currentDrawing.layers"
+          :key="index"
+          :src="layer.svgImage"
+          class="absolute"
+          draggable="false"
+          :style="
+            `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
+            `opacity:1.0`
+          "
+          @click="onClickToPickLayer($event)"
+        />
+        <img
+          v-for="(overlay, index) in currentDrawing.overlays"
+          :key="index"
+          :src="overlay.image"
+          class="absolute"
+          draggable="false"
+          :style="
+            `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
+            `opacity:1.0; Transform: ${overlayTransform(
+              index,
+              canvasParams.canw
+            )}`
+          "
+        />
+        <div
+          class="tool-handle-move absolute"
+          :style="
+            `width:${canvasParams.curw}px; height:${canvasParams.curh}px; ` +
+            `left: ${moveToolPos.left}px; ` +
+            `top: ${moveToolPos.top}px; `
+          "
+          draggable="true"
+          @dragstart="dragLayerImgStart($event)"
+          @touchstart="dragLayerImgStart($event)"
+          @click="onClickToolHandle()"
+        />
+        <div v-if="toolHandleMode">
+          <div
+            v-for="({ type, x, y }, index) in toolHandles"
+            :key="index"
+            class="absolute"
+            :class="
+              type === Tools.ROTATE
+                ? 'tool-handle-rotation'
+                : 'tool-handle-scaling'
+            "
+            :style="`width:${canvasParams.curw}px; height:${canvasParams.curh}px;
+            left: ${x}px; top: ${y}px;`"
+            draggable="true"
+            @dragstart="dragToolHandleStart($event, type)"
+            @touchstart="dragToolHandleStart($event, type)"
+          />
+        </div>
+        <div v-else>
+          <div
+            v-for="(cursor, index) in cursors"
+            :key="index"
+            :style="`width:${canvasParams.curw}px; height:${
+              canvasParams.curh
+            }px; left:${
+              assetXtoCanvasX(cursor.x) - canvasParams.curw / 2
+            }px; top:${assetYtoCanvasY(cursor.y) - canvasParams.curh / 2}px`"
+            :class="`${
+              index == pointIndex ? 'border-blue-800' : 'border-blue-400'
+            } ${cursor.c ? '' : 'rounded-xl'}`"
+            draggable="true"
+            class="absolute border-2 border-solid"
+            @dragstart="dragStart($event, index)"
+            @touchstart="dragStart($event, index)"
+            @click="onSelect($event, index)"
+          />
+        </div>
+      </div>
+
+      <div
+        :style="`width:${canvasParams.sidew + 2}px; height:${
+          canvasParams.canh
+        }px; left:${canvasParams.offx + canvasParams.canw - 2}px; top:${
+          canvasParams.offy
+        }px`"
+        class="border-2 border-solid border-blue-700 bg-slate-300"
+      >
+        <Layers
+          :drawing="currentDrawing"
+          :layerIndex="layerIndex"
+          :overlayIndex="overlayIndex"
+          :newLayer="newLayer"
+          :tokens="tokens"
+          :currentLayerType="currentLayerType"
+          :addresses="addresses"
+          :overlayTransform="overlayTransform"
+          @tokenSelected="tokenSelected"
+          @onSelectLayer="onSelectLayer"
+          @updateLayers="updateLayers"
+          @remixSelected="remixSelected"
+          @onSelectOverlay="onSelectOverlay"
+          @updateOverlays="updateOverlays"
+        />
+      </div>
     </div>
   </div>
 </template>
