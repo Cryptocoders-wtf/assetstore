@@ -7,10 +7,8 @@
   >
     <div style="width:100%;height:1px"></div>
     <div
-      :style="`width:${canvasParams.canw + canvasParams.sidew}px;
-      height:${canvasParams.headh + 2}px;
-      left:${canvasParams.offx}px;
-      top:${canvasParams.offy - canvasParams.headh}px`"
+      :style="`width:${canvasParams.canw + canvasParams.sidew + 6}px;
+      height:${canvasParams.headh}px`"
       class="flex items-center justify-between m-1 bg-slate-300 px-4"
     >
       <div class="flex items-center gap-1.5">
@@ -41,7 +39,7 @@
     <div class="flex">
 
       <div
-        :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px; left:${canvasParams.offx}px; top:${canvasParams.offy}px`"
+        :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px`"
         class="m-1 mt-0 bg-slate-100"
         @dragover="dragOver"
         @touchmove="dragOver"
@@ -87,11 +85,7 @@
         />
         <div
           class="tool-handle-move absolute"
-          :style="
-            `width:${canvasParams.curw}px; height:${canvasParams.curh}px; ` +
-            `left: ${moveToolPos.left}px; ` +
-            `top: ${moveToolPos.top}px; `
-          "
+          :style="`width:${canvasParams.curw}px; height:${canvasParams.curh}px; `"
           draggable="true"
           @dragstart="dragLayerImgStart($event)"
           @touchstart="dragLayerImgStart($event)"
