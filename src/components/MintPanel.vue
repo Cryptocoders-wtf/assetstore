@@ -5,7 +5,7 @@
   >
     <p class="mt-2">
       <b>
-        <span v-if="!drawing.remix.image">{{ selection.asset.name }}, </span>
+        <span v-if="!drawing">{{ selection.asset.name }}, </span>
         {{ selection.asset.category }}</b
       >
     </p>
