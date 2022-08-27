@@ -4,7 +4,6 @@
     @drop="drop($event)"
     @dragenter.prevent
     @dragover.prevent
-    ref="divCanvas"
   >
     <div style="width: 100%; height: 1px"></div>
     <div
@@ -43,6 +42,7 @@
         class="m-1 mt-0 bg-slate-100"
         @dragover="dragOver"
         @touchmove="dragOver"
+        ref="divCanvas"
       >
         <div
           :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
@@ -515,7 +515,8 @@ export default defineComponent({
     };
   },
   mounted() {
-    console.log("****** Canvas Mounted", this.$refs.divCanvas);    
+    const divCanvas:any = this.$refs.divCanvas;
+    console.log("*** divCanvas", divCanvas.getBoundingClientRect());
   }
 });
 </script>
