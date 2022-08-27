@@ -7,9 +7,9 @@
     </div>
     <div
       v-if="showPopup"
-      :style="`width:${canvasParams.canw*2/3}px; 
-              left: ${canvasParams.offx+canvasParams.canw/3}px; 
-              top: ${canvasParams.offy+canvasParams.canh/2}px`"
+      :style="`width:${(canvasParams.canw * 2) / 3}px; 
+              left: ${canvasParams.offx + canvasParams.canw / 3}px; 
+              top: ${canvasParams.offy + canvasParams.canh / 2}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
     >
       <select
@@ -24,7 +24,11 @@
           {{ provider.name }}
         </option>
       </select>
-      <div :style="`width: 100%; height: ${canvasParams.canh/3}px; overflow-y: scroll`">
+      <div
+        :style="`width: 100%; height: ${
+          canvasParams.canh / 3
+        }px; overflow-y: scroll`"
+      >
         <span
           v-for="(assetImage, index) in assetImages"
           :key="assetImage.image"

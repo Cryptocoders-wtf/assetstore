@@ -3,7 +3,7 @@
     <div
       v-if="remix.image"
       @click="onSelectRemix"
-      class="border-2 border-solid overflow-hidden"
+      class="overflow-hidden border-2 border-solid"
       :class="`${isRemixType ? 'border-blue-400' : 'border-slate-200'}`"
     >
       <img
@@ -25,12 +25,12 @@
     </div>
     <div
       v-if="showPopup"
-      :style="`width:${canvasParams.canw*2/3}px;
-              left: ${canvasParams.offx+canvasParams.canw/3}px; 
+      :style="`width:${(canvasParams.canw * 2) / 3}px;
+              left: ${canvasParams.offx + canvasParams.canw / 3}px; 
               top: ${canvasParams.offy}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
     >
-      <div :style="`height:${canvasParams.canh/3}px; overflow-y:scroll`"> 
+      <div :style="`height:${canvasParams.canh / 3}px; overflow-y:scroll`">
         <span v-for="token in tokens" :key="token.tokenId">
           <img
             @click="onSelect(token)"

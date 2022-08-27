@@ -21,13 +21,13 @@
         </button>
       </div>
       <div
-          class="border-2 border-solid object-fill"
-          :class="`${
-            index == layerIndex && isLayerType
-              ? 'border-blue-400'
-              : 'border-slate-200'
-          }`"
-      > 
+        class="border-2 border-solid object-fill"
+        :class="`${
+          index == layerIndex && isLayerType
+            ? 'border-blue-400'
+            : 'border-slate-200'
+        }`"
+      >
         <img
           @click="onSelectLayer(index)"
           :src="layer.svgImage"
@@ -79,9 +79,10 @@
             : 'border-slate-200'
         }`"
       >
-        <div class="overflow-hidden"
+        <div
+          class="overflow-hidden"
           :style="`width:${canvasParams.sidew}px;height:${canvasParams.sidew}px;`"
-        > 
+        >
           <img
             :src="overlay.image"
             :style="
@@ -110,10 +111,11 @@
       </div>
     </div>
     <div>
-      <asset-picker 
-        :addresses="addresses" 
+      <asset-picker
+        :addresses="addresses"
         :canvasParams="canvasParams"
-        @AssetSelected="AssetSelected" />
+        @AssetSelected="AssetSelected"
+      />
     </div>
   </div>
 </template>

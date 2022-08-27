@@ -11,7 +11,7 @@
         :addresses="addresses"
       />
       <div v-else>
-        <div class="flex flex-wrap mb-4">
+        <div class="mb-4 flex flex-wrap">
           <div
             v-for="(drawing, index) in drawings"
             :key="index"

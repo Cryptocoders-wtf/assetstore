@@ -5,11 +5,11 @@
     @dragenter.prevent
     @dragover.prevent
   >
-    <div style="width:100%;height:1px"></div>
+    <div style="width: 100%; height: 1px"></div>
     <div
       :style="`width:${canvasParams.canw + canvasParams.sidew + 6}px;
       height:${canvasParams.headh}px`"
-      class="flex items-center justify-between m-1 bg-slate-300 px-4"
+      class="m-1 flex items-center justify-between bg-slate-300 px-4"
     >
       <div class="flex items-center gap-1.5">
         <Undo
@@ -37,7 +37,6 @@
     </div>
 
     <div class="flex">
-
       <div
         :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px`"
         class="m-1 mt-0 bg-slate-100"
@@ -84,7 +83,7 @@
             "
           />
         </div>
-        <div class="absolute"> 
+        <div class="absolute">
           <div
             class="tool-handle-move absolute"
             :style="
@@ -142,7 +141,7 @@
         }px; left:${canvasParams.offx + canvasParams.canw - 2}px; top:${
           canvasParams.offy
         }px`"
-        class=" bg-slate-300"
+        class="bg-slate-300"
       >
         <Layers
           :drawing="currentDrawing"
