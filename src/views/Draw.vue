@@ -49,9 +49,7 @@
           :tokensPerAsset="tokensPerAsset"
           :assetStoreRO="assetStoreRO"
           :priceRange="priceRange"
-          :isRemix="true"
-          :remixId="selectedDrawing.remix.tokenId"
-          :remixTransform="remixTransformString"
+          :drawing="selectedDrawing"
           @minted="minted"
         >
           <p class="mb-2">

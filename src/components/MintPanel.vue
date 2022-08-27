@@ -5,7 +5,7 @@
   >
     <p class="mt-2">
       <b>
-        <span v-if="!isRemix">{{ selection.asset.name }}, </span>
+        <span v-if="!drawing.remix.image">{{ selection.asset.name }}, </span>
         {{ selection.asset.category }}</b
       >
     </p>
@@ -112,6 +112,10 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { ethers } from "ethers";
 import NetworkGate from "@/components/NetworkGate.vue";
+import {
+  identityTransform,
+  Transform
+} from "@/models/point";
 
 export default defineComponent({
   props: [
@@ -121,10 +125,8 @@ export default defineComponent({
     "tokenAbi",
     "assetStoreRO",
     "priceRange",
+    "drawing",
     "isRemix",
-    "remixId",
-    "remixTransform",
-    "remixColor",
   ],
   components: {
     NetworkGate,
@@ -194,6 +196,21 @@ export default defineComponent({
       } catch (e) {
         // this is success
       }
+      const transformString = (xf:Transform) => {
+        if (
+          xf.tx == identityTransform.tx &&
+          xf.ty == identityTransform.ty &&
+          xf.scale == identityTransform.scale &&
+          xf.rotate == identityTransform.rotate
+        ) {
+          return "";
+        }
+        const d = Math.round(512 * (xf.scale - 1));
+        return (
+          `translate(${xf.tx - d} ${xf.ty - d}) ` +
+          `scale(${xf.scale}) rotate(${xf.rotate} 512 512)`
+        );
+      };
 
       asset.soulbound = await networkContext.value.signer.getAddress();
       //console.log(asset.soulbound);
@@ -201,13 +218,18 @@ export default defineComponent({
         messageRef.value = "message.minting";
         asset.minter = minterName.value;
         asset.group = ""; // gas saving
-        console.log("*** minting", props.isRemix, asset, props.remixTransform);
-        const tx = props.isRemix
-          ? await networkContext.value.contract.mintWithAsset(
+        let tx;
+        if (props.drawing) {
+          const hasRemix:boolean = props.drawing.remix.image; 
+          const tokenId = hasRemix ? props.drawing.remix.tokenId : 0;
+          const color = hasRemix ? props.drawing.remix.color || "" : "";
+          const transform = hasRemix ? transformString(props.drawing.remix.transform) : "";
+          console.log("*** minting", tokenId, color, transform)
+          tx = await networkContext.value.contract.mintWithAsset(
               asset,
-              props.remixId, // remixId
-              props.remixColor || "", // color
-              props.remixTransform || "", // transform
+              tokenId, // remixId
+              color, // color
+              transform, // transform
               [] // overlays
               /*
                 [{
@@ -218,10 +240,13 @@ export default defineComponent({
                 }]
               */
             )
-          : await networkContext.value.contract.mintWithAsset(
+
+        } else {
+          tx = await networkContext.value.contract.mintWithAsset(
               asset,
               affiliateId
             );
+        }
         const result = await tx.wait();
         console.log("mint:gasUsed", result.gasUsed.toNumber());
         messageRef.value = "message.minted";
