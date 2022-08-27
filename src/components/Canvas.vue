@@ -513,6 +513,9 @@ export default defineComponent({
       overlayTransform,
     };
   },
+  mounted() {
+    console.log("****** Canvas Mounted");    
+  }
 });
 </script>
 
