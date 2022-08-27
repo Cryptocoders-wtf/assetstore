@@ -226,13 +226,22 @@ export default defineComponent({
           const tokenId = hasRemix ? drawing.remix.tokenId : 0;
           const color = hasRemix ? drawing.remix.color || "" : "";
           const transform = hasRemix ? transformString(drawing.remix.transform) : "";
-          console.log("*** minting", tokenId, color, transform)
+          console.log("*** minting", tokenId, color, transform, drawing.overlays.length);
+          const overlays = drawing.overlays.map(overlay => {
+                return {
+                  assetId: overlay.assetId,
+                  provider: overlay.provider,
+                  fill: overlay.fill,
+                  transform: transformString(overlay.transform)
+                }
+              });
+          console.log("overlays", overlays);
           tx = await networkContext.value.contract.mintWithAsset(
               asset,
               tokenId, // remixId
               color, // color
               transform, // transform
-              [] // overlays
+              overlays
               /*
                 [{
                   assetId: 54,
