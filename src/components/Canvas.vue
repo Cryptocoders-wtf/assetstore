@@ -4,6 +4,7 @@
     @drop="drop($event)"
     @dragenter.prevent
     @dragover.prevent
+    ref="divCanvas"
   >
     <div style="width: 100%; height: 1px"></div>
     <div
@@ -514,7 +515,7 @@ export default defineComponent({
     };
   },
   mounted() {
-    console.log("****** Canvas Mounted");    
+    console.log("****** Canvas Mounted", this.$refs.divCanvas);    
   }
 });
 </script>
