@@ -114,7 +114,8 @@ import { ethers } from "ethers";
 import NetworkGate from "@/components/NetworkGate.vue";
 import {
   identityTransform,
-  Transform
+  Transform,
+  Drawing
 } from "@/models/point";
 
 export default defineComponent({
@@ -220,10 +221,11 @@ export default defineComponent({
         asset.group = ""; // gas saving
         let tx;
         if (props.drawing) {
-          const hasRemix:boolean = props.drawing.remix.image; 
-          const tokenId = hasRemix ? props.drawing.remix.tokenId : 0;
-          const color = hasRemix ? props.drawing.remix.color || "" : "";
-          const transform = hasRemix ? transformString(props.drawing.remix.transform) : "";
+          const drawing = props.drawing as Drawing;
+          const hasRemix = drawing.remix.image; 
+          const tokenId = hasRemix ? drawing.remix.tokenId : 0;
+          const color = hasRemix ? drawing.remix.color || "" : "";
+          const transform = hasRemix ? transformString(drawing.remix.transform) : "";
           console.log("*** minting", tokenId, color, transform)
           tx = await networkContext.value.contract.mintWithAsset(
               asset,
