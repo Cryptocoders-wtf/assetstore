@@ -516,7 +516,8 @@ export default defineComponent({
   },
   mounted() {
     const divCanvas:any = this.$refs.divCanvas;
-    console.log("*** divCanvas", divCanvas.getBoundingClientRect());
+    const clientRect = divCanvas.getBoundingClientRect();
+    console.log("*** divCanvas", clientRect, clientRect.y + window.scrollY);
   }
 });
 </script>
