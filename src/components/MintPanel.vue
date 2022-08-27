@@ -112,11 +112,7 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { ethers } from "ethers";
 import NetworkGate from "@/components/NetworkGate.vue";
-import {
-  identityTransform,
-  Transform,
-  Drawing
-} from "@/models/point";
+import { identityTransform, Transform, Drawing } from "@/models/point";
 
 export default defineComponent({
   props: [
@@ -197,7 +193,7 @@ export default defineComponent({
       } catch (e) {
         // this is success
       }
-      const transformString = (xf:Transform) => {
+      const transformString = (xf: Transform) => {
         if (
           xf.tx == identityTransform.tx &&
           xf.ty == identityTransform.ty &&
@@ -222,27 +218,35 @@ export default defineComponent({
         let tx;
         if (props.drawing) {
           const drawing = props.drawing as Drawing;
-          const hasRemix = drawing.remix.image; 
+          const hasRemix = drawing.remix.image;
           const tokenId = hasRemix ? drawing.remix.tokenId : 0;
           const color = hasRemix ? drawing.remix.color || "" : "";
-          const transform = hasRemix ? transformString(drawing.remix.transform) : "";
-          console.log("*** minting", tokenId, color, transform, drawing.overlays.length);
-          const overlays = drawing.overlays.map(overlay => {
-                return {
-                  assetId: overlay.assetId,
-                  provider: overlay.provider,
-                  fill: overlay.fill,
-                  transform: transformString(overlay.transform)
-                }
-              });
+          const transform = hasRemix
+            ? transformString(drawing.remix.transform)
+            : "";
+          console.log(
+            "*** minting",
+            tokenId,
+            color,
+            transform,
+            drawing.overlays.length
+          );
+          const overlays = drawing.overlays.map((overlay) => {
+            return {
+              assetId: overlay.assetId,
+              provider: overlay.provider,
+              fill: overlay.fill,
+              transform: transformString(overlay.transform),
+            };
+          });
           console.log("overlays", overlays);
           tx = await networkContext.value.contract.mintWithAsset(
-              asset,
-              tokenId, // remixId
-              color, // color
-              transform, // transform
-              overlays
-              /*
+            asset,
+            tokenId, // remixId
+            color, // color
+            transform, // transform
+            overlays
+            /*
                 [{
                   assetId: 54,
                   provider: "asset",
@@ -250,13 +254,12 @@ export default defineComponent({
                   transform: "scale(0.4, 0.4)"
                 }]
               */
-            )
-
+          );
         } else {
           tx = await networkContext.value.contract.mintWithAsset(
-              asset,
-              affiliateId
-            );
+            asset,
+            affiliateId
+          );
         }
         const result = await tx.wait();
         console.log("mint:gasUsed", result.gasUsed.toNumber());
