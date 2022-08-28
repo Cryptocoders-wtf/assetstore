@@ -151,6 +151,7 @@
           :currentLayerType="currentLayerType"
           :addresses="addresses"
           :overlayTransform="overlayTransform"
+          :canvasOffset="canvasOffset"
           @tokenSelected="tokenSelected"
           @onSelectLayer="onSelectLayer"
           @updateLayers="updateLayers"
@@ -518,6 +519,7 @@ export default defineComponent({
       overlayIndex,
       overlayTransform,
       setCanvasOffset,
+      canvasOffset
     };
   },
   mounted() {

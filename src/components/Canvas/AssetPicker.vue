@@ -8,8 +8,8 @@
     <div
       v-if="showPopup"
       :style="`width:${(canvasParams.canw * 2) / 3}px; 
-              left: ${canvasParams.offx + canvasParams.canw / 3}px; 
-              top: ${canvasParams.offy + canvasParams.canh / 2}px`"
+              left: ${canvasOffset.x + canvasParams.canw / 3}px; 
+              top: ${canvasOffset.y + canvasParams.canh / 2}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
     >
       <select
@@ -68,7 +68,7 @@ interface AssetImage {
 }
 
 export default defineComponent({
-  props: ["addresses", "canvasParams"],
+  props: ["addresses", "canvasParams", "canvasOffset"],
   setup(props, context) {
     const showPopup = ref<boolean>(false);
     const assetProviderInfos = ref<AssetProviderInfo[]>([]);

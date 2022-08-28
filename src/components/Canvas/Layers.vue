@@ -8,6 +8,7 @@
         :canvasParams="canvasParams"
         :remix="drawing.remix"
         :isRemixType="isRemixType"
+        :canvasOffset="canvasOffset"
       />
     </div>
 
@@ -114,6 +115,7 @@
       <asset-picker
         :addresses="addresses"
         :canvasParams="canvasParams"
+        :canvasOffset="canvasOffset"
         @AssetSelected="AssetSelected"
       />
     </div>
@@ -122,7 +124,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
-import { useCanvasParams } from "@/utils/canvasUtil";
+import { useCanvasParams, Pos } from "@/utils/canvasUtil";
 import {
   Layer,
   LayerType,
@@ -172,6 +174,10 @@ export default defineComponent({
       type: Function,
       required: true,
     },
+    canvasOffset: {
+      type: Object as PropType<Pos>,
+      required: true
+    }
   },
   emits: [
     "onSelectLayer",

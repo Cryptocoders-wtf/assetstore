@@ -26,8 +26,8 @@
     <div
       v-if="showPopup"
       :style="`width:${(canvasParams.canw * 2) / 3}px;
-              left: ${canvasParams.offx + canvasParams.canw / 3}px; 
-              top: ${canvasParams.offy}px`"
+              left: ${canvasOffset.x + canvasParams.canw / 3}px; 
+              top: ${canvasOffset.y}px`"
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
     >
       <div :style="`height:${canvasParams.canh / 3}px; overflow-y:scroll`">
@@ -47,7 +47,7 @@ import { defineComponent, ref, computed } from "vue";
 import { Token } from "@/models/token";
 
 export default defineComponent({
-  props: ["tokens", "remix", "canvasParams", "isRemixType"],
+  props: ["tokens", "remix", "canvasParams", "isRemixType", "canvasOffset"],
   setup(props, context) {
     const transform = computed(() => {
       const xf = props.remix.transform;
