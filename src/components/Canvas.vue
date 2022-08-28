@@ -229,6 +229,12 @@ export default defineComponent({
     },
   },
   setup(props, context) {
+    const canvasOffset = ref<Pos>({x:40, y:0});
+    const setCanvasOffset = (pos:Pos) => {
+      console.log("*** updateCanvasOffset", pos);
+      canvasOffset.value = pos;
+    };
+
     const { canvasParams, assetXtoCanvasX, assetYtoCanvasY, getAssetPos } =
       useCanvasParams();
     const layerIndex = ref<number>(0);
@@ -508,12 +514,14 @@ export default defineComponent({
       onSelectOverlay,
       overlayIndex,
       overlayTransform,
+      setCanvasOffset,
     };
   },
   mounted() {
     const divCanvas: any = this.$refs.divCanvas;
     const clientRect = divCanvas.getBoundingClientRect();
-    console.log("*** divCanvas", clientRect, clientRect.y + window.scrollY);
+    //console.log("*** divCanvas", clientRect, clientRect.y + window.scrollY);
+    this.setCanvasOffset({x:clientRect.x, y:clientRect.y + window.scrollY});
   },
 });
 </script>
