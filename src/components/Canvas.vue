@@ -5,11 +5,11 @@
     @dragenter.prevent
     @dragover.prevent
   >
-    <div style="width: 100%; height: 1px"></div>
+    <div style="width: 100%; height:4px"></div>
     <div
-      :style="`width:${canvasParams.canw + canvasParams.sidew + 6}px;
+      :style="`width:${canvasParams.canw + canvasParams.sidew + 4}px;
       height:${canvasParams.headh}px`"
-      class="m-1 flex items-center justify-between bg-slate-300 px-4"
+      class="mr-1 ml-1 flex items-center justify-between bg-slate-300 px-4"
     >
       <div class="flex items-center gap-1.5">
         <Undo
@@ -36,10 +36,10 @@
       <Close @onClose="onClose" />
     </div>
 
-    <div class="flex">
+    <div class="flex m-1">
       <div
         :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px`"
-        class="m-1 mt-0 bg-slate-100"
+        class="bg-slate-100"
         @dragover="dragOver"
         @touchmove="dragOver"
         ref="divCanvas"
@@ -139,10 +139,8 @@
       <div
         :style="`width:${canvasParams.sidew + 2}px; height:${
           canvasParams.canh
-        }px; left:${canvasParams.offx + canvasParams.canw - 2}px; top:${
-          canvasParams.offy
-        }px`"
-        class="bg-slate-300"
+        }px;`"
+        class="bg-slate-300 ml-1"
       >
         <Layers
           :drawing="currentDrawing"
@@ -162,6 +160,7 @@
         />
       </div>
     </div>
+    <div style="width: 100%; height:1px"></div>
   </div>
 </template>
 

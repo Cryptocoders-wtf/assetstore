@@ -36,14 +36,13 @@ export const assetSize = { w: 1024, h: 1024 };
 
 export const useCanvasParams = () => {
   const store = useStore();
-  const canvasMarginX = 39; // HACK: This must match the left/right margin for the canvas
-
-  const windowWidth = computed(() => {
-    return store.state.windowWidth - menuSize.sidew - canvasMarginX * 2;
-  });
+  // HACK: These numbers must match margin specified for Draw and Canvas
+  const drawMargin = 32; // m-4 (Draw)
+  const canvasMargin = 4; // m-1 (Canvas)
 
   const canvasSize = computed<{ w: number; h: number }>(() => {
-    return { w: windowWidth.value, h: windowWidth.value };
+    const canvasWidth = store.state.windowWidth - menuSize.sidew - drawMargin * 2 - canvasMargin * 3;
+    return { w: canvasWidth, h: canvasWidth };
   });
 
   const canvasParams = computed(() => {
