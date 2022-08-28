@@ -175,7 +175,6 @@ import {
   pathFromPoints,
   splitPoint,
   togglePointType,
-  Transform,
   identityTransform,
   Overlay,
 } from "@/models/point";
@@ -230,12 +229,8 @@ export default defineComponent({
     },
   },
   setup(props, context) {
-    const {
-      canvasParams,
-      assetXtoCanvasX,
-      assetYtoCanvasY,
-      getAssetPos,
-    } = useCanvasParams();
+    const { canvasParams, assetXtoCanvasX, assetYtoCanvasY, getAssetPos } =
+      useCanvasParams();
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     const overlayIndex = ref<number>(0);
@@ -516,10 +511,10 @@ export default defineComponent({
     };
   },
   mounted() {
-    const divCanvas:any = this.$refs.divCanvas;
+    const divCanvas: any = this.$refs.divCanvas;
     const clientRect = divCanvas.getBoundingClientRect();
     console.log("*** divCanvas", clientRect, clientRect.y + window.scrollY);
-  }
+  },
 });
 </script>
 

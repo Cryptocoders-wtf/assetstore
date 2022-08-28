@@ -26,7 +26,7 @@ export interface RotationInfo {
   sin: number;
 }
 
-export const menuSize = {
+const menuSize = {
   offx: 40, // fix
   offy: 145, // fix
   sidew: 150, //fix
@@ -81,12 +81,12 @@ export const useCanvasParams = () => {
   const getAssetPos = (evt: DragEvent | MouseEvent | TouchEvent): Pos => {
     const x =
       evt instanceof TouchEvent ? evt.targetTouches[0].pageX : evt.pageX;
-      const y =
+    const y =
       evt instanceof TouchEvent ? evt.targetTouches[0].pageY : evt.pageY;
     return {
-        x:canvasXtoAssetX(x - offx), 
-        y:canvasXtoAssetX(y - offy)
-      };
+      x: canvasXtoAssetX(x - offx),
+      y: canvasXtoAssetX(y - offy),
+    };
   };
   const getOffsetX = (evt: DragEvent | MouseEvent | TouchEvent): number =>
     evt instanceof TouchEvent ? 0 : evt.offsetX / canvasParams.value.caratio;

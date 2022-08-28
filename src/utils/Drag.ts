@@ -2,12 +2,12 @@ import { ref, Ref, ComputedRef, computed } from "vue";
 
 import {
   useCanvasParams,
-  menuSize,
   Pos,
   UIPos,
   Tools,
   RotationInfo,
 } from "@/utils/canvasUtil";
+
 import {
   Point,
   LayerType,
@@ -27,13 +27,8 @@ export const useDrag = (
   currentDrawing: Ref<Drawing>,
   overlayIndex: Ref<number>
 ) => {
-  const {
-    getAssetPos,
-    getOffsetX,
-    getOffsetY,
-    canvastoAsset,
-    canvasParams,
-  } = useCanvasParams();
+  const { getAssetPos, getOffsetX, getOffsetY, canvastoAsset, canvasParams } =
+    useCanvasParams();
   const remixTransform = computed(() => {
     return currentDrawing.value.remix.transform;
   });
@@ -85,7 +80,6 @@ export const useDrag = (
     recordState();
   };
   const dragOver = (evt: DragEvent | TouchEvent) => {
-    const { offx } = menuSize;
     const g = grid.value;
     const assetPos = getAssetPos(evt);
     const gridder = (pos: Pos): Pos => {
@@ -111,12 +105,9 @@ export const useDrag = (
         : 0;
     const rad =
       currentTool.value === Tools.ROTATE
-        ? pivotPos.x + offx - startPoint.x > 1
+        ? pivotPos.x - startPoint.x > 0
           ? Math.atan2(pivotPos.y - assetPos.y, pivotPos.x - assetPos.x)
-          : (Math.atan2(
-              pivotPos.y - assetPos.y,
-              pivotPos.x - assetPos.x
-            ) +
+          : (Math.atan2(pivotPos.y - assetPos.y, pivotPos.x - assetPos.x) +
               Math.PI) %
             (2 * Math.PI)
         : 0;
