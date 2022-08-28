@@ -36,10 +36,10 @@ export const assetSize = { w: 1024, h: 1024 };
 
 export const useCanvasParams = () => {
   const store = useStore();
-  const canvasOffset = ref<Pos>({x:40, y:145});
+  const canvasMarginX = 39; // HACK: This must match the left/right margin for the canvas
 
   const windowWidth = computed(() => {
-    return store.state.windowWidth - menuSize.sidew - canvasOffset.value.x * 2;
+    return store.state.windowWidth - menuSize.sidew - canvasMarginX * 2;
   });
 
   const canvasSize = computed<{ w: number; h: number }>(() => {
@@ -77,16 +77,6 @@ export const useCanvasParams = () => {
     return { x: canvasXtoAssetX(x), y: canvasYtoAssetY(y) };
   };
 
-  const getAssetPos = (evt: DragEvent | MouseEvent | TouchEvent): Pos => {
-    const x =
-      evt instanceof TouchEvent ? evt.targetTouches[0].pageX : evt.pageX;
-    const y =
-      evt instanceof TouchEvent ? evt.targetTouches[0].pageY : evt.pageY;
-    return {
-      x: canvasXtoAssetX(x - canvasOffset.value.x),
-      y: canvasXtoAssetX(y - canvasOffset.value.y),
-    };
-  };
   const getOffsetX = (evt: DragEvent | MouseEvent | TouchEvent): number =>
     evt instanceof TouchEvent ? 0 : evt.offsetX / canvasParams.value.caratio;
 
@@ -97,11 +87,9 @@ export const useCanvasParams = () => {
     canvasParams,
     assetXtoCanvasX,
     assetYtoCanvasY,
-    getAssetPos,
     getOffsetX,
     getOffsetY,
     canvastoAsset,
-    canvasOffset
   };
 };
 
