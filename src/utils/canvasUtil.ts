@@ -105,6 +105,20 @@ export const useCanvasParams = () => {
   };
 };
 
+export const useCanasAsset = (canvasOffset:Ref<Pos>) => {
+  const { canvastoAsset } = useCanvasParams();
+  const getAssetPos = (evt: DragEvent | MouseEvent | TouchEvent): Pos => {
+    const x =
+      evt instanceof TouchEvent ? evt.targetTouches[0].pageX : evt.pageX - canvasOffset.value.x;
+    const y =
+      evt instanceof TouchEvent ? evt.targetTouches[0].pageY : evt.pageY - canvasOffset.value.y;
+    return canvastoAsset({x,y});
+  };
+  return {
+    getAssetPos
+  };
+};
+
 export const roundRect: Point[] = [
   { x: assetSize.w / 4, y: assetSize.h / 4, c: false },
   { x: assetSize.w - assetSize.w / 4, y: assetSize.h / 4, c: false },

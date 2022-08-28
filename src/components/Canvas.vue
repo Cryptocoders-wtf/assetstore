@@ -193,6 +193,7 @@ import "vue3-colorpicker/style.css";
 
 import {
   useCanvasParams,
+  useCanasAsset,
   roundRect,
   Tools,
   Pos,
@@ -235,8 +236,10 @@ export default defineComponent({
       canvasOffset.value = pos;
     };
 
-    const { canvasParams, assetXtoCanvasX, assetYtoCanvasY, getAssetPos } =
+    const { canvasParams, assetXtoCanvasX, assetYtoCanvasY } =
       useCanvasParams();
+    const { getAssetPos } = useCanasAsset(canvasOffset);
+
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     const overlayIndex = ref<number>(0);
@@ -346,7 +349,8 @@ export default defineComponent({
       recordState,
       currentLayerType,
       currentDrawing,
-      overlayIndex
+      overlayIndex,
+      canvasOffset
     );
 
     const togglePoint = () => {

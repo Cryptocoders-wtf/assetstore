@@ -2,6 +2,7 @@ import { ref, Ref, ComputedRef, computed } from "vue";
 
 import {
   useCanvasParams,
+  useCanasAsset,
   Pos,
   UIPos,
   Tools,
@@ -25,10 +26,12 @@ export const useDrag = (
   recordState: () => void,
   currentLayerType: Ref<number>,
   currentDrawing: Ref<Drawing>,
-  overlayIndex: Ref<number>
+  overlayIndex: Ref<number>,
+  canvasOffset: Ref<Pos>
 ) => {
-  const { getAssetPos, getOffsetX, getOffsetY, canvastoAsset, canvasParams } =
+  const { getOffsetX, getOffsetY, canvastoAsset, canvasParams } =
     useCanvasParams();
+  const { getAssetPos } = useCanasAsset(canvasOffset);
   const remixTransform = computed(() => {
     return currentDrawing.value.remix.transform;
   });
