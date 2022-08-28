@@ -28,8 +28,7 @@ export const useDrag = (
   overlayIndex: Ref<number>
 ) => {
   const {
-    getPageX,
-    getPageY,
+    getAssetPos,
     getOffsetX,
     getOffsetY,
     canvastoAsset,
@@ -57,7 +56,7 @@ export const useDrag = (
     currentTool.value = tool;
     offsetX = canvasParams.value.curw / 2;
     offsetY = canvasParams.value.curh / 2;
-    startPoint = { x: getPageX(evt), y: getPageY(evt) };
+    startPoint = getAssetPos(evt);
     pivotPos = canvastoAsset(moveToolPos.value);
     initialCursors = cursors.value;
     initialTransform =
@@ -70,8 +69,7 @@ export const useDrag = (
     currentTool.value = Tools.MOVE;
     offsetX = canvasParams.value.curw / 2;
     offsetY = canvasParams.value.curh / 2;
-    startPoint.x = getPageX(evt);
-    startPoint.y = getPageY(evt);
+    startPoint = getAssetPos(evt);
     initialCursors = cursors.value;
     initialTransform =
       currentLayerType.value == LayerType.OVERLAY
@@ -89,6 +87,7 @@ export const useDrag = (
   const dragOver = (evt: DragEvent | TouchEvent) => {
     const { offx } = menuSize;
     const g = grid.value;
+    const assetPos = getAssetPos(evt);
     const gridder = (pos: Pos): Pos => {
       const f = (n: number) => (g == 0 ? n : Math.round(n / g) * g);
       return {
@@ -107,16 +106,16 @@ export const useDrag = (
     const magnification =
       currentTool.value === Tools.ZOOM &&
       Math.abs(pivotPos.y - startPoint.y) !== 0
-        ? Math.abs(pivotPos.y - getPageY(evt)) /
+        ? Math.abs(pivotPos.y - assetPos.y) /
           Math.abs(pivotPos.y - startPoint.y)
         : 0;
     const rad =
       currentTool.value === Tools.ROTATE
         ? pivotPos.x + offx - startPoint.x > 1
-          ? Math.atan2(pivotPos.y - getPageY(evt), pivotPos.x - getPageX(evt))
+          ? Math.atan2(pivotPos.y - assetPos.y, pivotPos.x - assetPos.x)
           : (Math.atan2(
-              pivotPos.y - getPageY(evt),
-              pivotPos.x - getPageX(evt)
+              pivotPos.y - assetPos.y,
+              pivotPos.x - assetPos.x
             ) +
               Math.PI) %
             (2 * Math.PI)
@@ -167,8 +166,8 @@ export const useDrag = (
             return {
               ...gridder(
                 limiter({
-                  x: initialCursors[index].x - (startPoint.x - getPageX(evt)),
-                  y: initialCursors[index].y - (startPoint.y - getPageY(evt)),
+                  x: initialCursors[index].x - (startPoint.x - assetPos.x),
+                  y: initialCursors[index].y - (startPoint.y - assetPos.y),
                 })
               ),
               c: cursor.c,
@@ -179,8 +178,8 @@ export const useDrag = (
               return {
                 ...gridder(
                   limiter({
-                    x: getPageX(evt),
-                    y: getPageY(evt),
+                    x: assetPos.x,
+                    y: assetPos.y,
                   })
                 ),
                 c: cursor.c,
@@ -196,7 +195,7 @@ export const useDrag = (
       switch (currentTool.value) {
         case Tools.MOVE: {
           const { x, y } = {
-            ...gridder(limiter({ x: getPageX(evt), y: getPageY(evt) })),
+            ...gridder(limiter({ x: assetPos.x, y: assetPos.y })),
           };
           tx.tx = Math.round(x - canvasParams.value.assw / 2);
           tx.ty = Math.round(y - canvasParams.value.assh / 2);

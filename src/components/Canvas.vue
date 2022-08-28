@@ -196,6 +196,7 @@ import {
   useCanvasParams,
   roundRect,
   Tools,
+  Pos,
   useToolHandleMode,
 } from "@/utils/canvasUtil";
 
@@ -233,8 +234,7 @@ export default defineComponent({
       canvasParams,
       assetXtoCanvasX,
       assetYtoCanvasY,
-      getPageX,
-      getPageY,
+      getAssetPos,
     } = useCanvasParams();
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
@@ -415,23 +415,24 @@ export default defineComponent({
     const onClickToPickLayer = (evt: MouseEvent) => {
       const results: number[] = [];
       currentDrawing.value.layers.forEach((layer: Layer, index: number) => {
+        const pos = getAssetPos(evt) as Pos;
         if (
-          getPageX(evt) >
+          pos.x >
             Math.min.apply(
               null,
               layer.points.map((p) => p.x)
             ) &&
-          getPageX(evt) <
+          pos.x <
             Math.max.apply(
               null,
               layer.points.map((p) => p.x)
             ) &&
-          getPageY(evt) >
+          pos.y >
             Math.min.apply(
               null,
               layer.points.map((p) => p.y)
             ) &&
-          getPageY(evt) <
+          pos.y <
             Math.max.apply(
               null,
               layer.points.map((p) => p.y)
