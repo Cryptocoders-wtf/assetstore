@@ -26,11 +26,6 @@ export interface RotationInfo {
   sin: number;
 }
 
-const canvasOffset:Pos = {
-  x: 40, // fix
-  y: 145, // fix
-};
-
 const menuSize = {
   sidew: 150, //fix
   headh: 50,
@@ -41,9 +36,10 @@ export const assetSize = { w: 1024, h: 1024 };
 
 export const useCanvasParams = () => {
   const store = useStore();
+  const canvasOffset = ref<Pos>({x:40, y:145});
 
   const windowWidth = computed(() => {
-    return store.state.windowWidth - menuSize.sidew - canvasOffset.x * 2;
+    return store.state.windowWidth - menuSize.sidew - canvasOffset.value.x * 2;
   });
 
   const canvasSize = computed<{ w: number; h: number }>(() => {
@@ -87,8 +83,8 @@ export const useCanvasParams = () => {
     const y =
       evt instanceof TouchEvent ? evt.targetTouches[0].pageY : evt.pageY;
     return {
-      x: canvasXtoAssetX(x - canvasOffset.x),
-      y: canvasXtoAssetX(y - canvasOffset.y),
+      x: canvasXtoAssetX(x - canvasOffset.value.x),
+      y: canvasXtoAssetX(y - canvasOffset.value.y),
     };
   };
   const getOffsetX = (evt: DragEvent | MouseEvent | TouchEvent): number =>
@@ -105,6 +101,7 @@ export const useCanvasParams = () => {
     getOffsetX,
     getOffsetY,
     canvastoAsset,
+    canvasOffset
   };
 };
 
