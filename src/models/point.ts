@@ -5,6 +5,7 @@ export interface Point {
 }
 
 export enum LayerType {
+  NONE,
   REMIX,
   LAYER,
   OVERLAY,

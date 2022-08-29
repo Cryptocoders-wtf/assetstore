@@ -84,7 +84,7 @@
             "
           />
         </div>
-        <div class="absolute">
+        <div class="absolute" v-if="hasLayerMode">
           <div
             class="tool-handle-move absolute"
             :style="
@@ -243,7 +243,7 @@ export default defineComponent({
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);
     const overlayIndex = ref<number>(0);
-    const currentLayerType = ref<number>(LayerType.LAYER);
+    const currentLayerType = ref<number>(LayerType.NONE);
 
     const currentDrawing = ref<Drawing>(props.drawing);
 
@@ -405,6 +405,10 @@ export default defineComponent({
     };
     const updateOverlayIndex = (index: number) => {
       const overlays = currentDrawing.value.overlays;
+      if (overlays.length == 0) {
+        currentLayerType.value = LayerType.OVERLAY;
+        return;
+      }
       overlayIndex.value = (index + overlays.length) % overlays.length;
     };
     const onSelectOverlay = (index: number) => {
@@ -474,6 +478,9 @@ export default defineComponent({
     ) => {
       console.log("AssetSelected", key, index, assetId);
     };
+    const hasLayerMode = computed(() => {
+      return currentLayerType.value != LayerType.NONE;
+    });
     return {
       toolHandleMode,
       Tools,
@@ -521,6 +528,7 @@ export default defineComponent({
       overlayTransform,
       setCanvasOffset,
       canvasOffset,
+      hasLayerMode,
     };
   },
   mounted() {
