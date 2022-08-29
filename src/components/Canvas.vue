@@ -397,6 +397,7 @@ export default defineComponent({
       const newValue = Object.assign({}, currentDrawing.value);
       newValue.overlays = overlays;
       currentDrawing.value = newValue;
+      updateOverlayIndex(overlayIndex.value);
     };
     const onSelectLayer = (index: number) => {
       updateLayerIndex(index);
