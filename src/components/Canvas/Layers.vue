@@ -261,15 +261,17 @@ export default defineComponent({
     };
     const AssetSelected = (
       provider: string,
+      assetId: number,
       index: number,
       image: string,
-      assetId: number
+      svgPart: string,
     ) => {
       console.log("AssetSelected", provider, index, assetId);
       const overlay: Overlay = {
         provider,
         assetId,
         image,
+        svgPart,
         fill: "",
         transform: identityTransform,
       };

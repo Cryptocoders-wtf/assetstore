@@ -63,8 +63,9 @@ interface AssetProviderInfo {
 }
 
 interface AssetImage {
-  image: string;
   assetId: number;
+  image: string;
+  svgPart: string;
 }
 
 export default defineComponent({
@@ -138,7 +139,7 @@ export default defineComponent({
         //console.log(svg);
         const image =
           "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
-        images.push({ image, assetId });
+        images.push({ image, assetId, svgPart });
         assetImages.value = images.map((assetImage) => assetImage);
       }
     });
@@ -152,9 +153,10 @@ export default defineComponent({
       context.emit(
         "AssetSelected",
         selectedProvider.value,
+        assetImage.assetId,
         index,
         assetImage.image,
-        assetImage.assetId
+        assetImage.svgPart,
       );
       showPopup.value = false;
     };

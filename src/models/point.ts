@@ -36,7 +36,8 @@ export interface Overlay {
   assetId: number;
   fill: string;
   transform: Transform;
-  image: string; // cached svg image
+  image: string; // cached svg image (base64)
+  svgPart: string; // cached svg part
 }
 
 export interface Remix {
