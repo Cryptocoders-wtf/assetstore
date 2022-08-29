@@ -5,7 +5,7 @@
     @dragenter.prevent
     @dragover.prevent
   >
-    <div style="width: 100%; height:4px"></div>
+    <div style="width: 100%; height: 4px"></div>
     <div
       :style="`width:${canvasParams.canw + canvasParams.sidew + 4}px;
       height:${canvasParams.headh}px`"
@@ -36,7 +36,7 @@
       <Close @onClose="onClose" />
     </div>
 
-    <div class="flex m-1">
+    <div class="m-1 flex">
       <div
         :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px`"
         class="bg-slate-100"
@@ -140,7 +140,7 @@
         :style="`width:${canvasParams.sidew + 2}px; height:${
           canvasParams.canh
         }px;`"
-        class="bg-slate-300 ml-1"
+        class="ml-1 bg-slate-300"
       >
         <Layers
           :drawing="currentDrawing"
@@ -161,7 +161,7 @@
         />
       </div>
     </div>
-    <div style="width: 100%; height:1px"></div>
+    <div style="width: 100%; height: 1px"></div>
   </div>
 </template>
 
@@ -230,8 +230,8 @@ export default defineComponent({
     },
   },
   setup(props, context) {
-    const canvasOffset = ref<Pos>({x:40, y:0});
-    const setCanvasOffset = (pos:Pos) => {
+    const canvasOffset = ref<Pos>({ x: 40, y: 0 });
+    const setCanvasOffset = (pos: Pos) => {
       console.log("*** updateCanvasOffset", pos);
       canvasOffset.value = pos;
     };
@@ -520,14 +520,14 @@ export default defineComponent({
       overlayIndex,
       overlayTransform,
       setCanvasOffset,
-      canvasOffset
+      canvasOffset,
     };
   },
   mounted() {
     const divCanvas: any = this.$refs.divCanvas;
     const clientRect = divCanvas.getBoundingClientRect();
     //console.log("*** divCanvas", clientRect, clientRect.y + window.scrollY);
-    this.setCanvasOffset({x:clientRect.x, y:clientRect.y + window.scrollY});
+    this.setCanvasOffset({ x: clientRect.x, y: clientRect.y + window.scrollY });
   },
 });
 </script>

@@ -41,7 +41,11 @@ export const useCanvasParams = () => {
   const canvasMargin = 4; // m-1 (Canvas)
 
   const canvasSize = computed<{ w: number; h: number }>(() => {
-    const canvasWidth = store.state.windowWidth - menuSize.sidew - drawMargin * 2 - canvasMargin * 3;
+    const canvasWidth =
+      store.state.windowWidth -
+      menuSize.sidew -
+      drawMargin * 2 -
+      canvasMargin * 3;
     return { w: canvasWidth, h: canvasWidth };
   });
 
@@ -92,17 +96,21 @@ export const useCanvasParams = () => {
   };
 };
 
-export const useCanasAsset = (canvasOffset:Ref<Pos>) => {
+export const useCanasAsset = (canvasOffset: Ref<Pos>) => {
   const { canvastoAsset } = useCanvasParams();
   const getAssetPos = (evt: DragEvent | MouseEvent | TouchEvent): Pos => {
     const x =
-      evt instanceof TouchEvent ? evt.targetTouches[0].pageX : evt.pageX - canvasOffset.value.x;
+      evt instanceof TouchEvent
+        ? evt.targetTouches[0].pageX
+        : evt.pageX - canvasOffset.value.x;
     const y =
-      evt instanceof TouchEvent ? evt.targetTouches[0].pageY : evt.pageY - canvasOffset.value.y;
-    return canvastoAsset({x,y});
+      evt instanceof TouchEvent
+        ? evt.targetTouches[0].pageY
+        : evt.pageY - canvasOffset.value.y;
+    return canvastoAsset({ x, y });
   };
   return {
-    getAssetPos
+    getAssetPos,
   };
 };
 

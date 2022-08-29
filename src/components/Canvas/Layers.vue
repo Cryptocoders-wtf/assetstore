@@ -176,8 +176,8 @@ export default defineComponent({
     },
     canvasOffset: {
       type: Object as PropType<Pos>,
-      required: true
-    }
+      required: true,
+    },
   },
   emits: [
     "onSelectLayer",
