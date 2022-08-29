@@ -277,6 +277,7 @@ export default defineComponent({
       const overlays = props.drawing.overlays.map((overlay) => overlay);
       overlays.push(overlay);
       context.emit("updateOverlays", overlays);
+      onSelectOverlay(overlays.length - 1); // select the new one
     };
     return {
       canvasParams,
