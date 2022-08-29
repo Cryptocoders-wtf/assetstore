@@ -219,16 +219,14 @@ export default defineComponent({
         if (props.drawing) {
           const drawing = props.drawing as Drawing;
           const hasRemix = drawing.remix.image;
-          const tokenId = hasRemix ? drawing.remix.tokenId : 0;
-          const color = hasRemix ? drawing.remix.color || "" : "";
-          const transform = hasRemix
-            ? transformString(drawing.remix.transform)
-            : "";
+          const remixes = hasRemix ? [{
+            tokenId : drawing.remix.tokenId,
+            fill: drawing.remix.color || "",
+            transform: transformString(drawing.remix.transform)
+          }] : [];
           console.log(
             "*** minting",
-            tokenId,
-            color,
-            transform,
+            remixes,
             drawing.overlays.length
           );
           const overlays = drawing.overlays.map((overlay) => {
@@ -242,18 +240,9 @@ export default defineComponent({
           console.log("overlays", overlays);
           tx = await networkContext.value.contract.mintWithAsset(
             asset,
-            tokenId, // remixId
-            color, // color
-            transform, // transform
+            affiliateId,
+            remixes,
             overlays
-            /*
-                [{
-                  assetId: 54,
-                  provider: "asset",
-                  fill: "blue",
-                  transform: "scale(0.4, 0.4)"
-                }]
-              */
           );
         } else {
           tx = await networkContext.value.contract.mintWithAsset(
