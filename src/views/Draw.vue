@@ -239,7 +239,7 @@ export default defineComponent({
       const loadedAssets = loadAssets(actions);
       let tag = "item";
 
-      if (drawing.remix.tokenId) {
+      if (drawing.remix.image) {
         const result = await tokenRO.functions.generateSVGPart(
           drawing.remix.tokenId
         );
