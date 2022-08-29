@@ -31,6 +31,22 @@ export const identityTransform: Transform = {
   rotate: 0,
 };
 
+export const transformString = (xf:Transform) => {
+  if (
+    xf.tx == identityTransform.tx &&
+    xf.ty == identityTransform.ty &&
+    xf.scale == identityTransform.scale &&
+    xf.rotate == identityTransform.rotate
+  ) {
+    return "";
+  }
+  const d = Math.round(512 * (xf.scale - 1));
+  return (
+    `translate(${xf.tx - d} ${xf.ty - d}) ` +
+    `scale(${xf.scale}) rotate(${xf.rotate} 512 512)`
+  );
+};
+
 export interface Overlay {
   provider: string;
   assetId: number;

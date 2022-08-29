@@ -78,6 +78,7 @@ import {
   Layer,
   svgImageFromPath,
   pathFromPoints,
+  transformString,
 } from "@/models/point";
 import DrawingItem from "@/components/Canvas/DrawingItem.vue";
 import MintPanel from "@/components/MintPanel.vue";
@@ -248,8 +249,6 @@ export default defineComponent({
         const result = await tokenRO.functions.generateSVGPart(
           drawing.remix.tokenId
         );
-        console.log("svgParts", drawing.overlays.map(overlay => overlay.svgPart).join(''));
-        // LATER: add overlays here
         loadedAssets[0].svgPart =
           result[0] +
           loadedAssets[0].svgPart + 
@@ -335,22 +334,6 @@ export default defineComponent({
       showCanvas.value = false;
       selection.value = null; // force redraw
       onDrawingSelect(selectedIndex.value);
-    };
-    // LATER: share
-    const transformString = (xf:Transform) => {
-      if (
-        xf.tx == identityTransform.tx &&
-        xf.ty == identityTransform.ty &&
-        xf.scale == identityTransform.scale &&
-        xf.rotate == identityTransform.rotate
-      ) {
-        return "";
-      }
-      const d = Math.round(512 * (xf.scale - 1));
-      return (
-        `translate(${xf.tx - d} ${xf.ty - d}) ` +
-        `scale(${xf.scale}) rotate(${xf.rotate} 512 512)`
-      );
     };
     const remixTransformString = computed(() => {
       const xf = selectedDrawing.value.remix.transform;
