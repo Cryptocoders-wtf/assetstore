@@ -70,7 +70,7 @@
 import { defineComponent, ref, computed } from "vue";
 import { ethers } from "ethers";
 import { useRoute } from "vue-router";
-import Canvas from "@/components/Canvas.vue";
+import Canvas from "@/components/Canvas/Canvas.vue";
 import {
   Drawing,
   identityTransform,
