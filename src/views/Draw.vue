@@ -73,7 +73,6 @@ import { useRoute } from "vue-router";
 import Canvas from "@/components/Canvas.vue";
 import {
   Drawing,
-  Transform,
   identityTransform,
   Layer,
   svgImageFromPath,
@@ -102,16 +101,11 @@ const contentsToken = {
   wabi: require("../abis/DrawYourOwn.json"), // wrapped abi
 };
 
-/*
-interface Dictionary<T> {
-    [Key: string]: T;
-}
-*/
 interface Info {
   nextIndex: number;
   keys: string[];
-  //drawings: Dictionary<Layer[]>;
 }
+
 const baseInfo: Info = {
   nextIndex: 0,
   keys: [],
