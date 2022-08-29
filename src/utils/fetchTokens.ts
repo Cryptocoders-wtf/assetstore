@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { ethers, BigNumber } from "ethers";
 import { Token } from "@/models/token";
 
 export const fetchTokens = async (
@@ -16,7 +16,7 @@ export const fetchTokens = async (
       if (tokens[index]) {
         return tokens[index]; // we already have it
       }
-      const tokenId = index * tokensPerAsset
+      const tokenId = index * tokensPerAsset;
 
       const result = await tokenRO.functions.assetIdOfToken(tokenId);
       const assetId = result[0].toNumber();
@@ -65,8 +65,13 @@ export const fetchTokensRemix = async (
       }
 
       const tokenId = index * tokensPerAsset;
-      const earned = await tokenRO.functions.totalEarned(tokenId);
-      console.log("***earned", earned[0]);
+      const [earnedInWei] = await tokenRO.functions.totalEarned(tokenId);
+      const earnedInGwei = earnedInWei.div(BigNumber.from(1000000000));
+      console.log(
+        "*** totalEarned",
+        tokenId,
+        earnedInGwei.toNumber() / 1000000000
+      );
 
       const svgPart = await tokenRO.functions.generateSVGPart(tokenId);
       //console.log(svgPart[1]);

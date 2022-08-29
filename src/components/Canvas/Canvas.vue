@@ -427,20 +427,23 @@ export default defineComponent({
       const results: number[] = [];
       const pos = getAssetPos(evt) as Pos;
       if (currentDrawing.value.overlays.length > 0) {
-        for (var i=currentDrawing.value.overlays.length - 1; i>=0; i--) {
+        for (var i = currentDrawing.value.overlays.length - 1; i >= 0; i--) {
           const overlay = currentDrawing.value.overlays[i];
-          const dx = canvasParams.value.assw/2 + overlay.transform.tx - pos.x;
-          const dy = canvasParams.value.assh/2 + overlay.transform.ty - pos.y;
-          const d = Math.sqrt(dx*dx + dy*dy);
-          console.log(d, canvasParams.value.assw/2 * overlay.transform.scale);
-          if (d < canvasParams.value.assw / 2 * overlay.transform.scale) {
+          const dx = canvasParams.value.assw / 2 + overlay.transform.tx - pos.x;
+          const dy = canvasParams.value.assh / 2 + overlay.transform.ty - pos.y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          console.log(
+            d,
+            (canvasParams.value.assw / 2) * overlay.transform.scale
+          );
+          if (d < (canvasParams.value.assw / 2) * overlay.transform.scale) {
             updateOverlayIndex(i);
             currentLayerType.value = LayerType.OVERLAY;
             toolHandleMode.value = true;
             return;
           }
         }
-      } 
+      }
       currentDrawing.value.layers.forEach((layer: Layer, index: number) => {
         if (
           pos.x >

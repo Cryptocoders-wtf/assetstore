@@ -219,17 +219,17 @@ export default defineComponent({
         if (props.drawing) {
           const drawing = props.drawing as Drawing;
           const hasRemix = drawing.remix.image;
-          const remixes = hasRemix ? [{
-            tokenId : drawing.remix.tokenId,
-            fill: drawing.remix.color || "",
-            transform: transformString(drawing.remix.transform)
-          }] : [];
-          console.log(
-            "*** minting",
-            remixes,
-            drawing.overlays.length
-          );
-          const txParams:any = {};
+          const remixes = hasRemix
+            ? [
+                {
+                  tokenId: drawing.remix.tokenId,
+                  fill: drawing.remix.color || "",
+                  transform: transformString(drawing.remix.transform),
+                },
+              ]
+            : [];
+          console.log("*** minting", remixes, drawing.overlays.length);
+          const txParams: any = {};
           if (hasRemix) {
             const mintPrice = await networkContext.value.contract.mintPrice();
             console.log("mintPrice", mintPrice);
