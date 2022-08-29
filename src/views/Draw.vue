@@ -73,7 +73,7 @@ import { useRoute } from "vue-router";
 import Canvas from "@/components/Canvas.vue";
 import {
   Drawing,
-  Remix,
+  Transform,
   identityTransform,
   Layer,
   svgImageFromPath,
@@ -248,13 +248,17 @@ export default defineComponent({
         const result = await tokenRO.functions.generateSVGPart(
           drawing.remix.tokenId
         );
+        console.log("svgParts", drawing.overlays.map(overlay => overlay.svgPart).join(''));
         // LATER: add overlays here
         loadedAssets[0].svgPart =
           result[0] +
-          loadedAssets[0].svgPart +
+          loadedAssets[0].svgPart + 
+          '\n' +
+          drawing.overlays.map(overlay => overlay.svgPart).join('') +
           `<g id="mixed">\n` +
           ` <use href="#${result[1]}" transform="${remixTransformString.value}" />\n` +
           ` <use href="#item" />\n` +
+          drawing.overlays.map(overlay => ` <use href="#${overlay.provider + overlay.assetId}" transform="${transformString(overlay.transform)}" />\n`).join('') +
           `</g>\n`;
         tag = "mixed";
       }
@@ -332,8 +336,8 @@ export default defineComponent({
       selection.value = null; // force redraw
       onDrawingSelect(selectedIndex.value);
     };
-    const remixTransformString = computed(() => {
-      const xf = selectedDrawing.value.remix.transform;
+    // LATER: share
+    const transformString = (xf:Transform) => {
       if (
         xf.tx == identityTransform.tx &&
         xf.ty == identityTransform.ty &&
@@ -347,6 +351,10 @@ export default defineComponent({
         `translate(${xf.tx - d} ${xf.ty - d}) ` +
         `scale(${xf.scale}) rotate(${xf.rotate} 512 512)`
       );
+    };
+    const remixTransformString = computed(() => {
+      const xf = selectedDrawing.value.remix.transform;
+      return transformString(xf);
     });
     return {
       showCanvas,
