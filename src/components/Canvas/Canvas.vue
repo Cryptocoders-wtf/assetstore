@@ -82,6 +82,7 @@
                 canvasParams.canw
               )}`
             "
+            @click="onClickToPickLayer($event)"
           />
         </div>
         <div class="absolute" v-if="hasLayerMode">
@@ -424,8 +425,23 @@ export default defineComponent({
     };
     const onClickToPickLayer = (evt: MouseEvent) => {
       const results: number[] = [];
+      const pos = getAssetPos(evt) as Pos;
+      if (currentDrawing.value.overlays.length > 0) {
+        for (var i=currentDrawing.value.overlays.length - 1; i>=0; i--) {
+          const overlay = currentDrawing.value.overlays[i];
+          const dx = canvasParams.value.assw/2 + overlay.transform.tx - pos.x;
+          const dy = canvasParams.value.assh/2 + overlay.transform.ty - pos.y;
+          const d = Math.sqrt(dx*dx + dy*dy);
+          console.log(d, canvasParams.value.assw/2 * overlay.transform.scale);
+          if (d < canvasParams.value.assw / 2 * overlay.transform.scale) {
+            updateOverlayIndex(i);
+            currentLayerType.value = LayerType.OVERLAY;
+            toolHandleMode.value = true;
+            return;
+          }
+        }
+      } 
       currentDrawing.value.layers.forEach((layer: Layer, index: number) => {
-        const pos = getAssetPos(evt) as Pos;
         if (
           pos.x >
             Math.min.apply(
@@ -457,7 +473,9 @@ export default defineComponent({
             : results[0]
         );
         currentLayerType.value = LayerType.LAYER;
-      } else if (currentDrawing.value.remix.image) {
+        return;
+      }
+      if (currentDrawing.value.remix.image) {
         currentLayerType.value = LayerType.REMIX;
         toolHandleMode.value = true;
       }
