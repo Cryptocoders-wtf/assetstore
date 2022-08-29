@@ -16,10 +16,9 @@ export const fetchTokens = async (
       if (tokens[index]) {
         return tokens[index]; // we already have it
       }
+      const tokenId = index * tokensPerAsset
 
-      const result = await tokenRO.functions.assetIdOfToken(
-        index * tokensPerAsset
-      );
+      const result = await tokenRO.functions.assetIdOfToken(tokenId);
       const assetId = result[0].toNumber();
       const svgPart = await assetStoreRO.functions.generateSVGPart(
         assetId,
@@ -66,6 +65,9 @@ export const fetchTokensRemix = async (
       }
 
       const tokenId = index * tokensPerAsset;
+      const earned = await tokenRO.functions.totalEarned(tokenId);
+      console.log("***earned", earned[0]);
+
       const svgPart = await tokenRO.functions.generateSVGPart(tokenId);
       //console.log(svgPart[1]);
       const svg = await tokenRO.functions.generateSVG(
