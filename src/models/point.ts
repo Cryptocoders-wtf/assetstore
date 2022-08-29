@@ -31,7 +31,7 @@ export const identityTransform: Transform = {
   rotate: 0,
 };
 
-export const transformString = (xf:Transform) => {
+export const transformString = (xf: Transform) => {
   if (
     xf.tx == identityTransform.tx &&
     xf.ty == identityTransform.ty &&

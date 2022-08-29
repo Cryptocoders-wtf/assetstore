@@ -156,7 +156,7 @@ export default defineComponent({
         assetImage.assetId,
         index,
         assetImage.image,
-        assetImage.svgPart,
+        assetImage.svgPart
       );
       showPopup.value = false;
     };

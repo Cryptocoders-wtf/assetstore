@@ -245,13 +245,20 @@ export default defineComponent({
         );
         loadedAssets[0].svgPart =
           result[0] +
-          loadedAssets[0].svgPart + 
-          '\n' +
-          drawing.overlays.map(overlay => overlay.svgPart).join('') +
+          loadedAssets[0].svgPart +
+          "\n" +
+          drawing.overlays.map((overlay) => overlay.svgPart).join("") +
           `<g id="mixed">\n` +
           ` <use href="#${result[1]}" transform="${remixTransformString.value}" />\n` +
           ` <use href="#item" />\n` +
-          drawing.overlays.map(overlay => ` <use href="#${overlay.provider + overlay.assetId}" transform="${transformString(overlay.transform)}" />\n`).join('') +
+          drawing.overlays
+            .map(
+              (overlay) =>
+                ` <use href="#${
+                  overlay.provider + overlay.assetId
+                }" transform="${transformString(overlay.transform)}" />\n`
+            )
+            .join("") +
           `</g>\n`;
         tag = "mixed";
       }
