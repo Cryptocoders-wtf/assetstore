@@ -229,6 +229,13 @@ export default defineComponent({
             remixes,
             drawing.overlays.length
           );
+          const txParams:any = {};
+          if (hasRemix) {
+            const mintPrice = await networkContext.value.contract.mintPrice();
+            console.log("mintPrice", mintPrice);
+            txParams.value = mintPrice;
+          }
+
           const overlays = drawing.overlays.map((overlay) => {
             return {
               assetId: overlay.assetId,
@@ -242,7 +249,8 @@ export default defineComponent({
             asset,
             affiliateId,
             remixes,
-            overlays
+            overlays,
+            txParams
           );
         } else {
           tx = await networkContext.value.contract.mintWithAsset(
@@ -255,7 +263,7 @@ export default defineComponent({
         messageRef.value = "message.minted";
         context.emit("minted");
       } catch (e: any) {
-        console.log(e);
+        console.log("*** mint error", e);
         messageRef.value = e.message;
       }
     };
