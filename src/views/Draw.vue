@@ -89,7 +89,6 @@ import { fetchTokensRemix } from "@/utils/fetchTokens";
 import { getAddresses } from "@/utils/const";
 import References from "@/components/References.vue";
 import NFTList from "@/components/NFTList.vue";
-import { v4 as uuidv4 } from "uuid";
 import { OriginalAssetData, OriginalAssetDataSet } from "@/models/asset";
 import { roundRect } from "@/utils/canvasUtil";
 
@@ -225,21 +224,20 @@ export default defineComponent({
     const onDrawingSelect = async (index: number) => {
       selectedIndex.value = index;
       const drawing = selectedDrawing.value;
-      const uuid = uuidv4();
       const asset: OriginalAssetData = {
-        name: uuid,
+        name: "", // the contract will specify
         parts: drawing.layers.map((layer) => {
           return { body: layer.path, color: layer.color };
         }),
       };
-      const actions: OriginalAssetDataSet = {
-        group: "",
+      const dataset: OriginalAssetDataSet = {
+        group: "", // the contract will specify
         category: "CC0 Drawing (36)",
         width: 1024,
         height: 1024,
         assets: [asset],
       };
-      const loadedAssets = loadAssets(actions);
+      const loadedAssets = loadAssets(dataset);
       let tag = "item";
 
       const remix = {
@@ -255,7 +253,8 @@ export default defineComponent({
       }
       loadedAssets[0].svgPart =
         loadedAssets[0].svgPart +
-        remix.def + "\n" +
+        remix.def +
+        "\n" +
         drawing.overlays.map((overlay) => overlay.svgPart).join("") +
         `<g id="mixed">\n` +
         remix.use +
@@ -263,7 +262,9 @@ export default defineComponent({
         drawing.overlays
           .map(
             (overlay) =>
-              ` <use href="#${overlay.svgTag}" transform="${transformString(overlay.transform)}" />\n`
+              ` <use href="#${overlay.svgTag}" transform="${transformString(
+                overlay.transform
+              )}" />\n`
           )
           .join("") +
         `</g>\n`;
