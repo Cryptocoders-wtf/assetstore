@@ -1,5 +1,6 @@
 import { ethers, BigNumber } from "ethers";
 import { Token } from "@/models/token";
+import { weiToEther } from "@/utils/currency";
 
 export const fetchTokens = async (
   count: number,
@@ -66,11 +67,10 @@ export const fetchTokensRemix = async (
 
       const tokenId = index * tokensPerAsset;
       const [earnedInWei] = await tokenRO.functions.totalEarned(tokenId);
-      const earnedInGwei = earnedInWei.div(BigNumber.from(1000000000));
       console.log(
         "*** totalEarned",
         tokenId,
-        earnedInGwei.toNumber() / 1000000000
+        weiToEther(earnedInWei)
       );
 
       const svgPart = await tokenRO.functions.generateSVGPart(tokenId);
