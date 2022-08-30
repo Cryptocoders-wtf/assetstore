@@ -253,6 +253,7 @@ export default defineComponent({
         remix.def = result[0];
         remix.use = ` <use href="#${result[1]}" transform="${remixTransformString.value}" />\n`;
       }
+      // BUGBUG: asset required +1
       loadedAssets[0].svgPart =
         loadedAssets[0].svgPart + "\n"
         + drawing.overlays.map((overlay) => overlay.svgPart).join("")
@@ -263,7 +264,7 @@ export default defineComponent({
           .map(
             (overlay) =>
               ` <use href="#${
-                overlay.provider + overlay.assetId
+                overlay.provider + (overlay.assetId + (overlay.provider=="asset" ? 1 : 0))
               }" transform="${transformString(overlay.transform)}" />\n`
           )
           .join("") 
