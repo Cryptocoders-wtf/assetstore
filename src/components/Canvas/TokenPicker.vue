@@ -21,7 +21,7 @@
         @click="onRemove"
         class="ml-2 flex"
       >
-        <span class="material-icons">image_not_supported</span>
+        <span class="material-icons">delete</span>
       </button>
     </div>
     <div
