@@ -164,6 +164,9 @@ export default defineComponent({
           fetchPrimaryTokens();
         }
       });
+      tokenRO.on(tokenRO.filters.PayedOut(), async (to, tokenId, amount) => {
+        console.log("*** event.PayedOut", to, tokenId, amount);
+      });
     });
 
     const fetchPrimaryTokens = async () => {
@@ -231,7 +234,7 @@ export default defineComponent({
       };
       const actions: OriginalAssetDataSet = {
         group: "",
-        category: "CC0 Drawing (35)",
+        category: "CC0 Drawing (36)",
         width: 1024,
         height: 1024,
         assets: [asset],
