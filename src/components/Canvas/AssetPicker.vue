@@ -4,6 +4,10 @@
       <button @click="onOpen" class="">
         <span class="material-icons">image</span>
       </button>
+      <div class="text-sm">{{$tc("dfraw.overlay")}}</div>
+      <div>
+        <span class="material-icons invisible">image</span>
+      </div>
     </div>
     <div
       v-if="showPopup"

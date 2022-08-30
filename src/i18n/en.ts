@@ -72,6 +72,10 @@ const lang = {
     thanks:
       "Thanks to all the minters, the current release of { totalCount } NFTs were sold out. We are going to add more NTFs soon. Please stay tuned!",
   },
+  dfraw: {
+    remix: "Remix",
+    overlay: "Overlay",
+  },
   languages,
 };
 

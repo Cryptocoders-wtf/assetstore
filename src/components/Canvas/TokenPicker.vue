@@ -15,6 +15,7 @@
       <button @click="onOpen" class="">
         <span class="material-icons">image</span>
       </button>
+      <div class="text-sm">{{$tc("dfraw.remix")}}</div>
       <button
         :style="`opacity:${remix.image ? '1.0' : '0.5'}`"
         @click="onRemove"
