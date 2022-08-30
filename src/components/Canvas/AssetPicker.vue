@@ -47,6 +47,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 import { ethers } from "ethers";
+import { Overlay, identityTransform } from "@/models/point";
 
 const AssetComposer = {
   wabi: require("@/abis/AssetComposer.json"), // wrapped abi
@@ -62,19 +63,13 @@ interface AssetProviderInfo {
   provider: string;
 }
 
-interface AssetImage {
-  assetId: number;
-  image: string;
-  svgPart: string;
-}
-
 export default defineComponent({
   props: ["addresses", "canvasParams", "canvasOffset"],
   setup(props, context) {
     const showPopup = ref<boolean>(false);
     const assetProviderInfos = ref<AssetProviderInfo[]>([]);
     const selectedProvider = ref<string | null>(null);
-    const assetImages = ref<AssetImage[]>([]);
+    const assetImages = ref<Overlay[]>([]);
     //console.log("***", props.addresses.composerAddress);
     const provider =
       props.addresses.network == "localhost"
@@ -122,11 +117,12 @@ export default defineComponent({
       const count = result2[0].toNumber();
       console.log("totalSupply", count);
       const limit = count > 0 ? count : 50;
-      const images: AssetImage[] = [];
+      const images: Overlay[] = [];
+
       for (let i = 0; i < limit; i++) {
         const assetId = count > 0 ? i : Math.floor(Math.random() * 0x1000000);
         const result = await assetProvider.functions.generateSVGPart(assetId);
-        if (selectedProvider.value != newValue) {
+        if (selectedProvider.value != newValue || newValue == null) {
           return;
         }
         const svgPart = result[0];
@@ -139,7 +135,7 @@ export default defineComponent({
         //console.log(svg);
         const image =
           "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
-        images.push({ image, assetId, svgPart });
+        images.push({ provider: newValue, image, assetId, svgPart, transform:identityTransform, fill:"" });
         assetImages.value = images.map((assetImage) => assetImage);
       }
     });
