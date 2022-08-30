@@ -255,20 +255,22 @@ export default defineComponent({
       }
       // BUGBUG: asset required +1
       loadedAssets[0].svgPart =
-        loadedAssets[0].svgPart + "\n"
-        + drawing.overlays.map((overlay) => overlay.svgPart).join("")
-        + `<g id="mixed">\n` 
-        + remix.use 
-        + ` <use href="#item" />\n` 
-        + drawing.overlays
+        loadedAssets[0].svgPart +
+        "\n" +
+        drawing.overlays.map((overlay) => overlay.svgPart).join("") +
+        `<g id="mixed">\n` +
+        remix.use +
+        ` <use href="#item" />\n` +
+        drawing.overlays
           .map(
             (overlay) =>
               ` <use href="#${
-                overlay.provider + (overlay.assetId + (overlay.provider=="asset" ? 1 : 0))
+                overlay.provider +
+                (overlay.assetId + (overlay.provider == "asset" ? 1 : 0))
               }" transform="${transformString(overlay.transform)}" />\n`
           )
-          .join("") 
-        + `</g>\n`;
+          .join("") +
+        `</g>\n`;
       tag = "mixed";
       onSelect(loadedAssets[0], tag);
     };

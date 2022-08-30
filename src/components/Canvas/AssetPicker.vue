@@ -30,7 +30,7 @@
         }px; overflow-y: scroll`"
       >
         <span
-          v-for="(assetImage, index) in assetImages"
+          v-for="(assetImage, index) in assetOverlays"
           :key="assetImage.image"
         >
           <img
@@ -69,7 +69,7 @@ export default defineComponent({
     const showPopup = ref<boolean>(false);
     const assetProviderInfos = ref<AssetProviderInfo[]>([]);
     const selectedProvider = ref<string | null>(null);
-    const assetImages = ref<Overlay[]>([]);
+    const assetOverlays = ref<Overlay[]>([]);
     //console.log("***", props.addresses.composerAddress);
     const provider =
       props.addresses.network == "localhost"
@@ -117,7 +117,7 @@ export default defineComponent({
       const count = result2[0].toNumber();
       console.log("totalSupply", count);
       const limit = count > 0 ? count : 50;
-      const images: Overlay[] = [];
+      const overlays: Overlay[] = [];
 
       for (let i = 0; i < limit; i++) {
         const assetId = count > 0 ? i : Math.floor(Math.random() * 0x1000000);
@@ -135,8 +135,15 @@ export default defineComponent({
         //console.log(svg);
         const image =
           "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
-        images.push({ provider: newValue, image, assetId, svgPart, transform:identityTransform, fill:"" });
-        assetImages.value = images.map((assetImage) => assetImage);
+        overlays.push({
+          provider: newValue,
+          image,
+          assetId,
+          svgPart,
+          transform: identityTransform,
+          fill: "",
+        });
+        assetOverlays.value = overlays.map((assetImage) => assetImage);
       }
     });
 
@@ -145,7 +152,7 @@ export default defineComponent({
     };
 
     const onSelect = (index: number) => {
-      const overlay = assetImages.value[index];
+      const overlay = assetOverlays.value[index];
       context.emit("AssetSelected", overlay);
       showPopup.value = false;
     };
@@ -154,7 +161,7 @@ export default defineComponent({
       showPopup,
       assetProviderInfos,
       selectedProvider,
-      assetImages,
+      assetOverlays,
       onSelect,
     };
   },

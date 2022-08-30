@@ -259,9 +259,7 @@ export default defineComponent({
     const remixSelected = () => {
       context.emit("remixSelected");
     };
-    const AssetSelected = (
-      overlay: Overlay
-    ) => {
+    const AssetSelected = (overlay: Overlay) => {
       overlay.transform.scale = 0.5;
       const overlays = props.drawing.overlays.map((overlay) => overlay);
       overlays.push(overlay);
