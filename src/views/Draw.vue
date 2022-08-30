@@ -256,7 +256,7 @@ export default defineComponent({
       // BUGBUG: asset required +1
       loadedAssets[0].svgPart =
         loadedAssets[0].svgPart +
-        "\n" +
+        remix.def + "\n" +
         drawing.overlays.map((overlay) => overlay.svgPart).join("") +
         `<g id="mixed">\n` +
         remix.use +
