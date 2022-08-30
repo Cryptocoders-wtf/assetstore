@@ -113,6 +113,7 @@ import { useRoute } from "vue-router";
 import { ethers } from "ethers";
 import NetworkGate from "@/components/NetworkGate.vue";
 import { identityTransform, Transform, Drawing } from "@/models/point";
+import { weiToEther } from "@/utils/currency";
 
 export default defineComponent({
   props: [
@@ -228,12 +229,13 @@ export default defineComponent({
                 },
               ]
             : [];
-          console.log("*** minting", remixes, drawing.overlays.length);
           const txParams: any = {};
           if (hasRemix) {
             const mintPrice = await networkContext.value.contract.mintPrice();
-            console.log("mintPrice", mintPrice);
+            console.log("*** minting", remixes.length, drawing.overlays.length, weiToEther(mintPrice));
             txParams.value = mintPrice;
+          } else {
+            console.log("*** minting", remixes.length, drawing.overlays.length);
           }
 
           const overlays = drawing.overlays.map((overlay) => {
@@ -244,7 +246,7 @@ export default defineComponent({
               transform: transformString(overlay.transform),
             };
           });
-          console.log("overlays", overlays);
+          // console.log("overlays", overlays);
           tx = await networkContext.value.contract.mintWithAsset(
             asset,
             affiliateId,

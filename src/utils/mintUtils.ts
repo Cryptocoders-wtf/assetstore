@@ -23,10 +23,12 @@ export const useOnSelect = (initTokenPer: number, tokenRO: ethers.Contract) => {
   const tokensPerAsset = ref(initTokenPer); // hard-coded only for MaterialToken
   const selection = ref<MintSelectionAsset | null>(null);
   const onSelect = async (asset: OriginalAssetData, tag: string | null) => {
-    if (selection.value && selection.value.asset.name == asset.name) {
+    /* We no longer unselect on selecting the same one
+    if (selection.value && selection.value.asset.name == asset.name && asset.name != "") {
       selection.value = null;
       return;
     }
+    */
     selection.value = {
       isLoading: true,
       asset,
