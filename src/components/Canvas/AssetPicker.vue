@@ -145,15 +145,8 @@ export default defineComponent({
     };
 
     const onSelect = (index: number) => {
-      const assetImage = assetImages.value[index];
-      context.emit(
-        "AssetSelected",
-        selectedProvider.value,
-        assetImage.assetId,
-        index,
-        assetImage.image,
-        assetImage.svgPart
-      );
+      const overlay = assetImages.value[index];
+      context.emit("AssetSelected", overlay);
       showPopup.value = false;
     };
     return {

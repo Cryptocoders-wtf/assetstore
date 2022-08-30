@@ -260,21 +260,8 @@ export default defineComponent({
       context.emit("remixSelected");
     };
     const AssetSelected = (
-      provider: string,
-      assetId: number,
-      index: number,
-      image: string,
-      svgPart: string
+      overlay: Overlay
     ) => {
-      console.log("AssetSelected", provider, index, assetId);
-      const overlay: Overlay = {
-        provider,
-        assetId,
-        image,
-        svgPart,
-        fill: "",
-        transform: identityTransform,
-      };
       overlay.transform.scale = 0.5;
       const overlays = props.drawing.overlays.map((overlay) => overlay);
       overlays.push(overlay);
