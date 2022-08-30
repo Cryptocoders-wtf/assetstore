@@ -135,13 +135,15 @@ export default defineComponent({
         //console.log(svg);
         const image =
           "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
+        const transform = Object.assign({}, identityTransform);
+        transform.scale = 0.5;
         overlays.push({
           provider: newValue,
           image,
           assetId,
           svgPart,
           svgTag,
-          transform: identityTransform,
+          transform,
           fill: "",
         });
         assetOverlays.value = overlays.map((assetImage) => assetImage);
