@@ -91,6 +91,7 @@ import References from "@/components/References.vue";
 import NFTList from "@/components/NFTList.vue";
 import { OriginalAssetData, OriginalAssetDataSet } from "@/models/asset";
 import { roundRect } from "@/utils/canvasUtil";
+import { weiToEther } from "@/utils/currency";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -164,7 +165,7 @@ export default defineComponent({
         }
       });
       tokenRO.on(tokenRO.filters.PayedOut(), async (to, tokenId, amount) => {
-        console.log("*** event.PayedOut", to, tokenId, amount);
+        console.log("*** event.PayedOut", to, tokenId.toNumber(), weiToEther(amount));
       });
     });
 
