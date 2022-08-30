@@ -242,29 +242,33 @@ export default defineComponent({
       const loadedAssets = loadAssets(actions);
       let tag = "item";
 
+      const remix = {
+        def: "",
+        use: "",
+      };
       if (drawing.remix.image) {
         const result = await tokenRO.functions.generateSVGPart(
           drawing.remix.tokenId
         );
-        loadedAssets[0].svgPart =
-          result[0] +
-          loadedAssets[0].svgPart +
-          "\n" +
-          drawing.overlays.map((overlay) => overlay.svgPart).join("") +
-          `<g id="mixed">\n` +
-          ` <use href="#${result[1]}" transform="${remixTransformString.value}" />\n` +
-          ` <use href="#item" />\n` +
-          drawing.overlays
-            .map(
-              (overlay) =>
-                ` <use href="#${
-                  overlay.provider + overlay.assetId
-                }" transform="${transformString(overlay.transform)}" />\n`
-            )
-            .join("") +
-          `</g>\n`;
-        tag = "mixed";
+        remix.def = result[0];
+        remix.use = ` <use href="#${result[1]}" transform="${remixTransformString.value}" />\n`;
       }
+      loadedAssets[0].svgPart =
+        loadedAssets[0].svgPart + "\n"
+        + drawing.overlays.map((overlay) => overlay.svgPart).join("")
+        + `<g id="mixed">\n` 
+        + remix.use 
+        + ` <use href="#item" />\n` 
+        + drawing.overlays
+          .map(
+            (overlay) =>
+              ` <use href="#${
+                overlay.provider + overlay.assetId
+              }" transform="${transformString(overlay.transform)}" />\n`
+          )
+          .join("") 
+        + `</g>\n`;
+      tag = "mixed";
       onSelect(loadedAssets[0], tag);
     };
     const onOpen = () => {
