@@ -264,10 +264,7 @@ export default defineComponent({
         drawing.overlays
           .map(
             (overlay) =>
-              ` <use href="#${
-                overlay.provider +
-                (overlay.assetId + (overlay.provider == "asset" ? 1 : 0))
-              }" transform="${transformString(overlay.transform)}" />\n`
+              ` <use href="#${overlay.svgTag}" transform="${transformString(overlay.transform)}" />\n`
           )
           .join("") +
         `</g>\n`;

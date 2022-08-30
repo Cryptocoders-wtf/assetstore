@@ -55,6 +55,7 @@ export interface Overlay {
   transform: Transform;
   image: string; // cached svg image (base64)
   svgPart: string; // cached svg part
+  svgTag: string; // cached svg tag
 }
 
 export interface Remix {

@@ -126,11 +126,11 @@ export default defineComponent({
           return;
         }
         const svgPart = result[0];
-        const tag = result[1];
+        const svgTag = result[1];
         const svg =
           '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">\n' +
           `<defs>\n${svgPart}\n</defs>\n` +
-          `<use href="#${tag}" />\n` +
+          `<use href="#${svgTag}" />\n` +
           "</svg>\n";
         //console.log(svg);
         const image =
@@ -140,6 +140,7 @@ export default defineComponent({
           image,
           assetId,
           svgPart,
+          svgTag,
           transform: identityTransform,
           fill: "",
         });
