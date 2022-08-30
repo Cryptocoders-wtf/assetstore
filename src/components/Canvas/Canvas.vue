@@ -411,7 +411,7 @@ export default defineComponent({
     const updateOverlayIndex = (index: number) => {
       const overlays = currentDrawing.value.overlays;
       if (overlays.length == 0) {
-        currentLayerType.value = LayerType.OVERLAY;
+        currentLayerType.value = LayerType.NONE;
         return;
       }
       overlayIndex.value = (index + overlays.length) % overlays.length;
