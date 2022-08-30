@@ -196,7 +196,7 @@ export default defineComponent({
     const info = ref<Info>(
       resultInfo ? JSON.parse(resultInfo) || baseInfo : baseInfo
     );
-    console.log("** info", info.value.nextIndex, info.value.keys);
+    // console.log("** info", info.value.nextIndex, info.value.keys);
     drawings.value = info.value.keys.map((key, index) => {
       const result = localStorage.getItem(key);
       //console.log("result", key, index, result);
@@ -206,12 +206,7 @@ export default defineComponent({
       // Backward compativility
       drawing.overlays = drawing.overlays || [];
       drawing.remix = drawing.remix || { transform: identityTransform };
-      console.log(
-        "** setup:overlays.length",
-        index,
-        drawing.layers.length,
-        drawing.overlays.length
-      );
+      // console.log("** setup:overlays.length", index, drawing.layers.length, drawing.overlays.length);
       return drawing;
     });
     //console.log("drawings", drawings.value);
@@ -232,7 +227,7 @@ export default defineComponent({
       };
       const dataset: OriginalAssetDataSet = {
         group: "", // the contract will specify
-        category: "CC0 Drawing (36)",
+        category: "CC0 Drawing (37)",
         width: 1024,
         height: 1024,
         assets: [asset],
