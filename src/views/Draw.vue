@@ -165,7 +165,12 @@ export default defineComponent({
         }
       });
       tokenRO.on(tokenRO.filters.PayedOut(), async (to, tokenId, amount) => {
-        console.log("*** event.PayedOut", to, tokenId.toNumber(), weiToEther(amount));
+        console.log(
+          "*** event.PayedOut",
+          to,
+          tokenId.toNumber(),
+          weiToEther(amount)
+        );
       });
     });
 

@@ -232,7 +232,12 @@ export default defineComponent({
           const txParams: any = {};
           if (hasRemix) {
             const mintPrice = await networkContext.value.contract.mintPrice();
-            console.log("*** minting", remixes.length, drawing.overlays.length, weiToEther(mintPrice));
+            console.log(
+              "*** minting",
+              remixes.length,
+              drawing.overlays.length,
+              weiToEther(mintPrice)
+            );
             txParams.value = mintPrice;
           } else {
             console.log("*** minting", remixes.length, drawing.overlays.length);
