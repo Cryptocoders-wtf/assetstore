@@ -29,7 +29,6 @@
         <SplitSegment @splitSegment="splitSegment" />
         <div class="self-start">|</div>
         <color-picker
-          style="`margin: 10px; width: 100%"
           v-model:pureColor="stagingColor"
         />
       </div>
@@ -300,18 +299,23 @@ export default defineComponent({
 
     watch([cursors, currentColor], ([points, color]) => {
       const newValue = Object.assign({}, currentDrawing.value);
-      newValue.layers = currentDrawing.value.layers.map((layer, index) => {
-        if (index == layerIndex.value) {
-          const path = pathFromPoints(points);
-          return {
-            points,
-            color,
-            path,
-            svgImage: svgImageFromPath(path, color),
-          };
-        }
-        return layer;
-      });
+      
+      switch (currentLayerType.value) {
+        case LayerType.LAYER:
+          newValue.layers = currentDrawing.value.layers.map((layer, index) => {
+            if (index == layerIndex.value) {
+              const path = pathFromPoints(points);
+              return {
+                points,
+                color,
+                path,
+                svgImage: svgImageFromPath(path, color),
+              };
+            }
+            return layer;
+          });
+        break;
+      }
       currentDrawing.value = newValue;
     });
     const updateLayerIndex = (index: number) => {
