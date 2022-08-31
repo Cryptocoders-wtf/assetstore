@@ -145,7 +145,6 @@
           :layerIndex="layerIndex"
           :overlayIndex="overlayIndex"
           :newLayer="newLayer"
-          :tokens="tokens"
           :remixes="remixes"
           :currentLayerType="currentLayerType"
           :addresses="addresses"
@@ -218,10 +217,6 @@ export default defineComponent({
   props: {
     drawing: {
       type: Object as PropType<Drawing>,
-      required: true,
-    },
-    tokens: {
-      type: Array as PropType<Token[]>,
       required: true,
     },
     remixes: {

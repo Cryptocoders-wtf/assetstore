@@ -45,10 +45,10 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
-import { Token } from "@/models/token";
+import { Remix } from "@/models/point";
 
 export default defineComponent({
-  props: ["tokens", "remixes", "remix", "canvasParams", "isRemixType", "canvasOffset"],
+  props: ["remixes", "remix", "canvasParams", "isRemixType", "canvasOffset"],
   setup(props, context) {
     const transform = computed(() => {
       const xf = props.remix.transform;
@@ -65,7 +65,7 @@ export default defineComponent({
       console.log("onOpen");
       showPopup.value = !showPopup.value;
     };
-    const onSelect = (token: Token) => {
+    const onSelect = (token: Remix) => {
       console.log("onSelect", token.tokenId);
       //context.emit("update:remixToken", token);
       context.emit("tokenSelected", token);

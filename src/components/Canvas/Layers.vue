@@ -2,7 +2,6 @@
   <div :style="`height:${canvasParams.canh - 4}px; overflow-y: scroll`">
     <div>
       <token-picker
-        :tokens="tokens"
         :remixes="remixes"
         @tokenSelected="tokenSelected"
         @remixSelected="remixSelected"
@@ -137,7 +136,6 @@ import {
   Overlay,
 } from "@/models/point";
 import TokenPicker from "@/components/Canvas/TokenPicker.vue";
-import { Token } from "@/models/token";
 import AssetPicker from "@/components/Canvas/AssetPicker.vue";
 
 export default defineComponent({
@@ -160,10 +158,6 @@ export default defineComponent({
     },
     newLayer: {
       type: Object as PropType<Layer>,
-      required: true,
-    },
-    tokens: {
-      type: Array as PropType<Token[]>,
       required: true,
     },
     remixes: {

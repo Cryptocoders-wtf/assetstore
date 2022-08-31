@@ -7,7 +7,6 @@
         @close="onClose"
         class="z-10"
         :drawing="selectedDrawing"
-        :tokens="tokens"
         :remixes="remixes"
         :addresses="addresses"
       />
