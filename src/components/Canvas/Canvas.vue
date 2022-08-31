@@ -145,7 +145,6 @@
           :remixes="remixes"
           :currentLayerType="currentLayerType"
           :addresses="addresses"
-          :overlayTransform="overlayTransform"
           :canvasOffset="canvasOffset"
           @tokenSelected="tokenSelected"
           @onSelectLayer="onSelectLayer"
