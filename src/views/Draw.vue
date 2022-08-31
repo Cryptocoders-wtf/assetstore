@@ -310,7 +310,7 @@ export default defineComponent({
       const drawing: Drawing = {
         layers: [layer],
         overlays: [],
-        remix: { transform: identityTransform },
+        remix: { tokenId:0, transform: identityTransform },
       };
 
       const newDrawings: Drawing[] = drawings.value.map((body) => body);

@@ -285,7 +285,7 @@ export default defineComponent({
       const newValue: Drawing = {
         layers: currentDrawing.value.layers,
         overlays: currentDrawing.value.overlays,
-        remix: { transform: identityTransform },
+        remix: { tokenId:0, transform: identityTransform },
       };
       if (remix) {
         newValue.remix = Object.assign({}, remix);

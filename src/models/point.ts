@@ -59,7 +59,7 @@ export interface Overlay {
 }
 
 export interface Remix {
-  tokenId?: number; // optional remix tokenId
+  tokenId: number; // remix tokenId
   color?: string;
   transform: Transform;
   image?: string; // cached svg image
