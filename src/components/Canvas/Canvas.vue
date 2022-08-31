@@ -320,6 +320,14 @@ export default defineComponent({
             if (index == overlayIndex.value) {
               const newOverlay = Object.assign({}, overlay);
               newOverlay.fill = color;
+              const svg =
+                '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">\n' +
+                `<defs>\n${overlay.svgPart}\n</defs>\n` +
+                `<use href="#${overlay.svgTag}" fill="${color}"/>\n` +
+                "</svg>\n";
+              //console.log(svg);
+              newOverlay.image =
+                "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
               return newOverlay;
             }
             return overlay;
