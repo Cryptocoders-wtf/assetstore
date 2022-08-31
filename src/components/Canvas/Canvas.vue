@@ -74,10 +74,7 @@
             draggable="false"
             :style="
               `width:${canvasParams.canw}px; height:${canvasParams.canh}px;` +
-              `opacity:1.0; Transform: ${overlayTransform(
-                index,
-                canvasParams.canw
-              )}`
+              `opacity:1.0; Transform: ${overlayTransform(index)}`
             "
             @click="onClickToPickLayer($event)"
           />
@@ -524,12 +521,10 @@ export default defineComponent({
         stagingColor.value = currentDrawing.value.remix.color || "";
       }
     };
-    const overlayTransform = (index: number, width: number) => {
-      const xf = currentDrawing.value.overlays[index].transform;
-      return (
-        `translate(${(xf.tx * width) / canvasParams.value.assw}px,` +
-        `${(xf.ty * width) / canvasParams.value.assh}px) ` +
-        `scale(${xf.scale}) rotate(${xf.rotate}deg) `
+    const overlayTransform = (index: number) => {
+      return transformStyle(
+        currentDrawing.value.overlays[index].transform,
+        canvasParams.value.canw / canvasParams.value.assw
       );
     };
     const AssetSelected = (
