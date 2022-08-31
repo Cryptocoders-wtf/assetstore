@@ -176,6 +176,7 @@ import {
   identityTransform,
   Overlay,
   Remix,
+  transformStyle,
 } from "@/models/point";
 import { ColorPicker } from "vue3-colorpicker";
 
@@ -247,11 +248,9 @@ export default defineComponent({
     const currentDrawing = ref<Drawing>(props.drawing);
 
     const remixTransformString = computed(() => {
-      const xf = currentDrawing.value.remix.transform;
-      return (
-        `translate(${assetXtoCanvasX(xf.tx)}px,` +
-        `${assetYtoCanvasY(xf.ty)}px) ` +
-        `scale(${xf.scale}) rotate(${xf.rotate}deg) `
+      return transformStyle(
+        currentDrawing.value.remix.transform,
+        canvasParams.value.canw / canvasParams.value.assw
       );
     });
 
