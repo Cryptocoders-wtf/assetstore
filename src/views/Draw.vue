@@ -188,7 +188,6 @@ export default defineComponent({
         tokens.value,
         tokensPerAsset.value,
         0,
-        assetStoreRO,
         tokenRO,
         (updateTokens) => {
           tokens.value = updateTokens;

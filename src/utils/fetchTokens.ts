@@ -54,7 +54,6 @@ export const fetchTokensRemix = async (
   tokens: Token[],
   tokensPerAsset: number,
   style: number,
-  assetStoreRO: ethers.Contract,
   tokenRO: ethers.Contract,
   callback: (tokens: Token[]) => void
 ) => {
