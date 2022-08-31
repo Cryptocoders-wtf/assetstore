@@ -128,13 +128,7 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
 import { useCanvasParams, Pos } from "@/utils/canvasUtil";
-import {
-  Layer,
-  LayerType,
-  Drawing,
-  Remix,
-  Overlay,
-} from "@/models/point";
+import { Layer, LayerType, Drawing, Remix, Overlay } from "@/models/point";
 import TokenPicker from "@/components/Canvas/TokenPicker.vue";
 import AssetPicker from "@/components/Canvas/AssetPicker.vue";
 

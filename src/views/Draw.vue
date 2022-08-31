@@ -193,8 +193,8 @@ export default defineComponent({
         tokenRO,
         (updateTokens) => {
           remixes.value = updateTokens;
-          tokens.value = updateTokens.map(remix => { 
-            return { tokenId:remix.tokenId!, image:remix.image! };
+          tokens.value = updateTokens.map((remix) => {
+            return { tokenId: remix.tokenId!, image: remix.image! };
           });
         }
       );
@@ -309,7 +309,7 @@ export default defineComponent({
       const drawing: Drawing = {
         layers: [layer],
         overlays: [],
-        remix: { tokenId:0, transform: identityTransform },
+        remix: { tokenId: 0, transform: identityTransform },
       };
 
       const newDrawings: Drawing[] = drawings.value.map((body) => body);

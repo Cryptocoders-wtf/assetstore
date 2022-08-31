@@ -60,7 +60,7 @@ export const fetchTokensRemix = async (
 ) => {
   const promises = Array(count)
     .fill({})
-    .map(async (_, index):Promise<Remix> => {
+    .map(async (_, index): Promise<Remix> => {
       if (tokens[index]) {
         return tokens[index]; // we already have it
       }
@@ -75,7 +75,13 @@ export const fetchTokensRemix = async (
       const svg = await tokenRO.functions.generateSVG(svgPart, style, svgTag);
       const image =
         "data:image/svg+xml;base64," + Buffer.from(svg[0]).toString("base64");
-      return { image, tokenId: index * tokensPerAsset, svgPart, svgTag, transform: identityTransform };
+      return {
+        image,
+        tokenId: index * tokensPerAsset,
+        svgPart,
+        svgTag,
+        transform: identityTransform,
+      };
     });
 
   // Sequential version of callback(await Promise.all(promises));
