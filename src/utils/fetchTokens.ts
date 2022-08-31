@@ -68,14 +68,10 @@ export const fetchTokensRemix = async (
       const [earnedInWei] = await tokenRO.functions.totalEarned(tokenId);
       console.log("*** totalEarned", tokenId, weiToEther(earnedInWei));
 
-      const svgPart = await tokenRO.functions.generateSVGPart(tokenId);
-      //console.log(svgPart[1]);
-      const svg = await tokenRO.functions.generateSVG(
-        svgPart[0],
-        style,
-        svgPart[1]
+      const [svgPart, svgTag] = await tokenRO.functions.generateSVGPart(
+        tokenId
       );
-      //console.log(svg[0]);
+      const svg = await tokenRO.functions.generateSVG(svgPart, style, svgTag);
       const image =
         "data:image/svg+xml;base64," + Buffer.from(svg[0]).toString("base64");
       return { image, tokenId: index * tokensPerAsset };
@@ -87,10 +83,6 @@ export const fetchTokensRemix = async (
   for (i = 0; i < promises.length; i++) {
     const token = await promises[i];
     updateTokens.push(token);
-    callback(
-      updateTokens.map((token) => {
-        return token;
-      })
-    );
+    callback(updateTokens.map((token) => token));
   }
 };
