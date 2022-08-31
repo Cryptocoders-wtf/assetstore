@@ -49,6 +49,7 @@ import { Remix } from "@/models/point";
 
 export default defineComponent({
   props: ["remixes", "remix", "canvasParams", "isRemixType", "canvasOffset"],
+  emits: ["tokenSelected", "remixSelected"],
   setup(props, context) {
     const transform = computed(() => {
       const xf = props.remix.transform;
