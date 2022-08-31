@@ -128,7 +128,14 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
 import { useCanvasParams, Pos } from "@/utils/canvasUtil";
-import { Layer, LayerType, Drawing, Remix, Overlay, transformStyle } from "@/models/point";
+import {
+  Layer,
+  LayerType,
+  Drawing,
+  Remix,
+  Overlay,
+  transformStyle,
+} from "@/models/point";
 import TokenPicker from "@/components/Canvas/TokenPicker.vue";
 import AssetPicker from "@/components/Canvas/AssetPicker.vue";
 
@@ -256,7 +263,7 @@ export default defineComponent({
       context.emit("updateOverlays", overlays);
       onSelectOverlay(overlays.length - 1); // select the new one
     };
-    const overlayTransform = (index:number) => {
+    const overlayTransform = (index: number) => {
       return transformStyle(
         props.drawing.overlays[index].transform,
         canvasParams.value.sidew / canvasParams.value.assw
