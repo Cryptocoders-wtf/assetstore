@@ -314,7 +314,16 @@ export default defineComponent({
             }
             return layer;
           });
-        break;
+          break;
+        case LayerType.OVERLAY:
+          newValue.overlays = currentDrawing.value.overlays.map((overlay, index) => {
+            if (index == overlayIndex.value) {
+              const newOverlay = Object.assign({}, overlay);
+              newOverlay.fill = color;
+              return newOverlay;
+            }
+            return overlay;
+          });
       }
       currentDrawing.value = newValue;
     });
@@ -415,6 +424,10 @@ export default defineComponent({
         return;
       }
       overlayIndex.value = (index + overlays.length) % overlays.length;
+      const overlay = overlays[overlayIndex.value];
+      currentColor.value = overlay.fill;
+      stagingColor.value = overlay.fill;
+      console.log("overlay.fill", overlay.fill, currentColor.value);
     };
     const onSelectOverlay = (index: number) => {
       updateOverlayIndex(index);
