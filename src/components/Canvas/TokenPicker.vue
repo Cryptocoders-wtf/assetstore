@@ -18,7 +18,7 @@
       <div class="text-sm">{{ $tc("dfraw.remix") }}</div>
       <button
         :style="`opacity:${remix.image ? '1.0' : '0.5'}`"
-        @click="onRemove"
+        @click="onSelect(null)"
         class="ml-2 flex"
       >
         <span class="material-icons">delete</span>
@@ -62,28 +62,19 @@ export default defineComponent({
     });
     const showPopup = ref<boolean>(false);
     const onOpen = () => {
-      console.log("onOpen");
       showPopup.value = !showPopup.value;
     };
-    const onSelect = (token: Remix) => {
-      console.log("onSelect", token.tokenId);
-      //context.emit("update:remixToken", token);
+    const onSelect = (token: Remix | null) => {
       context.emit("tokenSelected", token);
       showPopup.value = false;
     };
-    const onRemove = () => {
-      context.emit("tokenSelected", null);
-      showPopup.value = false;
-    };
     const onSelectRemix = () => {
-      console.log("**onSelectRemix");
       context.emit("remixSelected");
     };
     return {
       onOpen,
       showPopup,
       onSelect,
-      onRemove,
       transform,
       onSelectRemix,
     };

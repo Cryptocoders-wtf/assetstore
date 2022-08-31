@@ -249,7 +249,6 @@ export default defineComponent({
     };
 
     const tokenSelected = (token: Remix | null) => {
-      console.log("tokenSelected", token);
       context.emit("tokenSelected", token);
     };
     const remixSelected = () => {

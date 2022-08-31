@@ -308,7 +308,6 @@ export default defineComponent({
               `<defs>\n${newRemix.svgPart}\n</defs>\n` +
               `<use href="#${newRemix.svgTag}" fill="${color}"/>\n` +
               "</svg>\n";
-            console.log(svg);
             newRemix.image =
               "data:image/svg+xml;base64," +
               Buffer.from(svg).toString("base64");
