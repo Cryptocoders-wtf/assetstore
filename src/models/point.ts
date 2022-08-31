@@ -63,6 +63,8 @@ export interface Remix {
   color?: string;
   transform: Transform;
   image?: string; // cached svg image
+  svgPart?: string; // cached svgPart
+  svgTag?: string; // cached svg tag
 }
 
 export interface Drawing {

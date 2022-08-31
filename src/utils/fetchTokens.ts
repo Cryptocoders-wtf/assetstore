@@ -1,5 +1,6 @@
 import { ethers, BigNumber } from "ethers";
 import { Token } from "@/models/token";
+import { identityTransform, Remix } from "@/models/point";
 import { weiToEther } from "@/utils/currency";
 
 export const fetchTokens = async (
@@ -51,15 +52,15 @@ export const fetchTokens = async (
 
 export const fetchTokensRemix = async (
   count: number,
-  tokens: Token[],
+  tokens: Remix[],
   tokensPerAsset: number,
   style: number,
   tokenRO: ethers.Contract,
-  callback: (tokens: Token[]) => void
+  callback: (tokens: Remix[]) => void
 ) => {
   const promises = Array(count)
     .fill({})
-    .map(async (_, index) => {
+    .map(async (_, index):Promise<Remix> => {
       if (tokens[index]) {
         return tokens[index]; // we already have it
       }
@@ -74,11 +75,11 @@ export const fetchTokensRemix = async (
       const svg = await tokenRO.functions.generateSVG(svgPart, style, svgTag);
       const image =
         "data:image/svg+xml;base64," + Buffer.from(svg[0]).toString("base64");
-      return { image, tokenId: index * tokensPerAsset };
+      return { image, tokenId: index * tokensPerAsset, svgPart, svgTag, transform: identityTransform };
     });
 
   // Sequential version of callback(await Promise.all(promises));
-  const updateTokens: Token[] = [];
+  const updateTokens: Remix[] = [];
   let i;
   for (i = 0; i < promises.length; i++) {
     const token = await promises[i];

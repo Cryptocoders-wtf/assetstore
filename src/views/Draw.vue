@@ -78,6 +78,7 @@ import {
   svgImageFromPath,
   pathFromPoints,
   transformString,
+  Remix,
 } from "@/models/point";
 import DrawingItem from "@/components/Canvas/DrawingItem.vue";
 import MintPanel from "@/components/MintPanel.vue";
@@ -151,6 +152,7 @@ export default defineComponent({
       contentsToken.wabi.abi,
       provider
     );
+    const remixes = ref<Remix[]>([]);
     const tokens = ref<Token[]>([]);
     const { onSelect, selection, tokensPerAsset } = useOnSelect(4, tokenRO);
 
@@ -185,12 +187,15 @@ export default defineComponent({
 
       fetchTokensRemix(
         count,
-        tokens.value,
+        remixes.value,
         tokensPerAsset.value,
         0,
         tokenRO,
         (updateTokens) => {
-          tokens.value = updateTokens;
+          remixes.value = updateTokens;
+          tokens.value = updateTokens.map(remix => { 
+            return { tokenId:remix.tokenId!, image:remix.image! };
+          });
         }
       );
     };
