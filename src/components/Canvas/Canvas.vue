@@ -28,9 +28,7 @@
         <DeletePoint @deletePoint="deletePoint" :cursors="cursors" />
         <SplitSegment @splitSegment="splitSegment" />
         <div class="self-start">|</div>
-        <color-picker
-          v-model:pureColor="stagingColor"
-        />
+        <color-picker v-model:pureColor="stagingColor" />
       </div>
       <Close @onClose="onClose" />
     </div>
@@ -299,7 +297,7 @@ export default defineComponent({
 
     watch([cursors, currentColor], ([points, color]) => {
       const newValue = Object.assign({}, currentDrawing.value);
-      
+
       switch (currentLayerType.value) {
         case LayerType.LAYER:
           newValue.layers = currentDrawing.value.layers.map((layer, index) => {
@@ -316,22 +314,25 @@ export default defineComponent({
           });
           break;
         case LayerType.OVERLAY:
-          newValue.overlays = currentDrawing.value.overlays.map((overlay, index) => {
-            if (index == overlayIndex.value) {
-              const newOverlay = Object.assign({}, overlay);
-              newOverlay.fill = color;
-              const svg =
-                '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">\n' +
-                `<defs>\n${overlay.svgPart}\n</defs>\n` +
-                `<use href="#${overlay.svgTag}" fill="${color}"/>\n` +
-                "</svg>\n";
-              //console.log(svg);
-              newOverlay.image =
-                "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
-              return newOverlay;
+          newValue.overlays = currentDrawing.value.overlays.map(
+            (overlay, index) => {
+              if (index == overlayIndex.value) {
+                const newOverlay = Object.assign({}, overlay);
+                newOverlay.fill = color;
+                const svg =
+                  '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">\n' +
+                  `<defs>\n${overlay.svgPart}\n</defs>\n` +
+                  `<use href="#${overlay.svgTag}" fill="${color}"/>\n` +
+                  "</svg>\n";
+                //console.log(svg);
+                newOverlay.image =
+                  "data:image/svg+xml;base64," +
+                  Buffer.from(svg).toString("base64");
+                return newOverlay;
+              }
+              return overlay;
             }
-            return overlay;
-          });
+          );
       }
       currentDrawing.value = newValue;
     });

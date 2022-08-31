@@ -13,8 +13,10 @@
     </div>
 
     <div v-for="(layer, index) in drawing.layers" :key="index">
-      <div v-if="index == layerIndex && isLayerType"
-        class="ml-2 mr-2 flex justify-between">
+      <div
+        v-if="index == layerIndex && isLayerType"
+        class="ml-2 mr-2 flex justify-between"
+      >
         <button @click="insertLayer(index)">
           <span class="material-icons">add</span>
         </button>

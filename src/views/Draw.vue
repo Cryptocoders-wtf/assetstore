@@ -263,9 +263,9 @@ export default defineComponent({
         drawing.overlays
           .map(
             (overlay) =>
-              ` <use href="#${overlay.svgTag}" transform="${transformString(
-                overlay.transform
-              )}" />\n`
+              ` <use href="#${overlay.svgTag}" 
+                     transform="${transformString(overlay.transform)}"
+                     fill="${overlay.fill}" />\n`
           )
           .join("") +
         `</g>\n`;
