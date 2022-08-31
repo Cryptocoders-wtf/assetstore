@@ -48,6 +48,13 @@ export const transformString = (xf: Transform) => {
   );
 };
 
+export const transformStyle = (xf: Transform, ratio: number) => {
+  return (
+    `translate(${xf.tx * ratio}px,${xf.ty * ratio}px)` +
+    ` scale(${xf.scale}) rotate(${xf.rotate}deg) `
+  );
+};
+
 export interface Overlay {
   provider: string;
   assetId: number;

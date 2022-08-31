@@ -45,20 +45,16 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
-import { Remix } from "@/models/point";
+import { Remix, transformStyle } from "@/models/point";
 
 export default defineComponent({
   props: ["remixes", "remix", "canvasParams", "isRemixType", "canvasOffset"],
   emits: ["tokenSelected", "remixSelected"],
   setup(props, context) {
     const transform = computed(() => {
-      const xf = props.remix.transform;
-      return (
-        `translate(${
-          (xf.tx * props.canvasParams.sidew) / props.canvasParams.assw
-        }px,` +
-        `${(xf.ty * props.canvasParams.sidew) / props.canvasParams.assh}px) ` +
-        `scale(${xf.scale}) rotate(${xf.rotate}deg) `
+      return transformStyle(
+        props.remix.transform,
+        props.canvasParams.sidew / props.canvasParams.assw
       );
     });
     const showPopup = ref<boolean>(false);
