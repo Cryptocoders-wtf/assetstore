@@ -3,7 +3,7 @@
     <div>
       <token-picker
         :remixes="remixes"
-        @tokenSelected="tokenSelected"
+        @updateRemix="updateRemix"
         @remixSelected="remixSelected"
         :canvasParams="canvasParams"
         :remix="drawing.remix"
@@ -181,7 +181,7 @@ export default defineComponent({
   emits: [
     "onSelectLayer",
     "updateLayers",
-    "tokenSelected",
+    "updateRemix",
     "remixSelected",
     "updateOverlays",
     "onSelectOverlay",
@@ -251,8 +251,8 @@ export default defineComponent({
       context.emit("updateOverlays", array, props.overlayIndex - 1);
     };
 
-    const tokenSelected = (token: Remix | null) => {
-      context.emit("tokenSelected", token);
+    const updateRemix = (remix: Remix | null) => {
+      context.emit("updateRemix", remix);
     };
     const remixSelected = () => {
       context.emit("remixSelected");
@@ -281,7 +281,7 @@ export default defineComponent({
       swapOverlay,
       copyOverlay,
       deleteOverlay,
-      tokenSelected,
+      updateRemix,
       remixSelected,
       isLayerType,
       isRemixType,

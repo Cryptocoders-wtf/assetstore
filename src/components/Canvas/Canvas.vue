@@ -146,7 +146,7 @@
           :currentLayerType="currentLayerType"
           :addresses="addresses"
           :canvasOffset="canvasOffset"
-          @tokenSelected="tokenSelected"
+          @updateRemix="updateRemix"
           @onSelectLayer="onSelectLayer"
           @updateLayers="updateLayers"
           @remixSelected="remixSelected"
@@ -270,7 +270,7 @@ export default defineComponent({
       cursors,
     } = useToolHandleMode(currentLayerType, currentDrawing, overlayIndex);
 
-    const tokenSelected = (remix: Remix | null) => {
+    const updateRemix = (remix: Remix | null) => {
       recordState();
       const newValue: Drawing = {
         layers: currentDrawing.value.layers,
@@ -570,7 +570,7 @@ export default defineComponent({
       grid,
       toggleGrid,
       onClickToPickLayer,
-      tokenSelected,
+      updateRemix,
       remixSelected,
 
       assetXtoCanvasX,

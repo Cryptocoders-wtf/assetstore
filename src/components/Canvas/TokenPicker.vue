@@ -49,7 +49,7 @@ import { Remix, transformStyle } from "@/models/point";
 
 export default defineComponent({
   props: ["remixes", "remix", "canvasParams", "isRemixType", "canvasOffset"],
-  emits: ["tokenSelected", "remixSelected"],
+  emits: ["updateRemix", "remixSelected"],
   setup(props, context) {
     const transform = computed(() => {
       return transformStyle(
@@ -61,8 +61,8 @@ export default defineComponent({
     const onOpen = () => {
       showPopup.value = !showPopup.value;
     };
-    const onSelect = (token: Remix | null) => {
-      context.emit("tokenSelected", token);
+    const onSelect = (newRemix: Remix | null) => {
+      context.emit("updateRemix", newRemix);
       showPopup.value = false;
     };
     const onSelectRemix = () => {
