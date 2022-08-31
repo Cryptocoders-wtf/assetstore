@@ -50,6 +50,7 @@ export const useDrag = (
     grid.value = (grid.value + 8) % 40;
   };
 
+  // rotate and scale
   const dragToolHandleStart = (evt: DragEvent | TouchEvent, tool: Tools) => {
     currentTool.value = tool;
     offsetX = canvasParams.value.curw / 2;
@@ -63,6 +64,7 @@ export const useDrag = (
         : remixTransform.value;
     recordState();
   };
+  // move
   const dragLayerImgStart = (evt: MouseEvent | TouchEvent) => {
     currentTool.value = Tools.MOVE;
     offsetX = canvasParams.value.curw / 2;
@@ -75,6 +77,7 @@ export const useDrag = (
         : remixTransform.value;
     recordState();
   };
+  // cursors
   const dragStart = (evt: DragEvent | TouchEvent, index: number) => {
     currentTool.value = Tools.CURSOR;
     offsetX = getOffsetX(evt);
