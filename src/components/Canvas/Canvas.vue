@@ -299,6 +299,14 @@ export default defineComponent({
       const newValue = Object.assign({}, currentDrawing.value);
 
       switch (currentLayerType.value) {
+        case LayerType.REMIX:
+          {
+            const newRemix = Object.assign({}, newValue.remix);
+            newRemix.color = color;
+            // LATER: We need to regenerate image from svgPath (which we don't have in Remix right now)
+            newValue.remix = newRemix;
+          }
+          break;
         case LayerType.LAYER:
           newValue.layers = currentDrawing.value.layers.map((layer, index) => {
             if (index == layerIndex.value) {
@@ -506,6 +514,8 @@ export default defineComponent({
       }
       if (currentDrawing.value.remix.image) {
         remixSelected();
+        currentColor.value = currentDrawing.value.remix.color || "";
+        stagingColor.value = currentDrawing.value.remix.color || "";
       }
     };
     const overlayTransform = (index: number, width: number) => {
