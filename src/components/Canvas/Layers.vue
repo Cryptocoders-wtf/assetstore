@@ -260,7 +260,7 @@ export default defineComponent({
       context.emit("updateOverlays", array, props.overlayIndex - 1);
     };
 
-    const tokenSelected = (token: Token | null) => {
+    const tokenSelected = (token: Remix | null) => {
       console.log("tokenSelected", token);
       context.emit("tokenSelected", token);
     };

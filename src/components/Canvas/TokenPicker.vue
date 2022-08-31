@@ -32,9 +32,9 @@
       class="absolute border-2 border-solid border-blue-700 bg-slate-100"
     >
       <div :style="`height:${canvasParams.canh / 3}px; overflow-y:scroll`">
-        <span v-for="token in tokens" :key="token.tokenId">
+        <span v-for="(token, index) in tokens" :key="token.tokenId">
           <img
-            @click="onSelect(token)"
+            @click="onSelect(remixes[index])"
             :src="token.image"
             class="mr-1 mb-1 inline-block w-14 rounded-xl"
           />

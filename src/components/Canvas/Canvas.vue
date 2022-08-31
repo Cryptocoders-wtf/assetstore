@@ -280,19 +280,15 @@ export default defineComponent({
       cursors,
     } = useToolHandleMode(currentLayerType, currentDrawing, overlayIndex);
 
-    const tokenSelected = (token: Token) => {
+    const tokenSelected = (remix: Remix | null) => {
       recordState();
       const newValue: Drawing = {
         layers: currentDrawing.value.layers,
         overlays: currentDrawing.value.overlays,
         remix: { transform: identityTransform },
       };
-      if (token) {
-        newValue.remix = {
-          tokenId: token.tokenId,
-          image: token.image,
-          transform: identityTransform,
-        };
+      if (remix) {
+        newValue.remix = Object.assign({}, remix);
       }
       currentDrawing.value = newValue;
     };
