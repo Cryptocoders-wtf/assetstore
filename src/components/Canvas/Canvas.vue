@@ -505,8 +505,7 @@ export default defineComponent({
         return;
       }
       if (currentDrawing.value.remix.image) {
-        currentLayerType.value = LayerType.REMIX;
-        toolHandleMode.value = true;
+        remixSelected();
       }
     };
     const overlayTransform = (index: number, width: number) => {
