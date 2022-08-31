@@ -290,6 +290,9 @@ export default defineComponent({
     const remixSelected = () => {
       currentLayerType.value = LayerType.REMIX;
       toolHandleMode.value = true;
+      const remix = currentDrawing.value.remix;
+      currentColor.value = remix.color || "";
+      stagingColor.value = remix.color || "";
     };
 
     watch([cursors, currentColor], ([points, color]) => {
@@ -300,7 +303,15 @@ export default defineComponent({
           {
             const newRemix = Object.assign({}, newValue.remix);
             newRemix.color = color;
-            // LATER: We need to regenerate image from svgPath (which we don't have in Remix right now)
+            const svg =
+              '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">\n' +
+              `<defs>\n${newRemix.svgPart}\n</defs>\n` +
+              `<use href="#${newRemix.svgTag}" fill="${color}"/>\n` +
+              "</svg>\n";
+            console.log(svg);
+            newRemix.image =
+              "data:image/svg+xml;base64," +
+              Buffer.from(svg).toString("base64");
             newValue.remix = newRemix;
           }
           break;
