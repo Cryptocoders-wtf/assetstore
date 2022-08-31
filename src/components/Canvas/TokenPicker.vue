@@ -48,7 +48,7 @@ import { defineComponent, ref, computed } from "vue";
 import { Token } from "@/models/token";
 
 export default defineComponent({
-  props: ["tokens", "remix", "canvasParams", "isRemixType", "canvasOffset"],
+  props: ["tokens", "remixes", "remix", "canvasParams", "isRemixType", "canvasOffset"],
   setup(props, context) {
     const transform = computed(() => {
       const xf = props.remix.transform;

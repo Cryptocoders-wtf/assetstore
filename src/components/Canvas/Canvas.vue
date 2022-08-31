@@ -146,6 +146,7 @@
           :overlayIndex="overlayIndex"
           :newLayer="newLayer"
           :tokens="tokens"
+          :remixes="remixes"
           :currentLayerType="currentLayerType"
           :addresses="addresses"
           :overlayTransform="overlayTransform"
@@ -175,6 +176,7 @@ import {
   togglePointType,
   identityTransform,
   Overlay,
+  Remix,
 } from "@/models/point";
 import { ColorPicker } from "vue3-colorpicker";
 
@@ -220,6 +222,10 @@ export default defineComponent({
     },
     tokens: {
       type: Array as PropType<Token[]>,
+      required: true,
+    },
+    remixes: {
+      type: Array as PropType<Remix[]>,
       required: true,
     },
     addresses: {

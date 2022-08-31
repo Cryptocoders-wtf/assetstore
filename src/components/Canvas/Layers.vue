@@ -3,6 +3,7 @@
     <div>
       <token-picker
         :tokens="tokens"
+        :remixes="remixes"
         @tokenSelected="tokenSelected"
         @remixSelected="remixSelected"
         :canvasParams="canvasParams"
@@ -132,7 +133,7 @@ import {
   Layer,
   LayerType,
   Drawing,
-  identityTransform,
+  Remix,
   Overlay,
 } from "@/models/point";
 import TokenPicker from "@/components/Canvas/TokenPicker.vue";
@@ -163,6 +164,10 @@ export default defineComponent({
     },
     tokens: {
       type: Array as PropType<Token[]>,
+      required: true,
+    },
+    remixes: {
+      type: Array as PropType<Remix[]>,
       required: true,
     },
     currentLayerType: {

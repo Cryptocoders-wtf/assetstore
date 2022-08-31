@@ -8,6 +8,7 @@
         class="z-10"
         :drawing="selectedDrawing"
         :tokens="tokens"
+        :remixes="remixes"
         :addresses="addresses"
       />
       <div v-else>
@@ -370,6 +371,7 @@ export default defineComponent({
       selection,
       addresses,
       tokens,
+      remixes,
       EtherscanStore,
       EtherscanToken,
       OpenSeaPath,
