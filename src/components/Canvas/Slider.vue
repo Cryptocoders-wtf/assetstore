@@ -1,8 +1,8 @@
 <template>
   <div class="flex" :style="`width:${sliderWidth}px; height:28px`">
-    <div v-if="value">
-      <input class="text-sm" type="value" :value="value" :style="`width:${sliderWidth}px; height:16px`"> 
-      <div class="bg-slate-400" :style="`width:${sliderWidth}px; height:8px`" @mousedown="mousedown">
+    <div v-if="value !== null">
+      <input class="text-sm" type="value" :value="value" @input="onTextInput($event.target.value)" :style="`width:${sliderWidth}px; height:16px`"> 
+      <div class="bg-slate-400 overflow-hidden" :style="`width:${sliderWidth}px; height:8px`" @mousedown="mousedown">
         <div class="bg-blue-300" :style="`width:${sliderWidth*value}px; height:8px`" />
       </div>
     </div>
@@ -21,9 +21,16 @@ export default defineComponent({
       context.emit("updateValue", evt.offsetX/sliderWidth);
       evt.preventDefault();
     };
+    const onTextInput = (textValue:string) => {
+      const newValue = parseFloat(textValue);
+      if (!isNaN(newValue)) {
+        context.emit("updateValue", newValue);
+      }
+    };
     return {
       sliderWidth,
       mousedown,
+      onTextInput
     };
   }
 });
