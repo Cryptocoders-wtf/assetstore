@@ -25,6 +25,7 @@
           @togglePoint="togglePoint"
           :isSharpCorner="isSharpCorner"
         />
+        <Slider />
         <DeletePoint @deletePoint="deletePoint" :cursors="cursors" />
         <SplitSegment @splitSegment="splitSegment" />
         <div class="self-start">|</div>
@@ -183,6 +184,7 @@ import ToggleGrid from "@/components/Canvas/Menu/ToggleGrid.vue";
 import TogglePoint from "@/components/Canvas/Menu/TogglePoint.vue";
 import DeletePoint from "@/components/Canvas/Menu/DeletePoint.vue";
 import SplitSegment from "@/components/Canvas/Menu/SplitSegment.vue";
+import Slider from "@/components/Canvas/Slider.vue";
 
 import "vue3-colorpicker/style.css";
 
@@ -209,6 +211,7 @@ export default defineComponent({
     TogglePoint,
     DeletePoint,
     SplitSegment,
+    Slider,
   },
   props: {
     drawing: {
