@@ -115,14 +115,14 @@ export const useCanasAsset = (canvasOffset: Ref<Pos>) => {
 };
 
 export const roundRect: Point[] = [
-  { x: assetSize.w / 4, y: assetSize.h / 4, c: false },
-  { x: assetSize.w - assetSize.w / 4, y: assetSize.h / 4, c: false },
+  { x: assetSize.w / 4, y: assetSize.h / 4, c: false, r: 0.553 },
+  { x: assetSize.w - assetSize.w / 4, y: assetSize.h / 4, c: false, r: 0.553 },
   {
     x: assetSize.w - assetSize.w / 4,
     y: assetSize.h - assetSize.h / 4,
-    c: false,
+    c: false, r: 0.553
   },
-  { x: assetSize.w / 4, y: assetSize.h - assetSize.h / 4, c: false },
+  { x: assetSize.w / 4, y: assetSize.h - assetSize.h / 4, c: false, r: 0.553 },
 ];
 
 export const useToolHandleMode = (

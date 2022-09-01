@@ -184,7 +184,6 @@ import TogglePoint from "@/components/Canvas/Menu/TogglePoint.vue";
 import DeletePoint from "@/components/Canvas/Menu/DeletePoint.vue";
 import SplitSegment from "@/components/Canvas/Menu/SplitSegment.vue";
 
-import { Token } from "@/models/token";
 import "vue3-colorpicker/style.css";
 
 import {

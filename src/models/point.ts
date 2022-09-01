@@ -1,7 +1,8 @@
 export interface Point {
   x: number;
   y: number;
-  c: boolean;
+  c?: boolean; // backward compatible
+  r: number; // ratio (0 to 1)
 }
 
 export enum LayerType {
@@ -136,7 +137,7 @@ export const svgImageFromDrawing = (drawing: Drawing) => {
 export const togglePointType = (points: Point[], index: number) => {
   return points.map((point, _index) => {
     if (_index == index) {
-      return { x: point.x, y: point.y, c: !point.c };
+      return { x: point.x, y: point.y, c: !point.c, r: 0.553 };
     }
     return point;
   });
@@ -149,6 +150,7 @@ export const splitPoint = (points: Point[], index: number) => {
     x: (prev.x + next.x) / 2,
     y: (prev.y + next.y) / 2,
     c: false,
+    r: prev.r,
   };
   const array = points.map((point) => point);
   array.splice(index + 1, 0, newItem);

@@ -213,9 +213,18 @@ export default defineComponent({
       const drawing: Drawing = result
         ? JSON.parse(result) || { layers: [] }
         : { layers: [] };
+
       // Backward compativility
       drawing.overlays = drawing.overlays || [];
       drawing.remix = drawing.remix || { transform: identityTransform };
+      drawing.layers = drawing.layers.map(layer => {
+        layer.points = layer.points.map(point => {
+          point.r = point.r || (point.c ? 1 : 0.553);
+          return point;
+        });
+        return layer;
+      });
+      
       // console.log("** setup:overlays.length", index, drawing.layers.length, drawing.overlays.length);
       return drawing;
     });
