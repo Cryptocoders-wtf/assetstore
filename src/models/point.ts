@@ -140,7 +140,7 @@ export const svgImageFromDrawing = (drawing: Drawing) => {
 export const togglePointType = (points: Point[], index: number) => {
   return points.map((point, _index) => {
     if (_index == index) {
-      return { x: point.x, y: point.y, c: !point.c, r: 0.553 };
+      return { x: point.x, y: point.y, c: !point.c, r: point.r };
     }
     return point;
   });
