@@ -104,13 +104,11 @@ export const pathFromPoints = (points: Point[]) => {
       index == 0
         ? `M${(cursor.x + prev.x) / 2},${(cursor.y + prev.y) / 2},`
         : "";
-    return (
-      path +
-      head +
-      (cursor.c ? "L" : "Q") +
-      `${cursor.x},${cursor.y},` +
-      `${(cursor.x + next.x) / 2},${(cursor.y + next.y) / 2}`
-    );
+    const last = `${(cursor.x + next.x) / 2},${(cursor.y + next.y) / 2}`;
+    if (cursor.c) {
+      return path + head + `L${cursor.x},${cursor.y},` + last;
+    }
+    return path + head + `Q${cursor.x},${cursor.y},` + last;
   }, "");
 };
 
