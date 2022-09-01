@@ -100,11 +100,12 @@ export const pathFromPoints = (points: Point[]) => {
   return points.reduce((path, cursor, index) => {
     const prev = points[(index + length - 1) % length];
     const next = points[(index + 1) % length];
-    const head =
-      index == 0
-        ? `M${(cursor.x + prev.x) / 2},${(cursor.y + prev.y) / 2},`
-        : "";
-    const last = `${(cursor.x + next.x) / 2},${(cursor.y + next.y) / 2}`;
+    const sx = (cursor.x + prev.x) / 2;
+    const sy = (cursor.y + prev.y) / 2;
+    const head = index == 0 ? `M${sx},${sy},` : "";
+    const ex = (cursor.x + next.x) / 2;
+    const ey = (cursor.y + next.y) / 2;
+    const last = `${ex},${ey}`;
     if (cursor.c) {
       return path + head + `L${cursor.x},${cursor.y},` + last;
     }
