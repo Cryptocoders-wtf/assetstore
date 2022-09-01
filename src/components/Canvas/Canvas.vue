@@ -283,6 +283,20 @@ export default defineComponent({
     });
     const updateRatio = (value:number) => {
       stagingRatio.value = value;
+      if (currentLayerType.value == LayerType.LAYER && !toolHandleMode.value) {
+        recordState();
+        cursors.value = cursors.value.map((cursor, index) => {
+          if (index == pointIndex.value) {
+            return {
+              x:cursor.x,
+              y:cursor.y,
+              c:false,
+              r:value
+            }
+          }
+          return cursor;
+        });
+      }
     };
 
     const updateRemix = (remix: Remix | null) => {

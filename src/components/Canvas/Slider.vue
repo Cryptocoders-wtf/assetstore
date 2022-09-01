@@ -16,7 +16,6 @@ export default defineComponent({
   setup(props, context) {
     const sliderWidth = 80;
     const mousedown = (evt:MouseEvent) => {
-      console.log("mousedown", evt.offsetX);
       context.emit("updateValue", evt.offsetX/sliderWidth);
     };
     return {
