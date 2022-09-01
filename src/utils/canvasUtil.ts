@@ -120,7 +120,8 @@ export const roundRect: Point[] = [
   {
     x: assetSize.w - assetSize.w / 4,
     y: assetSize.h - assetSize.h / 4,
-    c: false, r: 0.553
+    c: false,
+    r: 0.553,
   },
   { x: assetSize.w / 4, y: assetSize.h - assetSize.h / 4, c: false, r: 0.553 },
 ];

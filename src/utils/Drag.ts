@@ -142,7 +142,7 @@ export const useDrag = (
                 })
               ),
               c: cursor.c,
-              r: cursor.r
+              r: cursor.r,
             };
           case Tools.ROTATE:
             return {
@@ -159,7 +159,7 @@ export const useDrag = (
                 })
               ),
               c: cursor.c,
-              r: cursor.r
+              r: cursor.r,
             };
           case Tools.MOVE:
             return {
@@ -170,7 +170,7 @@ export const useDrag = (
                 })
               ),
               c: cursor.c,
-              r: cursor.r
+              r: cursor.r,
             };
           case Tools.CURSOR:
           default:
@@ -183,7 +183,7 @@ export const useDrag = (
                   })
                 ),
                 c: cursor.c,
-                r: cursor.r
+                r: cursor.r,
               };
             }
         }

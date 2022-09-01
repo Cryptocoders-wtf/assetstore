@@ -20,7 +20,9 @@
         class="form-select block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700"
         v-model="selectedProvider"
       >
-        <option disabled :value="null">{{$tc("assetPicker.chooseProvider")}}</option>
+        <option disabled :value="null">
+          {{ $tc("assetPicker.chooseProvider") }}
+        </option>
         <option
           v-for="provider in assetProviderInfos"
           :key="provider.name"
@@ -67,7 +69,7 @@ const AssetStoreProvider = {
 };
 
 // NOTE: There is no easy way to get the inteface Id of an interface.
-// I've got this by writing solidity code to return it. 
+// I've got this by writing solidity code to return it.
 const ICategorizedAssetProvider_InterfaceId = 0xe105c16e;
 
 interface AssetProviderInfo {
@@ -128,7 +130,9 @@ export default defineComponent({
       );
       //const interfaceId = await assetProvider.functions.getInterfaceId();
       //console.log("** interfaceId", interfaceId);
-      const [isCategorized] = await assetProvider.functions.supportsInterface(ICategorizedAssetProvider_InterfaceId);
+      const [isCategorized] = await assetProvider.functions.supportsInterface(
+        ICategorizedAssetProvider_InterfaceId
+      );
       console.log("** isCategorized", isCategorized);
 
       const result2 = await assetProvider.functions.totalSupply();

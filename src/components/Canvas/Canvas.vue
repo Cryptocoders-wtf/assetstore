@@ -272,27 +272,29 @@ export default defineComponent({
       cursors,
     } = useToolHandleMode(currentLayerType, currentDrawing, overlayIndex);
 
-    const stagingRatio = ref<number|null>(null); // staging for curve ratio
-    watch([pointIndex, cursors, currentLayerType, toolHandleMode], ([index, points, type, mode]) => {
-      if (type == LayerType.LAYER && !mode
-        && !points[index].c) {
+    const stagingRatio = ref<number | null>(null); // staging for curve ratio
+    watch(
+      [pointIndex, cursors, currentLayerType, toolHandleMode],
+      ([index, points, type, mode]) => {
+        if (type == LayerType.LAYER && !mode && !points[index].c) {
           stagingRatio.value = points[index].r;
         } else {
           stagingRatio.value = null;
         }
-    });
-    const updateRatio = (value:number) => {
+      }
+    );
+    const updateRatio = (value: number) => {
       stagingRatio.value = value;
       if (currentLayerType.value == LayerType.LAYER && !toolHandleMode.value) {
         recordState();
         cursors.value = cursors.value.map((cursor, index) => {
           if (index == pointIndex.value) {
             return {
-              x:cursor.x,
-              y:cursor.y,
-              c:false,
-              r:value
-            }
+              x: cursor.x,
+              y: cursor.y,
+              c: false,
+              r: value,
+            };
           }
           return cursor;
         });

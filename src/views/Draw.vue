@@ -217,8 +217,8 @@ export default defineComponent({
       // Backward compativility
       drawing.overlays = drawing.overlays || [];
       drawing.remix = drawing.remix || { transform: identityTransform };
-      drawing.layers = drawing.layers.map(layer => {
-        layer.points = layer.points.map(point => {
+      drawing.layers = drawing.layers.map((layer) => {
+        layer.points = layer.points.map((point) => {
           point.r = point.r || 0.553;
           return point;
         });
