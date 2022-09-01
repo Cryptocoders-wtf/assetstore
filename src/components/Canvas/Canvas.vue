@@ -25,7 +25,7 @@
           @togglePoint="togglePoint"
           :isSharpCorner="isSharpCorner"
         />
-        <Slider />
+        <Slider :value="stagingRatio" />
         <DeletePoint @deletePoint="deletePoint" :cursors="cursors" />
         <SplitSegment @splitSegment="splitSegment" />
         <div class="self-start">|</div>
@@ -271,6 +271,16 @@ export default defineComponent({
       moveToolPos,
       cursors,
     } = useToolHandleMode(currentLayerType, currentDrawing, overlayIndex);
+
+    const stagingRatio = ref<number|null>(null); // staging for curve ratio
+    watch([pointIndex, cursors, currentLayerType, toolHandleMode], ([index, points, type, mode]) => {
+      if (type == LayerType.LAYER && !mode
+        && !points[index].c) {
+          stagingRatio.value = points[index].r;
+        } else {
+          stagingRatio.value = null;
+        }
+    });
 
     const updateRemix = (remix: Remix | null) => {
       recordState();
@@ -545,6 +555,7 @@ export default defineComponent({
       cursors,
       pointIndex,
       stagingColor,
+      stagingRatio,
       canvasParams,
       moveToolPos,
       toolHandles,
