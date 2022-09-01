@@ -62,6 +62,10 @@ const IAssetProvider = {
   wabi: require("@/abis/IAssetProvider.json"), // wrapped abi
 };
 
+const AssetStoreProvider = {
+  wabi: require("@/abis/AssetStoreProvider.json"), // wrapped abi
+};
+
 interface AssetProviderInfo {
   key: string;
   name: string;
@@ -115,9 +119,12 @@ export default defineComponent({
 
       const assetProvider = new ethers.Contract(
         providerInfo.provider,
-        IAssetProvider.wabi.abi,
+        AssetStoreProvider.wabi.abi, // HACK: instead of IAssetProvider.wabi.abi,
         provider
       );
+      const supported = await assetProvider.functions.supportsInterface("0x1f9cbbd7");
+      console.log("** supported", supported);
+
       const result2 = await assetProvider.functions.totalSupply();
       const count = result2[0].toNumber();
       console.log("totalSupply", count);
