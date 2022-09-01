@@ -25,7 +25,7 @@
           @togglePoint="togglePoint"
           :isSharpCorner="isSharpCorner"
         />
-        <Slider :value="stagingRatio" />
+        <Slider :value="stagingRatio" @updateValue="updateRatio" />
         <DeletePoint @deletePoint="deletePoint" :cursors="cursors" />
         <SplitSegment @splitSegment="splitSegment" />
         <div class="self-start">|</div>
@@ -281,6 +281,9 @@ export default defineComponent({
           stagingRatio.value = null;
         }
     });
+    const updateRatio = (value:number) => {
+      stagingRatio.value = value;
+    };
 
     const updateRemix = (remix: Remix | null) => {
       recordState();
@@ -598,6 +601,7 @@ export default defineComponent({
       setCanvasOffset,
       canvasOffset,
       hasLayerMode,
+      updateRatio,
     };
   },
   mounted() {
