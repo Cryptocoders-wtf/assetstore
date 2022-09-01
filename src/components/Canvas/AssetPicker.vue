@@ -66,6 +66,10 @@ const AssetStoreProvider = {
   wabi: require("@/abis/AssetStoreProvider.json"), // wrapped abi
 };
 
+// NOTE: There is no easy way to get the inteface Id of an interface.
+// I've got this by writing solidity code to return it. 
+const ICategorizedAssetProvider_InterfaceId = 0xe105c16e;
+
 interface AssetProviderInfo {
   key: string;
   name: string;
@@ -122,8 +126,10 @@ export default defineComponent({
         AssetStoreProvider.wabi.abi, // HACK: instead of IAssetProvider.wabi.abi,
         provider
       );
-      const supported = await assetProvider.functions.supportsInterface("0x1f9cbbd7");
-      console.log("** supported", supported);
+      //const interfaceId = await assetProvider.functions.getInterfaceId();
+      //console.log("** interfaceId", interfaceId);
+      const [isCategorized] = await assetProvider.functions.supportsInterface(ICategorizedAssetProvider_InterfaceId);
+      console.log("** isCategorized", isCategorized);
 
       const result2 = await assetProvider.functions.totalSupply();
       const count = result2[0].toNumber();
