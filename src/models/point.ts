@@ -109,7 +109,11 @@ export const pathFromPoints = (points: Point[]) => {
     if (cursor.c) {
       return path + head + `L${cursor.x},${cursor.y},` + last;
     }
-    return path + head + `Q${cursor.x},${cursor.y},` + last;
+    const c1x = sx + cursor.r * (cursor.x - sx);
+    const c1y = sy + cursor.r * (cursor.y - sy);
+    const c2x = ex + cursor.r * (cursor.x - ex);
+    const c2y = ey + cursor.r * (cursor.y - ey);
+    return path + head + `C${c1x},${c1y},${c2x},${c2y},` + last;
   }, "");
 };
 
