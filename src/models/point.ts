@@ -1,7 +1,7 @@
 export interface Point {
   x: number;
   y: number;
-  c?: boolean; // backward compatible
+  c: boolean; // true:line, false:bezier
   r: number; // ratio (0 to 1)
 }
 

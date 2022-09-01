@@ -219,12 +219,12 @@ export default defineComponent({
       drawing.remix = drawing.remix || { transform: identityTransform };
       drawing.layers = drawing.layers.map(layer => {
         layer.points = layer.points.map(point => {
-          point.r = point.r || (point.c ? 1 : 0.553);
+          point.r = point.r || 0.553;
           return point;
         });
         return layer;
       });
-      
+
       // console.log("** setup:overlays.length", index, drawing.layers.length, drawing.overlays.length);
       return drawing;
     });
