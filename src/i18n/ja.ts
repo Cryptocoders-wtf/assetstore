@@ -77,6 +77,9 @@ const lang = {
     remix: "リミックス",
     overlay: "オーバーレイ",
   },
+  assetPicker: {
+    chooseProvider: "プロバイダーを選んで下さい",
+  },
   languages,
 };
 

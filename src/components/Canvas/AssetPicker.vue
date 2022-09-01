@@ -20,6 +20,7 @@
         class="form-select block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700"
         v-model="selectedProvider"
       >
+        <option disabled :value="null">{{$tc("assetPicker.chooseProvider")}}</option>
         <option
           v-for="provider in assetProviderInfos"
           :key="provider.name"

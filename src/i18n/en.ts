@@ -76,6 +76,9 @@ const lang = {
     remix: "Remix",
     overlay: "Overlay",
   },
+  assetPicker: {
+    chooseProvider: "Choose a provider",
+  },
   languages,
 };
 
