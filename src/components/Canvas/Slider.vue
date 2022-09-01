@@ -1,8 +1,10 @@
 <template>
-  <div class="flex bg-slate-400 mb-1" :style="`width:${sliderWidth}px; height:28px`" @mousedown="mousedown">
+  <div class="flex" :style="`width:${sliderWidth}px; height:28px`">
     <div v-if="value">
-      <input class="absolute text-sm" type="value" :value="value" :style="`width:${sliderWidth}px; height:16px`"> 
-      <div class="bg-blue-300" :style="`width:${sliderWidth*value}px; height:28px`" />
+      <input class="text-sm" type="value" :value="value" :style="`width:${sliderWidth}px; height:16px`"> 
+      <div class="bg-slate-400" :style="`width:${sliderWidth}px; height:8px`" @mousedown="mousedown">
+        <div class="bg-blue-300" :style="`width:${sliderWidth*value}px; height:8px`" />
+      </div>
     </div>
   </div>
 </template>
