@@ -263,7 +263,9 @@ export default defineComponent({
           drawing.remix.tokenId
         );
         remix.def = result[0];
-        remix.use = ` <use href="#${result[1]}" transform="${remixTransformString.value}" fill="${drawing.remix.color || ''}" />\n`;
+        remix.use = ` <use href="#${result[1]}" transform="${
+          remixTransformString.value
+        }" fill="${drawing.remix.color || ""}" />\n`;
       }
       loadedAssets[0].svgPart =
         loadedAssets[0].svgPart +
