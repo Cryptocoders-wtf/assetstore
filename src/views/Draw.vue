@@ -246,7 +246,7 @@ export default defineComponent({
       };
       const dataset: OriginalAssetDataSet = {
         group: "", // the contract will specify
-        category: "CC0 Drawing (40)",
+        category: "CC0 Drawing (41)",
         width: 1024,
         height: 1024,
         assets: [asset],
@@ -263,7 +263,7 @@ export default defineComponent({
           drawing.remix.tokenId
         );
         remix.def = result[0];
-        remix.use = ` <use href="#${result[1]}" transform="${remixTransformString.value}" />\n`;
+        remix.use = ` <use href="#${result[1]}" transform="${remixTransformString.value}" fill="${drawing.remix.color || ''}" />\n`;
       }
       loadedAssets[0].svgPart =
         loadedAssets[0].svgPart +
