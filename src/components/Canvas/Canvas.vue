@@ -312,6 +312,9 @@ export default defineComponent({
         newValue.remix = Object.assign({}, remix);
       }
       currentDrawing.value = newValue;
+      if (remix) {
+        remixSelected();
+      }
     };
     const remixSelected = () => {
       currentLayerType.value = LayerType.REMIX;
