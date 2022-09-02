@@ -190,7 +190,7 @@ import "vue3-colorpicker/style.css";
 
 import {
   useCanvasParams,
-  useCanasAsset,
+  useCanvasAsset,
   roundRect,
   Tools,
   Pos,
@@ -236,7 +236,7 @@ export default defineComponent({
 
     const { canvasParams, assetXtoCanvasX, assetYtoCanvasY } =
       useCanvasParams();
-    const { getAssetPos } = useCanasAsset(canvasOffset);
+    const { getAssetPos } = useCanvasAsset(canvasOffset);
 
     const layerIndex = ref<number>(0);
     const pointIndex = ref<number>(0);

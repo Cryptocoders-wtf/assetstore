@@ -81,10 +81,14 @@ export const useCanvasParams = () => {
   };
 
   const getOffsetX = (evt: DragEvent | MouseEvent | TouchEvent): number =>
-    evt instanceof TouchEvent ? 0 : evt.offsetX / canvasParams.value.caratio;
+    evt instanceof DragEvent || evt instanceof MouseEvent
+      ? evt.offsetX / canvasParams.value.caratio
+      : 0;
 
   const getOffsetY = (evt: DragEvent | MouseEvent | TouchEvent): number =>
-    evt instanceof TouchEvent ? 0 : evt.offsetY / canvasParams.value.caratio;
+    evt instanceof DragEvent || evt instanceof MouseEvent
+      ? evt.offsetY / canvasParams.value.caratio
+      : 0;
 
   return {
     canvasParams,
@@ -96,17 +100,17 @@ export const useCanvasParams = () => {
   };
 };
 
-export const useCanasAsset = (canvasOffset: Ref<Pos>) => {
+export const useCanvasAsset = (canvasOffset: Ref<Pos>) => {
   const { canvastoAsset } = useCanvasParams();
   const getAssetPos = (evt: DragEvent | MouseEvent | TouchEvent): Pos => {
     const x =
-      evt instanceof TouchEvent
-        ? evt.targetTouches[0].pageX
-        : evt.pageX - canvasOffset.value.x;
+      evt instanceof DragEvent || evt instanceof MouseEvent
+        ? evt.pageX - canvasOffset.value.x
+        : evt.targetTouches[0].pageX;
     const y =
-      evt instanceof TouchEvent
-        ? evt.targetTouches[0].pageY
-        : evt.pageY - canvasOffset.value.y;
+      evt instanceof DragEvent || evt instanceof MouseEvent
+        ? evt.pageY - canvasOffset.value.y
+        : evt.targetTouches[0].pageY;
     return canvastoAsset({ x, y });
   };
   return {
