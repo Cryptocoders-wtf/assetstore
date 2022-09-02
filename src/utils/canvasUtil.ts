@@ -100,7 +100,7 @@ export const useCanvasParams = () => {
   };
 };
 
-export const useCanasAsset = (canvasOffset: Ref<Pos>) => {
+export const useCanvasAsset = (canvasOffset: Ref<Pos>) => {
   const { canvastoAsset } = useCanvasParams();
   const getAssetPos = (evt: DragEvent | MouseEvent | TouchEvent): Pos => {
     const x =
