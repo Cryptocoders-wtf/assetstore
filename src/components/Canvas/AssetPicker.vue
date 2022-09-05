@@ -51,7 +51,11 @@
         <option disabled :value="null">
           {{ $tc("assetPicker.chooseGroup") }}
         </option>
-        <option v-for="category in categoryNames" :key="category" :value="category">
+        <option
+          v-for="category in categoryNames"
+          :key="category"
+          :value="category"
+        >
           {{ category }}
         </option>
       </select>
@@ -143,10 +147,13 @@ export default defineComponent({
     const selectedGroup = ref<string | null>(null);
     const categoryNames = ref<string[]>([]);
     const selectedCategory = ref<string | null>(null);
-    watch([selectedGroup], 
-      async ([newSelectedGroup]) => {
-      console.log("*** selectedGroup", newSelectedGroup, categorizedProviderAddress.value);
-      if (categorizedProviderAddress.value == null || newSelectedGroup == null) {
+
+    watch(selectedCategory, async (newSelectedCategory) => {
+      console.log("*** selectedCategory", newSelectedCategory);
+      if (
+        categorizedProviderAddress.value == null ||
+        newSelectedCategory == null
+      ) {
         return;
       }
       const assetProvider = new ethers.Contract(
@@ -154,25 +161,52 @@ export default defineComponent({
         AssetStoreProvider.wabi.abi, // HACK: instead of ICategorizedAssetProvider.wabi.abi,
         provider
       );
-      const [categoryCount] = await assetProvider.functions.getCategoryCount(newSelectedGroup);
+      const [assetCount] =
+        await assetProvider.functions.getAssetCountInCategory(
+          selectedGroup.value,
+          newSelectedCategory
+        );
+      console.log("*** assetCount", assetCount);
+    });
+    watch([selectedGroup], async ([newSelectedGroup]) => {
+      console.log(
+        "*** selectedGroup",
+        newSelectedGroup,
+        categorizedProviderAddress.value
+      );
+      if (
+        categorizedProviderAddress.value == null ||
+        newSelectedGroup == null
+      ) {
+        return;
+      }
+      const assetProvider = new ethers.Contract(
+        categorizedProviderAddress.value,
+        AssetStoreProvider.wabi.abi, // HACK: instead of ICategorizedAssetProvider.wabi.abi,
+        provider
+      );
+      const [categoryCount] = await assetProvider.functions.getCategoryCount(
+        newSelectedGroup
+      );
       console.log("*** categoryCount", categoryCount);
       const categories: string[] = [];
-        for (let i = 0; i < categoryCount; i++) {
-          const [categoryName] = await assetProvider.functions.getCategoryNameAtIndex(
+      for (let i = 0; i < categoryCount; i++) {
+        const [categoryName] =
+          await assetProvider.functions.getCategoryNameAtIndex(
             newSelectedGroup,
             i
           );
-          categories.push(categoryName);
+        categories.push(categoryName);
 
-          if (selectedGroup.value != newSelectedGroup) {
-            return;
-          }
+        if (selectedGroup.value != newSelectedGroup) {
+          return;
         }
-        console.log("*** categories", categories);
-        categoryNames.value = categories;
-        if (categories.length == 1) {
-          selectedCategory.value = categories[0]; //auto select the only one
-        } 
+      }
+      console.log("*** categories", categories);
+      categoryNames.value = categories;
+      if (categories.length == 1) {
+        selectedCategory.value = categories[0]; //auto select the only one
+      }
     });
     watch(selectedProvider, async (newValue) => {
       // Later: Eliminated this O(n) search with key mapping
