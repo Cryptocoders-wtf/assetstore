@@ -114,7 +114,7 @@ export default defineComponent({
     fetchProviders();
 
     const isCategorized = ref<boolean>(false);
-    const groups = ref<string[]>([]);
+    const groupNames = ref<string[]>([]);
     const selectedGroup = ref<string | null>(null);
     const selectedCategirt = ref<string | null>(null);
 
@@ -142,6 +142,24 @@ export default defineComponent({
         );
       console.log("** isCategorized", valueIsCategorized);
       isCategorized.value = valueIsCategorized;
+      if (valueIsCategorized) {
+        // fetch groups
+        const [groupCount] = await assetProvider.functions.getGroupCount();
+        console.log("*** groupCount", groupCount);
+        const groups: string[] = [];
+        for (let i=0; i<groupCount; i++) {
+          const [groupName] = await assetProvider.functions.getGroupNameAtIndex(i);
+          groups.push(groupName);
+
+          if (selectedProvider.value != newValue || newValue == null) {
+            return;
+          }
+        }
+        console.log("*** groups", groups);
+        groupNames.value = groups;
+      } else {
+        groupNames.value = [];
+      }
 
       fetchAssetsAsync(newValue, assetProvider);
     });
