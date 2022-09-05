@@ -131,9 +131,10 @@ export default defineComponent({
     const selectedGroup = ref<string | null>(null);
     const categoryNames = ref<string[]>([]);
     const selectedCategory = ref<string | null>(null);
-    watch([selectedGroup, groupNames], async ([newSelectedGroup, newGroupNames]) => {
+    watch([selectedGroup], 
+      async ([newSelectedGroup]) => {
       console.log("*** selectedGroup", newSelectedGroup, categorizedProviderAddress.value);
-      if (categorizedProviderAddress.value == null || selectedGroup.value == null) {
+      if (categorizedProviderAddress.value == null || newSelectedGroup == null) {
         return;
       }
       const assetProvider = new ethers.Contract(
@@ -141,8 +142,22 @@ export default defineComponent({
         AssetStoreProvider.wabi.abi, // HACK: instead of ICategorizedAssetProvider.wabi.abi,
         provider
       );
-      const [categoryCount] = await assetProvider.functions.getCategoryCount(selectedGroup.value);
+      const [categoryCount] = await assetProvider.functions.getCategoryCount(newSelectedGroup);
       console.log("*** categoryCount", categoryCount);
+      const categories: string[] = [];
+        for (let i = 0; i < categoryCount; i++) {
+          const [categoryName] = await assetProvider.functions.getCategoryNameAtIndex(
+            newSelectedGroup,
+            i
+          );
+          categories.push(categoryName);
+
+          if (selectedGroup.value != newSelectedGroup) {
+            return;
+          }
+        }
+        console.log("*** categories", categories);
+
     });
     watch(selectedProvider, async (newValue) => {
       // Later: Eliminated this O(n) search with key mapping
