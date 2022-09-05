@@ -32,7 +32,7 @@
         </option>
       </select>
       <select
-        v-if="isCategorized"
+        v-if="groupNames.length > 1"
         class="form-select block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700"
         v-model="selectedGroup"
       >
@@ -128,9 +128,10 @@ export default defineComponent({
     const isCategorized = ref<boolean>(false);
     const groupNames = ref<string[]>([]);
     const selectedGroup = ref<string | null>(null);
-    const selectedCategirt = ref<string | null>(null);
-    watch(selectedGroup, async (newValue) => {
-      console.log("*** selectedGroup", selectedGroup.value);
+    const categoryNames = ref<string[]>([]);
+    const selectedCategory = ref<string | null>(null);
+    watch([selectedGroup, groupNames], async ([newSelectedGroup, newGroupNames]) => {
+      console.log("*** selectedGroup", newSelectedGroup);
     });
     watch(selectedProvider, async (newValue) => {
       // Later: Eliminated this O(n) search with key mapping
@@ -158,6 +159,9 @@ export default defineComponent({
       isCategorized.value = valueIsCategorized;
       if (valueIsCategorized) {
         // fetch groups
+        groupNames.value = [];
+        categoryNames.value = [];
+
         const [groupCount] = await assetProvider.functions.getGroupCount();
         console.log("*** groupCount", groupCount);
         const groups: string[] = [];
@@ -173,8 +177,12 @@ export default defineComponent({
         }
         console.log("*** groups", groups);
         groupNames.value = groups;
+        if (groups.length == 1) {
+          selectedGroup.value = groups[0]; // auto select the only one
+        }
       } else {
         groupNames.value = [];
+        categoryNames.value = [];
       }
 
       fetchAssetsAsync(newValue, assetProvider);
@@ -240,6 +248,8 @@ export default defineComponent({
       isCategorized,
       groupNames,
       selectedGroup,
+      categoryNames,
+      selectedCategory,
     };
   },
 });
