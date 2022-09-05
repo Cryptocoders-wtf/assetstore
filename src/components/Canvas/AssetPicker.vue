@@ -180,7 +180,7 @@ export default defineComponent({
         );
         console.log("*** assetId", assetId.toNumber());
         const result = await assetProvider.functions.generateSVGPart(assetId);
-        if (selectedCategory.value == newSelectedCategory) {
+        if (selectedCategory.value != newSelectedCategory) {
           return;
         }
         const svgPart = result[0];
