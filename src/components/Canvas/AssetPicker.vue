@@ -125,19 +125,24 @@ export default defineComponent({
     };
     fetchProviders();
 
-    const categorizedProvider = ref<ethers.Contract | null>(null);
+    const categorizedProviderAddress = ref<string | null>(null);
     const isCategorized = ref<boolean>(false);
     const groupNames = ref<string[]>([]);
     const selectedGroup = ref<string | null>(null);
     const categoryNames = ref<string[]>([]);
     const selectedCategory = ref<string | null>(null);
     watch([selectedGroup, groupNames], async ([newSelectedGroup, newGroupNames]) => {
-      console.log("*** selectedGroup", newSelectedGroup);
-      if (categorizedProvider.value == null || selectedGroup.value == null) {
+      console.log("*** selectedGroup", newSelectedGroup, categorizedProviderAddress.value);
+      if (categorizedProviderAddress.value == null || selectedGroup.value == null) {
         return;
       }
-      //const [categoryCount] = await categorizedProvider.value.functions.getCategoryCount(selectedGroup.value);
-      //console.log("*** categoryCount", categoryCount);
+      const assetProvider = new ethers.Contract(
+        categorizedProviderAddress.value,
+        AssetStoreProvider.wabi.abi, // HACK: instead of ICategorizedAssetProvider.wabi.abi,
+        provider
+      );
+      const [categoryCount] = await assetProvider.functions.getCategoryCount(selectedGroup.value);
+      console.log("*** categoryCount", categoryCount);
     });
     watch(selectedProvider, async (newValue) => {
       // Later: Eliminated this O(n) search with key mapping
@@ -164,7 +169,7 @@ export default defineComponent({
       console.log("** isCategorized", valueIsCategorized);
       isCategorized.value = valueIsCategorized;
       if (valueIsCategorized) {
-        categorizedProvider.value = assetProvider;
+        categorizedProviderAddress.value = providerInfo.provider;
         // fetch groups
         groupNames.value = [];
         categoryNames.value = [];
@@ -188,6 +193,7 @@ export default defineComponent({
           selectedGroup.value = groups[0]; // auto select the only one
         }
       } else {
+        categorizedProviderAddress.value = null;
         groupNames.value = [];
         categoryNames.value = [];
       }
