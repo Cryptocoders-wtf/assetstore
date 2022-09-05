@@ -112,6 +112,12 @@ export default defineComponent({
       assetProviderInfos.value = infos;
     };
     fetchProviders();
+
+    const isCategorized = ref<boolean>(false);
+    const groups = ref<string[]>([]);
+    const selectedGroup = ref<string | null>(null);
+    const selectedCategirt = ref<string | null>(null);
+
     watch(selectedProvider, async (newValue) => {
       // Later: Eliminated this O(n) search with key mapping
       const infos = assetProviderInfos.value.filter((item) => {
@@ -130,11 +136,20 @@ export default defineComponent({
       );
       //const interfaceId = await assetProvider.functions.getInterfaceId();
       //console.log("** interfaceId", interfaceId);
-      const [isCategorized] = await assetProvider.functions.supportsInterface(
-        ICategorizedAssetProvider_InterfaceId
-      );
-      console.log("** isCategorized", isCategorized);
+      const [valueIsCategorized] =
+        await assetProvider.functions.supportsInterface(
+          ICategorizedAssetProvider_InterfaceId
+        );
+      console.log("** isCategorized", valueIsCategorized);
+      isCategorized.value = valueIsCategorized;
 
+      fetchAssetsAsync(newValue, assetProvider);
+    });
+
+    const fetchAssetsAsync = async (
+      provider: string | null,
+      assetProvider: ethers.Contract
+    ) => {
       const result2 = await assetProvider.functions.totalSupply();
       const count = result2[0].toNumber();
       console.log("totalSupply", count);
@@ -144,7 +159,7 @@ export default defineComponent({
       for (let i = 0; i < limit; i++) {
         const assetId = count > 0 ? i : Math.floor(Math.random() * 0x1000000);
         const result = await assetProvider.functions.generateSVGPart(assetId);
-        if (selectedProvider.value != newValue || newValue == null) {
+        if (selectedProvider.value != provider || provider == null) {
           return;
         }
         const svgPart = result[0];
@@ -160,7 +175,7 @@ export default defineComponent({
         const transform = Object.assign({}, identityTransform);
         transform.scale = 0.5;
         overlays.push({
-          provider: newValue,
+          provider,
           image,
           assetId,
           svgPart,
@@ -170,7 +185,7 @@ export default defineComponent({
         });
         assetOverlays.value = overlays.map((assetImage) => assetImage);
       }
-    });
+    };
 
     const onOpen = () => {
       showPopup.value = !showPopup.value;
@@ -188,6 +203,7 @@ export default defineComponent({
       selectedProvider,
       assetOverlays,
       onSelect,
+      isCategorized,
     };
   },
 });
