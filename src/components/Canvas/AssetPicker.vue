@@ -125,6 +125,7 @@ export default defineComponent({
     };
     fetchProviders();
 
+    const categorizedProvider = ref<ethers.Contract | null>(null);
     const isCategorized = ref<boolean>(false);
     const groupNames = ref<string[]>([]);
     const selectedGroup = ref<string | null>(null);
@@ -132,6 +133,11 @@ export default defineComponent({
     const selectedCategory = ref<string | null>(null);
     watch([selectedGroup, groupNames], async ([newSelectedGroup, newGroupNames]) => {
       console.log("*** selectedGroup", newSelectedGroup);
+      if (categorizedProvider.value == null || selectedGroup.value == null) {
+        return;
+      }
+      //const [categoryCount] = await categorizedProvider.value.functions.getCategoryCount(selectedGroup.value);
+      //console.log("*** categoryCount", categoryCount);
     });
     watch(selectedProvider, async (newValue) => {
       // Later: Eliminated this O(n) search with key mapping
@@ -158,6 +164,7 @@ export default defineComponent({
       console.log("** isCategorized", valueIsCategorized);
       isCategorized.value = valueIsCategorized;
       if (valueIsCategorized) {
+        categorizedProvider.value = assetProvider;
         // fetch groups
         groupNames.value = [];
         categoryNames.value = [];
