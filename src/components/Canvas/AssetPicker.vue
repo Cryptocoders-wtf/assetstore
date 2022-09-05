@@ -153,7 +153,7 @@ export default defineComponent({
       const provider2 = selectedProvider.value;
       if (
         categorizedProviderAddress.value == null ||
-        newSelectedCategory == null || 
+        newSelectedCategory == null ||
         provider2 == null
       ) {
         return;
