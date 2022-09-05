@@ -150,9 +150,11 @@ export default defineComponent({
 
     watch(selectedCategory, async (newSelectedCategory) => {
       console.log("*** selectedCategory", newSelectedCategory);
+      const provider2 = selectedProvider.value;
       if (
         categorizedProviderAddress.value == null ||
-        newSelectedCategory == null
+        newSelectedCategory == null || 
+        provider2 == null
       ) {
         return;
       }
@@ -167,6 +169,43 @@ export default defineComponent({
           newSelectedCategory
         );
       console.log("*** assetCount", assetCount);
+
+      const overlays: Overlay[] = [];
+
+      for (let i = 0; i < assetCount; i++) {
+        const [assetId] = await assetProvider.functions.getAssetIdInCategory(
+          selectedGroup.value,
+          newSelectedCategory,
+          i
+        );
+        console.log("*** assetId", assetId.toNumber());
+        const result = await assetProvider.functions.generateSVGPart(assetId);
+        if (selectedCategory.value == newSelectedCategory) {
+          return;
+        }
+        const svgPart = result[0];
+        const svgTag = result[1];
+        const svg =
+          '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">\n' +
+          `<defs>\n${svgPart}\n</defs>\n` +
+          `<use href="#${svgTag}" />\n` +
+          "</svg>\n";
+        //console.log(svg);
+        const image =
+          "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
+        const transform = Object.assign({}, identityTransform);
+        transform.scale = 0.5;
+        overlays.push({
+          provider: provider2,
+          image,
+          assetId,
+          svgPart,
+          svgTag,
+          transform,
+          fill: "",
+        });
+        assetOverlays.value = overlays.map((assetImage) => assetImage);
+      }
     });
     watch([selectedGroup], async ([newSelectedGroup]) => {
       console.log(
@@ -260,9 +299,8 @@ export default defineComponent({
         categorizedProviderAddress.value = null;
         groupNames.value = [];
         categoryNames.value = [];
+        fetchAssetsAsync(newValue, assetProvider);
       }
-
-      fetchAssetsAsync(newValue, assetProvider);
     });
 
     const fetchAssetsAsync = async (
