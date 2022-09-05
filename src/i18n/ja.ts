@@ -79,6 +79,8 @@ const lang = {
   },
   assetPicker: {
     chooseProvider: "プロバイダーを選んで下さい",
+    chooseGroup: "グループを選んで下さい",
+    chooseCategory: "カテゴリーを選んで下さい",
   },
   languages,
 };

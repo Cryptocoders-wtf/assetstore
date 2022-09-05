@@ -31,6 +31,18 @@
           {{ provider.name }}
         </option>
       </select>
+      <select
+        v-if="isCategorized"
+        class="form-select block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700"
+        v-model="selectedGroup"
+      >
+        <option disabled :value="null">
+          {{ $tc("assetPicker.chooseGroup") }}
+        </option>
+        <option v-for="group in groupNames" :key="group" :value="group">
+          {{ group }}
+        </option>
+      </select>
       <div
         :style="`width: 100%; height: ${
           canvasParams.canh / 3
@@ -117,7 +129,9 @@ export default defineComponent({
     const groupNames = ref<string[]>([]);
     const selectedGroup = ref<string | null>(null);
     const selectedCategirt = ref<string | null>(null);
-
+    watch(selectedGroup, async (newValue) => {
+      console.log("*** selectedGroup", selectedGroup.value);
+    });
     watch(selectedProvider, async (newValue) => {
       // Later: Eliminated this O(n) search with key mapping
       const infos = assetProviderInfos.value.filter((item) => {
@@ -147,8 +161,10 @@ export default defineComponent({
         const [groupCount] = await assetProvider.functions.getGroupCount();
         console.log("*** groupCount", groupCount);
         const groups: string[] = [];
-        for (let i=0; i<groupCount; i++) {
-          const [groupName] = await assetProvider.functions.getGroupNameAtIndex(i);
+        for (let i = 0; i < groupCount; i++) {
+          const [groupName] = await assetProvider.functions.getGroupNameAtIndex(
+            i
+          );
           groups.push(groupName);
 
           if (selectedProvider.value != newValue || newValue == null) {
@@ -222,6 +238,8 @@ export default defineComponent({
       assetOverlays,
       onSelect,
       isCategorized,
+      groupNames,
+      selectedGroup,
     };
   },
 });

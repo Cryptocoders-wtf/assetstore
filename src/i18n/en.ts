@@ -78,6 +78,8 @@ const lang = {
   },
   assetPicker: {
     chooseProvider: "Choose a provider",
+    chooseGroup: "Choose a group",
+    chooseCategory: "Choose a category",
   },
   languages,
 };
