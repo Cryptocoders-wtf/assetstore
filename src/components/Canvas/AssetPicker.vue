@@ -43,6 +43,18 @@
           {{ group }}
         </option>
       </select>
+      <select
+        v-if="categoryNames.length > 1"
+        class="form-select block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-1.5 text-base font-normal text-gray-700"
+        v-model="selectedCategory"
+      >
+        <option disabled :value="null">
+          {{ $tc("assetPicker.chooseGroup") }}
+        </option>
+        <option v-for="category in categoryNames" :key="category" :value="category">
+          {{ category }}
+        </option>
+      </select>
       <div
         :style="`width: 100%; height: ${
           canvasParams.canh / 3
@@ -157,7 +169,10 @@ export default defineComponent({
           }
         }
         console.log("*** categories", categories);
-
+        categoryNames.value = categories;
+        if (categories.length == 1) {
+          selectedCategory.value = categories[0]; //auto select the only one
+        } 
     });
     watch(selectedProvider, async (newValue) => {
       // Later: Eliminated this O(n) search with key mapping
