@@ -130,14 +130,11 @@ export default defineComponent({
       for (let i = 0; i < count; i++) {
         const result = await assetComposer.functions.getProvider(i);
         const providerInfo = result[0];
-        if (providerInfo.key != "comp") {
-          // Skip AssetComposer
-          infos.push({
-            key: providerInfo.key,
-            name: providerInfo.name,
-            provider: providerInfo.provider,
-          });
-        }
+        infos.push({
+          key: providerInfo.key,
+          name: providerInfo.name,
+          provider: providerInfo.provider,
+        });
       }
       assetProviderInfos.value = infos;
     };
@@ -281,10 +278,7 @@ export default defineComponent({
           const [groupName] = await assetProvider.functions.getGroupNameAtIndex(
             i
           );
-          // Skip assets from DrawYourOwn token
-          if (groupName != "Draw Your Own") {
-            groups.push(groupName);
-          }
+          groups.push(groupName);
 
           if (selectedProvider.value != newValue || newValue == null) {
             return;
