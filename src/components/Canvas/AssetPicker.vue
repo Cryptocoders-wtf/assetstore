@@ -284,7 +284,9 @@ export default defineComponent({
           const [groupName] = await assetProvider.functions.getGroupNameAtIndex(
             i
           );
-          groups.push(groupName);
+          if (groupName != "Draw Your Own") {
+            groups.push(groupName);
+          }
 
           if (selectedProvider.value != newValue || newValue == null) {
             return;
