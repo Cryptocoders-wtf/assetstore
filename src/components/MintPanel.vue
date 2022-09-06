@@ -230,7 +230,7 @@ export default defineComponent({
               ]
             : [];
           const txParams: any = {};
-          if (hasRemix) {
+          if (hasRemix || drawing.overlays.length > 0) {
             const mintPrice = await networkContext.value.contract.mintPrice();
             console.log(
               "*** minting",

@@ -166,7 +166,7 @@ export default defineComponent({
           fetchPrimaryTokens();
         }
       });
-      tokenRO.on(tokenRO.filters.PayedOut(), async (to, tokenId, amount) => {
+      tokenRO.on(tokenRO.filters.Payout(), async (to, tokenId, amount) => {
         console.log(
           "*** event.PayedOut",
           to,
@@ -246,7 +246,7 @@ export default defineComponent({
       };
       const dataset: OriginalAssetDataSet = {
         group: "", // the contract will specify
-        category: "CC0 Drawing (41)",
+        category: "CC0 Drawing (43)",
         width: 1024,
         height: 1024,
         assets: [asset],
