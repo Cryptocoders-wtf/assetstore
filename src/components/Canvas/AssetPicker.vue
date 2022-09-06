@@ -151,7 +151,7 @@ export default defineComponent({
     const selectedCategory = ref<string | null>(null);
 
     watch(selectedCategory, async (newSelectedCategory) => {
-      console.log("*** selectedCategory", newSelectedCategory);
+      //console.log("*** selectedCategory", newSelectedCategory);
       const provider2 = selectedProvider.value;
       if (
         categorizedProviderAddress.value == null ||
@@ -170,7 +170,7 @@ export default defineComponent({
           selectedGroup.value,
           newSelectedCategory
         );
-      console.log("*** assetCount", assetCount);
+      //console.log("*** assetCount", assetCount);
 
       const overlays: Overlay[] = [];
 
@@ -180,7 +180,7 @@ export default defineComponent({
           newSelectedCategory,
           i
         );
-        console.log("*** assetId", assetId.toNumber());
+        //console.log("*** assetId", assetId.toNumber());
         const result = await assetProvider.functions.generateSVGPart(assetId);
         if (selectedCategory.value != newSelectedCategory) {
           return;
@@ -210,11 +210,6 @@ export default defineComponent({
       }
     });
     watch([selectedGroup], async ([newSelectedGroup]) => {
-      console.log(
-        "*** selectedGroup",
-        newSelectedGroup,
-        categorizedProviderAddress.value
-      );
       if (
         categorizedProviderAddress.value == null ||
         newSelectedGroup == null
@@ -229,7 +224,7 @@ export default defineComponent({
       const [categoryCount] = await assetProvider.functions.getCategoryCount(
         newSelectedGroup
       );
-      console.log("*** categoryCount", categoryCount);
+      //console.log("*** categoryCount", categoryCount);
       const categories: string[] = [];
       for (let i = 0; i < categoryCount; i++) {
         const [categoryName] =
@@ -243,7 +238,7 @@ export default defineComponent({
           return;
         }
       }
-      console.log("*** categories", categories);
+      //console.log("*** categories", categories);
       categoryNames.value = categories;
       if (categories.length == 1) {
         selectedCategory.value = categories[0]; //auto select the only one
@@ -280,7 +275,7 @@ export default defineComponent({
         categoryNames.value = [];
 
         const [groupCount] = await assetProvider.functions.getGroupCount();
-        console.log("*** groupCount", groupCount);
+        //console.log("*** groupCount", groupCount);
         const groups: string[] = [];
         for (let i = 0; i < groupCount; i++) {
           const [groupName] = await assetProvider.functions.getGroupNameAtIndex(
@@ -295,7 +290,7 @@ export default defineComponent({
             return;
           }
         }
-        console.log("*** groups", groups);
+        //console.log("*** groups", groups);
         groupNames.value = groups;
         if (groups.length == 1) {
           selectedGroup.value = groups[0]; // auto select the only one
