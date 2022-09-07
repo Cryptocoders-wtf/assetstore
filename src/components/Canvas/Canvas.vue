@@ -43,7 +43,7 @@
       >
         <div
           :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
-          class="bg-slate-100 absolute overflow-hidden"
+          class="absolute overflow-hidden bg-slate-100"
         >
           <img
             :src="gridImage"
@@ -327,22 +327,27 @@ export default defineComponent({
       currentColor.value = remix.color || "";
       stagingColor.value = remix.color || "";
     };
-    const gridImage = computed(()=>{
+    const gridImage = computed(() => {
       const g = grid.value;
       const rects = [];
       if (g > 0) {
         for (var i = 0; i * g < 1024; i++) {
           for (var j = 0; j * g < 1024; j++) {
             if ((i + j) % 2 == 0) {
-              rects.push({x:i * g, y:j * g, w:g, h:g});
+              rects.push({ x: i * g, y: j * g, w: g, h: g });
             }
           }
         }
       }
       const svg =
-              '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">\n' +
-                rects.map(r => `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="#ccc"/>\n`).join('') +
-              '</svg>\n';
+        '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">\n' +
+        rects
+          .map(
+            (r) =>
+              `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="#ccc"/>\n`
+          )
+          .join("") +
+        "</svg>\n";
       return "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
     });
     watch([cursors, currentColor], ([points, color]) => {
@@ -654,7 +659,7 @@ export default defineComponent({
 .tool-handle-move::before {
   font-family: "Material Icons";
   content: "control_camera";
-  @apply text-4xl;
+  @apply text-3xl;
   @apply text-red-800;
   @apply relative;
   @apply bottom-2.5;

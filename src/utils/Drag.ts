@@ -47,10 +47,16 @@ export const useDrag = (
   const currentTool = ref<Tools>(0);
 
   const toggleGrid = () => {
-    switch(grid.value) {
-      case 0: grid.value = 8; break;
-      case 128: grid.value = 0; break;
-      default: grid.value = grid.value * 2; break;
+    switch (grid.value) {
+      case 0:
+        grid.value = 8;
+        break;
+      case 128:
+        grid.value = 0;
+        break;
+      default:
+        grid.value = grid.value * 2;
+        break;
     }
   };
 
