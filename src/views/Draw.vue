@@ -170,6 +170,12 @@ export default defineComponent({
     );
 
     const mintPrice = ref<number>(0.01); // to be over-written
+    const fetchMintPrice = async () => {
+      const result = await tokenRO.functions.mintPrice();
+      mintPrice.value = weiToEther(result[0]); 
+    };
+    fetchMintPrice();
+
     const remixes = ref<Remix[]>([]);
     const tokens = ref<Token[]>([]);
     const { onSelect, selection, tokensPerAsset } = useOnSelect(4, tokenRO);
