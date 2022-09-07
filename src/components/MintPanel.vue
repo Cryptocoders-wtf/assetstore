@@ -84,7 +84,7 @@
           <div>
             <slot />
             <div v-if="priceRange.high > 0">
-              <p  class="mb-2">
+              <p class="mb-2">
                 {{
                   $tc("mintPanel.mintMessage1", {
                     low: priceRange.low,

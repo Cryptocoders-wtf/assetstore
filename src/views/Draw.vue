@@ -56,7 +56,7 @@
             {{ $tc("mintPanel.cc0Message") }}
           </p>
           <p class="mb-2">
-            {{ $tc("mintPanel.drawMessage", {mintPrice}) }}
+            {{ $tc("mintPanel.drawMessage", { mintPrice }) }}
           </p>
         </MintPanel>
       </div>
@@ -172,7 +172,7 @@ export default defineComponent({
     const mintPrice = ref<number>(0.01); // to be over-written
     const fetchMintPrice = async () => {
       const result = await tokenRO.functions.mintPrice();
-      mintPrice.value = weiToEther(result[0]); 
+      mintPrice.value = weiToEther(result[0]);
     };
     fetchMintPrice();
 
@@ -431,7 +431,7 @@ export default defineComponent({
       OpenSeaPath,
       remixTransformString,
       minted,
-      mintPrice
+      mintPrice,
     };
   },
 });

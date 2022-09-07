@@ -480,7 +480,7 @@ export default defineComponent({
       const overlay = overlays[overlayIndex.value];
       currentColor.value = overlay.fill;
       stagingColor.value = overlay.fill;
-      console.log("overlay.fill", overlay.fill, currentColor.value);
+      // console.log("overlay.fill", overlay.fill, currentColor.value);
     };
     const onSelectOverlay = (index: number) => {
       updateOverlayIndex(index);
@@ -502,10 +502,6 @@ export default defineComponent({
           const dx = canvasParams.value.assw / 2 + overlay.transform.tx - pos.x;
           const dy = canvasParams.value.assh / 2 + overlay.transform.ty - pos.y;
           const d = Math.sqrt(dx * dx + dy * dy);
-          console.log(
-            d,
-            (canvasParams.value.assw / 2) * overlay.transform.scale
-          );
           if (d < (canvasParams.value.assw / 2) * overlay.transform.scale) {
             updateOverlayIndex(i);
             currentLayerType.value = LayerType.OVERLAY;
