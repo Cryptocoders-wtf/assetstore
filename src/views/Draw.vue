@@ -102,6 +102,10 @@ const contentsToken = {
   wabi: require("../abis/DrawYourOwn.json"), // wrapped abi
 };
 
+const AssetComposer = {
+  wabi: require("@/abis/AssetComposer.json"), // wrapped abi
+};
+
 interface Info {
   nextIndex: number;
   keys: string[];
@@ -152,6 +156,11 @@ export default defineComponent({
       contentsToken.wabi.abi,
       provider
     );
+    const assetComposer = new ethers.Contract(
+      addresses.composerAddress,
+      AssetComposer.wabi.abi,
+      provider
+    );
     const remixes = ref<Remix[]>([]);
     const tokens = ref<Token[]>([]);
     const { onSelect, selection, tokensPerAsset } = useOnSelect(4, tokenRO);
@@ -166,11 +175,13 @@ export default defineComponent({
           fetchPrimaryTokens();
         }
       });
-      tokenRO.on(tokenRO.filters.Payout(), async (to, tokenId, amount) => {
+      // event Payout(string providerKey, uint256 assetId, address payable to, uint256 amount);
+      tokenRO.on(assetComposer.filters.Payout(), async (providerKey, assetId, to, amount) => {
         console.log(
           "*** event.PayedOut",
+          providerKey,
+          assetId.toNumber(),
           to,
-          tokenId.toNumber(),
           weiToEther(amount)
         );
       });
