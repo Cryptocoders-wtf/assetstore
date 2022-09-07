@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mx-auto p-2 pl-8 pr-8 text-left">
-      <div class="mb-2 text-xl font-bold">{{ "Draw Your Own Token" }}</div>
+      <div class="mb-2 text-xl font-bold">{{ "Draw Your Own NFT" }}</div>
       <Canvas
         v-if="showCanvas"
         @close="onClose"
@@ -246,7 +246,7 @@ export default defineComponent({
       };
       const dataset: OriginalAssetDataSet = {
         group: "", // the contract will specify
-        category: "CC0 Drawing (44)",
+        category: "CC0 Drawing (50)",
         width: 1024,
         height: 1024,
         assets: [asset],

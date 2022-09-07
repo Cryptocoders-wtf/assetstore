@@ -66,8 +66,8 @@ export const fetchTokensRemix = async (
       }
 
       const tokenId = index * tokensPerAsset;
-      const [earnedInWei] = await tokenRO.functions.totalEarned(tokenId);
-      console.log("*** totalEarned", tokenId, weiToEther(earnedInWei));
+      //const [earnedInWei] = await tokenRO.functions.totalEarned(tokenId);
+      //console.log("*** totalEarned", tokenId, weiToEther(earnedInWei));
 
       const [svgPart, svgTag] = await tokenRO.functions.generateSVGPart(
         tokenId
