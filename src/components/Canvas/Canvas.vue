@@ -47,6 +47,11 @@
           class="absolute overflow-hidden"
         >
           <img
+            :src="gridImage"
+            class="absolute"
+            :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
+          />
+          <img
             v-if="currentDrawing.remix.image"
             :src="currentDrawing.remix.image"
             class="absolute"
@@ -323,7 +328,24 @@ export default defineComponent({
       currentColor.value = remix.color || "";
       stagingColor.value = remix.color || "";
     };
-
+    const gridImage = computed(()=>{
+      const g = grid.value;
+      const rects = [];
+      if (g > 0) {
+        for (var i = 0; i * g < 1024; i++) {
+          for (var j = 0; j * g < 1024; j++) {
+            if ((i + j) % 2 == 0) {
+              rects.push({x:i * g, y:j * g, w:g, h:g});
+            }
+          }
+        }
+      }
+      const svg =
+              '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">\n' +
+                rects.map(r => `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="#ccc"/>\n`).join('') +
+              '</svg>\n';
+      return "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
+    });
     watch([cursors, currentColor], ([points, color]) => {
       const newValue = Object.assign({}, currentDrawing.value);
 
@@ -617,6 +639,7 @@ export default defineComponent({
       canvasOffset,
       hasLayerMode,
       updateRatio,
+      gridImage,
     };
   },
   mounted() {
