@@ -106,6 +106,10 @@ const AssetComposer = {
   wabi: require("@/abis/AssetComposer.json"), // wrapped abi
 };
 
+const AssetStoreProvider = {
+  wabi: require("@/abis/AssetStoreProvider.json"), // wrapped abi
+};
+
 interface Info {
   nextIndex: number;
   keys: string[];
@@ -161,11 +165,12 @@ export default defineComponent({
       AssetComposer.wabi.abi,
       provider
     );
+
     const remixes = ref<Remix[]>([]);
     const tokens = ref<Token[]>([]);
     const { onSelect, selection, tokensPerAsset } = useOnSelect(4, tokenRO);
 
-    provider.once("block", () => {
+    provider.once("block", async () => {
       tokenRO.on(tokenRO.filters.Transfer(), async (from, to, tokenId) => {
         if (
           tokenId.toNumber() % tokensPerAsset.value == 0 &&
@@ -176,7 +181,17 @@ export default defineComponent({
         }
       });
       // event Payout(string providerKey, uint256 assetId, address payable to, uint256 amount);
-      tokenRO.on(assetComposer.filters.Payout(), async (providerKey, assetId, to, amount) => {
+      const [providerId] = await assetComposer.functions.getProviderId("asset");
+      console.log("providerId", providerId);
+      const [assetInfo] = await assetComposer.functions.getProvider(providerId);
+      console.log("assetInfo", assetInfo.key, assetInfo.name, assetInfo.provider);
+      const assetStoreProvider = new ethers.Contract(
+        assetInfo.provider,
+        AssetStoreProvider.wabi.abi,
+        provider
+      );
+
+      assetStoreProvider.on(assetStoreProvider.filters.Payout(), async (providerKey, assetId, to, amount) => {
         console.log(
           "*** event.PayedOut",
           providerKey,
