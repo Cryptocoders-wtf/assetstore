@@ -184,22 +184,30 @@ export default defineComponent({
       const [providerId] = await assetComposer.functions.getProviderId("asset");
       console.log("providerId", providerId);
       const [assetInfo] = await assetComposer.functions.getProvider(providerId);
-      console.log("assetInfo", assetInfo.key, assetInfo.name, assetInfo.provider);
+      console.log(
+        "assetInfo",
+        assetInfo.key,
+        assetInfo.name,
+        assetInfo.provider
+      );
       const assetStoreProvider = new ethers.Contract(
         assetInfo.provider,
         AssetStoreProvider.wabi.abi,
         provider
       );
 
-      assetStoreProvider.on(assetStoreProvider.filters.Payout(), async (providerKey, assetId, to, amount) => {
-        console.log(
-          "*** event.PayedOut",
-          providerKey,
-          assetId.toNumber(),
-          to,
-          weiToEther(amount)
-        );
-      });
+      assetStoreProvider.on(
+        assetStoreProvider.filters.Payout(),
+        async (providerKey, assetId, to, amount) => {
+          console.log(
+            "*** event.PayedOut",
+            providerKey,
+            assetId.toNumber(),
+            to,
+            weiToEther(amount)
+          );
+        }
+      );
     });
 
     const fetchPrimaryTokens = async () => {
