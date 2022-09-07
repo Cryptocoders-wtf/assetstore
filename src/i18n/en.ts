@@ -31,6 +31,8 @@ const lang = {
     maxLength: "Maximum 32 bytes.",
     cc0Message:
       "Images you mint here will be available for other people to reuse and remix as cc0 (public domain).",
+    drawMessage:
+      "This is a free mint, if you draw everything from scratch, but costs { mintPrice} ETH if you use remix or overlays. 97.5% of this mint fee will be distributed to creators. It means you can earn money as a creator (Draw2Earn).",
     mintMessage1:
       "This is a free mint, but you need to pay the gas fee, which is typically { low }〜{ high } ETH (depending on the complexity of the image, assuming the Gas price is ~15 Gwei).",
     mintMessage2:

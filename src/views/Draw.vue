@@ -55,6 +55,9 @@
           <p class="mb-2">
             {{ $tc("mintPanel.cc0Message") }}
           </p>
+          <p class="mb-2">
+            {{ $tc("mintPanel.drawMessage", {mintPrice}) }}
+          </p>
         </MintPanel>
       </div>
       <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
@@ -122,7 +125,7 @@ const baseInfo: Info = {
 
 const keyInfo = "manifest";
 const keyDrawing = "drawing";
-const priceRange = { low: 0.04, high: 0.23 };
+const priceRange = { low: 0, high: 0 };
 
 export default defineComponent({
   components: {
@@ -166,6 +169,7 @@ export default defineComponent({
       provider
     );
 
+    const mintPrice = ref<number>(0.01); // to be over-written
     const remixes = ref<Remix[]>([]);
     const tokens = ref<Token[]>([]);
     const { onSelect, selection, tokensPerAsset } = useOnSelect(4, tokenRO);
@@ -421,6 +425,7 @@ export default defineComponent({
       OpenSeaPath,
       remixTransformString,
       minted,
+      mintPrice
     };
   },
 });
