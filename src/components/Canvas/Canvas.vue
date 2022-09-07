@@ -9,7 +9,7 @@
     <div
       :style="`width:${canvasParams.canw + canvasParams.sidew + 4}px;
       height:${canvasParams.headh}px`"
-      class="mr-1 ml-1 flex items-center justify-between bg-slate-300 px-4"
+      class="ml-1 flex items-center justify-between bg-slate-300 px-4"
     >
       <div class="flex items-center gap-1.5">
         <Undo
@@ -34,17 +34,16 @@
       <Close @onClose="onClose" />
     </div>
 
-    <div class="m-1 flex">
+    <div class="m-1 mt-0.5 flex">
       <div
-        :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px`"
-        class="bg-slate-100"
+        :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
         @dragover="dragOver"
         @touchmove="dragOver"
         ref="divCanvas"
       >
         <div
           :style="`width:${canvasParams.canw}px; height:${canvasParams.canh}px;`"
-          class="absolute overflow-hidden"
+          class="bg-slate-100 absolute overflow-hidden"
         >
           <img
             :src="gridImage"
