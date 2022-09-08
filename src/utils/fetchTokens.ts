@@ -71,7 +71,7 @@ export const fetchTokensRemix = async (
         const [svgPart, svgTag] = await tokenRO.functions.generateSVGPart(
           tokenId
         );
-          const svg = await tokenRO.functions.generateSVG(svgPart, style, svgTag);
+        const svg = await tokenRO.functions.generateSVG(svgPart, style, svgTag);
         const image =
           "data:image/svg+xml;base64," + Buffer.from(svg[0]).toString("base64");
         return {
@@ -81,7 +81,7 @@ export const fetchTokensRemix = async (
           svgTag,
           transform: identityTransform,
         };
-      } catch (e:any) {
+      } catch (e: any) {
         console.error("failed to generateSVG");
         return null;
       }

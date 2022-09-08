@@ -96,6 +96,7 @@ import NFTList from "@/components/NFTList.vue";
 import { OriginalAssetData, OriginalAssetDataSet } from "@/models/asset";
 import { roundRect } from "@/utils/canvasUtil";
 import { weiToEther } from "@/utils/currency";
+import { v4 as uuidv4 } from "uuid";
 
 const AssetStore = {
   wabi: require("../abis/AssetStore.json"), // wrapped abi
@@ -283,15 +284,16 @@ export default defineComponent({
     const onDrawingSelect = async (index: number) => {
       selectedIndex.value = index;
       const drawing = selectedDrawing.value;
+      const uuid = uuidv4();
       const asset: OriginalAssetData = {
-        name: "", // the contract will specify
+        name: uuid,
         parts: drawing.layers.map((layer) => {
           return { body: layer.path, color: layer.color };
         }),
       };
       const dataset: OriginalAssetDataSet = {
         group: "", // the contract will specify
-        category: "CC0 Drawing (50)",
+        category: "CC0 Drawing (51)",
         width: 1024,
         height: 1024,
         assets: [asset],
