@@ -228,6 +228,7 @@ export default defineComponent({
 
       const resultSupply = await tokenRO.functions.totalSupply();
       const count = resultSupply[0].toNumber() / tokensPerAsset.value;
+      console.log("totalSupply", count, count * tokensPerAsset.value);
 
       fetchTokensRemix(
         count,

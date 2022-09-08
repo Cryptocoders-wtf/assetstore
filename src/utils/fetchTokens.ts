@@ -60,7 +60,7 @@ export const fetchTokensRemix = async (
 ) => {
   const promises = Array(count)
     .fill({})
-    .map(async (_, index): Promise<Remix> => {
+    .map(async (_, index): Promise<Remix | null> => {
       if (tokens[index]) {
         return tokens[index]; // we already have it
       }
@@ -72,16 +72,21 @@ export const fetchTokensRemix = async (
       const [svgPart, svgTag] = await tokenRO.functions.generateSVGPart(
         tokenId
       );
-      const svg = await tokenRO.functions.generateSVG(svgPart, style, svgTag);
-      const image =
-        "data:image/svg+xml;base64," + Buffer.from(svg[0]).toString("base64");
-      return {
-        image,
-        tokenId: index * tokensPerAsset,
-        svgPart,
-        svgTag,
-        transform: identityTransform,
-      };
+      try {
+        const svg = await tokenRO.functions.generateSVG(svgPart, style, svgTag);
+        const image =
+          "data:image/svg+xml;base64," + Buffer.from(svg[0]).toString("base64");
+        return {
+          image,
+          tokenId: index * tokensPerAsset,
+          svgPart,
+          svgTag,
+          transform: identityTransform,
+        };
+      } catch (e) {
+        console.error("failed to generateSVG", e);
+        return null;
+      }
     });
 
   // Sequential version of callback(await Promise.all(promises));
@@ -89,7 +94,9 @@ export const fetchTokensRemix = async (
   let i;
   for (i = 0; i < promises.length; i++) {
     const token = await promises[i];
-    updateTokens.push(token);
-    callback(updateTokens.map((token) => token));
+    if (token) {
+      updateTokens.push(token);
+      callback(updateTokens.map((token) => token));
+    }
   }
 };
