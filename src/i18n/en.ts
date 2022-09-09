@@ -84,7 +84,7 @@ const lang = {
     chooseCategory: "Choose a category",
   },
   draw: {
-    message1: "This is a service, which allows you to create your own drawing and mint it.",
+    message1: "This is a service, which allows you to create your own drawing and mint a fully on-chain NFT with it.",
     message2: "It is a free mint if you draw everything from scratch (the gas fee is required).",
     message3: "You may also create a drawing based on somebody else's drawing (remix),",
     message4: "or place various on-chain assets (such as Nouns and Kamon) on top of your drawing (overlay).",
