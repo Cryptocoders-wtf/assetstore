@@ -228,6 +228,7 @@ export default defineComponent({
                   tokenId: drawing.remix.tokenId,
                   fill: drawing.remix.color || "",
                   transform: transformString(drawing.remix.transform),
+                  stroke: 0,
                 },
               ]
             : [];
@@ -251,13 +252,14 @@ export default defineComponent({
               provider: overlay.provider,
               fill: overlay.fill,
               transform: transformString(overlay.transform),
+              stroke: 0,
             };
           });
           // console.log("overlays", overlays);
           tx = await networkContext.value.contract.mintWithAsset(
             asset,
             affiliateId,
-            8,
+            0,
             remixes,
             overlays,
             txParams
