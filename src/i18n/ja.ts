@@ -84,6 +84,17 @@ const lang = {
     chooseGroup: "グループを選んで下さい",
     chooseCategory: "カテゴリーを選んで下さい",
   },
+  draw: {
+    message1: "",
+    message2: "",
+    message3: "",
+    message4: "",
+    message5: "",
+    message6: "",
+    message7: "",
+    message8: "",
+    message9: "",
+  },
   languages,
 };
 

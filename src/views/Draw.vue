@@ -2,6 +2,21 @@
   <div>
     <div class="mx-auto p-2 pl-8 pr-8 text-left">
       <div class="mb-2 text-xl font-bold">{{ "Draw Your Own NFT" }}</div>
+      <p class="mb-2">
+        {{ $t("draw.message1") }}
+        {{ $t("draw.message2") }}
+      </p>
+      <p class="mb-2">
+        {{ $t("draw.message3") }}
+        {{ $t("draw.message4") }}
+        {{ $t("draw.message5") }}
+        {{ $t("draw.message6") }}
+      </p>
+      <p class="mb-2">
+        {{ $t("draw.message7") }}
+        {{ $t("draw.message8") }}
+        {{ $t("draw.message9") }}
+      </p>
       <Canvas
         v-if="showCanvas"
         @close="onClose"
