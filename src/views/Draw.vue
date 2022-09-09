@@ -88,6 +88,7 @@
 import { defineComponent, ref, computed } from "vue";
 import { ethers } from "ethers";
 import { useRoute } from "vue-router";
+import { displayAddress } from "@/utils/MetaMask";
 import Canvas from "@/components/Canvas/Canvas.vue";
 import {
   Drawing,
@@ -202,19 +203,19 @@ export default defineComponent({
           tokenId.toNumber() % tokensPerAsset.value == 0 &&
           tokenId.toNumber() >= tokens.value.length * tokensPerAsset.value
         ) {
-          console.log("*** event.Transfer calling fetchToken");
+          console.log("*** e.Transfer calling fetchToken");
           fetchPrimaryTokens();
         }
       });
       // event Payout(string providerKey, uint256 assetId, address payable to, uint256 amount);
       const [providerId] = await assetComposer.functions.getProviderId("asset");
-      console.log("providerId", providerId);
+      //console.log("providerId", providerId.toNumber());
       const [assetInfo] = await assetComposer.functions.getProvider(providerId);
       console.log(
         "assetInfo",
         assetInfo.key,
         assetInfo.name,
-        assetInfo.provider
+        displayAddress(assetInfo.provider)
       );
       const assetStoreProvider = new ethers.Contract(
         assetInfo.provider,
@@ -226,10 +227,10 @@ export default defineComponent({
         assetStoreProvider.filters.Payout(),
         async (providerKey, assetId, to, amount) => {
           console.log(
-            "*** event.PayedOut",
+            "*** e.Payout",
             providerKey,
             assetId.toNumber(),
-            to,
+            displayAddress(to),
             weiToEther(amount)
           );
         }
@@ -308,7 +309,7 @@ export default defineComponent({
       };
       const dataset: OriginalAssetDataSet = {
         group: "", // the contract will specify
-        category: "CC0 Drawing (56)",
+        category: "CC0 Drawing (59)",
         width: 1024,
         height: 1024,
         assets: [asset],
@@ -402,12 +403,11 @@ export default defineComponent({
       showCanvas.value = true;
     };
     const minted = () => {
-      console.log("minted");
       selection.value = null;
       selectedIndex.value = 9999;
     };
     const onClose = (output: Drawing) => {
-      console.log("** onClose:overlays.length", output.overlays.length);
+      //console.log("** onClose:overlays.length", output.overlays.length);
       drawings.value = drawings.value.map((drawing, index) => {
         if (index == selectedIndex.value) {
           return output;
