@@ -79,6 +79,7 @@ export interface Drawing {
   remix: Remix;
   layers: Layer[];
   overlays: Overlay[];
+  stroke: number; // optional stroke width
 }
 
 // asset,

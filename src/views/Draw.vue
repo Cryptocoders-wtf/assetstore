@@ -270,6 +270,7 @@ export default defineComponent({
         });
         return layer;
       });
+      drawing.stroke = drawing.stroke || 0;
 
       // console.log("** setup:overlays.length", index, drawing.layers.length, drawing.overlays.length);
       return drawing;
@@ -367,6 +368,7 @@ export default defineComponent({
         layers: [layer],
         overlays: [],
         remix: { tokenId: 0, transform: identityTransform },
+        stroke: 0,
       };
 
       const newDrawings: Drawing[] = drawings.value.map((body) => body);

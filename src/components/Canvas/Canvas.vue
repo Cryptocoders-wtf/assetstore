@@ -311,6 +311,7 @@ export default defineComponent({
         layers: currentDrawing.value.layers,
         overlays: currentDrawing.value.overlays,
         remix: { tokenId: 0, transform: identityTransform },
+        stroke: currentDrawing.value.stroke,
       };
       if (remix) {
         newValue.remix = Object.assign({}, remix);

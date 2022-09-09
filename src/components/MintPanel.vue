@@ -259,7 +259,7 @@ export default defineComponent({
           tx = await networkContext.value.contract.mintWithAsset(
             asset,
             affiliateId,
-            0,
+            drawing.stroke,
             remixes,
             overlays,
             txParams
