@@ -309,7 +309,7 @@ export default defineComponent({
       };
       const dataset: OriginalAssetDataSet = {
         group: "", // the contract will specify
-        category: "CC0 Drawing (62)",
+        category: "CC0 Drawing (65)",
         width: 1024,
         height: 1024,
         assets: [asset],
