@@ -307,9 +307,10 @@ export default defineComponent({
           return { body: layer.path, color: layer.color };
         }),
       };
+      const d = new Date();
       const dataset: OriginalAssetDataSet = {
-        group: "", // the contract will specify
-        category: "CC0 Drawing (65)",
+        group: `${d.getMonth()+1}-${d.getFullYear()}`,
+        category: `${d.getDate()} (CC Share Earnings)`,
         width: 1024,
         height: 1024,
         assets: [asset],

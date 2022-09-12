@@ -217,7 +217,7 @@ export default defineComponent({
       try {
         messageRef.value = "message.minting";
         asset.minter = minterName.value;
-        asset.group = ""; // gas saving
+        // asset.group = ""; // gas saving
         let tx;
         if (props.drawing) {
           const drawing = props.drawing as Drawing;
