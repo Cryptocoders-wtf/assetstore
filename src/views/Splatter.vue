@@ -14,11 +14,11 @@ export default defineComponent({
     const randomize = (value:number, ratio:number) => {
       return value + (Math.random() - 0.5) * value * ratio * 2;
     };
-    const generate = () => {
+    const generate = (count:number) => {
       const points:Point[] = [];
       const [cx, cy] = [512, 512];
       var r0 = 100;   
-      var speed = Math.PI / 30;
+      var speed = Math.PI / count;
       for (var i = speed, alt = 0, jump = 1, r1 = r0; i < Math.PI * 2; i += randomize(speed, 0.9), alt = (alt + 1) % 3, r1 = (randomize(r1, 0.2) * 2 + r0) / 3) {
         if (alt == 0) {
           const r = r1 * (1 + randomize(0.2, 1));
@@ -72,7 +72,7 @@ export default defineComponent({
       return svgImageFromPath(path, "red");
     };
     const updateImage = () => {
-      image.value = generate(); 
+      image.value = generate(randomize(30,0.5)); 
     };
     updateImage();
     return {
