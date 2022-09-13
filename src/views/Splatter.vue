@@ -15,35 +15,34 @@ export default defineComponent({
     }; 
     const points:Point[] = [];
     const [cx, cy] = [512, 512];
-    const r0 = 202;
-    var alt = false;
+    const r0 = 206;   
     var speed = Math.PI / 30;
-    for (var i = 0; i < Math.PI * 2; i += foo(speed, 2)) {
-      const r = alt ? foo(0.8, 1.2) : foo(0.5, 0.4);
+    for (var i = 0, alt = false, jump = 1; i < Math.PI * 2; jump = foo(1, 1.5),  i += speed / jump) {
+      const r = alt ? foo(0.8, 0.4) * jump : foo(0.5, 0.4);
       alt = !alt;
       if (r > 1) {
-        const arc = 0.1;
+        const arc = foo(0.2, 0.5);
         points.push({
-          x: cx + r0 * r * (1-arc) * Math.cos(i - speed * 0.03),
-          y: cy + r0 * r * (1-arc) * Math.sin(i - speed * 0.03),
+          x: cx + r0 * r * (1-arc/2) * Math.cos(i - speed * 0.03),
+          y: cy + r0 * r * (1-arc/2) * Math.sin(i - speed * 0.03),
           c: false,
           r: 0.588
         });
         points.push({
-          x: cx + r0 * r * Math.cos(i - speed * 0.2),
-          y: cy + r0 * r * Math.sin(i - speed * 0.2),
+          x: cx + r0 * r * Math.cos(i - speed * arc),
+          y: cy + r0 * r * Math.sin(i - speed * arc),
           c: false,
           r: 0.588
         });
         points.push({
-          x: cx + r0 * r * Math.cos(i + speed * 0.2),
-          y: cy + r0 * r * Math.sin(i + speed * 0.2),
+          x: cx + r0 * r * Math.cos(i + speed * arc),
+          y: cy + r0 * r * Math.sin(i + speed * arc),
           c: false,
           r: 0.588
         });
         points.push({
-          x: cx + r0 * r * (1-arc)  * Math.cos(i + speed * 0.03),
-          y: cy + r0 * r * (1-arc)  * Math.sin(i + speed * 0.03),
+          x: cx + r0 * r * (1-arc/2)  * Math.cos(i + speed * 0.03),
+          y: cy + r0 * r * (1-arc/2)  * Math.sin(i + speed * 0.03),
           c: false,
           r: 0.588
         });
