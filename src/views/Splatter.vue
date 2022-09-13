@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img :src="image" />
+    <img :src="image" @click="updateImage" />
   </div> 
 </template>
 
@@ -10,6 +10,7 @@ import { Point, pathFromPoints, svgImageFromPath } from "@/models/point";
 
 export default defineComponent({
   setup() {
+    const image = ref<string>("");
     const randomize = (value:number, ratio:number) => {
       return value + (Math.random() - 0.5) * value * ratio;
     };
@@ -59,9 +60,13 @@ export default defineComponent({
       const path = pathFromPoints(points);
       return svgImageFromPath(path, "red");
     };
-    const image = generate(); 
+    const updateImage = () => {
+      image.value = generate(); 
+    };
+    updateImage();
     return {
-      image
+      image,
+      updateImage
     };
   },
 });
