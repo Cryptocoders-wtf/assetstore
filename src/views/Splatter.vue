@@ -7,6 +7,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
 import { Point, pathFromPoints, svgImageFromPath } from "@/models/point";
+// https://github.com/Sikorkaio/sikorka/blob/master/contracts/trigonometry.sol
 
 export default defineComponent({
   setup() {
