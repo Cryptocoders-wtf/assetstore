@@ -10,16 +10,21 @@ import { Point, pathFromPoints, svgImageFromPath } from "@/models/point";
 
 export default defineComponent({
   setup() {
+    const foo = (value:number, ratio:number) => {
+      return value + (Math.random() - 0.5) * value * ratio;
+    }; 
     const points:Point[] = [];
     const [cx, cy] = [512, 512];
-    const r0 = 256;
-    for (var i = 0; i < 360; i += 30) {
-      const r = r0 + (Math.random() - 0.5) * r0/2;
+    const r0 = 200;
+    var alt = true;
+    for (var i = 0; i < Math.PI * 2; i += foo(0.1, 0.3)) {
+      const r = alt ? foo(1, 0.8) : foo(0.5, 0.4);
+      alt = !alt;
       points.push({
-        x: cx + r * Math.cos(i),
-        y: cy + r * Math.sin(i),
-        c: false,
-        r: 0.533
+        x: cx + r0 * r * Math.cos(i),
+        y: cy + r0 * r * Math.sin(i),
+        c: (r > 1.4),
+        r: alt ? foo(1.0, 0.3) : 0.588
       })
     }
     const path = pathFromPoints(points);
