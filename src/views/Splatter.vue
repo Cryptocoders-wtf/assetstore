@@ -6,13 +6,19 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
+import { Point, pathFromPoints, svgImageFromPath } from "@/models/point";
+
 export default defineComponent({
   setup() {
-    const svg =
-        '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">\n' +
-          '<path d="M 256 512 C 256 370 370 256 512 256 C 654 256 768 370 768 512 C 768 654 654 768 512 768 C 370 768 256 654 256 512 " />' +
-        '</svg>\n';
-    const image = "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
+    const points:Point[] = [];
+    const [cx, cy] = [512, 512];
+    const r = 256;
+    points.push({x:cx-r, y:cy-r, c:false, r:0.533});
+    points.push({x:cx+r, y:cy-r, c:false, r:0.533});
+    points.push({x:cx+r, y:cy+r, c:false, r:0.533});
+    points.push({x:cx-r, y:cy+r, c:false, r:0.533});
+    const path = pathFromPoints(points);
+    const image = svgImageFromPath(path, "red");
     return {
       image
     };
