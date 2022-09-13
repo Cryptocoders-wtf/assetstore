@@ -19,13 +19,19 @@ export default defineComponent({
       const [cx, cy] = [512, 512];
       var r0 = 100;   
       var speed = Math.PI / 30;
-      for (var i = speed, alt = 0, jump = 1, r1 = r0; i < Math.PI * 2; i += randomize(speed, 0.9), alt = (alt + 1) % 4) {
+      for (var i = speed, alt = 0, jump = 1, r1 = r0; i < Math.PI * 2; i += randomize(speed, 0.9), alt = (alt + 1) % 3, r1 = (randomize(r1, 0.2) * 2 + r0) / 3) {
         if (alt == 0) {
-          const r = r1 * (1 + randomize(0.3, 1));
+          const r = r1 * (1 + randomize(0.2, 1));
           const arc = randomize(0.3, 0.5);
           points.push({
-            x: cx + r * Math.cos(i - speed * 0.01),
-            y: cy + r * Math.sin(i - speed * 0.01),
+            x: cx + r1 * Math.cos(i - speed * arc/2),
+            y: cy + r1 * Math.sin(i - speed * arc/2),
+            c: false,
+            r: 0.588
+          });
+          points.push({
+            x: cx + r * Math.cos(i - speed * arc/2),
+            y: cy + r * Math.sin(i - speed * arc/2),
             c: false,
             r: 0.588
           });
@@ -42,19 +48,24 @@ export default defineComponent({
             r: 0.588
           });
           points.push({
-            x: cx + r * Math.cos(i + speed * 0.01),
-            y: cy + r * Math.sin(i + speed * 0.01),
+            x: cx + r * Math.cos(i + speed * arc/2),
+            y: cy + r * Math.sin(i + speed * arc/2),
+            c: false,
+            r: 0.588
+          });
+          points.push({
+            x: cx + r1 * Math.cos(i + speed * arc/2),
+            y: cy + r1 * Math.sin(i + speed * arc/2),
             c: false,
             r: 0.588
           });
         } else {
-          r1 = (randomize(r1, 0.1) * 2 + r0) / 3;
           points.push({
-          x: cx + r1 * Math.cos(i),
-          y: cy + r1 * Math.sin(i),
-          c: false,
-          r: alt ? randomize(1.0, 0.3) : 0.588
-        })
+            x: cx + r1 * Math.cos(i),
+            y: cy + r1 * Math.sin(i),
+            c: false,
+            r: 0.588
+          })
         }
       }
       const path = pathFromPoints(points);
