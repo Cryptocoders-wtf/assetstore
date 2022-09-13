@@ -8,6 +8,7 @@ import Materials from "../views/Materials.vue";
 import Kamons from "../views/Kamons.vue";
 import Emoji from "../views/Emoji.vue";
 import Draw from "../views/Draw.vue";
+import Splatter from "../views/Splatter.vue";
 
 const routeChildren: Array<RouteRecordRaw> = [
   {
@@ -29,6 +30,10 @@ const routeChildren: Array<RouteRecordRaw> = [
   {
     path: "draw",
     component: Draw,
+  },
+  {
+    path: "splatter",
+    component: Splatter,
   },
   {
     path: "group/:group?/:path(category)?/:category?",
