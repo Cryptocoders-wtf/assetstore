@@ -34,6 +34,7 @@ export interface ProviderRpcError extends Error {
 export const ChainIds = {
   Mainnet: "0x1",
   RinkebyTestNet: "0x4",
+  Goerli: "0x5",
   Polygon: "0x89",
   Localhost: "0x7a69", // not sure
 };
