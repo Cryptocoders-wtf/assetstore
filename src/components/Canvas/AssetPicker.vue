@@ -96,6 +96,10 @@ const AssetStoreProvider = {
   wabi: require("@/abis/AssetStoreProvider.json"), // wrapped abi
 };
 
+const AssetProviderRegistry = {
+  wabi: require("@/abis/AssetProviderRegistry.json"), // wrapped abi
+};
+
 // NOTE: There is no easy way to get the inteface Id of an interface.
 // I've got this by writing solidity code to return it.
 const ICategorizedAssetProvider_InterfaceId = 0xe105c16e;
@@ -123,12 +127,17 @@ export default defineComponent({
       AssetComposer.wabi.abi,
       provider
     );
+    const assetProviderRegistry = new ethers.Contract(
+      props.addresses.registryAddress,
+      AssetProviderRegistry.wabi.abi,
+      provider
+    );
     const fetchProviders = async () => {
-      const result = await assetComposer.functions.providerCount();
+      const result = await assetProviderRegistry.functions.providerCount();
       const count = result[0].toNumber();
       const infos: AssetProviderInfo[] = [];
       for (let i = 0; i < count; i++) {
-        const result = await assetComposer.functions.getProvider(i);
+        const result = await assetProviderRegistry.functions.getProvider(i);
         const providerInfo = result[0];
         infos.push({
           key: providerInfo.key,
