@@ -126,6 +126,10 @@ const AssetComposer = {
   wabi: require("@/abis/AssetComposer.json"), // wrapped abi
 };
 
+const AssetProviderRegistry = {
+  wabi: require("@/abis/AssetProviderRegistry.json"), // wrapped abi
+};
+
 const AssetStoreProvider = {
   wabi: require("@/abis/AssetStoreProvider.json"), // wrapped abi
 };
@@ -185,6 +189,11 @@ export default defineComponent({
       AssetComposer.wabi.abi,
       provider
     );
+    const assetProviderRegistry = new ethers.Contract(
+      addresses.registryAddress,
+      AssetProviderRegistry.wabi.abi,
+      provider
+    );
 
     const mintPrice = ref<number>(0.01); // to be over-written
     const fetchMintPrice = async () => {
@@ -208,9 +217,9 @@ export default defineComponent({
         }
       });
       // event Payout(string providerKey, uint256 assetId, address payable to, uint256 amount);
-      const [providerId] = await assetComposer.functions.getProviderId("asset");
+      const [providerId] = await assetProviderRegistry.functions.getProviderId("asset");
       //console.log("providerId", providerId.toNumber());
-      const [assetInfo] = await assetComposer.functions.getProvider(providerId);
+      const [assetInfo] = await assetProviderRegistry.functions.getProvider(providerId);
       console.log(
         "assetInfo",
         assetInfo.key,

@@ -24,6 +24,7 @@ export const getContractAddresses = (network: string) => {
       flagAddress: flag_localhost.emojiFlagAddress,
       drawAddress: draw_localhost.customTokenAddress,
       composerAddress: draw_localhost.composerAddress,
+      registryAddress: draw_localhost.registryAddress,
       tokenAddress: "",
     };
   }
@@ -38,6 +39,7 @@ export const getContractAddresses = (network: string) => {
       flagAddress: flag_rinkeby.emojiFlagAddress,
       drawAddress: draw_rinkeby.customTokenAddress,
       composerAddress: draw_rinkeby.composerAddress,
+      registryAddress: draw_rinkeby.registryAddress,
       tokenAddress: "",
     };
   }
@@ -52,6 +54,7 @@ export const getContractAddresses = (network: string) => {
       flagAddress: "", // flag_rinkeby.emojiFlagAddress,
       drawAddress: draw_goerli.customTokenAddress,
       composerAddress: draw_goerli.composerAddress,
+      registryAddress: draw_goerli.registryAddress,
       tokenAddress: "",
     };
   }
@@ -66,6 +69,7 @@ export const getContractAddresses = (network: string) => {
       flagAddress: flag_mainnet.emojiFlagAddress,
       drawAddress: "to be determined", // MEMO: don't forget to change the category in Draw.vue as well
       composerAddress: "to be determined",
+      registryAddress: "to be determined",
       tokenAddress: "",
     };
   }
