@@ -6,9 +6,11 @@ import { addresses as goerli } from "../../generated/addresses_goerli";
 import { kamon_addresses as kamon_mainnet } from "../../generated/addresses_kamon_mainnet";
 import { kamon_addresses as kamon_localhost } from "../../generated/addresses_kamon_localhost";
 import { kamon_addresses as kamon_rinkeby } from "../../generated/addresses_kamon_rinkeby";
+import { kamon_addresses as kamon_goerli } from "../../generated/addresses_kamon_goerli";
 import { token_addresses as flag_mainnet } from "../../generated/addresses_flag_mainnet";
 import { token_addresses as flag_localhost } from "../../generated/addresses_flag_localhost";
 import { token_addresses as flag_rinkeby } from "../../generated/addresses_flag_rinkeby";
+import { token_addresses as flag_goerli } from "../../generated/addresses_flag_goerli";
 import { token_addresses as draw_localhost } from "../../generated/addresses_draw_localhost";
 import { token_addresses as draw_rinkeby } from "../../generated/addresses_draw_rinkeby";
 import { token_addresses as draw_goerli } from "../../generated/addresses_draw_goerli";
@@ -50,8 +52,8 @@ export const getContractAddresses = (network: string) => {
       chainId: ChainIds.Goerli,
       storeAddress: goerli.storeAddress,
       materialAddress: goerli.tokenAddress,
-      kamonAddress: "", // kamon_rinkeby.kamonAddress,
-      flagAddress: "", // flag_rinkeby.emojiFlagAddress,
+      kamonAddress: kamon_goerli.kamonAddress,
+      flagAddress: flag_goerli.emojiFlagAddress,
       drawAddress: draw_goerli.customTokenAddress,
       composerAddress: draw_goerli.composerAddress,
       registryAddress: draw_goerli.registryAddress,
