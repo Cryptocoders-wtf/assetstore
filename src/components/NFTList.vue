@@ -2,7 +2,10 @@
   <div>
     <div v-if="tokens.length > 0">
       <div class="mt-4 mb-2">
-        <p class="font-bold">
+        <p v-if="isRecent" class="font-bold">
+          {{ $t("message.recentNFTs", { count: tokens.length }) }}
+        </p>
+        <p v-else class="font-bold">
           {{ $t("message.nftListTitle", { count: tokens.length }) }}
         </p>
       </div>
@@ -26,6 +29,6 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  props: ["tokens", "OpenSeaPath"],
+  props: ["tokens", "OpenSeaPath", "isRecent"],
 });
 </script>

@@ -75,7 +75,7 @@
           </p>
         </MintPanel>
       </div>
-      <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" />
+      <NFTList :tokens="tokens" :OpenSeaPath="OpenSeaPath" :isRecent="true" />
       <References
         :EtherscanStore="EtherscanStore"
         :EtherscanToken="EtherscanToken"

@@ -56,6 +56,7 @@ const lang = {
     processing: "処理中...",
     copy: "コピー",
     nftListTitle: "クラウドミント済みのNFT ({count}個)",
+    recentNFTs: "最近ミントされたNFT",
     resources: "参考リンク",
     loading: "読み込み中です...",
   },

@@ -55,6 +55,7 @@ const lang = {
     processing: "Processing...",
     copy: "copy",
     nftListTitle: "List of crowd-minted NFTs ({count})",
+    recentNFTs: "Recently minted NFTs",
     resources: "Resources",
     loading: "Loading...",
   },
