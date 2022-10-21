@@ -78,7 +78,7 @@ export default defineComponent({
     const provider =
       props.addresses.network == "localhost"
         ? new ethers.providers.JsonRpcProvider()
-        : new ethers.providers.AlchemyProvider(props.addresses.network);
+        : new ethers.providers.InfuraProvider(props.addresses.network);
 
     const assetStoreRO = new ethers.Contract(
       props.addresses.storeAddress,

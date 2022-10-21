@@ -137,10 +137,14 @@ export default defineComponent({
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
+    const alchemyKey = process.env.VUE_APP_ALCHEMY_API_KEY;
+    console.log("*** network", props.addresses.network, alchemyKey);
+
     const provider =
       props.addresses.network == "localhost"
         ? new ethers.providers.JsonRpcProvider()
-        : new ethers.providers.AlchemyProvider(props.addresses.network);
+        : alchemyKey ? new ethers.providers.AlchemyProvider(props.addresses.network, alchemyKey)
+          : new ethers.providers.InfuraProvider(props.addresses.network)
 
     const assetStoreRO = new ethers.Contract(
       props.addresses.storeAddress,
@@ -186,7 +190,7 @@ export default defineComponent({
         selectedAsset.value = Object.assign({}, asset);
       }
       sampleCode.value = [
-        `const provider = new ethers.providers.AlchemyProvider("${props.addresses.network}");`,
+        `const provider = new ethers.providers.InfuraProvider("${props.addresses.network}");`,
         `const storeAddress = "${props.addresses.storeAddress}";`,
         `const assetStore = new ethers.Contract(storeAddress, AssetStore.abi, provider);`,
         `const group = "${selectedGroup.value}";`,
@@ -199,7 +203,7 @@ export default defineComponent({
       ].join("\n");
 
       /*
-      const provider = new ethers.providers.AlchemyProvider("mainnet");
+      const provider = new ethers.providers.InfuraProvider("mainnet");
       const storeAddress = "0x847A044aF5225f994C60f43e8cF74d20F756187C";
       const assetStore = new ethers.Contract(storeAddress, AssetStore.wabi.abi, provider);
       const group = "Material Icons (Apache 2.0)";

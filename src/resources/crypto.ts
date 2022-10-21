@@ -25,4 +25,4 @@ const crypto = {
   ],
 };
 
-export const cryptoAssets = loadAssets(crypto);
+export const loadedAssets = loadAssets(crypto);
