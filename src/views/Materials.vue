@@ -46,7 +46,7 @@ export default defineComponent({
     }
     addresses.tokenAddress = addresses.materialAddress;
     const options = {
-      tokenOffset: addresses.network == "rinkeby" ? -1 : 580,
+      tokenOffset: 750,
       svgStyle: 0,
       initTokenPer: 4,
       tokenName: "MaterialToken",

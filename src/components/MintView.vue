@@ -71,14 +71,16 @@ export default defineComponent({
     const assetIndex = props.loadedAssets.reduce(assetsReduce, {});
     const availableAssets = ref<AssetData[] | null>(null);
 
-    console.log("* network", props.addresses.chainId);
+    const alchemyKey = process.env.VUE_APP_ALCHEMY_API_KEY;
+    console.log("* network", props.addresses.chainId, alchemyKey);
     // Following two lines must be changed for other networks
     //const expectedNetwork = ChainIds.RinkebyTestNet;
     //const provider = ;
     const provider =
       props.addresses.network == "localhost"
         ? new ethers.providers.JsonRpcProvider()
-        : new ethers.providers.InfuraProvider(props.addresses.network);
+        : alchemyKey ? new ethers.providers.AlchemyProvider(props.addresses.network, alchemyKey)
+          : new ethers.providers.InfuraProvider(props.addresses.network)
 
     const assetStoreRO = new ethers.Contract(
       props.addresses.storeAddress,
