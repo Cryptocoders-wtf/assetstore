@@ -105,6 +105,7 @@ export default defineComponent({
           tokenId.toNumber() >= tokens.value.length * tokensPerAsset.value
         ) {
           console.log("*** event.Transfer calling fetchToken");
+          tokens.value = [];
           fetchPrimaryTokens();
         }
       });
