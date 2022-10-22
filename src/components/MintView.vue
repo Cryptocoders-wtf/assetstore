@@ -79,8 +79,12 @@ export default defineComponent({
     const provider =
       props.addresses.network == "localhost"
         ? new ethers.providers.JsonRpcProvider()
-        : alchemyKey ? new ethers.providers.AlchemyProvider(props.addresses.network, alchemyKey)
-          : new ethers.providers.InfuraProvider(props.addresses.network)
+        : alchemyKey
+        ? new ethers.providers.AlchemyProvider(
+            props.addresses.network,
+            alchemyKey
+          )
+        : new ethers.providers.InfuraProvider(props.addresses.network);
 
     const assetStoreRO = new ethers.Contract(
       props.addresses.storeAddress,
@@ -120,9 +124,9 @@ export default defineComponent({
       const resultSupply = await tokenRO.functions.totalSupply();
       const count = resultSupply[0].toNumber() / tokensPerAsset.value;
       console.log("*** count", count, props.options.tokenOffset);
-      const delay = (ms:number) => {
-         return new Promise(resolve => setTimeout(resolve, ms));
-      }      
+      const delay = (ms: number) => {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      };
       for (let index = 0; index < count - props.options.tokenOffset; index++) {
         const result = await tokenRO.functions.assetIdOfToken(
           (props.options.tokenOffset + index) * tokensPerAsset.value
@@ -132,7 +136,12 @@ export default defineComponent({
         const name = attr[0][2];
 
         const asset = assetIndex[name];
-        console.log("*** asset", assetId, props.options.tokenOffset + index, !asset)
+        console.log(
+          "*** asset",
+          assetId,
+          props.options.tokenOffset + index,
+          !asset
+        );
         if (asset) {
           asset.registered = true;
           // Hack: Even though the name is not unique enough, this is sufficient.
