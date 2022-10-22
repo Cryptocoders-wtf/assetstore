@@ -119,31 +119,26 @@ export default defineComponent({
       const resultSupply = await tokenRO.functions.totalSupply();
       const count = resultSupply[0].toNumber() / tokensPerAsset.value;
       console.log("*** count", count, props.options.tokenOffset);
-      const promises2 = Array(count - props.options.tokenOffset)
-        .fill({})
-        .map(async (_, index) => {
-          const result = await tokenRO.functions.assetIdOfToken(
-            (props.options.tokenOffset + index) * tokensPerAsset.value
-          );
-          const assetId = result[0].toNumber();
-          const attr = await assetStoreRO.functions.getAttributes(assetId);
-          const name = attr[0][2];
+      const delay = (ms:number) => {
+         return new Promise(resolve => setTimeout(resolve, ms));
+      }      
+      for (let index = 0; index < count - props.options.tokenOffset; index++) {
+        const result = await tokenRO.functions.assetIdOfToken(
+          (props.options.tokenOffset + index) * tokensPerAsset.value
+        );
+        const assetId = result[0].toNumber();
+        const attr = await assetStoreRO.functions.getAttributes(assetId);
+        const name = attr[0][2];
 
-          const asset = assetIndex[name];
-          console.log("*** asset", assetId, !asset)
-          if (asset) {
-            asset.registered = true;
-            // Hack: Even though the name is not unique enough, this is sufficient.
-            if (selection.value && name == selection.value.asset.name) {
-              selection.value = null;
-            }
+        const asset = assetIndex[name];
+        console.log("*** asset", assetId, !asset)
+        if (asset) {
+          asset.registered = true;
+          // Hack: Even though the name is not unique enough, this is sufficient.
+          if (selection.value && name == selection.value.asset.name) {
+            selection.value = null;
           }
-          return index;
-        });
-
-      //await Promise.all(promises2);
-      for (let i = 0; i < promises2.length; i++) {
-        await promises2[i];
+        }
       }
 
       availableAssets.value = props.loadedAssets.filter(assetFilter);
