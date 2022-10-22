@@ -47,7 +47,7 @@ export default defineComponent({
     }
     addresses.tokenAddress = addresses.flagAddress;
     const options = {
-      tokenOffset: (network == "goerli") ? 0 : 140,
+      tokenOffset: (network == "goerli") ? 0 : 148,
       svgStyle: 8,
       initTokenPer: 0,
       tokenName: "EmojiFlagToken",

@@ -131,7 +131,7 @@ export default defineComponent({
         const name = attr[0][2];
 
         const asset = assetIndex[name];
-        console.log("*** asset", assetId, !asset)
+        console.log("*** asset", assetId, props.options.tokenOffset + index, !asset)
         if (asset) {
           asset.registered = true;
           // Hack: Even though the name is not unique enough, this is sufficient.
