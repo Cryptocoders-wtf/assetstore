@@ -118,28 +118,23 @@ export default defineComponent({
 
       const resultSupply = await tokenRO.functions.totalSupply();
       const count = resultSupply[0].toNumber() / tokensPerAsset.value;
-      const promises2 = Array(4)
+      console.log("*** count", count, props.options.tokenOffset);
+      const promises2 = Array(count - props.options.tokenOffset)
         .fill({})
         .map(async (_, index) => {
-          if (tokens.value[index]) {
-            return index; // we already have it
-          }
+          const result = await tokenRO.functions.assetIdOfToken(
+            (props.options.tokenOffset + index) * tokensPerAsset.value
+          );
+          const assetId = result[0].toNumber();
+          const attr = await assetStoreRO.functions.getAttributes(assetId);
+          const name = attr[0][2];
 
-          if (index > props.options.tokenOffset) {
-            const result = await tokenRO.functions.assetIdOfToken(
-              index * tokensPerAsset.value
-            );
-            const assetId = result[0].toNumber();
-            const attr = await assetStoreRO.functions.getAttributes(assetId);
-            const name = attr[0][2];
-
-            const asset = assetIndex[name];
-            if (asset) {
-              asset.registered = true;
-              // Hack: Even though the name is not unique enough, this is sufficient.
-              if (selection.value && name == selection.value.asset.name) {
-                selection.value = null;
-              }
+          const asset = assetIndex[name];
+          if (asset) {
+            asset.registered = true;
+            // Hack: Even though the name is not unique enough, this is sufficient.
+            if (selection.value && name == selection.value.asset.name) {
+              selection.value = null;
             }
           }
           return index;
