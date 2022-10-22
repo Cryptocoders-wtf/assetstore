@@ -55,7 +55,7 @@ const lang = {
     invalidNetwork: "ネットワークを切り替えてください { networkName }.",
     processing: "処理中...",
     copy: "コピー",
-    nftListTitle: "クラウドミント済みのNFT ({count}個)",
+    nftListTitle: "最近クラウドミントされたNFT",
     recentNFTs: "最近ミントされたNFT",
     resources: "参考リンク",
     loading: "読み込み中です...",

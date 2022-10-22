@@ -12,14 +12,16 @@ export const fetchTokens = async (
   tokenRO: ethers.Contract,
   callback: (tokens: Token[]) => void
 ) => {
-  const promises = Array(count)
+  const length = Math.min(4, count);
+  const offset = count - length;
+  const promises = Array(length)
     .fill({})
     .map(async (_, index) => {
       if (tokens[index]) {
         return tokens[index]; // we already have it
       }
-      const tokenId = index * tokensPerAsset;
-
+      const tokenId = (offset + index) * tokensPerAsset;
+      console.log("*** Fetching", tokenId);
       const result = await tokenRO.functions.assetIdOfToken(tokenId);
       const assetId = result[0].toNumber();
       const svgPart = await assetStoreRO.functions.generateSVGPart(

@@ -118,7 +118,7 @@ export default defineComponent({
 
       const resultSupply = await tokenRO.functions.totalSupply();
       const count = resultSupply[0].toNumber() / tokensPerAsset.value;
-      const promises2 = Array(count)
+      const promises2 = Array(4)
         .fill({})
         .map(async (_, index) => {
           if (tokens.value[index]) {
@@ -144,7 +144,12 @@ export default defineComponent({
           }
           return index;
         });
-      await Promise.all(promises2);
+
+      //await Promise.all(promises2);
+      for (let i = 0; i < promises2.length; i++) {
+        await promises2[i];
+      }
+
       availableAssets.value = props.loadedAssets.filter(assetFilter);
 
       fetchTokens(
