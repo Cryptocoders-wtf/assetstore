@@ -50,7 +50,7 @@ export default defineComponent({
     }
     addresses.tokenAddress = addresses.kamonAddress;
     const options = {
-      tokenOffset: 590,
+      tokenOffset: (network == "goerli") ? 0 : 590,
       svgStyle: 8,
       initTokenPer: 0,
       tokenName: "KamonToken",

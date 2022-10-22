@@ -46,7 +46,7 @@ export default defineComponent({
     }
     addresses.tokenAddress = addresses.materialAddress;
     const options = {
-      tokenOffset: 754,
+      tokenOffset: (network == "goerli") ? 0 : 754,
       svgStyle: 0,
       initTokenPer: 4,
       tokenName: "MaterialToken",
