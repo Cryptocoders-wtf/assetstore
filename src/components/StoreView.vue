@@ -241,37 +241,36 @@ export default defineComponent({
         selectedCategory.value
       );
       const assetCount = result[0];
-      const promises = Array(assetCount)
-        .fill("")
-        .map(async (_, index) => {
-          let result = await assetStoreRO.functions.getAssetIdInCategory(
-            selectedGroup.value,
-            selectedCategory.value,
-            index
+      const assetsData = [];
+      for (let index = 0; index < assetCount; index++) {
+        let result = await assetStoreRO.functions.getAssetIdInCategory(
+          selectedGroup.value,
+          selectedCategory.value,
+          index
+        );
+        const assetId = result[0].toNumber();
+        console.log("*** assetId", assetId);
+        try {
+          result = await assetStoreRO.functions.generateSVG(assetId); //, { gasLimit: 6000000000 });
+          console.log("*** got SVG", assetId);
+        } catch (error: any) {
+          const resultAttr = await assetStoreRO.functions.getAttributes(
+            assetId
           );
-          const assetId = result[0].toNumber();
-          console.log("*** assetId", assetId);
-          try {
-            result = await assetStoreRO.functions.generateSVG(assetId); //, { gasLimit: 6000000000 });
-            console.log("*** got SVG", assetId);
-          } catch (error: any) {
-            const resultAttr = await assetStoreRO.functions.getAttributes(
-              assetId
-            );
-            console.error(
-              "*** failed to get SVG",
-              assetId,
-              resultAttr[0][2],
-              error.message
-            );
-            result = ["N/A"];
-          }
-          const svg = result[0];
-          const image =
-            "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
-          return { index, assetId, svg, image };
-        });
-      const assetsData = await Promise.all(promises);
+          console.error(
+            "*** failed to get SVG",
+            assetId,
+            resultAttr[0][2],
+            error.message
+          );
+          result = ["N/A"];
+        }
+        const svg = result[0];
+        const image =
+          "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
+        assetsData[index] = { index, assetId, svg, image };
+      }
+
       assetsCache[cacheKey] = assetsData;
       assets.value = assetsData;
     };
