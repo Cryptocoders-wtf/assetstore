@@ -6,6 +6,7 @@ const crypto = {
   width: 4091.27,
   height: 4091.73,
   assets: [
+    /*
     {
       name: "Bitcoin Circle",
       parts: [
@@ -14,6 +15,7 @@ const crypto = {
         },
       ],
     },
+    */
     {
       name: "Bitcoin Logo",
       parts: [
