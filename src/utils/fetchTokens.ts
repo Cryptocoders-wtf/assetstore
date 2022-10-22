@@ -35,7 +35,7 @@ export const fetchTokens = async (
       );
       const image =
         "data:image/svg+xml;base64," + Buffer.from(svg[0]).toString("base64");
-      return { image, tokenId: index * tokensPerAsset };
+      return { image, tokenId: (offset + index) * tokensPerAsset };
     });
 
   // Sequential version of callback(await Promise.all(promises));
