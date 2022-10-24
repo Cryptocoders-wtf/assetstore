@@ -9,6 +9,7 @@ export const assetBase: AssetBase = {
 
 const regexNum = /[+-]?(\d*\.\d*|\d+)/;
 const regexNumG = /[+-]?(\d*\.\d*|\d+)/g;
+const regexFloatG = /[+-]?(\d*\.\d*|\d+)e-\d+/g;
 const regexDivG = /[,\s]+/g;
 
 // T is number or string
@@ -48,7 +49,10 @@ const reduceFun = <T>(
 };
 
 const prepareBody = (body: string) => {
-  const ret = body.replace(regexNumG, (str: string) => {
+  let ret = body.replace(regexFloatG, (str: string) => {
+    return "0";
+  });
+  ret = ret.replace(regexNumG, (str: string) => {
     return ` ${parseFloat(str)} `;
   });
   const items = ret.split(regexDivG);
