@@ -8,6 +8,8 @@ export const getAddresses = (
       return "https://rinkeby.etherscan.io/address";
     } else if (network == "goerli") {
       return "https://goerli.etherscan.io/address";
+    } else if (network == "matic") {
+      return "https://polygonscan.com/address";
     }
     return "https://etherscan.io/address";
   })();

@@ -1,4 +1,4 @@
 export const addresses = {
-  storeAddress:"0xb1B25Eeb1026cB947b3f65a5cc123FC28B13EEe6",
-  tokenAddress:"0x1e9851f8Eec792cDe839277ebB229bb1d45069D9"
+  storeAddress:"0x31E87E18282Aa2F8196c9C188D34fe575e5Fe1ab",
+  tokenAddress:"0x523f600738E5FC42214E05FA3B589B504C3ea49A"
 }

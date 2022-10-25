@@ -3,6 +3,7 @@ import { addresses as mainnet } from "../../generated/addresses_mainnet";
 import { addresses as localhost } from "../../generated/addresses_localhost";
 import { addresses as rinkeby } from "../../generated/addresses_rinkeby";
 import { addresses as goerli } from "../../generated/addresses_goerli";
+import { addresses as matic } from "../../generated/addresses_matic";
 import { kamon_addresses as kamon_mainnet } from "../../generated/addresses_kamon_mainnet";
 import { kamon_addresses as kamon_localhost } from "../../generated/addresses_kamon_localhost";
 import { kamon_addresses as kamon_rinkeby } from "../../generated/addresses_kamon_rinkeby";
@@ -69,6 +70,21 @@ export const getContractAddresses = (network: string) => {
       materialAddress: mainnet.tokenAddress,
       kamonAddress: kamon_mainnet.kamonAddress,
       flagAddress: flag_mainnet.emojiFlagAddress,
+      drawAddress: "to be determined", // MEMO: don't forget to change the category in Draw.vue as well
+      composerAddress: "to be determined",
+      registryAddress: "to be determined",
+      tokenAddress: "",
+    };
+  }
+  if (network == "matic") {
+    return {
+      network,
+      EtherscanBase: "https://polygonscan.com/address",
+      chainId: ChainIds.Polygon,
+      storeAddress: mainnet.storeAddress,
+      materialAddress: mainnet.tokenAddress,
+      kamonAddress: "to be determined",
+      flagAddress: "to be determined",
       drawAddress: "to be determined", // MEMO: don't forget to change the category in Draw.vue as well
       composerAddress: "to be determined",
       registryAddress: "to be determined",
