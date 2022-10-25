@@ -81,8 +81,8 @@ export const getContractAddresses = (network: string) => {
       network,
       EtherscanBase: "https://polygonscan.com/address",
       chainId: ChainIds.Polygon,
-      storeAddress: mainnet.storeAddress,
-      materialAddress: mainnet.tokenAddress,
+      storeAddress: matic.storeAddress,
+      materialAddress: matic.tokenAddress,
       kamonAddress: "to be determined",
       flagAddress: "to be determined",
       drawAddress: "to be determined", // MEMO: don't forget to change the category in Draw.vue as well
