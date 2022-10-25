@@ -22,7 +22,7 @@ import { getContractAddresses } from "@/utils/networks";
 import MintView from "@/components/MintView.vue";
 import NetworkError from "@/components/NetworkError.vue";
 
-import { loadedAssets } from "../resources/crypto";
+import { loadedAssets } from "../resources/materials";
 
 const contentsToken = {
   wabi: require("../abis/MaterialToken.json"), // wrapped abi

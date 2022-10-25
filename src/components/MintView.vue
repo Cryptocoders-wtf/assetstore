@@ -140,6 +140,7 @@ export default defineComponent({
           "*** asset",
           assetId,
           props.options.tokenOffset + index,
+          name,
           !asset
         );
         if (asset) {
