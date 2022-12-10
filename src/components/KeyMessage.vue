@@ -7,7 +7,7 @@
         href="https://hackmd.io/@snakajima/HJva6n-Jj"
         class="underline"
         target="_blank"
-        >On-Chain Asset Store and Composer</a
+        >On-chain Asset Store and Composer</a
       >
       {{ $t("keyMessage.message1b") }}
     </p>
